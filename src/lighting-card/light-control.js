@@ -7,7 +7,7 @@ import styles from './light-control.styles.js';
 import sharedStyles from './shared-styles.js';
 import './light-icon.js';
 import './slider.js';
-import '../../common-lighting-elements/color-wheel.js';
+import './color-wheel.js';
 import './theme-select.js';
 
 export class LightControl extends LitElement {

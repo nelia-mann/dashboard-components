@@ -5,7 +5,7 @@ import sharedStyles from './shared-styles.js';
 import "./floor-panel.js";
 import { interpolateRGB, OFF, ONLIGHT, rgba } from './color-util.js';
 
-export class MainCard extends LitElement {
+export class LightingCard extends LitElement {
 
     // private properties
     _hass;

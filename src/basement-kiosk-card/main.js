@@ -6,7 +6,7 @@ import sharedStyles from './shared-styles.js';
 import { rgba } from './color-util.js';
 import './light-button.js';
 
-export class MainCard extends LitElement {
+export class BasementKioskCard extends LitElement {
 
     // private properties
     _hass;

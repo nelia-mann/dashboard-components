@@ -3,7 +3,7 @@ import styles from './main.styles.js';
 import sharedStyles from './shared-styles.js';
 import { interpolateRGB, OFF, ONLIGHT, rgba } from './color-util.js';
 
-export class LightButton extends LitElement {
+export class LightingButton extends LitElement {
 
     _structure = {};
     _entityIds = [];
@@ -108,4 +108,4 @@ export class LightButton extends LitElement {
     }
 }
 
-customElements.define("light-button", LightButton);
+customElements.define("lighting-button", LightingButton);
