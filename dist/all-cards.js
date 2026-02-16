@@ -1153,7 +1153,6 @@ class $b256115b19ea84ae$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
     set hass(hass) {
         this._hass = hass;
         this.setStructures();
-        console.log(this._entityIds);
     }
     /******************************* structure logic ***********************/ getAreaIds() {
         const areas = this._hass.areas;

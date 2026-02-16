@@ -37,7 +37,6 @@ export class BasementKioskCard extends LitElement {
     set hass(hass) {
         this._hass = hass;
         this.setStructures();
-        console.log(this._entityIds)
     }
 
     /******************************* structure logic ***********************/
