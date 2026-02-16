@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
 import styles from './area.styles.js';
-import sharedStyles from './shared-styles.js';
+import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import './light.js';
 
 export class AreaPanel extends LitElement {

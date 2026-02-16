@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import styles from './slider.styles.js';
-import sharedStyles from './shared-styles.js';
+import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import { tempGradient, ONLIGHT, rgba } from './color-util.js';
 
 export class SliderBar extends LitElement {

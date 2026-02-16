@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit';
 import styles from './main.styles.js';
-import sharedStyles from './shared-styles.js';
+import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import { interpolateRGB, OFF, ONLIGHT, rgba } from './color-util.js';
 
 export class LightingButton extends LitElement {

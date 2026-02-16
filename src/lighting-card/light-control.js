@@ -4,7 +4,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { tempGradient, getTempColor, hsGradient, rgba, ONLIGHT, INDIGO } from './color-util.js';
 import { mdiBrightness6, mdiCreationOutline } from '@mdi/js';
 import styles from './light-control.styles.js';
-import sharedStyles from './shared-styles.js';
+import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import './light-icon.js';
 import './slider.js';
 import './color-wheel.js';

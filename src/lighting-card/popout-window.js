@@ -3,7 +3,7 @@ import { repeat } from 'lit-html/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { mdiCloseCircleOutline } from '@mdi/js';
 import styles from './popout.styles.js';
-import sharedStyles from './shared-styles.js';
+import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import './light-control.js';
 import { getColor } from './light-util.js';
 

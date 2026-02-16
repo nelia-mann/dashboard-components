@@ -3,7 +3,7 @@ import { repeat } from 'lit-html/directives/repeat.js';
 import './light-icon.js';
 import './popout-window.js';
 import styles from './light.styles.js';
-import sharedStyles from './shared-styles.js';
+import sharedStyles from '../shared-resources/styles/shared-styles.js';
 
 export class LightComponent extends LitElement {
 

@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import styles from './main.styles.js';
-import sharedStyles from './shared-styles.js';
+import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import "./floor-panel.js";
 import { interpolateRGB, OFF, ONLIGHT, rgba } from './color-util.js';
 
