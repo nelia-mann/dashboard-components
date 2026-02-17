@@ -1,8 +1,8 @@
 import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import styles from './wheel.styles.js';
-import sharedStyles from '../shared-resources/styles/shared-styles.js';
-import { hsGradient } from './color-util.js';
+import sharedStyles from '../../styles/shared-styles.js';
+import { hsGradient } from '../util/color-util.js';
 
 
 
@@ -14,7 +14,7 @@ export class ColorWheel extends LitElement {
 
     static get properties() {
         return {
-            _light: { state: true },
+            _lightState: { state: true },
             _changedEntityIds: { state: true },
             _hue: { state: true },
             _saturation: { state: true },
@@ -49,7 +49,7 @@ export class ColorWheel extends LitElement {
     }
 
     hasRelevantChanges() {
-        return this._changedEntityIds.has(this.getEntityId());
+        return this.getCEIs().has(this.getEntityId());
     }
 
     setInitialValues() {
@@ -98,6 +98,7 @@ export class ColorWheel extends LitElement {
         this._initialized = true;
     }
 
+    // access reference object
     getRect() {
         return this._box.getBoundingClientRect();
     }
@@ -107,11 +108,16 @@ export class ColorWheel extends LitElement {
     }
 
     getEntityId() {
-        return this._light.entity_id;
+        return this._lightState.entity_id;
     }
 
     getHSColor() {
-        return this._light.attributes.hs_color;
+        return this._lightState.attributes.hs_color;
+    }
+
+    // access reference object
+    getCEIs() {
+        return this._changedEntityIds;
     }
 
     /**************************** interactive logic **************************/
@@ -123,8 +129,7 @@ export class ColorWheel extends LitElement {
 
     up() {
         this.setIsDown(false);
-        const hs_color = [this.getHue(), this.getSat()];
-        this.dispatchEvent(new CustomEvent('change', { detail: hs_color }));
+        this.handleCallService();
     }
 
     move(e) {
@@ -143,6 +148,15 @@ export class ColorWheel extends LitElement {
                 this.up();
             }
         }
+    }
+
+    handleCallService() {
+        const entityId = this.getEntityId();
+        const data = {
+            entity_id: entityId,
+            'hs_color': [this.getHue(), this.getSat()]
+        }
+        this.callService('light', 'turn_on', data)
     }
 
     /**************************** style/html logic ***************************/

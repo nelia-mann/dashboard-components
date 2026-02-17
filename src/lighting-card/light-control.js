@@ -7,7 +7,7 @@ import styles from './light-control.styles.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import './light-icon.js';
 import './slider.js';
-import './color-wheel.js';
+import '../shared-resources/light-components/color-wheel/color-wheel.js';
 import './theme-select.js';
 
 export class LightControl extends LitElement {
@@ -205,8 +205,8 @@ export class LightControl extends LitElement {
             class="outlined"
             ._entityIds = ${this._entityIds}
             ._changedEntityIds = ${this._changedEntityIds}
-            ._light = ${{...light}}
-            @change = ${(e) => this.handleLightService('turn_on', 'hs_color', e.detail)}
+            .callService = ${this.callService}
+            ._lightState = ${light}
         ></color-wheel>`)
     }
 

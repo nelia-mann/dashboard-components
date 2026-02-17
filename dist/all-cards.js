@@ -9353,7 +9353,7 @@ customElements.define("slider-bar", $153b9c2f43414fbe$export$5ff34efdd1b9ed54);
 
 
 
-var $60a26c2498804738$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+var $0c1278e39028d633$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .wheel {
         position: relative;
@@ -9383,14 +9383,125 @@ var $60a26c2498804738$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+const $66c8ca609c94bdc0$export$a004fc522c1a4845 = [
+    255,
+    193,
+    7
+]; // color in rgb (yellow)
+const $66c8ca609c94bdc0$export$e59310e5bf013385 = [
+    127,
+    97,
+    3
+]; // should be black-ish yellow
+const $66c8ca609c94bdc0$export$173de64b5ad0d5b4 = [
+    158,
+    158,
+    158
+]; // color in rgb (gray)
+const $66c8ca609c94bdc0$export$f353bac13bc8bab2 = [
+    68,
+    115,
+    158
+]; // color in rgb (steel blue)
+const $66c8ca609c94bdc0$export$af126f6aeedfb296 = [
+    41,
+    0,
+    255
+]; // blue color
+function $66c8ca609c94bdc0$var$getTempRed(temp) {
+    let red;
+    if (temp <= 6600) red = 255;
+    else {
+        red = temp / 100 - 60;
+        red = Math.round(329.698727446 * red ** -0.1332047592);
+    }
+    red < 0 && (red = 0);
+    red > 255 && (red = 255);
+    return red;
+}
+function $66c8ca609c94bdc0$var$getTempGreen(temp) {
+    let green;
+    if (temp <= 6600) {
+        green = temp / 100;
+        green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
+    } else {
+        green = temp / 100 - 60;
+        green = Math.round(288.1221695283 * green ** -0.0755148492);
+    }
+    green < 0 && (green = 0);
+    green > 255 && (green = 255);
+    return green;
+}
+function $66c8ca609c94bdc0$var$getTempBlue(temp) {
+    let blue;
+    if (temp > 6600) blue = 255;
+    else if (temp <= 1900) blue = 0;
+    else {
+        blue = temp / 100 - 10;
+        blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
+    }
+    blue < 0 && (blue = 0);
+    blue > 255 && (blue = 255);
+    return blue;
+}
+function $66c8ca609c94bdc0$export$c18f11e95ff36b0c(temp) {
+    return [
+        $66c8ca609c94bdc0$var$getTempRed(temp),
+        $66c8ca609c94bdc0$var$getTempGreen(temp),
+        $66c8ca609c94bdc0$var$getTempBlue(temp)
+    ];
+}
+function $66c8ca609c94bdc0$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
+    let output = `linear-gradient(to top`;
+    for(let step = 0; step <= steps; step++){
+        const temp = (minTemp * (steps - step) + maxTemp * step) / steps;
+        const rgb = $66c8ca609c94bdc0$export$c18f11e95ff36b0c(temp);
+        const result = $66c8ca609c94bdc0$export$4e46ac54fc82cf3b(rgb, 1);
+        const percent = Math.round(step * 100 / steps);
+        output = output + `, ` + result + ` ${percent}%`;
+    }
+    output = output + `)`;
+    return output;
+}
+function $66c8ca609c94bdc0$export$475133aea461e763(steps) {
+    let output = 'radial-gradient(circle at center, white 0%, transparent 100%), ';
+    output = output + 'conic-gradient( from 0deg';
+    for(let step = 0; step <= steps; step++){
+        const angle = Math.round(step * 360 / steps);
+        output = output + `, hsl(${angle}, 100%, 50%)`;
+    }
+    output = output + `)`;
+    return output;
+}
+function $66c8ca609c94bdc0$var$setScale(a, b, t) {
+    let result = a;
+    if (t > 1) result = b;
+    else if (t < 0) result = a;
+    else result = a + (b - a) * t;
+    return result;
+}
+function $66c8ca609c94bdc0$export$4e46ac54fc82cf3b(rgbArray, opacity) {
+    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`;
+}
+function $66c8ca609c94bdc0$export$dd0fba3206c57e56(rgbA, rgbB, t) {
+    const red = $66c8ca609c94bdc0$var$setScale(rgbA[0], rgbB[0], t);
+    const green = $66c8ca609c94bdc0$var$setScale(rgbA[1], rgbB[1], t);
+    const blue = $66c8ca609c94bdc0$var$setScale(rgbA[2], rgbB[2], t);
+    return [
+        red,
+        green,
+        blue
+    ];
+}
 
-class $5bc7db8ae8390406$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+
+class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _box;
     _isDown = false;
     _initialized = false;
     static get properties() {
         return {
-            _light: {
+            _lightState: {
                 state: true
             },
             _changedEntityIds: {
@@ -9422,7 +9533,7 @@ class $5bc7db8ae8390406$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         this.hasRelevantChanges() && !this.isDown() && this.setInitialValues();
     }
     hasRelevantChanges() {
-        return this._changedEntityIds.has(this.getEntityId());
+        return this.getCEIs().has(this.getEntityId());
     }
     setInitialValues() {
         const hs_values = this.getHSColor();
@@ -9458,6 +9569,7 @@ class $5bc7db8ae8390406$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     initialize() {
         this._initialized = true;
     }
+    // access reference object
     getRect() {
         return this._box.getBoundingClientRect();
     }
@@ -9465,10 +9577,14 @@ class $5bc7db8ae8390406$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         this._box = box;
     }
     getEntityId() {
-        return this._light.entity_id;
+        return this._lightState.entity_id;
     }
     getHSColor() {
-        return this._light.attributes.hs_color;
+        return this._lightState.attributes.hs_color;
+    }
+    // access reference object
+    getCEIs() {
+        return this._changedEntityIds;
     }
     /**************************** interactive logic **************************/ down(e) {
         this.setIsDown(true);
@@ -9476,13 +9592,7 @@ class $5bc7db8ae8390406$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     }
     up() {
         this.setIsDown(false);
-        const hs_color = [
-            this.getHue(),
-            this.getSat()
-        ];
-        this.dispatchEvent(new CustomEvent('change', {
-            detail: hs_color
-        }));
+        this.handleCallService();
     }
     move(e) {
         if (this.isDown()) {
@@ -9498,6 +9608,17 @@ class $5bc7db8ae8390406$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
                 this.setSat(saturation);
             } else this.up();
         }
+    }
+    handleCallService() {
+        const entityId = this.getEntityId();
+        const data = {
+            entity_id: entityId,
+            'hs_color': [
+                this.getHue(),
+                this.getSat()
+            ]
+        };
+        this.callService('light', 'turn_on', data);
     }
     /**************************** style/html logic ***************************/ getXY() {
         const angle = this._hue * 2 * Math.PI / 360;
@@ -9516,7 +9637,7 @@ class $5bc7db8ae8390406$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     }
     getBGStyle() {
         let styles = {};
-        styles['background'] = (0, $431982fab2e14f47$export$475133aea461e763)(20);
+        styles['background'] = (0, $66c8ca609c94bdc0$export$475133aea461e763)(20);
         return styles;
     }
     getDotStyle() {
@@ -9532,7 +9653,7 @@ class $5bc7db8ae8390406$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     }
     static styles = [
         (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
-        (0, $60a26c2498804738$export$2e2bcd8739ae039)
+        (0, $0c1278e39028d633$export$2e2bcd8739ae039)
     ];
     render() {
         const XY = this.getXY();
@@ -9550,7 +9671,7 @@ class $5bc7db8ae8390406$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         `;
     }
 }
-customElements.define("color-wheel", $5bc7db8ae8390406$export$f80663f808113381);
+customElements.define("color-wheel", $bb0f3ca1b2cb13d8$export$f80663f808113381);
 
 
 
@@ -11191,10 +11312,8 @@ class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
             class="outlined"
             ._entityIds = ${this._entityIds}
             ._changedEntityIds = ${this._changedEntityIds}
-            ._light = ${{
-            ...light
-        }}
-            @change = ${(e)=>this.handleLightService('turn_on', 'hs_color', e.detail)}
+            .callService = ${this.callService}
+            ._lightState = ${light}
         ></color-wheel>`);
     }
     themeSelect() {
