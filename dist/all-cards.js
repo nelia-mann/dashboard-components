@@ -9215,8 +9215,10 @@ class $153b9c2f43414fbe$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     _max;
     _min;
     _startValue;
+    _units = '';
     _type;
     _initialized = false;
+    _isDown = false;
     static get properties() {
         return {
             _light: {
@@ -9240,12 +9242,12 @@ class $153b9c2f43414fbe$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     }
     // determines if an update should occur
     shouldUpdate(changedProps) {
-        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_value");
+        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_value");
     }
     // runs after the first update
     firstUpdated() {
         this.setInitialValue();
-        this._initialized = true;
+        this.initialize();
     }
     // runs after every update
     updated() {
@@ -9253,16 +9255,56 @@ class $153b9c2f43414fbe$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     }
     // helper to determine if should update
     hasRelevantChanges() {
-        return this._changedEntityIds.has(this._light.entity_id);
+        const isStateChanged = this.getCEIs().has(this.getEntityId());
+        const isUp = !this.isDown();
+        const isNew = this.getValue() != this.getStateValue();
+        return isStateChanged && isUp && isNew;
     }
     // syncs the value to an external change
     setInitialValue() {
-        this._startValue ? this._value = this._startValue : this._value = this._min;
+        this.getStateValue() ? this.setValue(this.getStateValue()) : this.setValue(this.getMin());
     }
     /****************************** getter and setter logic *************************/ getValue() {
         return this._value;
     }
-    /****************************** interactive logic *******************************/ handleOnChange(e) {
+    setValue(value) {
+        this._value = value;
+    }
+    getMin() {
+        return this._min;
+    }
+    getMax() {
+        return this._max;
+    }
+    getStateValue() {
+        return this._startValue;
+    }
+    isInitialized() {
+        return this._initialized;
+    }
+    initialize() {
+        this._initialized = true;
+    }
+    getEntityId() {
+        return this._light.entity_id;
+    }
+    getCEIs() {
+        return this._changedEntityIds;
+    }
+    addUnits(value) {
+        let newValue = String(Math.round(value));
+        newValue = newValue + this._units;
+        return newValue;
+    }
+    isDown() {
+        return this._isDown;
+    }
+    setIsDown(boolean) {
+        this._isDown = boolean;
+    }
+    /****************************** interactive logic *******************************/ // depends on type
+    handleOnChange(e) {
+        this.setIsDown(false);
         let value = e.target.value;
         this._type === "brightness" && (value = Math.round(value * 255 / 100));
         this.dispatchEvent(new CustomEvent('change', {
@@ -9270,22 +9312,17 @@ class $153b9c2f43414fbe$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         }));
     }
     handleOnInput(e) {
+        this.setIsDown(true);
         const value = e.target.value;
-        this._value = value;
+        this.setValue(value);
     }
-    /**************************** style/html logic ***************************/ addUnits(value) {
-        let newValue = String(Math.round(value));
-        if (this._type === "brightness") newValue = newValue + '%';
-        else if (this._type === "ct") newValue = newValue + 'K';
-        return newValue;
-    }
-    getHeight() {
-        const heightScale = (this.getValue() - this._min) / (this._max - this._min);
+    /**************************** style/html logic ***************************/ getHeight() {
+        const heightScale = (this.getValue() - this.getMin()) / (this.getMax() - this.getMin());
         return 100 * heightScale;
     }
     getTempGradient() {
-        const minTemp = this._min;
-        const maxTemp = this._max;
+        const minTemp = this.getMin();
+        const maxTemp = this.getMax();
         const steps = 10;
         return (0, $431982fab2e14f47$export$5b5356aa7e20fd72)(minTemp, maxTemp, steps);
     }
@@ -9294,6 +9331,7 @@ class $153b9c2f43414fbe$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         styles['bottom'] = `${this.getHeight()}%`;
         return styles;
     }
+    // depends on type
     getStyleBG() {
         let styles = {};
         if (this._type === 'brightness') {
@@ -9311,17 +9349,19 @@ class $153b9c2f43414fbe$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         (0, $efd5f21a0bdb917c$export$2e2bcd8739ae039)
     ];
     render() {
-        if (this._initialized) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        if (this.isInitialized()) {
+            console.log("rendering");
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div class="values">
                     <div class="inner-values">
-                        <div class="top-value"> ${this.addUnits(this._max)} </div>
-                        <div class="bottom-value"> ${this.addUnits(this._min)} </div>
+                        <div class="top-value"> ${this.addUnits(this.getMax())} </div>
+                        <div class="bottom-value"> ${this.addUnits(this.getMin())} </div>
                     </div>
                 </div>
                 <div class="slider outlined">
                     <div class="inner-slider">
                         <div
-                            class="shown-slider ${this._type}"
+                            class="shown-slider"
                             style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyleBG())}"
                         >
                             <div class="shown-level" style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyleLevel())}"></div>
@@ -9329,8 +9369,8 @@ class $153b9c2f43414fbe$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
                         <input
                             class="actual-slider"
                             type="range"
-                            max=${this._max}
-                            min=${this._min}
+                            max=${this.getMax()}
+                            min=${this.getMin()}
                             value="${this.getValue()}"
                             @input="${this.handleOnInput}"
                             @change="${this.handleOnChange}"
@@ -9345,6 +9385,7 @@ class $153b9c2f43414fbe$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
                     </div>
                 </div>
             `;
+        }
     }
 }
 customElements.define("slider-bar", $153b9c2f43414fbe$export$5ff34efdd1b9ed54);
@@ -10921,7 +10962,7 @@ class $618eb85283155d95$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
     _initialized = false;
     static get properties() {
         return {
-            _theme: {
+            _themeState: {
                 state: true
             },
             _option: {
@@ -10939,36 +10980,65 @@ class $618eb85283155d95$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         super.update(changedProps);
     }
     shouldUpdate(changedProps) {
-        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_option");
+        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_option");
     }
     firstUpdated() {
         this.setInitialValue();
-        this._initialized = true;
+        this.initialize();
     }
     hasRelevantChanges() {
-        return this._changedEntityIds.has(this._theme.entity_id);
+        const isStateChanged = this.getCEIs().has(this.getEntityId());
+        const isNewOption = this.getOption() != this.getThemeState();
+        return isStateChanged && isNewOption;
     }
     updated(changedProps) {
-        changedProps.has('_theme') && this.setInitialValue();
+        changedProps.has('_themeState') && this.setInitialValue();
     }
     setInitialValue() {
-        this._option = this._theme.state;
+        this.setOption(this.getThemeState());
     }
-    /*************************************************************************/ onClick(e) {
-        const newOption = e.target.id;
-        this._option = newOption;
-        this.dispatchEvent(new CustomEvent('change', {
-            detail: newOption
-        }));
+    /************************ getter and setter logic **************************/ isInitialized() {
+        return this._initialized;
+    }
+    initialize() {
+        this._initialized = true;
     }
     getOptions() {
-        const optionList = this._theme.attributes.options;
+        const optionList = this._themeState.attributes.options;
         return optionList;
     }
-    isSelected(option) {
-        return option === this._option;
+    getEntityId() {
+        const entityId = this._themeState.entity_id;
+        return entityId;
     }
-    getStyles(option) {
+    getThemeState() {
+        return this._themeState.state;
+    }
+    getOption() {
+        return this._option;
+    }
+    setOption(option) {
+        this._option = option;
+    }
+    isSelected(option) {
+        return option === this.getOption();
+    }
+    getCEIs() {
+        return this._changedEntityIds;
+    }
+    /**************************** interactive logic **************************/ onClick(option) {
+        this.setOption(option);
+        this.doCallService(option);
+    }
+    doCallService(option) {
+        const entityId = this.getEntityId();
+        const data = {
+            entity_id: entityId,
+            option: option
+        };
+        this.callService('select', 'select_option', data);
+    }
+    /**************************** style/html logic ***************************/ getStyles(option) {
         let styles = {};
         if (this.isSelected(option)) {
             styles['outline'] = `solid ${(0, $a46daac1435a049a$export$cc5233436f23d8d4)(option)}`;
@@ -10982,9 +11052,8 @@ class $618eb85283155d95$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         return (0, $6db6ff6394e885e6$export$76d90c956114f2c2)(optionList, (option)=>option, (option)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
                 class="option outlined sub-info"
-                style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(option))}"
-                id="${option}"
-                @click=${this.onClick}
+                style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(option))}
+                @click=${()=>this.onClick(option)}
              >
                 ${option}
             </div>`;
@@ -10995,7 +11064,7 @@ class $618eb85283155d95$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         (0, $95429741c61b667f$export$2e2bcd8739ae039)
     ];
     render() {
-        if (this._initialized) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${this.listOptions()}`;
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${this.listOptions()}`;
     }
 }
 customElements.define("theme-select", $618eb85283155d95$export$1b9e02e625a724dc);
@@ -11166,6 +11235,7 @@ class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
                 @change=${(e)=>this.handleLightService('turn_on', 'brightness', e.detail)}
                 ._max=${100}
                 ._min=${0}
+                ._units=${'%'}
                 ._startValue=${light.attributes.brightness * 100 / 255}
                 ._type=${'brightness'}
             ></slider-bar>`);
@@ -11181,6 +11251,7 @@ class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
             @change=${(e)=>this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
             ._max=${light.attributes.max_color_temp_kelvin}
             ._min=${light.attributes.min_color_temp_kelvin}
+            ._units=${'K'}
             ._startValue=${light.attributes.color_temp_kelvin}
             ._type=${'ct'}
         ></slider-bar>`);
@@ -11203,10 +11274,8 @@ class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
             class="outlined"
             ._entityIds = ${this._entityIds}
             ._changedEntityIds = ${this._changedEntityIds}
-            ._theme = ${{
-            ...theme
-        }}
-            @change = ${this.handleTheme}
+            ._themeState = ${theme}
+            .callService = ${this.callService}
         ></theme-select>
         `);
     }

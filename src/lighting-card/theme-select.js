@@ -12,7 +12,7 @@ export class ThemeSelect extends LitElement {
 
     static get properties() {
         return {
-            _theme: { state: true },
+            _themeState: { state: true },
             _option: { state: true },
             _changedEntityIds: { state: true }
         }
@@ -29,42 +29,84 @@ export class ThemeSelect extends LitElement {
     }
 
     shouldUpdate(changedProps) {
-        return (!this._initialized || this.hasRelevantChanges() || changedProps.has("_option"))
+        return (!this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_option"))
     }
 
     firstUpdated() {
         this.setInitialValue();
-        this._initialized = true;
+        this.initialize();
     }
 
     hasRelevantChanges() {
-        return this._changedEntityIds.has(this._theme.entity_id);
+        const isStateChanged = this.getCEIs().has(this.getEntityId());
+        const isNewOption = (this.getOption() != this.getThemeState());
+        return (isStateChanged && isNewOption);
     }
 
     updated(changedProps) {
-        (changedProps.has('_theme')) && this.setInitialValue();
+        (changedProps.has('_themeState')) && this.setInitialValue();
     }
 
     setInitialValue() {
-        this._option = this._theme.state;
+        this.setOption(this.getThemeState());
     }
 
-    /*************************************************************************/
+    /************************ getter and setter logic **************************/
 
-    onClick(e) {
-        const newOption = e.target.id;
-        this._option = newOption;
-        this.dispatchEvent(new CustomEvent('change', { detail: newOption }))
+    isInitialized() {
+        return this._initialized;
+    }
+
+    initialize() {
+        this._initialized = true;
     }
 
     getOptions() {
-        const optionList = this._theme.attributes.options;
+        const optionList = this._themeState.attributes.options;
         return optionList;
     }
 
-    isSelected(option) {
-        return (option === this._option);
+    getEntityId() {
+        const entityId = this._themeState.entity_id;
+        return entityId;
     }
+
+    getThemeState() {
+        return this._themeState.state;
+    }
+
+    getOption() {
+        return this._option;
+    }
+
+    setOption(option) {
+        this._option = option;
+    }
+
+    isSelected(option) {
+        return (option === this.getOption());
+    }
+
+    getCEIs() {
+        return this._changedEntityIds;
+    }
+
+    /**************************** interactive logic **************************/
+
+    onClick(option) {
+        this.setOption(option);
+        this.doCallService(option);
+    }
+
+    doCallService(option) {
+        const entityId = this.getEntityId();
+        const data = { entity_id: entityId, option: option };
+        this.callService('select', 'select_option', data);
+    }
+
+    /**************************** style/html logic ***************************/
+
+
 
     getStyles(option) {
         let styles = {};
@@ -81,9 +123,8 @@ export class ThemeSelect extends LitElement {
         return repeat(optionList, (option) => option, option => {
             return html`<div
                 class="option outlined sub-info"
-                style="${styleMap(this.getStyles(option))}"
-                id="${option}"
-                @click=${this.onClick}
+                style=${styleMap(this.getStyles(option))}
+                @click=${() => this.onClick(option)}
              >
                 ${option}
             </div>`
@@ -93,7 +134,7 @@ export class ThemeSelect extends LitElement {
     static styles = [sharedStyles, styles];
 
     render() {
-        if (this._initialized) {
+        if (this.isInitialized()) {
             return html`${this.listOptions()}`
         }
     }

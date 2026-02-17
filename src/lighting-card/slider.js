@@ -9,8 +9,10 @@ export class SliderBar extends LitElement {
     _max;
     _min;
     _startValue;
+    _units = '';
     _type;
     _initialized = false;
+    _isDown = false;
 
     static get properties() {
         return {
@@ -34,13 +36,13 @@ export class SliderBar extends LitElement {
 
     // determines if an update should occur
     shouldUpdate(changedProps) {
-        return (!this._initialized || this.hasRelevantChanges() || changedProps.has("_value"))
+        return (!this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_value"))
     }
 
     // runs after the first update
     firstUpdated() {
         this.setInitialValue();
-        this._initialized = true;
+        this.initialize();
     }
 
     // runs after every update
@@ -50,12 +52,15 @@ export class SliderBar extends LitElement {
 
     // helper to determine if should update
     hasRelevantChanges() {
-        return this._changedEntityIds.has(this._light.entity_id);
+        const isStateChanged = this.getCEIs().has(this.getEntityId());
+        const isUp = !this.isDown();
+        const isNew = (this.getValue() != this.getStateValue());
+        return (isStateChanged && isUp && isNew);
     }
 
     // syncs the value to an external change
     setInitialValue() {
-        (this._startValue) ? (this._value = this._startValue) : (this._value = this._min);
+        (this.getStateValue()) ? (this.setValue(this.getStateValue())) : (this.setValue(this.getMin()));
     }
 
     /****************************** getter and setter logic *************************/
@@ -64,39 +69,79 @@ export class SliderBar extends LitElement {
         return this._value;
     }
 
-    /****************************** interactive logic *******************************/
-
-    handleOnChange(e) {
-        let value = e.target.value;
-        (this._type === "brightness") && (value = Math.round(value * 255 / 100));
-        this.dispatchEvent(new CustomEvent('change', { detail: value }))
+    setValue(value) {
+        this._value = value;
     }
 
+    getMin() {
+        return this._min;
+    }
+
+    getMax() {
+        return this._max;
+    }
+
+    getStateValue() {
+        return this._startValue;
+    }
+
+    isInitialized() {
+        return this._initialized;
+    }
+
+    initialize() {
+        this._initialized = true;
+    }
+
+    getEntityId() {
+        return this._light.entity_id;
+    }
+
+    getCEIs() {
+        return this._changedEntityIds;
+    }
+
+    addUnits(value) {
+        let newValue = String(Math.round(value));
+        newValue = newValue + this._units;
+        return newValue;
+    }
+
+    isDown() {
+        return this._isDown;
+    }
+
+    setIsDown(boolean) {
+        this._isDown = boolean;
+    }
+
+    /****************************** interactive logic *******************************/
+
+    // depends on type
+    handleOnChange(e) {
+        this.setIsDown(false);
+        let value = e.target.value;
+        (this._type === "brightness") && (value = Math.round(value * 255 / 100));
+        this.dispatchEvent(new CustomEvent('change', { detail: value }));
+    }
+
+
     handleOnInput(e) {
+        this.setIsDown(true);
         const value = e.target.value;
-        this._value = value;
+        this.setValue(value);
     }
 
     /**************************** style/html logic ***************************/
 
-    addUnits(value) {
-        let newValue = String(Math.round(value));
-        if (this._type === "brightness") {
-            newValue = newValue + '%';
-        } else if (this._type === "ct") {
-            newValue = newValue + 'K';
-        }
-        return newValue;
-    }
-
     getHeight() {
-        const heightScale = (this.getValue() - this._min) / (this._max - this._min);
+        const heightScale = (this.getValue() - this.getMin()) / (this.getMax() - this.getMin());
         return 100 * heightScale;
     }
 
     getTempGradient() {
-        const minTemp = this._min;
-        const maxTemp = this._max;
+        const minTemp = this.getMin();
+        const maxTemp = this.getMax();
         const steps = 10;
         return tempGradient(minTemp, maxTemp, steps);
     }
@@ -107,6 +152,7 @@ export class SliderBar extends LitElement {
         return styles;
     }
 
+    // depends on type
     getStyleBG() {
         let styles = {};
         if (this._type === 'brightness') {
@@ -126,18 +172,19 @@ export class SliderBar extends LitElement {
     static styles = [sharedStyles, styles];
 
     render() {
-        if (this._initialized) {
+        if (this.isInitialized()) {
+            console.log("rendering");
             return html`
                 <div class="values">
                     <div class="inner-values">
-                        <div class="top-value"> ${this.addUnits(this._max)} </div>
-                        <div class="bottom-value"> ${this.addUnits(this._min)} </div>
+                        <div class="top-value"> ${this.addUnits(this.getMax())} </div>
+                        <div class="bottom-value"> ${this.addUnits(this.getMin())} </div>
                     </div>
                 </div>
                 <div class="slider outlined">
                     <div class="inner-slider">
                         <div
-                            class="shown-slider ${this._type}"
+                            class="shown-slider"
                             style="${styleMap(this.getStyleBG())}"
                         >
                             <div class="shown-level" style="${styleMap(this.getStyleLevel())}"></div>
@@ -145,8 +192,8 @@ export class SliderBar extends LitElement {
                         <input
                             class="actual-slider"
                             type="range"
-                            max=${this._max}
-                            min=${this._min}
+                            max=${this.getMax()}
+                            min=${this.getMin()}
                             value="${this.getValue()}"
                             @input="${this.handleOnInput}"
                             @change="${this.handleOnChange}"

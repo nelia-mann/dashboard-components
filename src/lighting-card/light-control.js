@@ -180,6 +180,7 @@ export class LightControl extends LitElement {
                 @change=${(e) => this.handleLightService('turn_on', 'brightness', e.detail)}
                 ._max=${100}
                 ._min=${0}
+                ._units=${'%'}
                 ._startValue=${light.attributes.brightness * 100 / 255}
                 ._type=${'brightness'}
             ></slider-bar>`)
@@ -194,6 +195,7 @@ export class LightControl extends LitElement {
             @change=${(e) => this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
             ._max=${light.attributes.max_color_temp_kelvin}
             ._min=${light.attributes.min_color_temp_kelvin}
+            ._units=${'K'}
             ._startValue=${light.attributes.color_temp_kelvin}
             ._type=${'ct'}
         ></slider-bar>`)
@@ -216,8 +218,8 @@ export class LightControl extends LitElement {
             class="outlined"
             ._entityIds = ${this._entityIds}
             ._changedEntityIds = ${this._changedEntityIds}
-            ._theme = ${{...theme}}
-            @change = ${this.handleTheme}
+            ._themeState = ${theme}
+            .callService = ${this.callService}
         ></theme-select>
         `)
     }
