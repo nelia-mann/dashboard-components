@@ -50,7 +50,7 @@ export class LightComponent extends LitElement {
         let lightState;
         result = repeat(lightIds, (lightId) => lightId, (lightId) => {
             lightState = this._states[lightId];
-            return html`<light-icon ._state=${lightState} ._isGroup=${false}></light-icon>`
+            return html`<light-icon ._state=${lightState}></light-icon>`
         })
         return result;
     }

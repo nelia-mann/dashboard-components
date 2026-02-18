@@ -82,7 +82,6 @@ export class PopoutWindow extends LitElement {
         const lightState = this._states[lightId];
         if (lightState) {
             const name = lightState.attributes.friendly_name;
-            const isGroup = this.isGroup(lightId);
             return html`
                 <div
                     class="light-inner outlined ${this.header(isMember)}"
@@ -91,7 +90,7 @@ export class PopoutWindow extends LitElement {
                     @click=${() => this.select(lightState)}
                 >
                     <div class="icons">
-                        <light-icon ._state=${lightState} ._isGroup=${isGroup}></light-icon>
+                        <light-icon ._state=${lightState}></light-icon>
                     </div>
                     ${name}
                 </div>

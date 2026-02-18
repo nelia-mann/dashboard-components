@@ -8,14 +8,17 @@ export class LightIcon extends LitElement {
 
     static get properties() {
         return {
-            _state: { state: true },
-            _isGroup: { state: true }
+            _state: { state: true }
         }
+    }
+
+    isGroup() {
+        return !!(this._state.attributes.entity_id);
     }
 
     lightbulb() {
         let lightbulb;
-        if (this._isGroup) {
+        if (this.isGroup()) {
             (isOn(this._state)) ? (lightbulb = mdiLightbulbGroup) : (lightbulb = mdiLightbulbGroupOff);
         } else {
             (isOn(this._state)) ? (lightbulb = mdiLightbulb) : (lightbulb = mdiLightbulbOff);

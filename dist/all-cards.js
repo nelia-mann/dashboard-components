@@ -8919,15 +8919,15 @@ class $7efc95c414d3bc9c$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
         return {
             _state: {
                 state: true
-            },
-            _isGroup: {
-                state: true
             }
         };
     }
+    isGroup() {
+        return !!this._state.attributes.entity_id;
+    }
     lightbulb() {
         let lightbulb;
-        if (this._isGroup) (0, $023a61f00bda0ff8$export$1a2d97de39ecbb75)(this._state) ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
+        if (this.isGroup()) (0, $023a61f00bda0ff8$export$1a2d97de39ecbb75)(this._state) ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
         else (0, $023a61f00bda0ff8$export$1a2d97de39ecbb75)(this._state) ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
         return lightbulb;
     }
@@ -11300,7 +11300,7 @@ class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
             case 'onOff':
                 content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._state=${{
                     ...this._lightState
-                }} ._isGroup=${this.isGroup()}></light-icon>`;
+                }} ></light-icon>`;
                 break;
             case 'brightness':
                 content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80}></ha-svg-icon>`;
@@ -11502,7 +11502,6 @@ class $37f28d6f302b8247$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         const lightState = this._states[lightId];
         if (lightState) {
             const name = lightState.attributes.friendly_name;
-            const isGroup = this.isGroup(lightId);
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div
                     class="light-inner outlined ${this.header(isMember)}"
@@ -11511,7 +11510,7 @@ class $37f28d6f302b8247$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
                     @click=${()=>this.select(lightState)}
                 >
                     <div class="icons">
-                        <light-icon ._state=${lightState} ._isGroup=${isGroup}></light-icon>
+                        <light-icon ._state=${lightState}></light-icon>
                     </div>
                     ${name}
                 </div>
@@ -11676,7 +11675,7 @@ class $5f91742d25a4f6c9$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         let lightState;
         result = (0, $6db6ff6394e885e6$export$76d90c956114f2c2)(lightIds, (lightId)=>lightId, (lightId)=>{
             lightState = this._states[lightId];
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._state=${lightState} ._isGroup=${false}></light-icon>`;
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._state=${lightState}></light-icon>`;
         });
         return result;
     }
