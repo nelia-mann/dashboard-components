@@ -1,8 +1,8 @@
 import { html, LitElement } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
-import styles from './theme.styles.js';
-import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import { styleMap } from 'lit/directives/style-map.js';
+import styles from './theme.styles.js';
+import sharedStyles from '../../styles/shared-styles.js';
 import { getThemeGradient, getThemeOutline } from './theme-util.js';
 
 
@@ -43,8 +43,8 @@ export class ThemeSelect extends LitElement {
         return (isStateChanged && isNewOption);
     }
 
-    updated(changedProps) {
-        (changedProps.has('_themeState')) && this.setInitialValue();
+    updated() {
+        (this.hasRelevantChanges()) && this.setInitialValue();
     }
 
     setInitialValue() {

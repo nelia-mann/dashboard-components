@@ -1,8 +1,8 @@
 import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import styles from './slider.styles.js';
-import sharedStyles from '../shared-resources/styles/shared-styles.js';
-import { tempGradient, ONLIGHT, rgba } from './color-util.js';
+import sharedStyles from '../../styles/shared-styles.js';
+import { rgba } from '../util/color-util.js';
 
 export class SliderBar extends LitElement {
 
@@ -10,13 +10,14 @@ export class SliderBar extends LitElement {
     _min;
     _startValue;
     _units = '';
-    _type;
+    _background = '';
+    _colorCode = [255, 255, 255];
     _initialized = false;
     _isDown = false;
 
     static get properties() {
         return {
-            _light: { state: true },
+            _state: { state: true },
             _value: { state: true },
             _changedEntityIds: { state: true },
         }
@@ -94,7 +95,7 @@ export class SliderBar extends LitElement {
     }
 
     getEntityId() {
-        return this._light.entity_id;
+        return this._state.entity_id;
     }
 
     getCEIs() {
@@ -115,13 +116,20 @@ export class SliderBar extends LitElement {
         this._isDown = boolean;
     }
 
+    getBackground() {
+        return this._background;
+    }
+
+    getColorCode() {
+        return this._colorCode;
+    }
+
     /****************************** interactive logic *******************************/
 
     // depends on type
     handleOnChange(e) {
         this.setIsDown(false);
         let value = e.target.value;
-        (this._type === "brightness") && (value = Math.round(value * 255 / 100));
         this.dispatchEvent(new CustomEvent('change', { detail: value }));
     }
 
@@ -136,14 +144,7 @@ export class SliderBar extends LitElement {
 
     getHeight() {
         const heightScale = (this.getValue() - this.getMin()) / (this.getMax() - this.getMin());
-        return 100 * heightScale;
-    }
-
-    getTempGradient() {
-        const minTemp = this.getMin();
-        const maxTemp = this.getMax();
-        const steps = 10;
-        return tempGradient(minTemp, maxTemp, steps);
+        return Math.round(100 * heightScale);
     }
 
     getStyleLevel() {
@@ -152,19 +153,17 @@ export class SliderBar extends LitElement {
         return styles;
     }
 
-    // depends on type
     getStyleBG() {
         let styles = {};
-        if (this._type === 'brightness') {
-            let height = ` ${Math.round(this.getHeight())}%`;
-            let dark = rgba(ONLIGHT, 1);
-            let pale = rgba(ONLIGHT, 0.2);
+        if (this.getBackground()) {
+            styles['background'] = this.getBackground();
+        } else {
+            let height = ` ${this.getHeight()}%`;
+            let dark = rgba(this.getColorCode(), 1);
+            let pale = rgba(this.getColorCode(), 0.2);
             let stem = 'linear-gradient(to top, ';
             stem = stem + dark + height + ', ' + pale + height + ')';
             styles['background'] = stem;
-        }
-        else if (this._type === 'ct') {
-            styles['background'] = this.getTempGradient();
         }
         return styles;
     }
@@ -173,7 +172,6 @@ export class SliderBar extends LitElement {
 
     render() {
         if (this.isInitialized()) {
-            console.log("rendering");
             return html`
                 <div class="values">
                     <div class="inner-values">

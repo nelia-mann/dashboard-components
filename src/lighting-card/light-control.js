@@ -6,9 +6,9 @@ import { mdiBrightness6, mdiCreationOutline } from '@mdi/js';
 import styles from './light-control.styles.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import './light-icon.js';
-import './slider.js';
+import '../shared-resources/light-components/slider/slider.js';
 import '../shared-resources/light-components/color-wheel/color-wheel.js';
-import './theme-select.js';
+import '../shared-resources/light-components/theme-select/theme-select.js';
 
 export class LightControl extends LitElement {
 
@@ -161,43 +161,40 @@ export class LightControl extends LitElement {
         this.callService('light', service, data)
     }
 
-    handleTheme(event) {
-        const entityId = this._themeState.entity_id;
-        const data = {
-            entity_id: entityId,
-            option: event.detail
-        }
-        this.callService('select', 'select_option', data)
-    }
-
     brightnessBar() {
         const light = this._lightState;
         return keyed(light.entity_id, html`
             <slider-bar
                 class="outlined"
                 ._changedEntityIds = ${this._changedEntityIds}
-                ._light=${{...light}}
-                @change=${(e) => this.handleLightService('turn_on', 'brightness', e.detail)}
+                ._state=${light}
+                @change=${(e) => this.handleLightService('turn_on', 'brightness_pct', e.detail)}
                 ._max=${100}
                 ._min=${0}
                 ._units=${'%'}
                 ._startValue=${light.attributes.brightness * 100 / 255}
                 ._type=${'brightness'}
+                ._colorCode=${ONLIGHT}
             ></slider-bar>`)
     }
 
     ctBar() {
         const light = this._lightState;
+        const min = light.attributes.min_color_temp_kelvin;
+        const max = light.attributes.max_color_temp_kelvin;
+        const steps = 10;
+        const tempGrad = tempGradient(min, max, steps);
         return keyed(light.entity_id, html`<slider-bar
             class="outlined"
             ._changedEntityIds = ${this._changedEntityIds}
-            ._light=${{...light}}
+            ._state=${light}
             @change=${(e) => this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
-            ._max=${light.attributes.max_color_temp_kelvin}
-            ._min=${light.attributes.min_color_temp_kelvin}
+            ._max=${max}
+            ._min=${min}
             ._units=${'K'}
             ._startValue=${light.attributes.color_temp_kelvin}
             ._type=${'ct'}
+            ._background=${tempGrad}
         ></slider-bar>`)
     }
 
