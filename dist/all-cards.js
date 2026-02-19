@@ -9761,7 +9761,10 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         this.hasRelevantChanges() && !this.isDown() && this.setInitialValues();
     }
     hasRelevantChanges() {
-        return this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState()));
+        const isStateChanged = this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState()));
+        const lightHSColor = (0, $6d3ca277783cacc8$export$ea3cc22fc7f3ca28)(this.getLightState());
+        const hasNewValues = lightHSColor[0] !== this.getHue() || lightHSColor[1] !== this.getSat();
+        return isStateChanged && hasNewValues;
     }
     setInitialValues() {
         const hs_values = (0, $6d3ca277783cacc8$export$ea3cc22fc7f3ca28)(this.getLightState());
@@ -9774,10 +9777,10 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         }
     }
     /****************************** getter and setter logic *******************/ getHue() {
-        return this._hue;
+        return Math.round(this._hue);
     }
     getSat() {
-        return this._saturation;
+        return Math.round(this._saturation);
     }
     setHue(hue) {
         this._hue = hue;

@@ -54,7 +54,10 @@ export class ColorWheel extends LitElement {
     }
 
     hasRelevantChanges() {
-        return this.getCEIs().has(getEntityId(this.getLightState()));
+        const isStateChanged = this.getCEIs().has(getEntityId(this.getLightState()));
+        const lightHSColor = getHSColor(this.getLightState());
+        const hasNewValues = (lightHSColor[0] !== this.getHue()) || (lightHSColor[1] !== this.getSat())
+        return isStateChanged && hasNewValues;
     }
 
     setInitialValues() {
@@ -72,11 +75,11 @@ export class ColorWheel extends LitElement {
     /****************************** getter and setter logic *******************/
 
     getHue() {
-        return this._hue;
+        return Math.round(this._hue);
     }
 
     getSat() {
-        return this._saturation;
+        return Math.round(this._saturation);
     }
 
     setHue(hue) {
