@@ -9910,15 +9910,11 @@ customElements.define("color-wheel", $bb0f3ca1b2cb13d8$export$f80663f808113381);
 
 var $650a21d87e85f0eb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
-    .option {
+    theme-button {
         padding-top: 1px;
         padding-bottom: 1px;
         margin: 5px;
         width: 90px;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
     }
 
 `;
@@ -11269,6 +11265,94 @@ function $9fad138f4964f803$export$cc5233436f23d8d4(theme) {
 
 
 
+
+
+
+var $88924f19593e44bd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    .option {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+`;
+
+
+
+
+class $65629b7f5a2a2127$export$91a69db4fc637fd9 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    static get properties() {
+        return {
+            _option: {
+                state: true
+            },
+            _isSelected: {
+                state: true
+            },
+            _initialized: {
+                state: true
+            }
+        };
+    }
+    constructor(){
+        super();
+        this._isSelected = false;
+        this._initialized = false;
+    }
+    /********************* lifecycle ******************************/ update(changedProps) {
+        super.update(changedProps);
+    }
+    shouldUpdate(changedProps) {
+        return !this.isInitialized() || changedProps.has("_isSelected") || changedProps.has("_initialized");
+    }
+    firstUpdated() {
+        this.initialize();
+    }
+    /********************* getter and setter logic ****************/ isInitialized() {
+        return this._initialized;
+    }
+    initialize() {
+        this._initialized = true;
+    }
+    getOption() {
+        return this._option;
+    }
+    isSelected() {
+        return this._isSelected;
+    }
+    /********************* interactive logic **********************/ onClick() {
+        this.dispatchEvent(new CustomEvent('select'));
+    }
+    /********************* style/html logic ***********************/ getStyles() {
+        let styles = {};
+        if (this.isSelected()) {
+            styles['outline'] = `solid ${(0, $9fad138f4964f803$export$cc5233436f23d8d4)(this.getOption())}`;
+            styles['outline-offset'] = '-3px;';
+        }
+        styles['background'] = (0, $9fad138f4964f803$export$aa352c5cf20281b9)(this.getOption());
+        return styles;
+    }
+    static styles = [
+        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
+        (0, $88924f19593e44bd$export$2e2bcd8739ae039)
+    ];
+    render() {
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
+                    class="option outlined sub-info"
+                    style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles())}
+                    @click=${this.onClick}
+                >
+                    ${this.getOption()}
+                </div>`;
+    }
+}
+customElements.define("theme-button", $65629b7f5a2a2127$export$91a69db4fc637fd9);
+
+
 class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -11362,13 +11446,11 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
     listOptions() {
         const optionList = this.getOptions();
         return (0, $6db6ff6394e885e6$export$76d90c956114f2c2)(optionList, (option)=>option, (option)=>{
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
-                class="option outlined sub-info"
-                style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(option))}
-                @click=${()=>this.onClick(option)}
-             >
-                ${option}
-            </div>`;
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-button
+                @select=${()=>this.onClick(option)}
+                ._option=${option}
+                ._isSelected=${this.isSelected(option)}
+             ></theme-button>`;
         });
     }
     static styles = [

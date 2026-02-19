@@ -5,6 +5,7 @@ import styles from './theme.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import { getThemeGradient, getThemeOutline } from './theme-util.js';
 import { getEntityId, getState } from '../../util/state-util.js';
+import './theme-button.js';
 
 
 export class ThemeSelect extends LitElement {
@@ -124,13 +125,11 @@ export class ThemeSelect extends LitElement {
     listOptions() {
         const optionList = this.getOptions();
         return repeat(optionList, (option) => option, option => {
-            return html`<div
-                class="option outlined sub-info"
-                style=${styleMap(this.getStyles(option))}
-                @click=${() => this.onClick(option)}
-             >
-                ${option}
-            </div>`
+            return html`<theme-button
+                @select=${() => this.onClick(option)}
+                ._option=${option}
+                ._isSelected=${this.isSelected(option)}
+             ></theme-button>`
         })
     }
 
