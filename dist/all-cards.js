@@ -9229,27 +9229,19 @@ var $aff2444c65f9a133$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         margin: 10px;
     }
 
-    slider-bar {
-        margin-left: 20px;
-        margin-right: 10px;
-        width: 150px;
-        height: 150px;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
-
     brightness-slider {
         margin-left: 20px;
         margin-right: 10px;
         width: 150px;
         height: 150px;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
+        padding: 20px;
+    }
+
+    colortemp-slider {
+        margin-left: 20px;
+        margin-right: 10px;
+        width: 150px;
+        height: 150px;
         padding: 20px;
     }
 
@@ -9294,19 +9286,36 @@ var $aff2444c65f9a133$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-const $8f35bb7688a30718$var$_TOPMARGIN = 10;
-const $8f35bb7688a30718$var$_BOTTOMMARGIN = 0;
-var $8f35bb7688a30718$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+var $ae9105d0e2173251$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    slider-bar {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+`;
+
+
+
+
+
+
+const $ef1a79c6631dfc4e$var$_TOPMARGIN = 10;
+const $ef1a79c6631dfc4e$var$_BOTTOMMARGIN = 0;
+var $ef1a79c6631dfc4e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .values {
         height: 100%;
         width: 35px;
-        padding-top: ${$8f35bb7688a30718$var$_TOPMARGIN + 25}%;
+        padding-top: ${$ef1a79c6631dfc4e$var$_TOPMARGIN + 25}%;
     }
 
     .inner-values {
         position: relative;
-        height: ${100 - $8f35bb7688a30718$var$_TOPMARGIN - $8f35bb7688a30718$var$_BOTTOMMARGIN}%;
+        height: ${100 - $ef1a79c6631dfc4e$var$_TOPMARGIN - $ef1a79c6631dfc4e$var$_BOTTOMMARGIN}%;
         width: 100%;
     }
 
@@ -9314,12 +9323,12 @@ var $8f35bb7688a30718$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         height: 100%;
         width: 30px;
         margin-left: 5px;
-        padding-top: ${$8f35bb7688a30718$var$_TOPMARGIN}%;
+        padding-top: ${$ef1a79c6631dfc4e$var$_TOPMARGIN}%;
     }
 
     .inner-slider {
         position: relative;
-        height: ${100 - $8f35bb7688a30718$var$_TOPMARGIN - $8f35bb7688a30718$var$_BOTTOMMARGIN}%;
+        height: ${100 - $ef1a79c6631dfc4e$var$_TOPMARGIN - $ef1a79c6631dfc4e$var$_BOTTOMMARGIN}%;
         width: 100%;
     }
 
@@ -9370,17 +9379,48 @@ var $8f35bb7688a30718$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+const $884a87e59af13a5c$export$173de64b5ad0d5b4 = [
+    158,
+    158,
+    158
+]; // color in rgb (gray)
+const $884a87e59af13a5c$export$d5a2e4d76c8cdaad = [
+    68,
+    115,
+    158
+]; // color in rgb (steel blue)
+function $884a87e59af13a5c$var$setScale(a, b, t) {
+    let result = a;
+    if (t > 1) result = b;
+    else if (t < 0) result = a;
+    else result = a + (b - a) * t;
+    return result;
+}
+function $884a87e59af13a5c$export$4e46ac54fc82cf3b(rgbArray, opacity) {
+    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`;
+}
+function $884a87e59af13a5c$export$dd0fba3206c57e56(rgbA, rgbB, t) {
+    const red = $884a87e59af13a5c$var$setScale(rgbA[0], rgbB[0], t);
+    const green = $884a87e59af13a5c$var$setScale(rgbA[1], rgbB[1], t);
+    const blue = $884a87e59af13a5c$var$setScale(rgbA[2], rgbB[2], t);
+    return [
+        red,
+        green,
+        blue
+    ];
+}
 
-class $91f755965ec27edf$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+
+class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _max;
     _min;
     _startValue;
     _units = '';
     _background = '';
     _colorCode = [
-        255,
-        255,
-        255
+        0,
+        0,
+        0
     ];
     _isDown = false;
     static get properties() {
@@ -9505,8 +9545,8 @@ class $91f755965ec27edf$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         if (this.getBackground()) styles['background'] = this.getBackground();
         else {
             let height = ` ${this.getHeight()}%`;
-            let dark = (0, $66c8ca609c94bdc0$export$4e46ac54fc82cf3b)(this.getColorCode(), 1);
-            let pale = (0, $66c8ca609c94bdc0$export$4e46ac54fc82cf3b)(this.getColorCode(), 0.2);
+            let dark = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getColorCode(), 1);
+            let pale = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getColorCode(), 0.2);
             let stem = 'linear-gradient(to top, ';
             stem = stem + dark + height + ', ' + pale + height + ')';
             styles['background'] = stem;
@@ -9515,7 +9555,7 @@ class $91f755965ec27edf$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     }
     static styles = [
         (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
-        (0, $8f35bb7688a30718$export$2e2bcd8739ae039)
+        (0, $ef1a79c6631dfc4e$export$2e2bcd8739ae039)
     ];
     render() {
         if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
@@ -9554,25 +9594,7 @@ class $91f755965ec27edf$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
             `;
     }
 }
-customElements.define("slider-bar", $91f755965ec27edf$export$5ff34efdd1b9ed54);
-
-
-
-
-
-var $ae9105d0e2173251$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-
-    slider-bar {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
-    }
-`;
-
-
+customElements.define("slider-bar", $9d406f50450a5172$export$5ff34efdd1b9ed54);
 
 
 class $289a3d4763775a85$export$2541e764ec89469 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
@@ -9658,6 +9680,117 @@ class $289a3d4763775a85$export$2541e764ec89469 extends (0, $ab210b2da7b39b9d$exp
     }
 }
 customElements.define("brightness-slider", $289a3d4763775a85$export$2541e764ec89469);
+
+
+
+
+
+var $25e401c3c55763f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    slider-bar {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+`;
+
+
+
+
+class $3d80432ed0534279$export$e97d95246d8cbf24 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    static get properties() {
+        return {
+            _lightState: {
+                state: true
+            },
+            _changedEntityIds: {
+                state: true
+            },
+            _initialized: {
+                state: true
+            }
+        };
+    }
+    constructor(){
+        super();
+        this._lightState = {};
+        this._changedEntityIds = new Set();
+        this._initialized = false;
+    }
+    /******************************* lifecycle **********************************/ update(changedProps) {
+        super.update(changedProps);
+    }
+    shouldUpdate(changedProps) {
+        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_initialized");
+    }
+    firstUpdated() {
+        this.initialize();
+    }
+    hasRelevantChanges() {
+        return this.getCEIs().has(this.getEntityId());
+    }
+    /************************ getter and setter logic *************************/ isInitialized() {
+        return this._initialized;
+    }
+    initialize() {
+        this._initialized = true;
+    }
+    getState() {
+        return this._lightState;
+    }
+    getEntityId() {
+        return this.getState().entity_id;
+    }
+    getColorTempKelvin() {
+        return this.getState().attributes.color_temp_kelvin;
+    }
+    getCEIs() {
+        return this._changedEntityIds;
+    }
+    getMinTemp() {
+        return this.getState().attributes.min_color_temp_kelvin;
+    }
+    getMaxTemp() {
+        return this.getState().attributes.max_color_temp_kelvin;
+    }
+    /************************ interactive logic *******************************/ handleLightService(e) {
+        const value = e.detail;
+        const entityId = this.getEntityId();
+        let data = {
+            entity_id: entityId,
+            color_temp_kelvin: value
+        };
+        this.callService('light', 'turn_on', data);
+    }
+    /**************************** style/html logic ******************************/ ctBar() {
+        const steps = 10;
+        const tempGrad = (0, $66c8ca609c94bdc0$export$5b5356aa7e20fd72)(this.getMinTemp(), this.getMaxTemp(), steps);
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <slider-bar
+                ._changedEntityIds = ${this.getCEIs()}
+                ._state=${this.getState()}
+                @change=${this.handleLightService}
+                ._max=${this.getMaxTemp()}
+                ._min=${this.getMinTemp()}
+                ._units=${'K'}
+                ._startValue=${this.getColorTempKelvin()}
+                ._background=${tempGrad}
+            ></slider-bar>`;
+    }
+    static styles = [
+        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
+        (0, $25e401c3c55763f7$export$2e2bcd8739ae039)
+    ];
+    render() {
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                ${this.ctBar()}
+            `;
+    }
+}
+customElements.define("colortemp-slider", $3d80432ed0534279$export$e97d95246d8cbf24);
 
 
 
@@ -11492,19 +11625,17 @@ class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         `;
     }
     onSelect(type) {
-        if (type === 'onOff') this.handleLightService('toggle', null, null);
+        if (type === 'onOff') {
+            const entityId = this._lightState.entity_id;
+            const data = {
+                entity_id: entityId
+            };
+            this.callService('light', 'toggle', data);
+        }
         this._control = type;
     }
     isSelected(type) {
         return this._control === type;
-    }
-    handleLightService(service, key, value) {
-        const entityId = this._lightState.entity_id;
-        let data = {
-            entity_id: entityId
-        };
-        if (key) data[key] = value;
-        this.callService('light', service, data);
     }
     brightnessBar() {
         const light = this._lightState;
@@ -11518,22 +11649,13 @@ class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     }
     ctBar() {
         const light = this._lightState;
-        const min = light.attributes.min_color_temp_kelvin;
-        const max = light.attributes.max_color_temp_kelvin;
-        const steps = 10;
-        const tempGrad = (0, $431982fab2e14f47$export$5b5356aa7e20fd72)(min, max, steps);
-        return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(light.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
-            class="outlined"
-            ._changedEntityIds = ${this._changedEntityIds}
-            ._state=${light}
-            @change=${(e)=>this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
-            ._max=${max}
-            ._min=${min}
-            ._units=${'K'}
-            ._startValue=${light.attributes.color_temp_kelvin}
-            ._type=${'ct'}
-            ._background=${tempGrad}
-        ></slider-bar>`);
+        return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(light.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <colortemp-slider
+                class="outlined"
+                ._changedEntityIds=${this._changedEntityIds}
+                ._lightState=${light}
+                .callService=${this.callService}
+            ></colortemp-slider>`);
     }
     colorWheel() {
         const light = this._lightState;

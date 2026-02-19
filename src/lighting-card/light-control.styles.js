@@ -20,27 +20,19 @@ export default css`
         margin: 10px;
     }
 
-    slider-bar {
-        margin-left: 20px;
-        margin-right: 10px;
-        width: 150px;
-        height: 150px;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
-
     brightness-slider {
         margin-left: 20px;
         margin-right: 10px;
         width: 150px;
         height: 150px;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
+        padding: 20px;
+    }
+
+    colortemp-slider {
+        margin-left: 20px;
+        margin-right: 10px;
+        width: 150px;
+        height: 150px;
         padding: 20px;
     }
 

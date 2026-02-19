@@ -1,10 +1,10 @@
 import { html, LitElement } from 'lit';
-import { ONLIGHT } from '../util/color-util.js';
-import styles from './brightness-slider.styles.js';
+import { tempGradient } from '../util/color-util.js';
+import styles from './colortemp-slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../../general-components/slider/slider.js';
 
-export class BrightnessSlider extends LitElement {
+export class ColorTempSlider extends LitElement {
 
     static get properties() {
         return {
@@ -59,12 +59,20 @@ export class BrightnessSlider extends LitElement {
         return this.getState().entity_id;
     }
 
-    getBrightnessPct() {
-        return this.getState().attributes.brightness * 100 / 255;
+    getColorTempKelvin() {
+        return this.getState().attributes.color_temp_kelvin;
     }
 
     getCEIs() {
         return this._changedEntityIds;
+    }
+
+    getMinTemp() {
+        return this.getState().attributes.min_color_temp_kelvin;
+    }
+
+    getMaxTemp() {
+        return this.getState().attributes.max_color_temp_kelvin;
     }
 
     /************************ interactive logic *******************************/
@@ -72,23 +80,25 @@ export class BrightnessSlider extends LitElement {
     handleLightService(e) {
         const value = e.detail;
         const entityId = this.getEntityId();
-        let data = { entity_id: entityId, brightness_pct: value }
+        let data = { entity_id: entityId, color_temp_kelvin: value }
         this.callService('light', 'turn_on', data)
     }
 
     /**************************** style/html logic ******************************/
 
-    brightnessBar() {
+    ctBar() {
+        const steps = 10;
+        const tempGrad = tempGradient(this.getMinTemp(), this.getMaxTemp(), steps);
         return html`
             <slider-bar
                 ._changedEntityIds = ${this.getCEIs()}
                 ._state=${this.getState()}
                 @change=${this.handleLightService}
-                ._max=${100}
-                ._min=${0}
-                ._units=${'%'}
-                ._startValue=${this.getBrightnessPct()}
-                ._colorCode=${ONLIGHT}
+                ._max=${this.getMaxTemp()}
+                ._min=${this.getMinTemp()}
+                ._units=${'K'}
+                ._startValue=${this.getColorTempKelvin()}
+                ._background=${tempGrad}
             ></slider-bar>`
     }
 
@@ -97,11 +107,11 @@ export class BrightnessSlider extends LitElement {
     render() {
         if (this.isInitialized()) {
             return html`
-                ${this.brightnessBar()}
+                ${this.ctBar()}
             `
         }
     }
 
 }
 
-customElements.define("brightness-slider", BrightnessSlider);
+customElements.define("colortemp-slider", ColorTempSlider);

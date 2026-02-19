@@ -6,8 +6,8 @@ import { mdiBrightness6, mdiCreationOutline } from '@mdi/js';
 import styles from './light-control.styles.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import '../shared-resources/light-components/light-icon/light-icon.js';
-import '../shared-resources/light-components/slider/slider.js';
 import '../shared-resources/light-components/brightness-slider/brightness-slider.js';
+import '../shared-resources/light-components/colortemp-slider/colortemp-slider.js';
 import '../shared-resources/light-components/color-wheel/color-wheel.js';
 import '../shared-resources/light-components/theme-select/theme-select.js';
 
@@ -147,22 +147,15 @@ export class LightControl extends LitElement {
 
     onSelect(type) {
         if (type === 'onOff') {
-            this.handleLightService('toggle', null, null);
+            const entityId = this._lightState.entity_id;
+            const data = { entity_id: entityId }
+            this.callService('light', 'toggle', data)
         }
         this._control = type;
     }
 
     isSelected(type) {
         return (this._control === type);
-    }
-
-    handleLightService(service, key, value) {
-        const entityId = this._lightState.entity_id;
-        let data = { entity_id: entityId }
-        if (key) {
-            data[key] = value;
-        }
-        this.callService('light', service, data)
     }
 
     brightnessBar() {
@@ -178,22 +171,13 @@ export class LightControl extends LitElement {
 
     ctBar() {
         const light = this._lightState;
-        const min = light.attributes.min_color_temp_kelvin;
-        const max = light.attributes.max_color_temp_kelvin;
-        const steps = 10;
-        const tempGrad = tempGradient(min, max, steps);
-        return keyed(light.entity_id, html`<slider-bar
-            class="outlined"
-            ._changedEntityIds = ${this._changedEntityIds}
-            ._state=${light}
-            @change=${(e) => this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
-            ._max=${max}
-            ._min=${min}
-            ._units=${'K'}
-            ._startValue=${light.attributes.color_temp_kelvin}
-            ._type=${'ct'}
-            ._background=${tempGrad}
-        ></slider-bar>`)
+        return keyed(light.entity_id, html`
+            <colortemp-slider
+                class="outlined"
+                ._changedEntityIds=${this._changedEntityIds}
+                ._lightState=${light}
+                .callService=${this.callService}
+            ></colortemp-slider>`)
     }
 
     colorWheel() {
