@@ -1,5 +1,11 @@
 import { css } from 'lit';
 
+const SIZE = 210;
+const LEFTMARGIN = 20;
+const RIGHTMARGIN = 10;
+const PADDING = 20;
+
+
 export default css`
 
     .control-column {
@@ -29,31 +35,31 @@ export default css`
     }
 
     brightness-slider {
-        margin-left: 20px;
-        margin-right: 10px;
-        width: 150px;
-        height: 150px;
-        padding: 20px;
+        margin-left: ${LEFTMARGIN}px;
+        margin-right: ${RIGHTMARGIN}px;
+        width: ${SIZE}px;
+        height: ${SIZE}px;
+        padding: ${PADDING}px;
     }
 
     colortemp-slider {
-        margin-left: 20px;
-        margin-right: 10px;
-        width: 150px;
-        height: 150px;
-        padding: 20px;
+        margin-left: ${LEFTMARGIN}px;
+        margin-right: ${RIGHTMARGIN}px;
+        width: ${SIZE}px;
+        height: ${SIZE}px;
+        padding: ${PADDING}px;
     }
 
     color-wheel {
         position: relative;
-        width: 150px;
-        height: 150px;
-        margin-left: 20px;
-        margin-right: 10px;
+        width: ${SIZE}px;
+        height: ${SIZE}px;
+        margin-left: ${LEFTMARGIN}px;
+        margin-right: ${RIGHTMARGIN}px;
+        padding: ${PADDING}px;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 20px;
     }
 
     theme-select {
@@ -61,12 +67,11 @@ export default css`
         flex-flow: column wrap;
         justify-content: flex-start;
         align-items: center;
-        margin-left: 15px;
         width: 450px;
         height: 360px;
-        padding: 10px;
-        padding-left: 5px;
-        padding-right: 5px;
+        margin-left: ${LEFTMARGIN}px;
+        margin-right: ${RIGHTMARGIN}px;
+        padding: ${PADDING}px;
     }
 
 `;

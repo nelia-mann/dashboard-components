@@ -9140,6 +9140,10 @@ var $7b691440c938e64b$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+const $2a56fe717a5ec2a6$var$SIZE = 210;
+const $2a56fe717a5ec2a6$var$LEFTMARGIN = 20;
+const $2a56fe717a5ec2a6$var$RIGHTMARGIN = 10;
+const $2a56fe717a5ec2a6$var$PADDING = 20;
 var $2a56fe717a5ec2a6$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .control-column {
@@ -9169,31 +9173,31 @@ var $2a56fe717a5ec2a6$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     brightness-slider {
-        margin-left: 20px;
-        margin-right: 10px;
-        width: 150px;
-        height: 150px;
-        padding: 20px;
+        margin-left: ${$2a56fe717a5ec2a6$var$LEFTMARGIN}px;
+        margin-right: ${$2a56fe717a5ec2a6$var$RIGHTMARGIN}px;
+        width: ${$2a56fe717a5ec2a6$var$SIZE}px;
+        height: ${$2a56fe717a5ec2a6$var$SIZE}px;
+        padding: ${$2a56fe717a5ec2a6$var$PADDING}px;
     }
 
     colortemp-slider {
-        margin-left: 20px;
-        margin-right: 10px;
-        width: 150px;
-        height: 150px;
-        padding: 20px;
+        margin-left: ${$2a56fe717a5ec2a6$var$LEFTMARGIN}px;
+        margin-right: ${$2a56fe717a5ec2a6$var$RIGHTMARGIN}px;
+        width: ${$2a56fe717a5ec2a6$var$SIZE}px;
+        height: ${$2a56fe717a5ec2a6$var$SIZE}px;
+        padding: ${$2a56fe717a5ec2a6$var$PADDING}px;
     }
 
     color-wheel {
         position: relative;
-        width: 150px;
-        height: 150px;
-        margin-left: 20px;
-        margin-right: 10px;
+        width: ${$2a56fe717a5ec2a6$var$SIZE}px;
+        height: ${$2a56fe717a5ec2a6$var$SIZE}px;
+        margin-left: ${$2a56fe717a5ec2a6$var$LEFTMARGIN}px;
+        margin-right: ${$2a56fe717a5ec2a6$var$RIGHTMARGIN}px;
+        padding: ${$2a56fe717a5ec2a6$var$PADDING}px;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 20px;
     }
 
     theme-select {
@@ -9201,12 +9205,11 @@ var $2a56fe717a5ec2a6$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         flex-flow: column wrap;
         justify-content: flex-start;
         align-items: center;
-        margin-left: 15px;
         width: 450px;
         height: 360px;
-        padding: 10px;
-        padding-left: 5px;
-        padding-right: 5px;
+        margin-left: ${$2a56fe717a5ec2a6$var$LEFTMARGIN}px;
+        margin-right: ${$2a56fe717a5ec2a6$var$RIGHTMARGIN}px;
+        padding: ${$2a56fe717a5ec2a6$var$PADDING}px;
     }
 
 `;
