@@ -90,7 +90,7 @@ export class PopoutWindow extends LitElement {
                     @click=${() => this.select(lightState)}
                 >
                     <div class="icons">
-                        <light-icon ._state=${lightState}></light-icon>
+                        <light-icon ._state=${lightState} ._changedEntityIds=${this._changedEntityIds}></light-icon>
                     </div>
                     ${name}
                 </div>

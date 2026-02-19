@@ -12,7 +12,6 @@ export class SliderBar extends LitElement {
     _units = '';
     _background = '';
     _colorCode = [255, 255, 255];
-    _initialized = false;
     _isDown = false;
 
     static get properties() {
@@ -20,15 +19,17 @@ export class SliderBar extends LitElement {
             _state: { state: true },
             _value: { state: true },
             _changedEntityIds: { state: true },
+            _initialized: { state: true }
         }
     }
-
-    /************* lifecycle ***********************************************/
 
     // when first constructed
     constructor() {
         super();
+        this._initialized = false;
     }
+
+    /************* lifecycle ***********************************************/
 
     // each time an update occurs resulting in rerendering
     update(changedProps) {
@@ -37,7 +38,10 @@ export class SliderBar extends LitElement {
 
     // determines if an update should occur
     shouldUpdate(changedProps) {
-        return (!this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_value"))
+        return (!this.isInitialized()
+            || this.hasRelevantChanges()
+            || changedProps.has("_value")
+            || changedProps.has("_initialized"))
     }
 
     // runs after the first update

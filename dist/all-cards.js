@@ -8768,7 +8768,7 @@ var $04557c061247a0a6$export$a14c803a1714faa3 = "M18.5,19.13C20,17.77 20,15.18 2
 
 
 
-var $62485370934ca499$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+var $6ebd1da0712f968b$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     ha-svg-icon {
         padding: 0%;
@@ -8779,6 +8779,320 @@ var $62485370934ca499$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
 `;
+
+
+const $66c8ca609c94bdc0$export$a004fc522c1a4845 = [
+    255,
+    193,
+    7
+]; // color in rgb (yellow)
+const $66c8ca609c94bdc0$export$e59310e5bf013385 = [
+    127,
+    97,
+    3
+]; // should be black-ish yellow
+const $66c8ca609c94bdc0$export$173de64b5ad0d5b4 = [
+    158,
+    158,
+    158
+]; // color in rgb (gray)
+const $66c8ca609c94bdc0$export$f353bac13bc8bab2 = [
+    68,
+    115,
+    158
+]; // color in rgb (steel blue)
+const $66c8ca609c94bdc0$export$af126f6aeedfb296 = [
+    41,
+    0,
+    255
+]; // blue color
+function $66c8ca609c94bdc0$var$getTempRed(temp) {
+    let red;
+    if (temp <= 6600) red = 255;
+    else {
+        red = temp / 100 - 60;
+        red = Math.round(329.698727446 * red ** -0.1332047592);
+    }
+    red < 0 && (red = 0);
+    red > 255 && (red = 255);
+    return red;
+}
+function $66c8ca609c94bdc0$var$getTempGreen(temp) {
+    let green;
+    if (temp <= 6600) {
+        green = temp / 100;
+        green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
+    } else {
+        green = temp / 100 - 60;
+        green = Math.round(288.1221695283 * green ** -0.0755148492);
+    }
+    green < 0 && (green = 0);
+    green > 255 && (green = 255);
+    return green;
+}
+function $66c8ca609c94bdc0$var$getTempBlue(temp) {
+    let blue;
+    if (temp > 6600) blue = 255;
+    else if (temp <= 1900) blue = 0;
+    else {
+        blue = temp / 100 - 10;
+        blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
+    }
+    blue < 0 && (blue = 0);
+    blue > 255 && (blue = 255);
+    return blue;
+}
+function $66c8ca609c94bdc0$export$c18f11e95ff36b0c(temp) {
+    return [
+        $66c8ca609c94bdc0$var$getTempRed(temp),
+        $66c8ca609c94bdc0$var$getTempGreen(temp),
+        $66c8ca609c94bdc0$var$getTempBlue(temp)
+    ];
+}
+function $66c8ca609c94bdc0$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
+    let output = `linear-gradient(to top`;
+    for(let step = 0; step <= steps; step++){
+        const temp = (minTemp * (steps - step) + maxTemp * step) / steps;
+        const rgb = $66c8ca609c94bdc0$export$c18f11e95ff36b0c(temp);
+        const result = $66c8ca609c94bdc0$export$4e46ac54fc82cf3b(rgb, 1);
+        const percent = Math.round(step * 100 / steps);
+        output = output + `, ` + result + ` ${percent}%`;
+    }
+    output = output + `)`;
+    return output;
+}
+function $66c8ca609c94bdc0$export$475133aea461e763(steps) {
+    let output = 'radial-gradient(circle at center, white 0%, transparent 100%), ';
+    output = output + 'conic-gradient( from 0deg';
+    for(let step = 0; step <= steps; step++){
+        const angle = Math.round(step * 360 / steps);
+        output = output + `, hsl(${angle}, 100%, 50%)`;
+    }
+    output = output + `)`;
+    return output;
+}
+function $66c8ca609c94bdc0$var$setScale(a, b, t) {
+    let result = a;
+    if (t > 1) result = b;
+    else if (t < 0) result = a;
+    else result = a + (b - a) * t;
+    return result;
+}
+function $66c8ca609c94bdc0$export$4e46ac54fc82cf3b(rgbArray, opacity) {
+    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`;
+}
+function $66c8ca609c94bdc0$export$dd0fba3206c57e56(rgbA, rgbB, t) {
+    const red = $66c8ca609c94bdc0$var$setScale(rgbA[0], rgbB[0], t);
+    const green = $66c8ca609c94bdc0$var$setScale(rgbA[1], rgbB[1], t);
+    const blue = $66c8ca609c94bdc0$var$setScale(rgbA[2], rgbB[2], t);
+    return [
+        red,
+        green,
+        blue
+    ];
+}
+
+
+function $6d3ca277783cacc8$export$1a2d97de39ecbb75(lightState) {
+    return lightState.state === "on";
+}
+function $6d3ca277783cacc8$var$getRGB(lightState) {
+    return lightState.attributes.rgb_color;
+}
+function $6d3ca277783cacc8$var$getBrightness(lightState) {
+    let brightness = 1;
+    if (lightState.attributes.brightness) brightness = lightState.attributes.brightness / 255;
+    return brightness;
+}
+function $6d3ca277783cacc8$export$5551a2d24ff40153(lightState) {
+    let rgb = (0, $66c8ca609c94bdc0$export$f353bac13bc8bab2);
+    if ($6d3ca277783cacc8$export$1a2d97de39ecbb75(lightState)) {
+        if ($6d3ca277783cacc8$var$getRGB(lightState)) rgb = (0, $66c8ca609c94bdc0$export$dd0fba3206c57e56)((0, $66c8ca609c94bdc0$export$e59310e5bf013385), $6d3ca277783cacc8$var$getRGB(lightState), $6d3ca277783cacc8$var$getBrightness(lightState));
+        else rgb = (0, $66c8ca609c94bdc0$export$dd0fba3206c57e56)((0, $66c8ca609c94bdc0$export$e59310e5bf013385), (0, $66c8ca609c94bdc0$export$a004fc522c1a4845), $6d3ca277783cacc8$var$getBrightness(lightState));
+    }
+    return (0, $66c8ca609c94bdc0$export$4e46ac54fc82cf3b)(rgb, 1);
+}
+
+
+class $4135704356e7d3a7$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    static get properties() {
+        return {
+            _state: {
+                state: true
+            },
+            _changedEntityIds: {
+                state: true
+            },
+            _initialized: {
+                state: true
+            }
+        };
+    }
+    constructor(){
+        super();
+        this._initialized = false;
+    }
+    /*********************************** lifecycle **********************************/ update(changedProps) {
+        super.update(changedProps);
+    }
+    shouldUpdate(changedProps) {
+        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_initialized");
+    }
+    firstUpdated() {
+        this.initialize();
+    }
+    hasRelevantChanges() {
+        return this.getCEIs().has(this.getEntityId());
+    }
+    /****************************** getter and setter logic *************************/ isInitialized() {
+        return this._initialized;
+    }
+    initialize() {
+        this._initialized = true;
+    }
+    getState() {
+        return this._state;
+    }
+    getEntityId() {
+        return this.getState().entity_id;
+    }
+    isGroup() {
+        return !!this.getState().attributes.entity_id;
+    }
+    getCEIs() {
+        return this._changedEntityIds;
+    }
+    /**************************** style/html logic ***************************/ lightbulb() {
+        let lightbulb;
+        if (this.isGroup()) (0, $6d3ca277783cacc8$export$1a2d97de39ecbb75)(this.getState()) ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
+        else (0, $6d3ca277783cacc8$export$1a2d97de39ecbb75)(this.getState()) ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
+        return lightbulb;
+    }
+    getColor() {
+        return (0, $6d3ca277783cacc8$export$5551a2d24ff40153)(this.getState());
+    }
+    getStyles() {
+        let styles = {
+            "color": this.getColor()
+        };
+        return styles;
+    }
+    static styles = (0, $6ebd1da0712f968b$export$2e2bcd8739ae039);
+    render() {
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <ha-svg-icon .path=${this.lightbulb()} style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles())}"></ha-svg-icon>
+            `;
+    }
+}
+customElements.define("light-icon", $4135704356e7d3a7$export$82acdd66a4e4bf90);
+
+
+
+
+
+
+
+var $7b691440c938e64b$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+    dialog {
+        padding: 20px;
+        border: none;
+    }
+
+    dialog[open] {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .modal-header {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px;
+        margin-top: -10px;
+        background: none;
+        padding-top: none;
+        padding-bottom: none;
+        height: 40px;
+        width: 100%;
+    }
+
+    .close-button {
+        font-size: 15px;
+        border: none;
+        background: none;
+    }
+
+    .content-row {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .select-lights {
+        width: 100%;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .light-inner {
+        width: 180px;
+        height: 25px;
+        padding: 10px;
+        padding-top: 8px;
+        padding-bottom: 5px;
+        margin: 10px;
+        touch-action: none;
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    .icons {
+        margin-right: 10px;
+        margin-left: 0px;
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    light-control {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+`;
+
+
+
+
+
+
+
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */ const $bf5aa997e63c2265$export$8dbf9c790527241e = (0, $107bb7d062dde330$export$99b43ad1ed32e735)(class extends (0, $107bb7d062dde330$export$befdefbdce210f91) {
+    constructor(){
+        super(...arguments), this.key = (0, $f58f44579a4747ac$export$45b790e32b2810ee);
+    }
+    render(r, t) {
+        return this.key = r, t;
+    }
+    update(r, [t, e]) {
+        return t !== this.key && ((0, $311430566e21b48b$export$ea70d9dd5965b1c8)(r), this.key = t), e;
+    }
+});
+
+
+
 
 
 const $431982fab2e14f47$export$a004fc522c1a4845 = [
@@ -8891,172 +9205,6 @@ function $431982fab2e14f47$export$dd0fba3206c57e56(rgbA, rgbB, t) {
         blue
     ];
 }
-
-
-function $023a61f00bda0ff8$export$1a2d97de39ecbb75(lightState) {
-    return lightState.state === "on";
-}
-function $023a61f00bda0ff8$var$getRGB(lightState) {
-    return lightState.attributes.rgb_color;
-}
-function $023a61f00bda0ff8$var$getBrightness(lightState) {
-    let brightness = 1;
-    if (lightState.attributes.brightness) brightness = lightState.attributes.brightness / 255;
-    return brightness;
-}
-function $023a61f00bda0ff8$export$5551a2d24ff40153(lightState) {
-    let rgb = (0, $431982fab2e14f47$export$f353bac13bc8bab2);
-    if ($023a61f00bda0ff8$export$1a2d97de39ecbb75(lightState)) {
-        if ($023a61f00bda0ff8$var$getRGB(lightState)) rgb = (0, $431982fab2e14f47$export$dd0fba3206c57e56)((0, $431982fab2e14f47$export$e59310e5bf013385), $023a61f00bda0ff8$var$getRGB(lightState), $023a61f00bda0ff8$var$getBrightness(lightState));
-        else rgb = (0, $431982fab2e14f47$export$dd0fba3206c57e56)((0, $431982fab2e14f47$export$e59310e5bf013385), (0, $431982fab2e14f47$export$a004fc522c1a4845), $023a61f00bda0ff8$var$getBrightness(lightState));
-    }
-    return (0, $431982fab2e14f47$export$4e46ac54fc82cf3b)(rgb, 1);
-}
-
-
-class $7efc95c414d3bc9c$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    static get properties() {
-        return {
-            _state: {
-                state: true
-            }
-        };
-    }
-    isGroup() {
-        return !!this._state.attributes.entity_id;
-    }
-    lightbulb() {
-        let lightbulb;
-        if (this.isGroup()) (0, $023a61f00bda0ff8$export$1a2d97de39ecbb75)(this._state) ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
-        else (0, $023a61f00bda0ff8$export$1a2d97de39ecbb75)(this._state) ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
-        return lightbulb;
-    }
-    getColor() {
-        return (0, $023a61f00bda0ff8$export$5551a2d24ff40153)(this._state);
-    }
-    getStyles() {
-        let styles = {
-            "color": this.getColor()
-        };
-        return styles;
-    }
-    static styles = (0, $62485370934ca499$export$2e2bcd8739ae039);
-    render() {
-        if (this._state) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <ha-svg-icon .path=${this.lightbulb()} style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles())}"></ha-svg-icon>
-            `;
-    }
-}
-customElements.define("light-icon", $7efc95c414d3bc9c$export$82acdd66a4e4bf90);
-
-
-
-
-
-
-
-var $7b691440c938e64b$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-    dialog {
-        padding: 20px;
-        border: none;
-    }
-
-    dialog[open] {
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-    }
-
-    .modal-header {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-        align-items: center;
-        margin: 20px;
-        margin-top: -10px;
-        background: none;
-        padding-top: none;
-        padding-bottom: none;
-        height: 40px;
-        width: 100%;
-    }
-
-    .close-button {
-        font-size: 15px;
-        border: none;
-        background: none;
-    }
-
-    .content-row {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-around;
-        align-items: center;
-    }
-
-    .select-lights {
-        width: 100%;
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: flex-start;
-        justify-content: center;
-    }
-
-    .light-inner {
-        width: 180px;
-        height: 25px;
-        padding: 10px;
-        padding-top: 8px;
-        padding-bottom: 5px;
-        margin: 10px;
-        touch-action: none;
-        display: flex;
-        flex-flow: row nowrap;
-    }
-
-    .icons {
-        margin-right: 10px;
-        margin-left: 0px;
-        display: flex;
-        flex-flow: row nowrap;
-    }
-
-    light-control {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-around;
-        align-items: center;
-    }
-
-`;
-
-
-
-
-
-
-
-/**
- * @license
- * Copyright 2021 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */ const $bf5aa997e63c2265$export$8dbf9c790527241e = (0, $107bb7d062dde330$export$99b43ad1ed32e735)(class extends (0, $107bb7d062dde330$export$befdefbdce210f91) {
-    constructor(){
-        super(...arguments), this.key = (0, $f58f44579a4747ac$export$45b790e32b2810ee);
-    }
-    render(r, t) {
-        return this.key = r, t;
-    }
-    update(r, [t, e]) {
-        return t !== this.key && ((0, $311430566e21b48b$export$ea70d9dd5965b1c8)(r), this.key = t), e;
-    }
-});
-
-
-
-
 
 
 
@@ -9210,117 +9358,6 @@ var $8f35bb7688a30718$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-const $66c8ca609c94bdc0$export$a004fc522c1a4845 = [
-    255,
-    193,
-    7
-]; // color in rgb (yellow)
-const $66c8ca609c94bdc0$export$e59310e5bf013385 = [
-    127,
-    97,
-    3
-]; // should be black-ish yellow
-const $66c8ca609c94bdc0$export$173de64b5ad0d5b4 = [
-    158,
-    158,
-    158
-]; // color in rgb (gray)
-const $66c8ca609c94bdc0$export$f353bac13bc8bab2 = [
-    68,
-    115,
-    158
-]; // color in rgb (steel blue)
-const $66c8ca609c94bdc0$export$af126f6aeedfb296 = [
-    41,
-    0,
-    255
-]; // blue color
-function $66c8ca609c94bdc0$var$getTempRed(temp) {
-    let red;
-    if (temp <= 6600) red = 255;
-    else {
-        red = temp / 100 - 60;
-        red = Math.round(329.698727446 * red ** -0.1332047592);
-    }
-    red < 0 && (red = 0);
-    red > 255 && (red = 255);
-    return red;
-}
-function $66c8ca609c94bdc0$var$getTempGreen(temp) {
-    let green;
-    if (temp <= 6600) {
-        green = temp / 100;
-        green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
-    } else {
-        green = temp / 100 - 60;
-        green = Math.round(288.1221695283 * green ** -0.0755148492);
-    }
-    green < 0 && (green = 0);
-    green > 255 && (green = 255);
-    return green;
-}
-function $66c8ca609c94bdc0$var$getTempBlue(temp) {
-    let blue;
-    if (temp > 6600) blue = 255;
-    else if (temp <= 1900) blue = 0;
-    else {
-        blue = temp / 100 - 10;
-        blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
-    }
-    blue < 0 && (blue = 0);
-    blue > 255 && (blue = 255);
-    return blue;
-}
-function $66c8ca609c94bdc0$export$c18f11e95ff36b0c(temp) {
-    return [
-        $66c8ca609c94bdc0$var$getTempRed(temp),
-        $66c8ca609c94bdc0$var$getTempGreen(temp),
-        $66c8ca609c94bdc0$var$getTempBlue(temp)
-    ];
-}
-function $66c8ca609c94bdc0$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
-    let output = `linear-gradient(to top`;
-    for(let step = 0; step <= steps; step++){
-        const temp = (minTemp * (steps - step) + maxTemp * step) / steps;
-        const rgb = $66c8ca609c94bdc0$export$c18f11e95ff36b0c(temp);
-        const result = $66c8ca609c94bdc0$export$4e46ac54fc82cf3b(rgb, 1);
-        const percent = Math.round(step * 100 / steps);
-        output = output + `, ` + result + ` ${percent}%`;
-    }
-    output = output + `)`;
-    return output;
-}
-function $66c8ca609c94bdc0$export$475133aea461e763(steps) {
-    let output = 'radial-gradient(circle at center, white 0%, transparent 100%), ';
-    output = output + 'conic-gradient( from 0deg';
-    for(let step = 0; step <= steps; step++){
-        const angle = Math.round(step * 360 / steps);
-        output = output + `, hsl(${angle}, 100%, 50%)`;
-    }
-    output = output + `)`;
-    return output;
-}
-function $66c8ca609c94bdc0$var$setScale(a, b, t) {
-    let result = a;
-    if (t > 1) result = b;
-    else if (t < 0) result = a;
-    else result = a + (b - a) * t;
-    return result;
-}
-function $66c8ca609c94bdc0$export$4e46ac54fc82cf3b(rgbArray, opacity) {
-    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`;
-}
-function $66c8ca609c94bdc0$export$dd0fba3206c57e56(rgbA, rgbB, t) {
-    const red = $66c8ca609c94bdc0$var$setScale(rgbA[0], rgbB[0], t);
-    const green = $66c8ca609c94bdc0$var$setScale(rgbA[1], rgbB[1], t);
-    const blue = $66c8ca609c94bdc0$var$setScale(rgbA[2], rgbB[2], t);
-    return [
-        red,
-        green,
-        blue
-    ];
-}
-
 
 class $91f755965ec27edf$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _max;
@@ -9333,7 +9370,6 @@ class $91f755965ec27edf$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         255,
         255
     ];
-    _initialized = false;
     _isDown = false;
     static get properties() {
         return {
@@ -9345,20 +9381,24 @@ class $91f755965ec27edf$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
             },
             _changedEntityIds: {
                 state: true
+            },
+            _initialized: {
+                state: true
             }
         };
     }
-    /************* lifecycle ***********************************************/ // when first constructed
+    // when first constructed
     constructor(){
         super();
+        this._initialized = false;
     }
-    // each time an update occurs resulting in rerendering
+    /************* lifecycle ***********************************************/ // each time an update occurs resulting in rerendering
     update(changedProps) {
         super.update(changedProps);
     }
     // determines if an update should occur
     shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_value");
+        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_value") || changedProps.has("_initialized");
     }
     // runs after the first update
     firstUpdated() {
@@ -9540,7 +9580,6 @@ var $0c1278e39028d633$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _box;
     _isDown = false;
-    _initialized = false;
     static get properties() {
         return {
             _lightState: {
@@ -9554,17 +9593,21 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
             },
             _saturation: {
                 state: true
+            },
+            _initialized: {
+                state: true
             }
         };
     }
     constructor(){
         super();
+        this._initialized = false;
     }
     /****************************** lifecycle **************************************/ update(changedProps) {
         super.update(changedProps);
     }
     shouldUpdate(changedProps) {
-        return !this.isInitialized() || changedProps.has("_hue") || changedProps.has("_saturation") || this.hasRelevantChanges();
+        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_hue") || changedProps.has("_saturation") || changedProps.has("_initialized");
     }
     firstUpdated() {
         this.setBox(this.renderRoot.querySelector('.wheel-background'));
@@ -9674,6 +9717,7 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         ];
     }
     // logic could be improved to derive "lightness"
+    // -- actually, maybe better to change how the color gradient works!
     getColor() {
         return `hsl(${this.getHue()}, ${this.getSat()}%, ${100 - this.getSat() / 2}%)`;
     }
@@ -11081,7 +11125,6 @@ function $9fad138f4964f803$export$cc5233436f23d8d4(theme) {
 
 
 class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    _initialized = false;
     static get properties() {
         return {
             _themeState: {
@@ -11092,17 +11135,21 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
             },
             _changedEntityIds: {
                 state: true
+            },
+            _initialized: {
+                state: true
             }
         };
     }
-    /************* lifecycle ***********************************************/ constructor(){
+    constructor(){
         super();
+        this._initialized = false;
     }
-    update(changedProps) {
+    /************* lifecycle ***********************************************/ update(changedProps) {
         super.update(changedProps);
     }
     shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_option");
+        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_option") || changedProps.has("_initialized");
     }
     firstUpdated() {
         this.setInitialValue();
@@ -11298,9 +11345,12 @@ class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         let content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
         switch(type){
             case 'onOff':
-                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._state=${{
+                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon
+                    ._state=${{
                     ...this._lightState
-                }} ></light-icon>`;
+                }}
+                    ._changedEntityIds = ${this._changedEntityIds}
+                ></light-icon>`;
                 break;
             case 'brightness':
                 content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80}></ha-svg-icon>`;
@@ -11433,6 +11483,27 @@ customElements.define("light-control", $197e5531adca31e1$export$5ebffa7af4af21de
 
 
 
+function $023a61f00bda0ff8$export$1a2d97de39ecbb75(lightState) {
+    return lightState.state === "on";
+}
+function $023a61f00bda0ff8$var$getRGB(lightState) {
+    return lightState.attributes.rgb_color;
+}
+function $023a61f00bda0ff8$var$getBrightness(lightState) {
+    let brightness = 1;
+    if (lightState.attributes.brightness) brightness = lightState.attributes.brightness / 255;
+    return brightness;
+}
+function $023a61f00bda0ff8$export$5551a2d24ff40153(lightState) {
+    let rgb = (0, $431982fab2e14f47$export$f353bac13bc8bab2);
+    if ($023a61f00bda0ff8$export$1a2d97de39ecbb75(lightState)) {
+        if ($023a61f00bda0ff8$var$getRGB(lightState)) rgb = (0, $431982fab2e14f47$export$dd0fba3206c57e56)((0, $431982fab2e14f47$export$e59310e5bf013385), $023a61f00bda0ff8$var$getRGB(lightState), $023a61f00bda0ff8$var$getBrightness(lightState));
+        else rgb = (0, $431982fab2e14f47$export$dd0fba3206c57e56)((0, $431982fab2e14f47$export$e59310e5bf013385), (0, $431982fab2e14f47$export$a004fc522c1a4845), $023a61f00bda0ff8$var$getBrightness(lightState));
+    }
+    return (0, $431982fab2e14f47$export$4e46ac54fc82cf3b)(rgb, 1);
+}
+
+
 class $37f28d6f302b8247$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _structure;
     _theme;
@@ -11510,7 +11581,7 @@ class $37f28d6f302b8247$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
                     @click=${()=>this.select(lightState)}
                 >
                     <div class="icons">
-                        <light-icon ._state=${lightState}></light-icon>
+                        <light-icon ._state=${lightState} ._changedEntityIds=${this._changedEntityIds}></light-icon>
                     </div>
                     ${name}
                 </div>
@@ -11675,7 +11746,7 @@ class $5f91742d25a4f6c9$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         let lightState;
         result = (0, $6db6ff6394e885e6$export$76d90c956114f2c2)(lightIds, (lightId)=>lightId, (lightId)=>{
             lightState = this._states[lightId];
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._state=${lightState}></light-icon>`;
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._state=${lightState} ._changedEntityIds=${this._changedEntityIds}></light-icon>`;
         });
         return result;
     }

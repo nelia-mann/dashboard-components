@@ -5,7 +5,7 @@ import { tempGradient, getTempColor, hsGradient, rgba, ONLIGHT, INDIGO } from '.
 import { mdiBrightness6, mdiCreationOutline } from '@mdi/js';
 import styles from './light-control.styles.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
-import './light-icon.js';
+import '../shared-resources/light-components/light-icon/light-icon.js';
 import '../shared-resources/light-components/slider/slider.js';
 import '../shared-resources/light-components/color-wheel/color-wheel.js';
 import '../shared-resources/light-components/theme-select/theme-select.js';
@@ -117,7 +117,10 @@ export class LightControl extends LitElement {
         let content = html``;
         switch (type) {
             case 'onOff':
-                content = html`<light-icon ._state=${{ ...this._lightState }} ></light-icon>`;
+                content = html`<light-icon
+                    ._state=${{ ...this._lightState }}
+                    ._changedEntityIds = ${this._changedEntityIds}
+                ></light-icon>`;
                 break;
             case 'brightness':
                 content = html`<ha-svg-icon .path=${mdiBrightness6}></ha-svg-icon>`;

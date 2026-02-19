@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
-import './light-icon.js';
+import '../shared-resources/light-components/light-icon/light-icon.js';
 import './popout-window.js';
 import styles from './light.styles.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
@@ -50,7 +50,7 @@ export class LightComponent extends LitElement {
         let lightState;
         result = repeat(lightIds, (lightId) => lightId, (lightId) => {
             lightState = this._states[lightId];
-            return html`<light-icon ._state=${lightState}></light-icon>`
+            return html`<light-icon ._state=${lightState} ._changedEntityIds=${this._changedEntityIds}></light-icon>`
         })
         return result;
     }

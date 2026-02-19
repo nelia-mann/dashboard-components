@@ -10,7 +10,6 @@ export class ColorWheel extends LitElement {
 
     _box;
     _isDown = false;
-    _initialized = false;
 
     static get properties() {
         return {
@@ -18,11 +17,13 @@ export class ColorWheel extends LitElement {
             _changedEntityIds: { state: true },
             _hue: { state: true },
             _saturation: { state: true },
+            _initialized: { state: true }
         }
     }
 
     constructor() {
         super();
+        this._initialized = false;
     }
 
     /****************************** lifecycle **************************************/
@@ -33,9 +34,10 @@ export class ColorWheel extends LitElement {
 
     shouldUpdate(changedProps) {
         return (!this.isInitialized()
+            || this.hasRelevantChanges()
             || changedProps.has("_hue")
             || changedProps.has("_saturation")
-            || this.hasRelevantChanges())
+            || changedProps.has("_initialized"))
     }
 
     firstUpdated() {
@@ -171,6 +173,7 @@ export class ColorWheel extends LitElement {
     }
 
     // logic could be improved to derive "lightness"
+    // -- actually, maybe better to change how the color gradient works!
     getColor() {
         return `hsl(${this.getHue()}, ${this.getSat()}%, ${100 - this.getSat() / 2}%)`
     }

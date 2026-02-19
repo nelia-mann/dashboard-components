@@ -8,28 +8,33 @@ import { getThemeGradient, getThemeOutline } from './theme-util.js';
 
 export class ThemeSelect extends LitElement {
 
-    _initialized = false;
-
     static get properties() {
         return {
             _themeState: { state: true },
             _option: { state: true },
-            _changedEntityIds: { state: true }
+            _changedEntityIds: { state: true },
+            _initialized: { state: true }
         }
+    }
+
+    constructor() {
+        super();
+        this._initialized = false;
     }
 
     /************* lifecycle ***********************************************/
 
-    constructor() {
-        super();
-    }
+
 
     update(changedProps) {
         super.update(changedProps);
     }
 
     shouldUpdate(changedProps) {
-        return (!this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_option"))
+        return (!this.isInitialized()
+            || this.hasRelevantChanges()
+            || changedProps.has("_option")
+            || changedProps.has("_initialized"))
     }
 
     firstUpdated() {
