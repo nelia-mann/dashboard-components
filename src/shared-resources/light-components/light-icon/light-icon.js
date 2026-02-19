@@ -2,14 +2,15 @@ import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { mdiLightbulb, mdiLightbulbOff, mdiLightbulbGroup, mdiLightbulbGroupOff } from '@mdi/js';
 import styles from './icon.styles.js';
-import { getColor, isOn }  from '../util/light-util.js';
+import { getColor } from '../util/light-util.js';
+import { isOn, isGroup, getEntityId } from '../../util/state-util.js';
 
 export class LightIcon extends LitElement {
 
 
     static get properties() {
         return {
-            _state: { state: true },
+            _lightState: { state: true },
             _changedEntityIds: { state: true },
             _initialized: { state: true}
         }
@@ -36,7 +37,7 @@ export class LightIcon extends LitElement {
     }
 
     hasRelevantChanges() {
-        return this.getCEIs().has(this.getEntityId());
+        return this.getCEIs().has(getEntityId(this.getLightState()));
     }
 
     /****************************** getter and setter logic *************************/
@@ -49,16 +50,8 @@ export class LightIcon extends LitElement {
         this._initialized = true;
     }
 
-    getState() {
-        return this._state;
-    }
-
-    getEntityId() {
-        return this.getState().entity_id;
-    }
-
-    isGroup() {
-        return !!(this.getState().attributes.entity_id)
+    getLightState() {
+        return this._lightState;
     }
 
     getCEIs() {
@@ -69,16 +62,16 @@ export class LightIcon extends LitElement {
 
     lightbulb() {
         let lightbulb;
-        if (this.isGroup()) {
-            (isOn(this.getState())) ? (lightbulb = mdiLightbulbGroup) : (lightbulb = mdiLightbulbGroupOff);
+        if (isGroup(this.getLightState())) {
+            (isOn(this.getLightState())) ? (lightbulb = mdiLightbulbGroup) : (lightbulb = mdiLightbulbGroupOff);
         } else {
-            (isOn(this.getState())) ? (lightbulb = mdiLightbulb) : (lightbulb = mdiLightbulbOff);
+            (isOn(this.getLightState())) ? (lightbulb = mdiLightbulb) : (lightbulb = mdiLightbulbOff);
         }
         return lightbulb;
     }
 
     getColor() {
-        return getColor(this.getState())
+        return getColor(this.getLightState())
     }
 
     getStyles() {

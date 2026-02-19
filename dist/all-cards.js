@@ -8781,32 +8781,134 @@ var $6ebd1da0712f968b$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 `;
 
 
-const $66c8ca609c94bdc0$export$a004fc522c1a4845 = [
+const $884a87e59af13a5c$export$a004fc522c1a4845 = [
     255,
     193,
     7
 ]; // color in rgb (yellow)
-const $66c8ca609c94bdc0$export$e59310e5bf013385 = [
+const $884a87e59af13a5c$export$e59310e5bf013385 = [
     127,
     97,
     3
 ]; // should be black-ish yellow
-const $66c8ca609c94bdc0$export$173de64b5ad0d5b4 = [
+const $884a87e59af13a5c$export$173de64b5ad0d5b4 = [
     158,
     158,
     158
 ]; // color in rgb (gray)
-const $66c8ca609c94bdc0$export$f353bac13bc8bab2 = [
+const $884a87e59af13a5c$export$f353bac13bc8bab2 = [
     68,
     115,
     158
 ]; // color in rgb (steel blue)
-const $66c8ca609c94bdc0$export$af126f6aeedfb296 = [
+const $884a87e59af13a5c$export$af126f6aeedfb296 = [
     41,
     0,
     255
 ]; // blue color
-function $66c8ca609c94bdc0$var$getTempRed(temp) {
+const $884a87e59af13a5c$export$4a58048e5a424e1a = [
+    45,
+    100
+];
+function $884a87e59af13a5c$var$setScale(a, b, t) {
+    let result = a;
+    if (t > 1) result = b;
+    else if (t < 0) result = a;
+    else result = a + (b - a) * t;
+    return result;
+}
+function $884a87e59af13a5c$export$4e46ac54fc82cf3b(rgbArray, opacity) {
+    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`;
+}
+function $884a87e59af13a5c$export$dd0fba3206c57e56(rgbA, rgbB, t) {
+    const red = $884a87e59af13a5c$var$setScale(rgbA[0], rgbB[0], t);
+    const green = $884a87e59af13a5c$var$setScale(rgbA[1], rgbB[1], t);
+    const blue = $884a87e59af13a5c$var$setScale(rgbA[2], rgbB[2], t);
+    return [
+        red,
+        green,
+        blue
+    ];
+}
+
+
+function $4ab534091a4f77ec$export$25d14d759b7df9bc(state) {
+    return state.entity_id;
+}
+function $4ab534091a4f77ec$export$fe94072fee8a6976(state) {
+    return state.attributes;
+}
+function $4ab534091a4f77ec$export$50fdfeece43146fd(state) {
+    return state.state;
+}
+function $4ab534091a4f77ec$export$1a2d97de39ecbb75(state) {
+    return $4ab534091a4f77ec$export$50fdfeece43146fd(state) === "on";
+}
+function $4ab534091a4f77ec$export$d7976824e9f55785(state) {
+    return !!$4ab534091a4f77ec$export$fe94072fee8a6976(state).entity_id;
+}
+
+
+const $6d3ca277783cacc8$var$STEPS = 10;
+const $6d3ca277783cacc8$var$MAXTEMP = 9000;
+const $6d3ca277783cacc8$var$MINTEMP = 1500;
+const $6d3ca277783cacc8$var$MINTEMPSAFE = 2000;
+function $6d3ca277783cacc8$export$5ee105321a1a6648(lightState) {
+    return (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).supported_color_modes;
+}
+function $6d3ca277783cacc8$var$getRGB(lightState) {
+    return (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).rgb_color;
+}
+function $6d3ca277783cacc8$export$33cacb20a48e02bf(lightState) {
+    return (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).brightness;
+}
+function $6d3ca277783cacc8$export$81cd3a8150946066(lightState) {
+    let brightnessPct = 100;
+    let brightness = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).brightness;
+    brightness && (brightnessPct = brightness * 100 / 255);
+    return brightnessPct;
+}
+function $6d3ca277783cacc8$export$ea3cc22fc7f3ca28(lightState) {
+    let hsColor = (0, $884a87e59af13a5c$export$4a58048e5a424e1a);
+    let hsColorAttr = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).hs_color;
+    hsColorAttr && (hsColor = hsColorAttr);
+    return hsColor;
+}
+function $6d3ca277783cacc8$var$getHalfRGB(lightState) {
+    const rgb = $6d3ca277783cacc8$var$getRGB(lightState);
+    return [
+        rgb[0] / 2,
+        rgb[1] / 2,
+        rgb[2] / 2
+    ];
+}
+function $6d3ca277783cacc8$export$5551a2d24ff40153(lightState) {
+    let rgb = (0, $884a87e59af13a5c$export$f353bac13bc8bab2);
+    if ((0, $4ab534091a4f77ec$export$1a2d97de39ecbb75)(lightState)) {
+        if ($6d3ca277783cacc8$var$getRGB(lightState)) rgb = (0, $884a87e59af13a5c$export$dd0fba3206c57e56)($6d3ca277783cacc8$var$getHalfRGB(lightState), $6d3ca277783cacc8$var$getRGB(lightState), $6d3ca277783cacc8$export$81cd3a8150946066(lightState) / 100);
+        else rgb = (0, $884a87e59af13a5c$export$dd0fba3206c57e56)((0, $884a87e59af13a5c$export$e59310e5bf013385), (0, $884a87e59af13a5c$export$a004fc522c1a4845), $6d3ca277783cacc8$export$81cd3a8150946066(lightState) / 100);
+    }
+    return (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(rgb, 1);
+}
+function $6d3ca277783cacc8$export$18ec4b0de54438e3(lightState) {
+    let min = $6d3ca277783cacc8$var$MINTEMP;
+    const minAttr = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).min_color_temp_kelvin;
+    minAttr && (min = minAttr);
+    return min;
+}
+function $6d3ca277783cacc8$export$b9f60e8a0f490976(lightState) {
+    let max = $6d3ca277783cacc8$var$MAXTEMP;
+    const maxAttr = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).max_color_temp_kelvin;
+    maxAttr && (max = maxAttr);
+    return max;
+}
+function $6d3ca277783cacc8$export$af79b6bdd49ea8f2(lightState) {
+    let temp = $6d3ca277783cacc8$var$MINTEMPSAFE;
+    const tempAttr = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).color_temp_kelvin;
+    tempAttr && (temp = tempAttr);
+    return temp;
+}
+function $6d3ca277783cacc8$var$getTempRed(temp) {
     let red;
     if (temp <= 6600) red = 255;
     else {
@@ -8817,7 +8919,7 @@ function $66c8ca609c94bdc0$var$getTempRed(temp) {
     red > 255 && (red = 255);
     return red;
 }
-function $66c8ca609c94bdc0$var$getTempGreen(temp) {
+function $6d3ca277783cacc8$var$getTempGreen(temp) {
     let green;
     if (temp <= 6600) {
         green = temp / 100;
@@ -8830,7 +8932,7 @@ function $66c8ca609c94bdc0$var$getTempGreen(temp) {
     green > 255 && (green = 255);
     return green;
 }
-function $66c8ca609c94bdc0$var$getTempBlue(temp) {
+function $6d3ca277783cacc8$var$getTempBlue(temp) {
     let blue;
     if (temp > 6600) blue = 255;
     else if (temp <= 1900) blue = 0;
@@ -8842,28 +8944,36 @@ function $66c8ca609c94bdc0$var$getTempBlue(temp) {
     blue > 255 && (blue = 255);
     return blue;
 }
-function $66c8ca609c94bdc0$export$c18f11e95ff36b0c(temp) {
+function $6d3ca277783cacc8$var$getTempColor(temp) {
     return [
-        $66c8ca609c94bdc0$var$getTempRed(temp),
-        $66c8ca609c94bdc0$var$getTempGreen(temp),
-        $66c8ca609c94bdc0$var$getTempBlue(temp)
+        $6d3ca277783cacc8$var$getTempRed(temp),
+        $6d3ca277783cacc8$var$getTempGreen(temp),
+        $6d3ca277783cacc8$var$getTempBlue(temp)
     ];
 }
-function $66c8ca609c94bdc0$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
+function $6d3ca277783cacc8$export$5b5356aa7e20fd72(minTemp, maxTemp) {
     let output = `linear-gradient(to top`;
+    const steps = $6d3ca277783cacc8$var$STEPS;
     for(let step = 0; step <= steps; step++){
         const temp = (minTemp * (steps - step) + maxTemp * step) / steps;
-        const rgb = $66c8ca609c94bdc0$export$c18f11e95ff36b0c(temp);
-        const result = $66c8ca609c94bdc0$export$4e46ac54fc82cf3b(rgb, 1);
+        const rgb = $6d3ca277783cacc8$var$getTempColor(temp);
+        const result = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(rgb, 1);
         const percent = Math.round(step * 100 / steps);
         output = output + `, ` + result + ` ${percent}%`;
     }
     output = output + `)`;
     return output;
 }
-function $66c8ca609c94bdc0$export$475133aea461e763(steps) {
+function $6d3ca277783cacc8$export$bca49aacb0a7b300() {
+    return $6d3ca277783cacc8$export$5b5356aa7e20fd72($6d3ca277783cacc8$var$MINTEMP, $6d3ca277783cacc8$var$MAXTEMP);
+}
+function $6d3ca277783cacc8$export$bb0cdaadb7fd443b() {
+    return (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)($6d3ca277783cacc8$var$getTempColor($6d3ca277783cacc8$var$MINTEMP), 1);
+}
+function $6d3ca277783cacc8$export$475133aea461e763() {
     let output = 'radial-gradient(circle at center, white 0%, transparent 100%), ';
     output = output + 'conic-gradient( from 0deg';
+    const steps = $6d3ca277783cacc8$var$STEPS;
     for(let step = 0; step <= steps; step++){
         const angle = Math.round(step * 360 / steps);
         output = output + `, hsl(${angle}, 100%, 50%)`;
@@ -8871,53 +8981,13 @@ function $66c8ca609c94bdc0$export$475133aea461e763(steps) {
     output = output + `)`;
     return output;
 }
-function $66c8ca609c94bdc0$var$setScale(a, b, t) {
-    let result = a;
-    if (t > 1) result = b;
-    else if (t < 0) result = a;
-    else result = a + (b - a) * t;
-    return result;
-}
-function $66c8ca609c94bdc0$export$4e46ac54fc82cf3b(rgbArray, opacity) {
-    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`;
-}
-function $66c8ca609c94bdc0$export$dd0fba3206c57e56(rgbA, rgbB, t) {
-    const red = $66c8ca609c94bdc0$var$setScale(rgbA[0], rgbB[0], t);
-    const green = $66c8ca609c94bdc0$var$setScale(rgbA[1], rgbB[1], t);
-    const blue = $66c8ca609c94bdc0$var$setScale(rgbA[2], rgbB[2], t);
-    return [
-        red,
-        green,
-        blue
-    ];
-}
 
-
-function $6d3ca277783cacc8$export$1a2d97de39ecbb75(lightState) {
-    return lightState.state === "on";
-}
-function $6d3ca277783cacc8$var$getRGB(lightState) {
-    return lightState.attributes.rgb_color;
-}
-function $6d3ca277783cacc8$var$getBrightness(lightState) {
-    let brightness = 1;
-    if (lightState.attributes.brightness) brightness = lightState.attributes.brightness / 255;
-    return brightness;
-}
-function $6d3ca277783cacc8$export$5551a2d24ff40153(lightState) {
-    let rgb = (0, $66c8ca609c94bdc0$export$f353bac13bc8bab2);
-    if ($6d3ca277783cacc8$export$1a2d97de39ecbb75(lightState)) {
-        if ($6d3ca277783cacc8$var$getRGB(lightState)) rgb = (0, $66c8ca609c94bdc0$export$dd0fba3206c57e56)((0, $66c8ca609c94bdc0$export$e59310e5bf013385), $6d3ca277783cacc8$var$getRGB(lightState), $6d3ca277783cacc8$var$getBrightness(lightState));
-        else rgb = (0, $66c8ca609c94bdc0$export$dd0fba3206c57e56)((0, $66c8ca609c94bdc0$export$e59310e5bf013385), (0, $66c8ca609c94bdc0$export$a004fc522c1a4845), $6d3ca277783cacc8$var$getBrightness(lightState));
-    }
-    return (0, $66c8ca609c94bdc0$export$4e46ac54fc82cf3b)(rgb, 1);
-}
 
 
 class $4135704356e7d3a7$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
-            _state: {
+            _lightState: {
                 state: true
             },
             _changedEntityIds: {
@@ -8942,7 +9012,7 @@ class $4135704356e7d3a7$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
         this.initialize();
     }
     hasRelevantChanges() {
-        return this.getCEIs().has(this.getEntityId());
+        return this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState()));
     }
     /****************************** getter and setter logic *************************/ isInitialized() {
         return this._initialized;
@@ -8950,26 +9020,20 @@ class $4135704356e7d3a7$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
     initialize() {
         this._initialized = true;
     }
-    getState() {
-        return this._state;
-    }
-    getEntityId() {
-        return this.getState().entity_id;
-    }
-    isGroup() {
-        return !!this.getState().attributes.entity_id;
+    getLightState() {
+        return this._lightState;
     }
     getCEIs() {
         return this._changedEntityIds;
     }
     /**************************** style/html logic ***************************/ lightbulb() {
         let lightbulb;
-        if (this.isGroup()) (0, $6d3ca277783cacc8$export$1a2d97de39ecbb75)(this.getState()) ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
-        else (0, $6d3ca277783cacc8$export$1a2d97de39ecbb75)(this.getState()) ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
+        if ((0, $4ab534091a4f77ec$export$d7976824e9f55785)(this.getLightState())) (0, $4ab534091a4f77ec$export$1a2d97de39ecbb75)(this.getLightState()) ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
+        else (0, $4ab534091a4f77ec$export$1a2d97de39ecbb75)(this.getLightState()) ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
         return lightbulb;
     }
     getColor() {
-        return (0, $6d3ca277783cacc8$export$5551a2d24ff40153)(this.getState());
+        return (0, $6d3ca277783cacc8$export$5551a2d24ff40153)(this.getLightState());
     }
     getStyles() {
         let styles = {
@@ -9075,141 +9139,8 @@ var $7b691440c938e64b$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-/**
- * @license
- * Copyright 2021 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */ const $bf5aa997e63c2265$export$8dbf9c790527241e = (0, $107bb7d062dde330$export$99b43ad1ed32e735)(class extends (0, $107bb7d062dde330$export$befdefbdce210f91) {
-    constructor(){
-        super(...arguments), this.key = (0, $f58f44579a4747ac$export$45b790e32b2810ee);
-    }
-    render(r, t) {
-        return this.key = r, t;
-    }
-    update(r, [t, e]) {
-        return t !== this.key && ((0, $311430566e21b48b$export$ea70d9dd5965b1c8)(r), this.key = t), e;
-    }
-});
 
-
-
-
-
-const $431982fab2e14f47$export$a004fc522c1a4845 = [
-    255,
-    193,
-    7
-]; // color in rgb (yellow)
-const $431982fab2e14f47$export$e59310e5bf013385 = [
-    127,
-    97,
-    3
-]; // should be black-ish yellow
-const $431982fab2e14f47$export$173de64b5ad0d5b4 = [
-    158,
-    158,
-    158
-]; // color in rgb (gray)
-const $431982fab2e14f47$export$f353bac13bc8bab2 = [
-    68,
-    115,
-    158
-]; // color in rgb (steel blue)
-const $431982fab2e14f47$export$af126f6aeedfb296 = [
-    41,
-    0,
-    255
-]; // blue color
-function $431982fab2e14f47$var$getTempRed(temp) {
-    let red;
-    if (temp <= 6600) red = 255;
-    else {
-        red = temp / 100 - 60;
-        red = Math.round(329.698727446 * red ** -0.1332047592);
-    }
-    red < 0 && (red = 0);
-    red > 255 && (red = 255);
-    return red;
-}
-function $431982fab2e14f47$var$getTempGreen(temp) {
-    let green;
-    if (temp <= 6600) {
-        green = temp / 100;
-        green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
-    } else {
-        green = temp / 100 - 60;
-        green = Math.round(288.1221695283 * green ** -0.0755148492);
-    }
-    green < 0 && (green = 0);
-    green > 255 && (green = 255);
-    return green;
-}
-function $431982fab2e14f47$var$getTempBlue(temp) {
-    let blue;
-    if (temp > 6600) blue = 255;
-    else if (temp <= 1900) blue = 0;
-    else {
-        blue = temp / 100 - 10;
-        blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
-    }
-    blue < 0 && (blue = 0);
-    blue > 255 && (blue = 255);
-    return blue;
-}
-function $431982fab2e14f47$export$c18f11e95ff36b0c(temp) {
-    return [
-        $431982fab2e14f47$var$getTempRed(temp),
-        $431982fab2e14f47$var$getTempGreen(temp),
-        $431982fab2e14f47$var$getTempBlue(temp)
-    ];
-}
-function $431982fab2e14f47$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
-    let output = `linear-gradient(to top`;
-    for(let step = 0; step <= steps; step++){
-        const temp = (minTemp * (steps - step) + maxTemp * step) / steps;
-        const rgb = $431982fab2e14f47$export$c18f11e95ff36b0c(temp);
-        const result = $431982fab2e14f47$export$4e46ac54fc82cf3b(rgb, 1);
-        const percent = Math.round(step * 100 / steps);
-        output = output + `, ` + result + ` ${percent}%`;
-    }
-    output = output + `)`;
-    return output;
-}
-function $431982fab2e14f47$export$475133aea461e763(steps) {
-    let output = 'radial-gradient(circle at center, white 0%, transparent 100%), ';
-    output = output + 'conic-gradient( from 0deg';
-    for(let step = 0; step <= steps; step++){
-        const angle = Math.round(step * 360 / steps);
-        output = output + `, hsl(${angle}, 100%, 50%)`;
-    }
-    output = output + `)`;
-    return output;
-}
-function $431982fab2e14f47$var$setScale(a, b, t) {
-    let result = a;
-    if (t > 1) result = b;
-    else if (t < 0) result = a;
-    else result = a + (b - a) * t;
-    return result;
-}
-function $431982fab2e14f47$export$4e46ac54fc82cf3b(rgbArray, opacity) {
-    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`;
-}
-function $431982fab2e14f47$export$dd0fba3206c57e56(rgbA, rgbB, t) {
-    const red = $431982fab2e14f47$var$setScale(rgbA[0], rgbB[0], t);
-    const green = $431982fab2e14f47$var$setScale(rgbA[1], rgbB[1], t);
-    const blue = $431982fab2e14f47$var$setScale(rgbA[2], rgbB[2], t);
-    return [
-        red,
-        green,
-        blue
-    ];
-}
-
-
-
-
-var $aff2444c65f9a133$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+var $2a56fe717a5ec2a6$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .control-column {
         display: flex;
@@ -9227,6 +9158,14 @@ var $aff2444c65f9a133$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         justify-content: center;
         align-items: center;
         margin: 10px;
+    }
+
+    ha-svg-icon {
+        padding: 0%;
+        margin: 0%;
+        --mdc-icon-size: 20px;
+        height: 20px;
+        width: 20px;
     }
 
     brightness-slider {
@@ -9270,15 +9209,12 @@ var $aff2444c65f9a133$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         padding-right: 5px;
     }
 
-    ha-svg-icon {
-        padding: 0%;
-        margin: 0%;
-        --mdc-icon-size: 20px;
-        height: 20px;
-        width: 20px;
-    }
-
 `;
+
+
+
+
+
 
 
 
@@ -9379,36 +9315,6 @@ var $ef1a79c6631dfc4e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-const $884a87e59af13a5c$export$173de64b5ad0d5b4 = [
-    158,
-    158,
-    158
-]; // color in rgb (gray)
-const $884a87e59af13a5c$export$d5a2e4d76c8cdaad = [
-    68,
-    115,
-    158
-]; // color in rgb (steel blue)
-function $884a87e59af13a5c$var$setScale(a, b, t) {
-    let result = a;
-    if (t > 1) result = b;
-    else if (t < 0) result = a;
-    else result = a + (b - a) * t;
-    return result;
-}
-function $884a87e59af13a5c$export$4e46ac54fc82cf3b(rgbArray, opacity) {
-    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`;
-}
-function $884a87e59af13a5c$export$dd0fba3206c57e56(rgbA, rgbB, t) {
-    const red = $884a87e59af13a5c$var$setScale(rgbA[0], rgbB[0], t);
-    const green = $884a87e59af13a5c$var$setScale(rgbA[1], rgbB[1], t);
-    const blue = $884a87e59af13a5c$var$setScale(rgbA[2], rgbB[2], t);
-    return [
-        red,
-        green,
-        blue
-    ];
-}
 
 
 class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
@@ -9446,7 +9352,7 @@ class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         this._changedEntityIds = new Set();
         this._initialized = false;
     }
-    /************* lifecycle ***********************************************/ // each time an update occurs resulting in rerendering
+    /************************** lifecycle *****************************/ // each time an update occurs resulting in rerendering
     update(changedProps) {
         super.update(changedProps);
     }
@@ -9465,7 +9371,7 @@ class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     }
     // helper to determine if should update
     hasRelevantChanges() {
-        const isStateChanged = this.getCEIs().has(this.getEntityId());
+        const isStateChanged = this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getState()));
         const isUp = !this.isDown();
         const isNew = this.getValue() != this.getStateValue();
         return isStateChanged && isUp && isNew;
@@ -9495,8 +9401,8 @@ class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     initialize() {
         this._initialized = true;
     }
-    getEntityId() {
-        return this._state.entity_id;
+    getState() {
+        return this._state;
     }
     getCEIs() {
         return this._changedEntityIds;
@@ -9627,7 +9533,7 @@ class $289a3d4763775a85$export$2541e764ec89469 extends (0, $ab210b2da7b39b9d$exp
         this.initialize();
     }
     hasRelevantChanges() {
-        return this.getCEIs().has(this.getEntityId());
+        return this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState()));
     }
     /************************ getter and setter logic *************************/ isInitialized() {
         return this._initialized;
@@ -9635,21 +9541,15 @@ class $289a3d4763775a85$export$2541e764ec89469 extends (0, $ab210b2da7b39b9d$exp
     initialize() {
         this._initialized = true;
     }
-    getState() {
+    getLightState() {
         return this._lightState;
-    }
-    getEntityId() {
-        return this.getState().entity_id;
-    }
-    getBrightnessPct() {
-        return this.getState().attributes.brightness * 100 / 255;
     }
     getCEIs() {
         return this._changedEntityIds;
     }
-    /************************ interactive logic *******************************/ handleLightService(e) {
+    /************************ interactive logic *******************************/ handleCallService(e) {
         const value = e.detail;
-        const entityId = this.getEntityId();
+        const entityId = (0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState());
         let data = {
             entity_id: entityId,
             brightness_pct: value
@@ -9660,13 +9560,13 @@ class $289a3d4763775a85$export$2541e764ec89469 extends (0, $ab210b2da7b39b9d$exp
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <slider-bar
                 ._changedEntityIds = ${this.getCEIs()}
-                ._state=${this.getState()}
-                @change=${this.handleLightService}
+                ._state=${this.getLightState()}
+                @change=${this.handleCallService}
                 ._max=${100}
                 ._min=${0}
                 ._units=${'%'}
-                ._startValue=${this.getBrightnessPct()}
-                ._colorCode=${0, $66c8ca609c94bdc0$export$a004fc522c1a4845}
+                ._startValue=${(0, $6d3ca277783cacc8$export$81cd3a8150946066)(this.getLightState())}
+                ._colorCode=${0, $884a87e59af13a5c$export$a004fc522c1a4845}
             ></slider-bar>`;
     }
     static styles = [
@@ -9696,6 +9596,7 @@ var $25e401c3c55763f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: center;
     }
 `;
+
 
 
 
@@ -9730,7 +9631,7 @@ class $3d80432ed0534279$export$e97d95246d8cbf24 extends (0, $ab210b2da7b39b9d$ex
         this.initialize();
     }
     hasRelevantChanges() {
-        return this.getCEIs().has(this.getEntityId());
+        return this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState()));
     }
     /************************ getter and setter logic *************************/ isInitialized() {
         return this._initialized;
@@ -9738,27 +9639,15 @@ class $3d80432ed0534279$export$e97d95246d8cbf24 extends (0, $ab210b2da7b39b9d$ex
     initialize() {
         this._initialized = true;
     }
-    getState() {
+    getLightState() {
         return this._lightState;
-    }
-    getEntityId() {
-        return this.getState().entity_id;
-    }
-    getColorTempKelvin() {
-        return this.getState().attributes.color_temp_kelvin;
     }
     getCEIs() {
         return this._changedEntityIds;
     }
-    getMinTemp() {
-        return this.getState().attributes.min_color_temp_kelvin;
-    }
-    getMaxTemp() {
-        return this.getState().attributes.max_color_temp_kelvin;
-    }
-    /************************ interactive logic *******************************/ handleLightService(e) {
+    /************************ interactive logic *******************************/ handleCallService(e) {
         const value = e.detail;
-        const entityId = this.getEntityId();
+        const entityId = (0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState());
         let data = {
             entity_id: entityId,
             color_temp_kelvin: value
@@ -9766,17 +9655,18 @@ class $3d80432ed0534279$export$e97d95246d8cbf24 extends (0, $ab210b2da7b39b9d$ex
         this.callService('light', 'turn_on', data);
     }
     /**************************** style/html logic ******************************/ ctBar() {
-        const steps = 10;
-        const tempGrad = (0, $66c8ca609c94bdc0$export$5b5356aa7e20fd72)(this.getMinTemp(), this.getMaxTemp(), steps);
+        const minTemp = (0, $6d3ca277783cacc8$export$18ec4b0de54438e3)(this.getLightState());
+        const maxTemp = (0, $6d3ca277783cacc8$export$b9f60e8a0f490976)(this.getLightState());
+        const tempGrad = (0, $6d3ca277783cacc8$export$5b5356aa7e20fd72)(minTemp, maxTemp);
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <slider-bar
                 ._changedEntityIds = ${this.getCEIs()}
-                ._state=${this.getState()}
-                @change=${this.handleLightService}
-                ._max=${this.getMaxTemp()}
-                ._min=${this.getMinTemp()}
+                ._state=${this.getLightState()}
+                @change=${this.handleCallService}
+                ._max=${maxTemp}
+                ._min=${minTemp}
                 ._units=${'K'}
-                ._startValue=${this.getColorTempKelvin()}
+                ._startValue=${(0, $6d3ca277783cacc8$export$af79b6bdd49ea8f2)(this.getLightState())}
                 ._background=${tempGrad}
             ></slider-bar>`;
     }
@@ -9827,6 +9717,7 @@ var $0c1278e39028d633$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+
 class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _box;
     _isDown = false;
@@ -9870,10 +9761,10 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         this.hasRelevantChanges() && !this.isDown() && this.setInitialValues();
     }
     hasRelevantChanges() {
-        return this.getCEIs().has(this.getEntityId());
+        return this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState()));
     }
     setInitialValues() {
-        const hs_values = this.getHSColor();
+        const hs_values = (0, $6d3ca277783cacc8$export$ea3cc22fc7f3ca28)(this.getLightState());
         if (hs_values) {
             this.setHue(hs_values[0]);
             this.setSat(hs_values[1]);
@@ -9906,20 +9797,15 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     initialize() {
         this._initialized = true;
     }
-    // access reference object
     getRect() {
         return this._box.getBoundingClientRect();
     }
     setBox(box) {
         this._box = box;
     }
-    getEntityId() {
-        return this._lightState.entity_id;
+    getLightState() {
+        return this._lightState;
     }
-    getHSColor() {
-        return this._lightState.attributes.hs_color;
-    }
-    // access reference object
     getCEIs() {
         return this._changedEntityIds;
     }
@@ -9947,7 +9833,7 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         }
     }
     handleCallService() {
-        const entityId = this.getEntityId();
+        const entityId = (0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState());
         const data = {
             entity_id: entityId,
             'hs_color': [
@@ -9971,11 +9857,11 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     // logic could be improved to derive "lightness"
     // -- actually, maybe better to change how the color gradient works!
     getColor() {
-        return `hsl(${this.getHue()}, ${this.getSat()}%, ${100 - this.getSat() / 2}%)`;
+        return `hsl(${this.getHue()}, 100%, ${100 - this.getSat() / 2}%)`;
     }
     getBGStyle() {
         let styles = {};
-        styles['background'] = (0, $66c8ca609c94bdc0$export$475133aea461e763)(20);
+        styles['background'] = (0, $6d3ca277783cacc8$export$475133aea461e763)();
         return styles;
     }
     getDotStyle() {
@@ -11376,6 +11262,7 @@ function $9fad138f4964f803$export$cc5233436f23d8d4(theme) {
 }
 
 
+
 class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -11410,15 +11297,15 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         this.initialize();
     }
     hasRelevantChanges() {
-        const isStateChanged = this.getCEIs().has(this.getEntityId());
-        const isNewOption = this.getOption() != this.getThemeState();
+        const isStateChanged = this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getThemeState()));
+        const isNewOption = this.getOption() != (0, $4ab534091a4f77ec$export$50fdfeece43146fd)(this.getThemeState());
         return isStateChanged && isNewOption;
     }
     updated() {
         this.hasRelevantChanges() && this.setInitialValue();
     }
     setInitialValue() {
-        this.setOption(this.getThemeState());
+        this.setOption((0, $4ab534091a4f77ec$export$50fdfeece43146fd)(this.getThemeState()));
     }
     /************************ getter and setter logic **************************/ isInitialized() {
         return this._initialized;
@@ -11430,12 +11317,8 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         const optionList = this._themeState.attributes.options;
         return optionList;
     }
-    getEntityId() {
-        const entityId = this._themeState.entity_id;
-        return entityId;
-    }
     getThemeState() {
-        return this._themeState.state;
+        return this._themeState;
     }
     getOption() {
         return this._option;
@@ -11451,10 +11334,10 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
     }
     /**************************** interactive logic **************************/ onClick(option) {
         this.setOption(option);
-        this.doCallService(option);
+        this.handleCallService(option);
     }
-    doCallService(option) {
-        const entityId = this.getEntityId();
+    handleCallService(option) {
+        const entityId = (0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getThemeState());
         const data = {
             entity_id: entityId,
             option: option
@@ -11493,18 +11376,8 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
 customElements.define("theme-select", $8e27fe42aa65588c$export$1b9e02e625a724dc);
 
 
-class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    _entityIds = [];
-    _TYPES = [
-        'onOff',
-        'brightness',
-        'ct',
-        'hs',
-        'theme'
-    ];
-    _MINTEMP = 1500;
-    _MAXTEMP = 9000;
-    _initialized = false;
+class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _options = [];
     static get properties() {
         return {
             _lightState: {
@@ -11513,96 +11386,144 @@ class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
             _themeState: {
                 state: true
             },
-            _control: {
+            _option: {
                 state: true
             },
             _changedEntityIds: {
+                state: true
+            },
+            opened: {
+                state: true
+            },
+            _initialized: {
                 state: true
             }
         };
     }
     constructor(){
         super();
+        this._lightState = {};
+        this._themeState = {};
+        this._changedEntityIds = new Set();
+        this._initialized = false;
+        this._option = '';
     }
-    update(changedProps) {
+    /******************************* lifecycle *******************************/ update(changedProps) {
         super.update(changedProps);
-        this._initialized = true;
-    }
-    hasRelevantChanges() {
-        return this._entityIds.some((entityId)=>this._changedEntityIds.has(entityId));
+        changedProps.has("opened") && this.setOption('');
     }
     shouldUpdate(changedProps) {
-        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_control") || changedProps.has("_lightState");
+        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_option") || changedProps.has("_initialized") || changedProps.has("opened");
     }
-    static styles = [
-        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
-        (0, $aff2444c65f9a133$export$2e2bcd8739ae039)
-    ];
-    getTempGradient() {
-        const steps = 10;
-        return (0, $431982fab2e14f47$export$5b5356aa7e20fd72)(this._MINTEMP, this._MAXTEMP, steps);
+    firstUpdated() {
+        this.buildOptions();
+        this.initialize();
     }
-    getTempBorder() {
-        return (0, $431982fab2e14f47$export$4e46ac54fc82cf3b)((0, $431982fab2e14f47$export$c18f11e95ff36b0c)(this._MINTEMP), 1);
+    hasRelevantChanges() {
+        return this.getEntityIds().some((entityId)=>this.getCEIs().has(entityId));
     }
-    isOption(type) {
-        let valid;
-        let attribute;
-        switch(type){
-            case 'onOff':
-                valid = true;
-                break;
-            case 'theme':
-                valid = !!this._themeState.entity_id;
-                break;
-            case 'hs':
-                attribute = this._lightState.attributes['hs_color'];
-                valid = !(attribute === undefined);
-                break;
-            case 'ct':
-                attribute = this._lightState.attributes['color_temp_kelvin'];
-                valid = !(attribute === undefined);
-                break;
-            default:
-                attribute = this._lightState.attributes[type];
-                valid = !(attribute === undefined);
-        }
-        return valid;
+    /*********************** getter and setter logic ***********************/ getLightState() {
+        return this._lightState;
     }
-    getStyles(type) {
+    getThemeState() {
+        return this._themeState;
+    }
+    isInitialized() {
+        return this._initialized;
+    }
+    initialize() {
+        this._initialized = true;
+    }
+    getCEIs() {
+        return this._changedEntityIds;
+    }
+    getOption() {
+        return this._option;
+    }
+    setOption(option) {
+        this._option = option;
+    }
+    isSelected(option) {
+        return this.getOption() === option;
+    }
+    getOptions() {
+        return this._options;
+    }
+    getEntityIds() {
+        let entityIds = [
+            (0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState())
+        ];
+        const themeState = this.getThemeState();
+        themeState && entityIds.push((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(themeState));
+        return entityIds;
+    }
+    /************************* build options structure logic ***************/ isBrightness() {
+        return (0, $6d3ca277783cacc8$export$33cacb20a48e02bf)(this.getLightState()) !== undefined;
+    }
+    isHSColor() {
+        return (0, $6d3ca277783cacc8$export$5ee105321a1a6648)(this.getLightState()).includes('hs');
+    }
+    isCTColor() {
+        return (0, $6d3ca277783cacc8$export$5ee105321a1a6648)(this.getLightState()).includes('color_temp');
+    }
+    isTheme() {
+        return this.getThemeState() && Object.keys(this.getThemeState()).length > 0;
+    }
+    buildOptions() {
+        let options = [
+            'onOff'
+        ];
+        this.isBrightness() && options.push('brightness');
+        this.isCTColor() && options.push('color_temp_kelvin');
+        this.isHSColor() && options.push('hs_color');
+        this.isTheme() && options.push('theme');
+        this._options = options;
+    }
+    /************************* interactive logic ***************************/ onSelect(option) {
+        if (option === 'onOff') {
+            const entityId = (0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState());
+            const data = {
+                entity_id: entityId
+            };
+            this.callService('light', 'toggle', data);
+            this.setOption(null);
+        } else this.setOption(option);
+    }
+    /************************** html/style logic ***************************/ getStyles(option) {
         let styles = {};
-        switch(type){
+        let outline = '';
+        switch(option){
             case 'brightness':
-                styles['background'] = (0, $431982fab2e14f47$export$4e46ac54fc82cf3b)((0, $431982fab2e14f47$export$a004fc522c1a4845), .2);
-                this.isSelected(type) && (styles['outline'] = 'solid ' + (0, $431982fab2e14f47$export$4e46ac54fc82cf3b)((0, $431982fab2e14f47$export$a004fc522c1a4845), 1));
+                styles['background'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$a004fc522c1a4845), .2);
+                outline = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$a004fc522c1a4845), 1);
                 break;
-            case 'ct':
-                styles['background'] = this.getTempGradient();
-                this.isSelected(type) && (styles['outline'] = 'solid ' + this.getTempBorder());
+            case 'color_temp_kelvin':
+                styles['background'] = (0, $6d3ca277783cacc8$export$bca49aacb0a7b300)();
+                outline = (0, $6d3ca277783cacc8$export$bb0cdaadb7fd443b)();
                 break;
-            case 'hs':
-                styles['background'] = (0, $431982fab2e14f47$export$475133aea461e763)(10);
-                this.isSelected(type) && (styles['outline'] = 'solid ' + (0, $431982fab2e14f47$export$4e46ac54fc82cf3b)((0, $431982fab2e14f47$export$af126f6aeedfb296), 1));
+            case 'hs_color':
+                styles['background'] = (0, $6d3ca277783cacc8$export$475133aea461e763)();
+                outline = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$af126f6aeedfb296), 1);
                 break;
             case 'theme':
-                styles['background'] = (0, $431982fab2e14f47$export$4e46ac54fc82cf3b)((0, $431982fab2e14f47$export$a004fc522c1a4845), .2);
-                this.isSelected(type) && (styles['outline'] = 'solid ' + (0, $431982fab2e14f47$export$4e46ac54fc82cf3b)((0, $431982fab2e14f47$export$a004fc522c1a4845), 1));
+                styles['background'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$a004fc522c1a4845), .2);
+                outline = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$a004fc522c1a4845), 1);
                 break;
         }
-        if (this.isSelected(type) && type != 'onOff') styles['outline-offset'] = '-2px';
+        if (this.isSelected(option)) {
+            styles['outline-offset'] = '-2px';
+            styles['outline'] = 'solid ' + outline;
+        }
         return styles;
     }
-    isGroup() {
-        return !!this._lightState.attributes.entity_id;
-    }
-    iconContent(type) {
-        let content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
-        switch(type){
+    iconContent(option) {
+        let content;
+        switch(option){
             case 'onOff':
                 content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon
-                    ._state=${this._lightState}
-                    ._changedEntityIds = ${this._changedEntityIds}
-                ></light-icon>`;
+                        ._lightState=${this.getLightState()}
+                        ._changedEntityIds = ${this.getCEIs()}
+                    ></light-icon>`;
                 break;
             case 'brightness':
                 content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80}></ha-svg-icon>`;
@@ -11613,130 +11534,89 @@ class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         }
         return content;
     }
-    icon(type) {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+    icons() {
+        return (0, $6db6ff6394e885e6$export$76d90c956114f2c2)(this.getOptions(), (option)=>option, (option)=>{
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div
                     class="icon outlined"
-                    style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(type))}
-                    @click=${()=>this.onSelect(type)}
+                    style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(option))}
+                    @click=${()=>this.onSelect(option)}
                 >
-                    ${this.iconContent(type)}
+                    ${this.iconContent(option)}
                 </div>
-        `;
-    }
-    onSelect(type) {
-        if (type === 'onOff') {
-            const entityId = this._lightState.entity_id;
-            const data = {
-                entity_id: entityId
-            };
-            this.callService('light', 'toggle', data);
-        }
-        this._control = type;
-    }
-    isSelected(type) {
-        return this._control === type;
+            `;
+        });
     }
     brightnessBar() {
-        const light = this._lightState;
-        return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(light.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <brightness-slider
                 class="outlined"
-                ._changedEntityIds=${this._changedEntityIds}
-                ._lightState=${light}
+                ._changedEntityIds=${this.getCEIs()}
+                ._lightState=${this.getLightState()}
                 .callService=${this.callService}
-            ></brightness-slider>`);
+            ></brightness-slider>`;
     }
     ctBar() {
-        const light = this._lightState;
-        return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(light.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <colortemp-slider
                 class="outlined"
-                ._changedEntityIds=${this._changedEntityIds}
-                ._lightState=${light}
+                ._changedEntityIds=${this.getCEIs()}
+                ._lightState=${this.getLightState()}
                 .callService=${this.callService}
-            ></colortemp-slider>`);
+            ></colortemp-slider>`;
     }
     colorWheel() {
-        const light = this._lightState;
-        return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(light.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel
             class="outlined"
-            ._entityIds = ${this._entityIds}
-            ._changedEntityIds = ${this._changedEntityIds}
+            ._changedEntityIds = ${this.getCEIs()}
             .callService = ${this.callService}
-            ._lightState = ${light}
-        ></color-wheel>`);
+            ._lightState = ${this.getLightState()}
+        ></color-wheel>`;
     }
     themeSelect() {
-        const theme = this._themeState;
-        return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(theme.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-select
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-select
             class="outlined"
-            ._entityIds = ${this._entityIds}
-            ._changedEntityIds = ${this._changedEntityIds}
-            ._themeState = ${theme}
+            ._changedEntityIds = ${this.getCEIs()}
+            ._themeState = ${this.getThemeState()}
             .callService = ${this.callService}
         ></theme-select>
-        `);
+        `;
     }
-    controls() {
+    optionControl() {
         let panel;
-        switch(this._control){
+        switch(this.getOption()){
             case 'brightness':
                 panel = this.brightnessBar();
                 break;
-            case 'ct':
+            case 'color_temp_kelvin':
                 panel = this.ctBar();
                 break;
-            case 'hs':
+            case 'hs_color':
                 panel = this.colorWheel();
                 break;
             case 'theme':
-                this._themeState && (panel = this.themeSelect());
+                panel = this.themeSelect();
                 break;
             default:
                 panel = '';
         }
         return panel;
     }
-    icons() {
-        let icons = [];
-        this._TYPES.forEach((type)=>{
-            if (this.isOption(type)) icons.push(this.icon(type));
-        });
-        return icons;
-    }
+    static styles = [
+        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
+        (0, $2a56fe717a5ec2a6$export$2e2bcd8739ae039)
+    ];
     render() {
-        if (this._initialized) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div class="control-column outlined">
                     ${this.icons()}
                 </div>
-                ${this.controls()}
+                ${this.optionControl()}
             `;
     }
 }
-customElements.define("light-control", $197e5531adca31e1$export$5ebffa7af4af21de);
+customElements.define("light-control", $ee6aaf60e5f69fab$export$5ebffa7af4af21de);
 
-
-
-function $023a61f00bda0ff8$export$1a2d97de39ecbb75(lightState) {
-    return lightState.state === "on";
-}
-function $023a61f00bda0ff8$var$getRGB(lightState) {
-    return lightState.attributes.rgb_color;
-}
-function $023a61f00bda0ff8$var$getBrightness(lightState) {
-    let brightness = 1;
-    if (lightState.attributes.brightness) brightness = lightState.attributes.brightness / 255;
-    return brightness;
-}
-function $023a61f00bda0ff8$export$5551a2d24ff40153(lightState) {
-    let rgb = (0, $431982fab2e14f47$export$f353bac13bc8bab2);
-    if ($023a61f00bda0ff8$export$1a2d97de39ecbb75(lightState)) {
-        if ($023a61f00bda0ff8$var$getRGB(lightState)) rgb = (0, $431982fab2e14f47$export$dd0fba3206c57e56)((0, $431982fab2e14f47$export$e59310e5bf013385), $023a61f00bda0ff8$var$getRGB(lightState), $023a61f00bda0ff8$var$getBrightness(lightState));
-        else rgb = (0, $431982fab2e14f47$export$dd0fba3206c57e56)((0, $431982fab2e14f47$export$e59310e5bf013385), (0, $431982fab2e14f47$export$a004fc522c1a4845), $023a61f00bda0ff8$var$getBrightness(lightState));
-    }
-    return (0, $431982fab2e14f47$export$4e46ac54fc82cf3b)(rgb, 1);
-}
 
 
 class $37f28d6f302b8247$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
@@ -11793,7 +11673,7 @@ class $37f28d6f302b8247$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     getStyles(lightState) {
         let styles = {};
         if (this.isSelected(lightState)) {
-            styles['outline'] = 'solid ' + (0, $023a61f00bda0ff8$export$5551a2d24ff40153)(lightState);
+            styles['outline'] = 'solid ' + (0, $6d3ca277783cacc8$export$5551a2d24ff40153)(lightState);
             styles['outline-offset'] = '-4px';
         }
         return styles;
@@ -11816,7 +11696,7 @@ class $37f28d6f302b8247$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
                     @click=${()=>this.select(lightState)}
                 >
                     <div class="icons">
-                        <light-icon ._state=${lightState} ._changedEntityIds=${this._changedEntityIds}></light-icon>
+                        <light-icon ._lightState=${lightState} ._changedEntityIds=${this._changedEntityIds}></light-icon>
                     </div>
                     ${name}
                 </div>
@@ -11834,19 +11714,14 @@ class $37f28d6f302b8247$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
     lightControl() {
         const lightState = this.selectedLightState();
-        const entityIds = this.selectedLightEntityIds();
         if (lightState) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-control
                     id = ${lightState.entity_id}
-                    ._lightState = ${{
-            ...lightState
-        }}
-                    ._entityIds = ${entityIds}
+                    ._lightState = ${lightState}
                     ._changedEntityIds = ${this._changedEntityIds}
-                    ._themeState = ${{
-            ...this.selectedThemeState()
-        }}
+                    ._themeState = ${this.selectedThemeState()}
                     .callService=${this.callService}
+                    .opened=${this.opened}
                 ></light-control>
             `;
     }
@@ -11981,7 +11856,7 @@ class $5f91742d25a4f6c9$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         let lightState;
         result = (0, $6db6ff6394e885e6$export$76d90c956114f2c2)(lightIds, (lightId)=>lightId, (lightId)=>{
             lightState = this._states[lightId];
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._state=${lightState} ._changedEntityIds=${this._changedEntityIds}></light-icon>`;
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._lightState=${lightState} ._changedEntityIds=${this._changedEntityIds}></light-icon>`;
         });
         return result;
     }
@@ -12208,6 +12083,117 @@ class $bf7b3f7781c5b8f5$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$ex
 }
 customElements.define("floor-panel", $bf7b3f7781c5b8f5$export$8ff612b8b93103f2);
 
+
+const $431982fab2e14f47$export$a004fc522c1a4845 = [
+    255,
+    193,
+    7
+]; // color in rgb (yellow)
+const $431982fab2e14f47$export$e59310e5bf013385 = [
+    127,
+    97,
+    3
+]; // should be black-ish yellow
+const $431982fab2e14f47$export$173de64b5ad0d5b4 = [
+    158,
+    158,
+    158
+]; // color in rgb (gray)
+const $431982fab2e14f47$export$f353bac13bc8bab2 = [
+    68,
+    115,
+    158
+]; // color in rgb (steel blue)
+const $431982fab2e14f47$export$af126f6aeedfb296 = [
+    41,
+    0,
+    255
+]; // blue color
+function $431982fab2e14f47$var$getTempRed(temp) {
+    let red;
+    if (temp <= 6600) red = 255;
+    else {
+        red = temp / 100 - 60;
+        red = Math.round(329.698727446 * red ** -0.1332047592);
+    }
+    red < 0 && (red = 0);
+    red > 255 && (red = 255);
+    return red;
+}
+function $431982fab2e14f47$var$getTempGreen(temp) {
+    let green;
+    if (temp <= 6600) {
+        green = temp / 100;
+        green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
+    } else {
+        green = temp / 100 - 60;
+        green = Math.round(288.1221695283 * green ** -0.0755148492);
+    }
+    green < 0 && (green = 0);
+    green > 255 && (green = 255);
+    return green;
+}
+function $431982fab2e14f47$var$getTempBlue(temp) {
+    let blue;
+    if (temp > 6600) blue = 255;
+    else if (temp <= 1900) blue = 0;
+    else {
+        blue = temp / 100 - 10;
+        blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
+    }
+    blue < 0 && (blue = 0);
+    blue > 255 && (blue = 255);
+    return blue;
+}
+function $431982fab2e14f47$export$c18f11e95ff36b0c(temp) {
+    return [
+        $431982fab2e14f47$var$getTempRed(temp),
+        $431982fab2e14f47$var$getTempGreen(temp),
+        $431982fab2e14f47$var$getTempBlue(temp)
+    ];
+}
+function $431982fab2e14f47$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
+    let output = `linear-gradient(to top`;
+    for(let step = 0; step <= steps; step++){
+        const temp = (minTemp * (steps - step) + maxTemp * step) / steps;
+        const rgb = $431982fab2e14f47$export$c18f11e95ff36b0c(temp);
+        const result = $431982fab2e14f47$export$4e46ac54fc82cf3b(rgb, 1);
+        const percent = Math.round(step * 100 / steps);
+        output = output + `, ` + result + ` ${percent}%`;
+    }
+    output = output + `)`;
+    return output;
+}
+function $431982fab2e14f47$export$475133aea461e763(steps) {
+    let output = 'radial-gradient(circle at center, white 0%, transparent 100%), ';
+    output = output + 'conic-gradient( from 0deg';
+    for(let step = 0; step <= steps; step++){
+        const angle = Math.round(step * 360 / steps);
+        output = output + `, hsl(${angle}, 100%, 50%)`;
+    }
+    output = output + `)`;
+    return output;
+}
+function $431982fab2e14f47$var$setScale(a, b, t) {
+    let result = a;
+    if (t > 1) result = b;
+    else if (t < 0) result = a;
+    else result = a + (b - a) * t;
+    return result;
+}
+function $431982fab2e14f47$export$4e46ac54fc82cf3b(rgbArray, opacity) {
+    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`;
+}
+function $431982fab2e14f47$export$dd0fba3206c57e56(rgbA, rgbB, t) {
+    const red = $431982fab2e14f47$var$setScale(rgbA[0], rgbB[0], t);
+    const green = $431982fab2e14f47$var$setScale(rgbA[1], rgbB[1], t);
+    const blue = $431982fab2e14f47$var$setScale(rgbA[2], rgbB[2], t);
+    return [
+        red,
+        green,
+        blue
+    ];
+}
 
 
 class $ca5bc5434f55c475$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {

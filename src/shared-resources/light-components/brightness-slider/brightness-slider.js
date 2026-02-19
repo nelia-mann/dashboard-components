@@ -1,5 +1,7 @@
 import { html, LitElement } from 'lit';
-import { ONLIGHT } from '../util/color-util.js';
+import { getBrightnessPct } from '../util/light-util.js';
+import { ONLIGHT } from '../../util/color-util.js';
+import { getEntityId } from '../../util/state-util.js';
 import styles from './brightness-slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../../general-components/slider/slider.js';
@@ -38,7 +40,7 @@ export class BrightnessSlider extends LitElement {
     }
 
     hasRelevantChanges() {
-        return this.getCEIs().has(this.getEntityId());
+        return this.getCEIs().has(getEntityId(this.getLightState()));
     }
 
     /************************ getter and setter logic *************************/
@@ -48,19 +50,11 @@ export class BrightnessSlider extends LitElement {
     }
 
     initialize() {
-        (this._initialized = true);
+        this._initialized = true;
     }
 
-    getState() {
+    getLightState() {
         return this._lightState;
-    }
-
-    getEntityId() {
-        return this.getState().entity_id;
-    }
-
-    getBrightnessPct() {
-        return this.getState().attributes.brightness * 100 / 255;
     }
 
     getCEIs() {
@@ -69,9 +63,9 @@ export class BrightnessSlider extends LitElement {
 
     /************************ interactive logic *******************************/
 
-    handleLightService(e) {
+    handleCallService(e) {
         const value = e.detail;
-        const entityId = this.getEntityId();
+        const entityId = getEntityId(this.getLightState());
         let data = { entity_id: entityId, brightness_pct: value }
         this.callService('light', 'turn_on', data)
     }
@@ -82,12 +76,12 @@ export class BrightnessSlider extends LitElement {
         return html`
             <slider-bar
                 ._changedEntityIds = ${this.getCEIs()}
-                ._state=${this.getState()}
-                @change=${this.handleLightService}
+                ._state=${this.getLightState()}
+                @change=${this.handleCallService}
                 ._max=${100}
                 ._min=${0}
                 ._units=${'%'}
-                ._startValue=${this.getBrightnessPct()}
+                ._startValue=${getBrightnessPct(this.getLightState())}
                 ._colorCode=${ONLIGHT}
             ></slider-bar>`
     }

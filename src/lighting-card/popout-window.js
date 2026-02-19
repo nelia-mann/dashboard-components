@@ -4,8 +4,8 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { mdiCloseCircleOutline } from '@mdi/js';
 import styles from './popout.styles.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
-import './light-control.js';
-import { getColor } from './light-util.js';
+import '../shared-resources/light-components/light-control/light-control.js';
+import { getColor } from '../shared-resources/light-components/util/light-util.js';
 
 export class PopoutWindow extends LitElement {
 
@@ -90,7 +90,7 @@ export class PopoutWindow extends LitElement {
                     @click=${() => this.select(lightState)}
                 >
                     <div class="icons">
-                        <light-icon ._state=${lightState} ._changedEntityIds=${this._changedEntityIds}></light-icon>
+                        <light-icon ._lightState=${lightState} ._changedEntityIds=${this._changedEntityIds}></light-icon>
                     </div>
                     ${name}
                 </div>
@@ -114,16 +114,15 @@ export class PopoutWindow extends LitElement {
 
     lightControl() {
         const lightState = this.selectedLightState();
-        const entityIds = this.selectedLightEntityIds();
         if (lightState) {
             return html`
                 <light-control
                     id = ${lightState.entity_id}
-                    ._lightState = ${{ ...lightState }}
-                    ._entityIds = ${entityIds}
+                    ._lightState = ${lightState}
                     ._changedEntityIds = ${this._changedEntityIds}
-                    ._themeState = ${{...this.selectedThemeState()}}
+                    ._themeState = ${this.selectedThemeState()}
                     .callService=${this.callService}
+                    .opened=${this.opened}
                 ></light-control>
             `
         }

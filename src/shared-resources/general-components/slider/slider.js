@@ -3,6 +3,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import styles from './slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import { rgba } from '../../util/color-util.js';
+import { getEntityId } from '../../util/state-util.js';
 
 export class SliderBar extends LitElement {
 
@@ -31,7 +32,7 @@ export class SliderBar extends LitElement {
         this._initialized = false;
     }
 
-    /************* lifecycle ***********************************************/
+    /************************** lifecycle *****************************/
 
     // each time an update occurs resulting in rerendering
     update(changedProps) {
@@ -59,7 +60,7 @@ export class SliderBar extends LitElement {
 
     // helper to determine if should update
     hasRelevantChanges() {
-        const isStateChanged = this.getCEIs().has(this.getEntityId());
+        const isStateChanged = this.getCEIs().has(getEntityId(this.getState()));
         const isUp = !this.isDown();
         const isNew = (this.getValue() != this.getStateValue());
         return (isStateChanged && isUp && isNew);
@@ -100,8 +101,8 @@ export class SliderBar extends LitElement {
         this._initialized = true;
     }
 
-    getEntityId() {
-        return this._state.entity_id;
+    getState() {
+        return this._state;
     }
 
     getCEIs() {

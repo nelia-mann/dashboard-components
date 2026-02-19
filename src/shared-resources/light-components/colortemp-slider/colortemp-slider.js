@@ -1,8 +1,9 @@
 import { html, LitElement } from 'lit';
-import { tempGradient } from '../util/color-util.js';
+import { tempGradient, getMinTemp, getMaxTemp, getColorTemp } from '../util/light-util.js';
 import styles from './colortemp-slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../../general-components/slider/slider.js';
+import { getEntityId } from '../../util/state-util.js';
 
 export class ColorTempSlider extends LitElement {
 
@@ -38,7 +39,7 @@ export class ColorTempSlider extends LitElement {
     }
 
     hasRelevantChanges() {
-        return this.getCEIs().has(this.getEntityId());
+        return this.getCEIs().has(getEntityId(this.getLightState()));
     }
 
     /************************ getter and setter logic *************************/
@@ -48,38 +49,22 @@ export class ColorTempSlider extends LitElement {
     }
 
     initialize() {
-        (this._initialized = true);
+        this._initialized = true;
     }
 
-    getState() {
+    getLightState() {
         return this._lightState;
-    }
-
-    getEntityId() {
-        return this.getState().entity_id;
-    }
-
-    getColorTempKelvin() {
-        return this.getState().attributes.color_temp_kelvin;
     }
 
     getCEIs() {
         return this._changedEntityIds;
     }
 
-    getMinTemp() {
-        return this.getState().attributes.min_color_temp_kelvin;
-    }
-
-    getMaxTemp() {
-        return this.getState().attributes.max_color_temp_kelvin;
-    }
-
     /************************ interactive logic *******************************/
 
-    handleLightService(e) {
+    handleCallService(e) {
         const value = e.detail;
-        const entityId = this.getEntityId();
+        const entityId = getEntityId(this.getLightState());
         let data = { entity_id: entityId, color_temp_kelvin: value }
         this.callService('light', 'turn_on', data)
     }
@@ -87,17 +72,18 @@ export class ColorTempSlider extends LitElement {
     /**************************** style/html logic ******************************/
 
     ctBar() {
-        const steps = 10;
-        const tempGrad = tempGradient(this.getMinTemp(), this.getMaxTemp(), steps);
+        const minTemp = getMinTemp(this.getLightState());
+        const maxTemp = getMaxTemp(this.getLightState())
+        const tempGrad = tempGradient(minTemp, maxTemp);
         return html`
             <slider-bar
                 ._changedEntityIds = ${this.getCEIs()}
-                ._state=${this.getState()}
-                @change=${this.handleLightService}
-                ._max=${this.getMaxTemp()}
-                ._min=${this.getMinTemp()}
+                ._state=${this.getLightState()}
+                @change=${this.handleCallService}
+                ._max=${maxTemp}
+                ._min=${minTemp}
                 ._units=${'K'}
-                ._startValue=${this.getColorTempKelvin()}
+                ._startValue=${getColorTemp(this.getLightState())}
                 ._background=${tempGrad}
             ></slider-bar>`
     }

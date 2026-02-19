@@ -4,6 +4,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import styles from './theme.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import { getThemeGradient, getThemeOutline } from './theme-util.js';
+import { getEntityId, getState } from '../../util/state-util.js';
 
 
 export class ThemeSelect extends LitElement {
@@ -45,8 +46,8 @@ export class ThemeSelect extends LitElement {
     }
 
     hasRelevantChanges() {
-        const isStateChanged = this.getCEIs().has(this.getEntityId());
-        const isNewOption = (this.getOption() != this.getThemeState());
+        const isStateChanged = this.getCEIs().has(getEntityId(this.getThemeState()));
+        const isNewOption = (this.getOption() != getState(this.getThemeState()));
         return (isStateChanged && isNewOption);
     }
 
@@ -55,7 +56,7 @@ export class ThemeSelect extends LitElement {
     }
 
     setInitialValue() {
-        this.setOption(this.getThemeState());
+        this.setOption(getState(this.getThemeState()));
     }
 
     /************************ getter and setter logic **************************/
@@ -73,13 +74,8 @@ export class ThemeSelect extends LitElement {
         return optionList;
     }
 
-    getEntityId() {
-        const entityId = this._themeState.entity_id;
-        return entityId;
-    }
-
     getThemeState() {
-        return this._themeState.state;
+        return this._themeState;
     }
 
     getOption() {
@@ -102,11 +98,11 @@ export class ThemeSelect extends LitElement {
 
     onClick(option) {
         this.setOption(option);
-        this.doCallService(option);
+        this.handleCallService(option);
     }
 
-    doCallService(option) {
-        const entityId = this.getEntityId();
+    handleCallService(option) {
+        const entityId = getEntityId(this.getThemeState());
         const data = { entity_id: entityId, option: option };
         this.callService('select', 'select_option', data);
     }

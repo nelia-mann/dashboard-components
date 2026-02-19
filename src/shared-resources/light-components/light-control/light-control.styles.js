@@ -20,6 +20,14 @@ export default css`
         margin: 10px;
     }
 
+    ha-svg-icon {
+        padding: 0%;
+        margin: 0%;
+        --mdc-icon-size: 20px;
+        height: 20px;
+        width: 20px;
+    }
+
     brightness-slider {
         margin-left: 20px;
         margin-right: 10px;
@@ -59,14 +67,6 @@ export default css`
         padding: 10px;
         padding-left: 5px;
         padding-right: 5px;
-    }
-
-    ha-svg-icon {
-        padding: 0%;
-        margin: 0%;
-        --mdc-icon-size: 20px;
-        height: 20px;
-        width: 20px;
     }
 
 `;

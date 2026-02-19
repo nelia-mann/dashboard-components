@@ -1,5 +1,10 @@
+const ONLIGHT = [255, 193, 7]; // color in rgb (yellow)
+const HALFLIGHT = [127, 97, 3]; // should be black-ish yellow
 const OFF = [158, 158, 158]; // color in rgb (gray)
-const OFFENTITY = [68, 115, 158]; // color in rgb (steel blue)
+const OFFLIGHT = [68, 115, 158]; // color in rgb (steel blue)
+const INDIGO = [41, 0, 255]; // blue color
+
+const ONLIGHTHS = [45, 100];
 
 function setScale(a, b, t) {
     let result = a;
@@ -28,5 +33,9 @@ export {
     interpolateRGB,
     rgba,
     OFF,
-    OFFENTITY
+    ONLIGHT,
+    HALFLIGHT,
+    OFFLIGHT,
+    INDIGO,
+    ONLIGHTHS
 }
