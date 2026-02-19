@@ -19,6 +19,8 @@ export class ThemeSelect extends LitElement {
 
     constructor() {
         super();
+        this._themeState = {};
+        this._changedEntityIds = new Set();
         this._initialized = false;
     }
 

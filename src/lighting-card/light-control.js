@@ -7,6 +7,7 @@ import styles from './light-control.styles.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import '../shared-resources/light-components/light-icon/light-icon.js';
 import '../shared-resources/light-components/slider/slider.js';
+import '../shared-resources/light-components/brightness-slider/brightness-slider.js';
 import '../shared-resources/light-components/color-wheel/color-wheel.js';
 import '../shared-resources/light-components/theme-select/theme-select.js';
 
@@ -118,7 +119,7 @@ export class LightControl extends LitElement {
         switch (type) {
             case 'onOff':
                 content = html`<light-icon
-                    ._state=${{ ...this._lightState }}
+                    ._state=${this._lightState}
                     ._changedEntityIds = ${this._changedEntityIds}
                 ></light-icon>`;
                 break;
@@ -167,18 +168,12 @@ export class LightControl extends LitElement {
     brightnessBar() {
         const light = this._lightState;
         return keyed(light.entity_id, html`
-            <slider-bar
+            <brightness-slider
                 class="outlined"
-                ._changedEntityIds = ${this._changedEntityIds}
-                ._state=${light}
-                @change=${(e) => this.handleLightService('turn_on', 'brightness_pct', e.detail)}
-                ._max=${100}
-                ._min=${0}
-                ._units=${'%'}
-                ._startValue=${light.attributes.brightness * 100 / 255}
-                ._type=${'brightness'}
-                ._colorCode=${ONLIGHT}
-            ></slider-bar>`)
+                ._changedEntityIds=${this._changedEntityIds}
+                ._lightState=${light}
+                .callService=${this.callService}
+            ></brightness-slider>`)
     }
 
     ctBar() {

@@ -9241,6 +9241,18 @@ var $aff2444c65f9a133$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         padding: 20px;
     }
 
+    brightness-slider {
+        margin-left: 20px;
+        margin-right: 10px;
+        width: 150px;
+        height: 150px;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
     color-wheel {
         position: relative;
         width: 150px;
@@ -9390,6 +9402,8 @@ class $91f755965ec27edf$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     // when first constructed
     constructor(){
         super();
+        this._state = {};
+        this._changedEntityIds = new Set();
         this._initialized = false;
     }
     /************* lifecycle ***********************************************/ // each time an update occurs resulting in rerendering
@@ -9546,6 +9560,109 @@ customElements.define("slider-bar", $91f755965ec27edf$export$5ff34efdd1b9ed54);
 
 
 
+var $ae9105d0e2173251$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    slider-bar {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+`;
+
+
+
+
+class $289a3d4763775a85$export$2541e764ec89469 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    static get properties() {
+        return {
+            _lightState: {
+                state: true
+            },
+            _changedEntityIds: {
+                state: true
+            },
+            _initialized: {
+                state: true
+            }
+        };
+    }
+    constructor(){
+        super();
+        this._lightState = {};
+        this._changedEntityIds = new Set();
+        this._initialized = false;
+    }
+    /******************************* lifecycle **********************************/ update(changedProps) {
+        super.update(changedProps);
+    }
+    shouldUpdate(changedProps) {
+        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_initialized");
+    }
+    firstUpdated() {
+        this.initialize();
+    }
+    hasRelevantChanges() {
+        return this.getCEIs().has(this.getEntityId());
+    }
+    /************************ getter and setter logic *************************/ isInitialized() {
+        return this._initialized;
+    }
+    initialize() {
+        this._initialized = true;
+    }
+    getState() {
+        return this._lightState;
+    }
+    getEntityId() {
+        return this.getState().entity_id;
+    }
+    getBrightnessPct() {
+        return this.getState().attributes.brightness * 100 / 255;
+    }
+    getCEIs() {
+        return this._changedEntityIds;
+    }
+    /************************ interactive logic *******************************/ handleLightService(e) {
+        const value = e.detail;
+        const entityId = this.getEntityId();
+        let data = {
+            entity_id: entityId,
+            brightness_pct: value
+        };
+        this.callService('light', 'turn_on', data);
+    }
+    /**************************** style/html logic ******************************/ brightnessBar() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <slider-bar
+                ._changedEntityIds = ${this.getCEIs()}
+                ._state=${this.getState()}
+                @change=${this.handleLightService}
+                ._max=${100}
+                ._min=${0}
+                ._units=${'%'}
+                ._startValue=${this.getBrightnessPct()}
+                ._colorCode=${0, $66c8ca609c94bdc0$export$a004fc522c1a4845}
+            ></slider-bar>`;
+    }
+    static styles = [
+        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
+        (0, $ae9105d0e2173251$export$2e2bcd8739ae039)
+    ];
+    render() {
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                ${this.brightnessBar()}
+            `;
+    }
+}
+customElements.define("brightness-slider", $289a3d4763775a85$export$2541e764ec89469);
+
+
+
+
+
 var $0c1278e39028d633$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .wheel {
@@ -9601,6 +9718,8 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     }
     constructor(){
         super();
+        this._lightState = {};
+        this._changedEntityIds = new Set();
         this._initialized = false;
     }
     /****************************** lifecycle **************************************/ update(changedProps) {
@@ -11143,6 +11262,8 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
     }
     constructor(){
         super();
+        this._themeState = {};
+        this._changedEntityIds = new Set();
         this._initialized = false;
     }
     /************* lifecycle ***********************************************/ update(changedProps) {
@@ -11346,9 +11467,7 @@ class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         switch(type){
             case 'onOff':
                 content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon
-                    ._state=${{
-                    ...this._lightState
-                }}
+                    ._state=${this._lightState}
                     ._changedEntityIds = ${this._changedEntityIds}
                 ></light-icon>`;
                 break;
@@ -11390,18 +11509,12 @@ class $197e5531adca31e1$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     brightnessBar() {
         const light = this._lightState;
         return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(light.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <slider-bar
+            <brightness-slider
                 class="outlined"
-                ._changedEntityIds = ${this._changedEntityIds}
-                ._state=${light}
-                @change=${(e)=>this.handleLightService('turn_on', 'brightness_pct', e.detail)}
-                ._max=${100}
-                ._min=${0}
-                ._units=${'%'}
-                ._startValue=${light.attributes.brightness * 100 / 255}
-                ._type=${'brightness'}
-                ._colorCode=${(0, $431982fab2e14f47$export$a004fc522c1a4845)}
-            ></slider-bar>`);
+                ._changedEntityIds=${this._changedEntityIds}
+                ._lightState=${light}
+                .callService=${this.callService}
+            ></brightness-slider>`);
     }
     ctBar() {
         const light = this._lightState;

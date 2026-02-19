@@ -26,6 +26,8 @@ export class SliderBar extends LitElement {
     // when first constructed
     constructor() {
         super();
+        this._state = {};
+        this._changedEntityIds = new Set();
         this._initialized = false;
     }
 

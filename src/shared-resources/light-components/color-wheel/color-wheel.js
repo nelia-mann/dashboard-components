@@ -23,6 +23,8 @@ export class ColorWheel extends LitElement {
 
     constructor() {
         super();
+        this._lightState = {};
+        this._changedEntityIds = new Set();
         this._initialized = false;
     }
 
