@@ -11354,6 +11354,7 @@ customElements.define("theme-button", $65629b7f5a2a2127$export$91a69db4fc637fd9)
 
 
 class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _flag = false;
     static get properties() {
         return {
             _themeState: {
@@ -11377,6 +11378,7 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         this._initialized = false;
     }
     /************* lifecycle ***********************************************/ update(changedProps) {
+        !this.getChangeFlag() && this.setInitialValue();
         super.update(changedProps);
     }
     shouldUpdate(changedProps) {
@@ -11389,10 +11391,11 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
     hasRelevantChanges() {
         const isStateChanged = this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getThemeState()));
         const isNewOption = this.getOption() != (0, $4ab534091a4f77ec$export$50fdfeece43146fd)(this.getThemeState());
-        return isStateChanged && isNewOption;
+        const isFlag = this.getChangeFlag();
+        return !isFlag && isStateChanged && isNewOption;
     }
     updated() {
-        this.hasRelevantChanges() && this.setInitialValue();
+        this.lowerChangeFlag();
     }
     setInitialValue() {
         this.setOption((0, $4ab534091a4f77ec$export$50fdfeece43146fd)(this.getThemeState()));
@@ -11422,7 +11425,17 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
     getCEIs() {
         return this._changedEntityIds;
     }
+    getChangeFlag() {
+        return this._flag;
+    }
+    raiseChangeFlag() {
+        this._flag = true;
+    }
+    lowerChangeFlag() {
+        this._flag = false;
+    }
     /**************************** interactive logic **************************/ onClick(option) {
+        this.raiseChangeFlag();
         this.setOption(option);
         this.handleCallService(option);
     }
@@ -11458,7 +11471,10 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         (0, $650a21d87e85f0eb$export$2e2bcd8739ae039)
     ];
     render() {
-        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${this.listOptions()}`;
+        if (this.isInitialized()) {
+            console.log("rerendered");
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${this.listOptions()}`;
+        }
     }
 }
 customElements.define("theme-select", $8e27fe42aa65588c$export$1b9e02e625a724dc);

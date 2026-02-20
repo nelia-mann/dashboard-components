@@ -10,6 +10,8 @@ import './theme-button.js';
 
 export class ThemeSelect extends LitElement {
 
+    _flag = false;
+
     static get properties() {
         return {
             _themeState: { state: true },
@@ -31,6 +33,7 @@ export class ThemeSelect extends LitElement {
 
 
     update(changedProps) {
+        (!this.getChangeFlag()) && (this.setInitialValue());
         super.update(changedProps);
     }
 
@@ -49,11 +52,12 @@ export class ThemeSelect extends LitElement {
     hasRelevantChanges() {
         const isStateChanged = this.getCEIs().has(getEntityId(this.getThemeState()));
         const isNewOption = (this.getOption() != getState(this.getThemeState()));
-        return (isStateChanged && isNewOption);
+        const isFlag = this.getChangeFlag();
+        return (!isFlag && isStateChanged && isNewOption);
     }
 
     updated() {
-        (this.hasRelevantChanges()) && this.setInitialValue();
+        this.lowerChangeFlag();
     }
 
     setInitialValue() {
@@ -95,9 +99,22 @@ export class ThemeSelect extends LitElement {
         return this._changedEntityIds;
     }
 
+    getChangeFlag() {
+        return this._flag;
+    }
+
+    raiseChangeFlag() {
+        this._flag = true;
+    }
+
+    lowerChangeFlag() {
+        this._flag = false;
+    }
+
     /**************************** interactive logic **************************/
 
     onClick(option) {
+        this.raiseChangeFlag();
         this.setOption(option);
         this.handleCallService(option);
     }
@@ -137,6 +154,7 @@ export class ThemeSelect extends LitElement {
 
     render() {
         if (this.isInitialized()) {
+            console.log("rerendered");
             return html`${this.listOptions()}`
         }
     }

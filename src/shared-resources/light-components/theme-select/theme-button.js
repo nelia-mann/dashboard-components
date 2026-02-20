@@ -36,7 +36,6 @@ export class ThemeButton extends LitElement {
         this.initialize();
     }
 
-
     /********************* getter and setter logic ****************/
 
     isInitialized() {
