@@ -8,6 +8,7 @@ import '../../general-components/slider/slider.js';
 
 export class BrightnessSlider extends LitElement {
 
+
     static get properties() {
         return {
             _lightState: { state: true },

@@ -14,6 +14,7 @@ export class SliderBar extends LitElement {
     _background = '';
     _colorCode = [0, 0, 0];
     _isDown = false;
+    _flag = false;
 
     static get properties() {
         return {
@@ -36,6 +37,7 @@ export class SliderBar extends LitElement {
 
     // each time an update occurs resulting in rerendering
     update(changedProps) {
+        (!this.getChangeFlag()) && (this.setInitialValue());
         super.update(changedProps);
     }
 
@@ -55,7 +57,7 @@ export class SliderBar extends LitElement {
 
     // runs after every update
     updated() {
-        (this.hasRelevantChanges()) && (this.setInitialValue());
+        (!this.isDown()) && (this.lowerChangeFlag());
     }
 
     // helper to determine if should update
@@ -131,6 +133,18 @@ export class SliderBar extends LitElement {
         return this._colorCode;
     }
 
+    getChangeFlag() {
+        return this._flag;
+    }
+
+    raiseChangeFlag() {
+        this._flag = true;
+    }
+
+    lowerChangeFlag() {
+        this._flag = false;
+    }
+
     /****************************** interactive logic *******************************/
 
     // depends on type
@@ -142,6 +156,7 @@ export class SliderBar extends LitElement {
 
 
     handleOnInput(e) {
+        this.raiseChangeFlag();
         this.setIsDown(true);
         const value = e.target.value;
         this.setValue(value);

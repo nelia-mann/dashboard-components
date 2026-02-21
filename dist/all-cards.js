@@ -9332,6 +9332,7 @@ class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         0
     ];
     _isDown = false;
+    _flag = false;
     static get properties() {
         return {
             _state: {
@@ -9357,6 +9358,7 @@ class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     }
     /************************** lifecycle *****************************/ // each time an update occurs resulting in rerendering
     update(changedProps) {
+        !this.getChangeFlag() && this.setInitialValue();
         super.update(changedProps);
     }
     // determines if an update should occur
@@ -9370,7 +9372,7 @@ class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     }
     // runs after every update
     updated() {
-        this.hasRelevantChanges() && this.setInitialValue();
+        !this.isDown() && this.lowerChangeFlag();
     }
     // helper to determine if should update
     hasRelevantChanges() {
@@ -9427,6 +9429,15 @@ class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     getColorCode() {
         return this._colorCode;
     }
+    getChangeFlag() {
+        return this._flag;
+    }
+    raiseChangeFlag() {
+        this._flag = true;
+    }
+    lowerChangeFlag() {
+        this._flag = false;
+    }
     /****************************** interactive logic *******************************/ // depends on type
     handleOnChange(e) {
         this.setIsDown(false);
@@ -9436,6 +9447,7 @@ class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         }));
     }
     handleOnInput(e) {
+        this.raiseChangeFlag();
         this.setIsDown(true);
         const value = e.target.value;
         this.setValue(value);
