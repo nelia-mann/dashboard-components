@@ -1,13 +1,13 @@
 import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
+import {keyed} from 'lit/directives/keyed.js';
 import styles from './main.styles.js';
-import sharedStyles from '../shared-resources/styles/shared-styles.js';
-import "./floor-panel.js";
-import { interpolateRGB, OFF, ONLIGHT, rgba } from './color-util.js';
+import sharedStyles from '../../shared-resources/styles/shared-styles.js';
+import "../floor-panel/floor-panel.js";
+import { interpolateRGB, OFF, ONLIGHT, rgba } from '../../shared-resources/util/color-util.js';
 
 export class LightingCard extends LitElement {
 
-    // private properties
     _hass;
     _structure = {};
     _entityIds = [];
@@ -17,7 +17,6 @@ export class LightingCard extends LitElement {
     _needsRender = false;
     _changedEntityIds = new Set();
 
-    // internal reactive states
     static get properties() {
         return {
             _floorId: { state: true },
@@ -25,11 +24,9 @@ export class LightingCard extends LitElement {
         };
     }
 
-    // establish config information for card
     setConfig() {
     }
 
-    // gets the hass, and then creates the light bundles to be passed around.
     set hass(hass) {
         const oldHass = this._hass;
         this._hass = hass;
@@ -443,16 +440,15 @@ export class LightingCard extends LitElement {
 
     // generates panel content, based on currently selected floor.
     content() {
-        return html`
+        return keyed(this.getFloorId(), html`
             <floor-panel
-                ._structure = ${this.getFloorStructure()}
-                ._states = ${this._states}
-                ._entityIds = ${this.getFloorEntityIds()}
-                ._changedEntityIds = ${this._changedEntityIds}
-                ._floorId = ${this.getFloorId()}
+                .changedEntityIds = ${this._changedEntityIds}
+                .states = ${this._states}
+                .structure = ${this.getFloorStructure()}
+                .entityIds = ${this.getFloorEntityIds()}
                 .callService=${this._hass.callService}
             ></floor-panel>
-        `;
+        `);
     }
 
     // pull styles

@@ -11,16 +11,16 @@ export class BrightnessSlider extends LitElement {
 
     static get properties() {
         return {
-            _lightState: { state: true },
-            _changedEntityIds: { state: true },
+            changedEntityIds: { state: true },
+            lightState: { state: true },
             _initialized: { state: true }
         }
     }
 
     constructor() {
         super();
-        this._lightState = {};
-        this._changedEntityIds = new Set();
+        this.changedEntityIds = new Set();
+        this.lightState = {};
         this._initialized = false;
     }
 
@@ -55,11 +55,11 @@ export class BrightnessSlider extends LitElement {
     }
 
     getLightState() {
-        return this._lightState;
+        return this.lightState;
     }
 
     getCEIs() {
-        return this._changedEntityIds;
+        return this.changedEntityIds;
     }
 
     /************************ interactive logic *******************************/
@@ -76,14 +76,14 @@ export class BrightnessSlider extends LitElement {
     brightnessBar() {
         return html`
             <slider-bar
-                ._changedEntityIds = ${this.getCEIs()}
-                ._state=${this.getLightState()}
+                .changedEntityIds = ${this.getCEIs()}
+                .state=${this.getLightState()}
+                .max=${100}
+                .min=${0}
+                .units=${'%'}
+                .startValue=${getBrightnessPct(this.getLightState())}
+                .colorCode=${ONLIGHT}
                 @change=${this.handleCallService}
-                ._max=${100}
-                ._min=${0}
-                ._units=${'%'}
-                ._startValue=${getBrightnessPct(this.getLightState())}
-                ._colorCode=${ONLIGHT}
             ></slider-bar>`
     }
 

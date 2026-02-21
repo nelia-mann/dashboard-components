@@ -18,10 +18,15 @@ function isGroup(state) {
     return !!(getAttributes(state).entity_id)
 }
 
+function getName(state) {
+    return getAttributes(state).friendly_name;
+}
+
 export {
     getState,
     getEntityId,
     getAttributes,
     isOn,
-    isGroup
+    isGroup,
+    getName
 }

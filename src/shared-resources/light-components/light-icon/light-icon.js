@@ -10,14 +10,16 @@ export class LightIcon extends LitElement {
 
     static get properties() {
         return {
-            _lightState: { state: true },
-            _changedEntityIds: { state: true },
+            changedEntityIds: { state: true },
+            lightState: { state: true },
             _initialized: { state: true}
         }
     }
 
     constructor() {
         super();
+        this.changedEntityIds = new Set();
+        this.themeState = {};
         this._initialized = false;
     }
 
@@ -29,7 +31,10 @@ export class LightIcon extends LitElement {
     }
 
     shouldUpdate(changedProps) {
-        return (!this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_initialized"))
+        return (!this.isInitialized()
+            || this.hasRelevantChanges()
+            || changedProps.has("_initialized")
+            || changedProps.has("lightState"))
     }
 
     firstUpdated() {
@@ -51,11 +56,11 @@ export class LightIcon extends LitElement {
     }
 
     getLightState() {
-        return this._lightState;
+        return this.lightState;
     }
 
     getCEIs() {
-        return this._changedEntityIds;
+        return this.changedEntityIds;
     }
 
     /**************************** style/html logic ***************************/

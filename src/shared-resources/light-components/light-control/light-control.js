@@ -19,29 +19,27 @@ export class LightControl extends LitElement {
 
     static get properties() {
         return {
-            _lightState: { state: true },
-            _themeState: { state: true },
+            changedEntityIds: { state: true },
+            lightState: { state: true },
+            themeState: { state: true },
             _option: { state: true },
-            _changedEntityIds: { state: true },
-            opened: { state: true },
             _initialized: { state: true }
         }
     }
 
     constructor() {
         super();
-        this._lightState = {};
-        this._themeState = {};
-        this._changedEntityIds = new Set();
-        this._initialized = false;
+        this.changedEntityIds = new Set();
+        this.lightState = {};
+        this.themeState = {};
         this._option = '';
+        this._initialized = false;
     }
 
     /******************************* lifecycle *******************************/
 
     update(changedProps) {
         super.update(changedProps);
-        (changedProps.has("opened")) && (this.setOption(''));
     }
 
     shouldUpdate(changedProps) {
@@ -49,7 +47,7 @@ export class LightControl extends LitElement {
             || this.hasRelevantChanges()
             || changedProps.has("_option")
             || changedProps.has("_initialized")
-            || changedProps.has("opened"))
+            || changedProps.has("lightState"))
     }
 
     firstUpdated() {
@@ -64,11 +62,11 @@ export class LightControl extends LitElement {
     /*********************** getter and setter logic ***********************/
 
     getLightState() {
-        return this._lightState;
+        return this.lightState;
     }
 
     getThemeState() {
-        return this._themeState;
+        return this.themeState;
     }
 
     isInitialized() {
@@ -80,7 +78,7 @@ export class LightControl extends LitElement {
     }
 
     getCEIs() {
-        return this._changedEntityIds;
+        return this.changedEntityIds;
     }
 
     getOption() {
@@ -182,8 +180,8 @@ export class LightControl extends LitElement {
         switch (option) {
             case 'onOff':
                 content = html`<light-icon
-                        ._lightState=${this.getLightState()}
-                        ._changedEntityIds = ${this.getCEIs()}
+                        .changedEntityIds = ${this.getCEIs()}
+                        .lightState=${this.getLightState()}
                     ></light-icon>`;
                 break;
             case 'brightness':
@@ -214,8 +212,8 @@ export class LightControl extends LitElement {
         return html`
             <brightness-slider
                 class="outlined"
-                ._changedEntityIds=${this.getCEIs()}
-                ._lightState=${this.getLightState()}
+                .changedEntityIds=${this.getCEIs()}
+                .lightState=${this.getLightState()}
                 .callService=${this.callService}
             ></brightness-slider>`
     }
@@ -224,8 +222,8 @@ export class LightControl extends LitElement {
         return html`
             <colortemp-slider
                 class="outlined"
-                ._changedEntityIds=${this.getCEIs()}
-                ._lightState=${this.getLightState()}
+                .changedEntityIds=${this.getCEIs()}
+                .lightState=${this.getLightState()}
                 .callService=${this.callService}
             ></colortemp-slider>`
     }
@@ -233,17 +231,17 @@ export class LightControl extends LitElement {
     colorWheel() {
         return html`<color-wheel
             class="outlined"
-            ._changedEntityIds = ${this.getCEIs()}
+            .changedEntityIds = ${this.getCEIs()}
+            .lightState = ${this.getLightState()}
             .callService = ${this.callService}
-            ._lightState = ${this.getLightState()}
         ></color-wheel>`
     }
 
     themeSelect() {
         return html`<theme-select
             class="outlined"
-            ._changedEntityIds = ${this.getCEIs()}
-            ._themeState = ${this.getThemeState()}
+            .changedEntityIds = ${this.getCEIs()}
+            .themeState = ${this.getThemeState()}
             .callService = ${this.callService}
         ></theme-select>
         `

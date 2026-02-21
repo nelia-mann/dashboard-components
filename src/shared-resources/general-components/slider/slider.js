@@ -7,20 +7,20 @@ import { getEntityId } from '../../util/state-util.js';
 
 export class SliderBar extends LitElement {
 
-    _max;
-    _min;
-    _startValue;
-    _units = '';
-    _background = '';
-    _colorCode = [0, 0, 0];
+    max;
+    min;
+    startValue;
+    units = '';
+    background = '';
+    colorCode = [0, 0, 0];
     _isDown = false;
     _flag = false;
 
     static get properties() {
         return {
-            _state: { state: true },
+            changedEntityIds: { state: true },
+            state: { state: true },
             _value: { state: true },
-            _changedEntityIds: { state: true },
             _initialized: { state: true }
         }
     }
@@ -28,8 +28,8 @@ export class SliderBar extends LitElement {
     // when first constructed
     constructor() {
         super();
-        this._state = {};
-        this._changedEntityIds = new Set();
+        this.state = {};
+        this.changedEntityIds = new Set();
         this._initialized = false;
     }
 
@@ -84,15 +84,15 @@ export class SliderBar extends LitElement {
     }
 
     getMin() {
-        return this._min;
+        return this.min;
     }
 
     getMax() {
-        return this._max;
+        return this.max;
     }
 
     getStateValue() {
-        return this._startValue;
+        return this.startValue;
     }
 
     isInitialized() {
@@ -104,16 +104,16 @@ export class SliderBar extends LitElement {
     }
 
     getState() {
-        return this._state;
+        return this.state;
     }
 
     getCEIs() {
-        return this._changedEntityIds;
+        return this.changedEntityIds;
     }
 
     addUnits(value) {
         let newValue = String(Math.round(value));
-        newValue = newValue + this._units;
+        newValue = newValue + this.units;
         return newValue;
     }
 
@@ -126,11 +126,11 @@ export class SliderBar extends LitElement {
     }
 
     getBackground() {
-        return this._background;
+        return this.background;
     }
 
     getColorCode() {
-        return this._colorCode;
+        return this.colorCode;
     }
 
     getChangeFlag() {

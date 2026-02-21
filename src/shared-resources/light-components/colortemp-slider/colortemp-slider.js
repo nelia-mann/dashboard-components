@@ -9,16 +9,16 @@ export class ColorTempSlider extends LitElement {
 
     static get properties() {
         return {
-            _lightState: { state: true },
-            _changedEntityIds: { state: true },
+            changedEntityIds: { state: true },
+            lightState: { state: true },
             _initialized: { state: true }
         }
     }
 
     constructor() {
         super();
-        this._lightState = {};
-        this._changedEntityIds = new Set();
+        this.changedEntityIds = new Set();
+        this.lightState = {};
         this._initialized = false;
     }
 
@@ -53,11 +53,11 @@ export class ColorTempSlider extends LitElement {
     }
 
     getLightState() {
-        return this._lightState;
+        return this.lightState;
     }
 
     getCEIs() {
-        return this._changedEntityIds;
+        return this.changedEntityIds;
     }
 
     /************************ interactive logic *******************************/
@@ -77,14 +77,14 @@ export class ColorTempSlider extends LitElement {
         const tempGrad = tempGradient(minTemp, maxTemp);
         return html`
             <slider-bar
-                ._changedEntityIds = ${this.getCEIs()}
-                ._state=${this.getLightState()}
+                .changedEntityIds = ${this.getCEIs()}
+                .state=${this.getLightState()}
+                .max=${maxTemp}
+                .min=${minTemp}
+                .startValue=${getColorTemp(this.getLightState())}
+                .units=${'K'}
+                .background=${tempGrad}
                 @change=${this.handleCallService}
-                ._max=${maxTemp}
-                ._min=${minTemp}
-                ._units=${'K'}
-                ._startValue=${getColorTemp(this.getLightState())}
-                ._background=${tempGrad}
             ></slider-bar>`
     }
 

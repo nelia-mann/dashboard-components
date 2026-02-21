@@ -16,8 +16,8 @@ export class ColorWheel extends LitElement {
 
     static get properties() {
         return {
-            _lightState: { state: true },
-            _changedEntityIds: { state: true },
+            changedEntityIds: { state: true },
+            lightState: { state: true },
             _hue: { state: true },
             _saturation: { state: true },
             _initialized: { state: true }
@@ -26,8 +26,8 @@ export class ColorWheel extends LitElement {
 
     constructor() {
         super();
-        this._lightState = {};
-        this._changedEntityIds = new Set();
+        this.changedEntityIds = new Set();
+        this.lightState = {};
         this._initialized = false;
     }
 
@@ -119,11 +119,11 @@ export class ColorWheel extends LitElement {
     }
 
     getLightState() {
-        return this._lightState;
+        return this.lightState;
     }
 
     getCEIs() {
-        return this._changedEntityIds;
+        return this.changedEntityIds;
     }
 
     getChangeFlag() {

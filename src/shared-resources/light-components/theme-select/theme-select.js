@@ -1,10 +1,9 @@
 import { html, LitElement } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
-import { styleMap } from 'lit/directives/style-map.js';
 import styles from './theme.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import { getThemeGradient, getThemeOutline } from './theme-util.js';
-import { getEntityId, getState } from '../../util/state-util.js';
+import { getEntityId, getState, getAttributes } from '../../util/state-util.js';
 import './theme-button.js';
 
 
@@ -14,17 +13,17 @@ export class ThemeSelect extends LitElement {
 
     static get properties() {
         return {
-            _themeState: { state: true },
+            changedEntityIds: { state: true },
+            themeState: { state: true },
             _option: { state: true },
-            _changedEntityIds: { state: true },
             _initialized: { state: true }
         }
     }
 
     constructor() {
         super();
-        this._themeState = {};
-        this._changedEntityIds = new Set();
+        this.changedEntityIds = new Set();
+        this.themeState = {};
         this._initialized = false;
     }
 
@@ -74,13 +73,13 @@ export class ThemeSelect extends LitElement {
         this._initialized = true;
     }
 
-    getOptions() {
-        const optionList = this._themeState.attributes.options;
-        return optionList;
+    getThemeState() {
+        return this.themeState;
     }
 
-    getThemeState() {
-        return this._themeState;
+    getOptions() {
+        const optionList = getAttributes(this.getThemeState()).options;
+        return optionList;
     }
 
     getOption() {
@@ -96,7 +95,7 @@ export class ThemeSelect extends LitElement {
     }
 
     getCEIs() {
-        return this._changedEntityIds;
+        return this.changedEntityIds;
     }
 
     getChangeFlag() {
@@ -143,9 +142,9 @@ export class ThemeSelect extends LitElement {
         const optionList = this.getOptions();
         return repeat(optionList, (option) => option, option => {
             return html`<theme-button
+                .option=${option}
+                .selected=${this.isSelected(option)}
                 @select=${() => this.onClick(option)}
-                ._option=${option}
-                ._isSelected=${this.isSelected(option)}
              ></theme-button>`
         })
     }
@@ -154,7 +153,6 @@ export class ThemeSelect extends LitElement {
 
     render() {
         if (this.isInitialized()) {
-            console.log("rerendered");
             return html`${this.listOptions()}`
         }
     }

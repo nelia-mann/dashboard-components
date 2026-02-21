@@ -8,15 +8,15 @@ export class ThemeButton extends LitElement {
 
     static get properties() {
         return {
-            _option: { state: true },
-            _isSelected: { state: true },
+            option: { state: true },
+            selected: { state: true },
             _initialized: { state: true }
         }
     }
 
     constructor() {
         super();
-        this._isSelected = false;
+        this.selected = false;
         this._initialized = false;
     }
 
@@ -28,7 +28,7 @@ export class ThemeButton extends LitElement {
 
     shouldUpdate(changedProps) {
         return (!this.isInitialized()
-            || changedProps.has("_isSelected")
+            || changedProps.has("selected")
             || changedProps.has("_initialized"))
     }
 
@@ -47,11 +47,11 @@ export class ThemeButton extends LitElement {
     }
 
     getOption() {
-        return this._option;
+        return this.option;
     }
 
     isSelected() {
-        return this._isSelected;
+        return this.selected;
     }
 
     /********************* interactive logic **********************/

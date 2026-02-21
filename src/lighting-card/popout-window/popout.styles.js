@@ -34,45 +34,10 @@ export default css`
         background: none;
     }
 
-    .content-row {
+    light-group-control {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-around;
         align-items: center;
     }
-
-    .select-lights {
-        width: 100%;
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: flex-start;
-        justify-content: center;
-    }
-
-    .light-inner {
-        width: 180px;
-        height: 25px;
-        padding: 10px;
-        padding-top: 8px;
-        padding-bottom: 5px;
-        margin: 10px;
-        touch-action: none;
-        display: flex;
-        flex-flow: row nowrap;
-    }
-
-    .icons {
-        margin-right: 10px;
-        margin-left: 0px;
-        display: flex;
-        flex-flow: row nowrap;
-    }
-
-    light-control {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-around;
-        align-items: center;
-    }
-
 `;
