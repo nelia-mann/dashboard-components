@@ -11,6 +11,8 @@ export class ColorWheel extends LitElement {
 
     _box;
     _isDown = false;
+    _flag = false;
+
 
     static get properties() {
         return {
@@ -32,6 +34,7 @@ export class ColorWheel extends LitElement {
     /****************************** lifecycle **************************************/
 
     update(changedProps) {
+        (!this.getChangeFlag()) && (this.setInitialValues());
         super.update(changedProps);
     }
 
@@ -50,14 +53,15 @@ export class ColorWheel extends LitElement {
     }
 
     updated() {
-        (this.hasRelevantChanges() && !this.isDown()) && (this.setInitialValues());
+        (!this.isDown()) && (this.lowerChangeFlag());
     }
 
     hasRelevantChanges() {
         const isStateChanged = this.getCEIs().has(getEntityId(this.getLightState()));
         const lightHSColor = getHSColor(this.getLightState());
+        const isUp = !this.isDown();
         const hasNewValues = (lightHSColor[0] !== this.getHue()) || (lightHSColor[1] !== this.getSat())
-        return isStateChanged && hasNewValues;
+        return isStateChanged && isUp && hasNewValues;
     }
 
     setInitialValues() {
@@ -122,9 +126,22 @@ export class ColorWheel extends LitElement {
         return this._changedEntityIds;
     }
 
+    getChangeFlag() {
+        return this._flag;
+    }
+
+    raiseChangeFlag() {
+        this._flag = true;
+    }
+
+    lowerChangeFlag() {
+        this._flag = false;
+    }
+
     /**************************** interactive logic **************************/
 
     down(e) {
+        this.raiseChangeFlag();
         this.setIsDown(true);
         this.move(e);
     }

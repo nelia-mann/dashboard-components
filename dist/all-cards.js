@@ -9736,6 +9736,7 @@ var $0c1278e39028d633$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _box;
     _isDown = false;
+    _flag = false;
     static get properties() {
         return {
             _lightState: {
@@ -9762,6 +9763,7 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         this._initialized = false;
     }
     /****************************** lifecycle **************************************/ update(changedProps) {
+        !this.getChangeFlag() && this.setInitialValues();
         super.update(changedProps);
     }
     shouldUpdate(changedProps) {
@@ -9773,13 +9775,14 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         this.initialize();
     }
     updated() {
-        this.hasRelevantChanges() && !this.isDown() && this.setInitialValues();
+        !this.isDown() && this.lowerChangeFlag();
     }
     hasRelevantChanges() {
         const isStateChanged = this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState()));
         const lightHSColor = (0, $6d3ca277783cacc8$export$ea3cc22fc7f3ca28)(this.getLightState());
+        const isUp = !this.isDown();
         const hasNewValues = lightHSColor[0] !== this.getHue() || lightHSColor[1] !== this.getSat();
-        return isStateChanged && hasNewValues;
+        return isStateChanged && isUp && hasNewValues;
     }
     setInitialValues() {
         const hs_values = (0, $6d3ca277783cacc8$export$ea3cc22fc7f3ca28)(this.getLightState());
@@ -9827,7 +9830,17 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     getCEIs() {
         return this._changedEntityIds;
     }
+    getChangeFlag() {
+        return this._flag;
+    }
+    raiseChangeFlag() {
+        this._flag = true;
+    }
+    lowerChangeFlag() {
+        this._flag = false;
+    }
     /**************************** interactive logic **************************/ down(e) {
+        this.raiseChangeFlag();
         this.setIsDown(true);
         this.move(e);
     }
