@@ -9242,8 +9242,8 @@ var $ae9105d0e2173251$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-const $ef1a79c6631dfc4e$var$_TOPMARGIN = 10;
-const $ef1a79c6631dfc4e$var$_BOTTOMMARGIN = 0;
+const $ef1a79c6631dfc4e$var$_TOPMARGIN = 5;
+const $ef1a79c6631dfc4e$var$_BOTTOMMARGIN = 1;
 var $ef1a79c6631dfc4e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .values {
@@ -9260,7 +9260,7 @@ var $ef1a79c6631dfc4e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .slider {
         height: 100%;
-        width: 30px;
+        width: 40px;
         margin-left: 5px;
         padding-top: ${$ef1a79c6631dfc4e$var$_TOPMARGIN}%;
     }

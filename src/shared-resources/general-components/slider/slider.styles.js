@@ -1,7 +1,7 @@
 import { css } from 'lit';
 
-const _TOPMARGIN = 10;
-const _BOTTOMMARGIN = 0;
+const _TOPMARGIN = 5;
+const _BOTTOMMARGIN = 1;
 
 export default css`
 
@@ -19,7 +19,7 @@ export default css`
 
     .slider {
         height: 100%;
-        width: 30px;
+        width: 40px;
         margin-left: 5px;
         padding-top: ${_TOPMARGIN}%;
     }
