@@ -15,7 +15,7 @@ function getState(hass, entityId) {
 }
 
 function isLight(hass, entityId) {
-    const entity = this.getEntity(hass, entityId);
+    const entity = getEntity(hass, entityId);
     const notLight = entity.labels.includes('not_light');
     return (entityId.substring(0, 6) === "light.") && (!notLight);
 }
@@ -32,7 +32,7 @@ function isTheme(entityId) {
 }
 
 function getThemeIds(hass) {
-    const entities = this.getHassEntities(hass);
+    const entities = getHassEntities(hass);
     const themeIds = Object.keys(entities).filter((entityId) =>
         isTheme(hass, entityId));
     return new Set(themeIds);
