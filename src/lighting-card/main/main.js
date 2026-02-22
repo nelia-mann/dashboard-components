@@ -1,10 +1,11 @@
 import { html, LitElement } from 'lit';
-import { styleMap } from 'lit/directives/style-map.js';
-import {keyed} from 'lit/directives/keyed.js';
+import { keyed } from 'lit/directives/keyed.js';
+import { repeat } from 'lit-html/directives/repeat.js';
 import styles from './main.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import "../floor-panel/floor-panel.js";
-import { interpolateRGB, OFF, ONLIGHT, rgba } from '../../shared-resources/util/color-util.js';
+import "../../shared-resources/light-components/light-button/light-button.js";
+import { isGroup } from '../../shared-resources/util/state-util.js';
 
 export class LightingCard extends LitElement {
 
@@ -47,7 +48,6 @@ export class LightingCard extends LitElement {
     update(changedProps) {
         if (!this._structuresBuilt && this._hass) {
             this.setStructures();
-            this.setStates();
             this._structuresBuilt = true;
             this._needsRender = true;
         }
@@ -63,7 +63,9 @@ export class LightingCard extends LitElement {
     }
 
     shouldUpdate(changedProps) {
-        return this._needsRender || !this._structuresBuilt || changedProps.has("_floorId") > 0;
+        return (this._needsRender
+            || !this._structuresBuilt
+            || changedProps.has("_floorId") > 0);
     }
 
     detectStateChanges(oldHass, newHass) {
@@ -261,6 +263,10 @@ export class LightingCard extends LitElement {
         lightDictionary.entityIds = [...lightDictionary.entityIds, ...entityIds];
     }
 
+    isSoloLight(entityId) {
+        return this.isLight(entityId) && !this.isAGroup(entityId);
+    }
+
     setLightIdStructure() {
         const lightIds = this.getLightIds();
         Object.values(this._structure).forEach((floorDict) => {
@@ -282,6 +288,8 @@ export class LightingCard extends LitElement {
                 floorEntityIds = [...floorEntityIds, ...areaEntityIds];
             })
             floorDict.entityIds = floorEntityIds;
+            const soloLightIds = floorEntityIds.filter((entityId) => this.isSoloLight(entityId));
+            floorDict.soloLightIds = soloLightIds;
         })
     }
 
@@ -303,12 +311,13 @@ export class LightingCard extends LitElement {
     }
 
     setStructures() {
+        this.setEntityIds();
+        this.setStates();
         this.setFloorStructure();
         this.setAreaStructure();
         this.setLightIdStructure();
         this.cleanStructure();
         this.initializeFloor();
-        this.setEntityIds();
     }
 
     setEntityIds() {
@@ -372,70 +381,29 @@ export class LightingCard extends LitElement {
     }
 
     // deals with click to select floor.
-    onClick(e) {
-        this.setFloorId(e.currentTarget.id);
+    onClick(floorId) {
+        this.setFloorId(floorId);
     }
 
     /************************* style and html ***********************************/
 
-    // given a particular floor id, returns an array with the total number of lights,
-    // and the number that are on.
-    getLightData(floorId) {
-        const floorStructure = this._structure[floorId].structure;
-        let on = 0;
-        let tot = 0;
-        Object.values(floorStructure).forEach((areaDict) => {
-            const areaStructure = areaDict.structure;
-            Object.keys(areaStructure).forEach((lightId) => {
-                const lightState = this._states[lightId]
-                if (lightState) {
-                    tot = tot + 1;
-                    (lightState.state === "on") && (on = on + 1);
-                }
-            })
-        })
-        return [on, tot];
-    }
-
-    // determines the shade of color associated with a particular floor id, based on
-    // the fraction of the lights that are on.
-    getRGB(floorId, opacity) {
-        const onTot = this.getLightData(floorId);
-        const rgb = interpolateRGB(OFF, ONLIGHT, onTot[0] / onTot[1])
-        return rgba(rgb, opacity);
-    }
-
-    getStyles(floorId) {
-        let styles = {
-            'background-color': this.getRGB(floorId, 0.5)
-        }
-        if (this.isFloor(floorId)) {
-            styles['outline'] = `solid ${this.getRGB(floorId, 1)}`;
-            styles['outline-offset'] = '-4px';
-        }
-        return styles;
-    }
-
-    // generates the floor button for a particular floor id.
     floorButton(floorId) {
-        const onTot = this.getLightData(floorId);
         return html`
-            <button
-                class="button outlined"
-                style="${styleMap(this.getStyles(floorId))}"
-                id="${floorId}"
-                @click="${this.onClick}"
-            >
-                <div class="small-heading"> ${this.getFloorName(floorId)} <div>
-                <div class="sub-info"> ${onTot[0]}/${onTot[1]} lights on </div>
-            </button>
+            <lighting-button
+                .changedEntityIds = ${this._changedEntityIds}
+                .states = ${this._states}
+                .isSelected = ${this.isFloor(floorId)}
+                .lightIds = ${this._structure[floorId].soloLightIds}
+                .title = ${this._structure[floorId].name}
+                @select = ${() => this.onClick(floorId)}
+            ></lighting-button>
         `
     }
 
     // generates the list of floor buttons.
     floorButtons() {
         const floorIds = Object.keys(this._structure);
-        return floorIds.map((floorId) => (this.floorButton(floorId)));
+        return repeat(floorIds, (floorId) => floorId, floorId => this.floorButton(floorId));
     }
 
     // generates panel content, based on currently selected floor.

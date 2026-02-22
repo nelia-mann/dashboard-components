@@ -4,7 +4,6 @@ import { repeat } from 'lit-html/directives/repeat.js';
 import styles from './main.styles.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import { rgba } from './color-util.js';
-import './light-button.js';
 
 export class BasementKioskCard extends LitElement {
 

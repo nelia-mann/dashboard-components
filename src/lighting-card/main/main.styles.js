@@ -35,10 +35,10 @@ export default css`
         padding: 0px;
     }
 
-    .button {
+    lighting-button {
         height: 100%;
         width: 160px;
-        padding: 0px;
+        padding: 5px;
         border: none;
     }
 
