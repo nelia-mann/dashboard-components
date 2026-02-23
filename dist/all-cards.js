@@ -12345,7 +12345,9 @@ class $f93889c4c3188e64$export$f07dc1717dcb8b95 extends (0, $ab210b2da7b39b9d$ex
                 .lightId = ${lightId}
                 .themeId = ${this.getThemeId(lightId)}
                 .structure = ${this.getSubStructure(lightId)}
-                .entityIds = ${this.getSubEIs(lightId)}
+                .entityIds = ${[
+            ...this.getSubEIs(lightId)
+        ]}
                 .callService=${this.callService}
             ></light-component>
         `;
@@ -12435,7 +12437,9 @@ class $8d2a857b49dddd4c$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$ex
                 .states = ${this.getStates()}
                 .name = ${this.getAreaName(areaId)}
                 .structure = ${this.getSubStructure(areaId)}
-                .entityIds = ${this.getSubEIs(areaId)}
+                .entityIds = ${[
+            ...this.getSubEIs(areaId)
+        ]}
                 .callService = ${this.callService}
             ></area-panel>
         `;
@@ -12612,6 +12616,172 @@ class $97ffa901314cba74$export$1e5763623e0cb555 extends (0, $ab210b2da7b39b9d$ex
 customElements.define("lighting-button", $97ffa901314cba74$export$1e5763623e0cb555);
 
 
+/********************************states and entities ****************************************/ function $d14817f641e94e06$var$getHassEntities(hass) {
+    return hass.entities;
+}
+function $d14817f641e94e06$var$getHassStates(hass) {
+    return hass.states;
+}
+function $d14817f641e94e06$var$getEntity(hass, entityId) {
+    return $d14817f641e94e06$var$getHassEntities(hass)[entityId];
+}
+function $d14817f641e94e06$export$50fdfeece43146fd(hass, entityId) {
+    return $d14817f641e94e06$var$getHassStates(hass)[entityId];
+}
+/********************************* floors ************************************************/ function $d14817f641e94e06$var$getHassFloors(hass) {
+    return hass.floors;
+}
+function $d14817f641e94e06$export$19df7d2072d90b46(hass, structure) {
+    const floors = $d14817f641e94e06$var$getHassFloors(hass);
+    Object.entries(floors).forEach(([floorId, floor])=>{
+        const floorName = floor.name;
+        structure[floorId] = {
+            name: floorName,
+            structure: {},
+            entityIds: new Set()
+        };
+    });
+}
+/********************************* areas *************************************************/ function $d14817f641e94e06$var$getHassAreas(hass) {
+    return hass.areas;
+}
+function $d14817f641e94e06$var$isAreaOnFloor(hass, floorId, areaId) {
+    const areas = $d14817f641e94e06$var$getHassAreas(hass);
+    const area = areas[areaId];
+    return area.floor_id === floorId;
+}
+function $d14817f641e94e06$export$f45a0d26e841229c(hass, structure, floorId) {
+    const areas = $d14817f641e94e06$var$getHassAreas(hass);
+    Object.entries(areas).forEach(([areaId, area])=>{
+        const areaName = area.name;
+        if ($d14817f641e94e06$var$isAreaOnFloor(hass, floorId, areaId)) structure[areaId] = {
+            name: areaName,
+            structure: {},
+            entityIds: new Set()
+        };
+    });
+}
+function $d14817f641e94e06$var$getEntityAreaId(hass, entityId) {
+    const entity = $d14817f641e94e06$var$getEntity(hass, entityId);
+    return entity.area_id;
+}
+function $d14817f641e94e06$var$isInArea(hass, entityId, areaId) {
+    return areaId === $d14817f641e94e06$var$getEntityAreaId(hass, entityId);
+}
+/********************************* themes ************************************************/ function $d14817f641e94e06$var$isTheme(entityId) {
+    return entityId.substring(0, 7) === "select." && entityId.includes("theme");
+}
+function $d14817f641e94e06$export$639f23662367b414(hass) {
+    const entities = $d14817f641e94e06$var$getHassEntities(hass);
+    const themeIds = Object.keys(entities).filter((entityId)=>$d14817f641e94e06$var$isTheme(entityId));
+    return new Set(themeIds);
+}
+function $d14817f641e94e06$var$getAssociatedThemeId(hass, lightId) {
+    const lightIdStub = lightId.substring(6);
+    const themeIds = $d14817f641e94e06$export$639f23662367b414(hass);
+    let foundId = null;
+    themeIds.forEach((themeId)=>{
+        themeId.includes(lightIdStub) && (foundId = themeId);
+    });
+    return foundId;
+}
+function $d14817f641e94e06$var$lightHasTheme(hass, lightId) {
+    return $d14817f641e94e06$var$getAssociatedThemeId(hass, lightId) !== null;
+}
+function $d14817f641e94e06$var$addThemeStructure(hass, dictionary, lightId) {
+    if ($d14817f641e94e06$var$lightHasTheme(hass, lightId)) {
+        const themeId = $d14817f641e94e06$var$getAssociatedThemeId(hass, lightId);
+        dictionary.theme = themeId;
+        dictionary.entityIds.add(themeId);
+    }
+}
+/********************************* groups ************************************************/ function $d14817f641e94e06$var$isGroup(hass, entityId) {
+    const entity = $d14817f641e94e06$var$getEntity(hass, entityId);
+    return entity.platform === "group";
+}
+function $d14817f641e94e06$var$getGroupMemberIds(hass, entityId) {
+    const state = $d14817f641e94e06$export$50fdfeece43146fd(hass, entityId);
+    return state.attributes.entity_id;
+}
+function $d14817f641e94e06$var$getAllLightGroupMemberIds(hass) {
+    const lightIds = $d14817f641e94e06$export$e5295beccfcd4404(hass);
+    let groupMemberIds = [];
+    lightIds.forEach((lightId)=>{
+        if ($d14817f641e94e06$var$isGroup(hass, lightId)) groupMemberIds = [
+            ...groupMemberIds,
+            ...$d14817f641e94e06$var$getGroupMemberIds(hass, lightId)
+        ];
+    });
+    return groupMemberIds;
+}
+function $d14817f641e94e06$var$isLightInAGroup(hass, lightId) {
+    const memberIds = $d14817f641e94e06$var$getAllLightGroupMemberIds(hass);
+    return memberIds.includes(lightId);
+}
+function $d14817f641e94e06$var$addLightGroupStructure(hass, dictionary, lightId) {
+    if ($d14817f641e94e06$var$isGroup(hass, lightId)) {
+        const memberIds = $d14817f641e94e06$var$getGroupMemberIds(hass, lightId);
+        let members = {};
+        let entityIds = [];
+        memberIds.forEach((memberId)=>{
+            let memberDictionary = {
+                entityIds: new Set([
+                    memberId
+                ])
+            };
+            $d14817f641e94e06$var$addThemeStructure(hass, memberDictionary, memberId);
+            members[memberId] = memberDictionary;
+            entityIds = [
+                ...entityIds,
+                ...memberDictionary.entityIds
+            ];
+        });
+        dictionary.structure = members;
+        dictionary.entityIds = new Set([
+            ...dictionary.entityIds,
+            ...entityIds
+        ]);
+    }
+}
+/********************************* lights ************************************************/ function $d14817f641e94e06$var$isLight(hass, entityId) {
+    const entity = $d14817f641e94e06$var$getEntity(hass, entityId);
+    const notLight = entity.labels.includes('not_light');
+    return entityId.substring(0, 6) === "light." && !notLight;
+}
+function $d14817f641e94e06$export$e5295beccfcd4404(hass) {
+    const entities = $d14817f641e94e06$var$getHassEntities(hass);
+    const lightIds = Object.keys(entities).filter((entityId)=>$d14817f641e94e06$var$isLight(hass, entityId));
+    return new Set(lightIds);
+}
+function $d14817f641e94e06$export$c982908e94e49fd1(hass, dictionary, areaId) {
+    const lightIds = $d14817f641e94e06$export$e5295beccfcd4404(hass);
+    let structure = dictionary.structure;
+    let entityIds = [
+        ...dictionary.entityIds
+    ];
+    lightIds.forEach((lightId)=>{
+        if ($d14817f641e94e06$var$isInArea(hass, lightId, areaId) && !$d14817f641e94e06$var$isLightInAGroup(hass, lightId)) {
+            let lightDictionary = {
+                structure: {},
+                entityIds: new Set([
+                    lightId
+                ])
+            };
+            $d14817f641e94e06$var$addThemeStructure(hass, lightDictionary, lightId);
+            $d14817f641e94e06$var$addLightGroupStructure(hass, lightDictionary, lightId);
+            structure[lightId] = lightDictionary;
+            entityIds = [
+                ...entityIds,
+                ...lightDictionary.entityIds
+            ];
+        }
+    });
+    dictionary.entityIds = new Set(entityIds);
+}
+function $d14817f641e94e06$export$d3a5cc061b32c876(hass, entityId) {
+    return $d14817f641e94e06$var$isLight(hass, entityId) && !$d14817f641e94e06$var$isGroup(hass, entityId);
+}
+
 
 class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _hass;
@@ -12691,43 +12861,15 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
         this.cleanStructure();
         this.initializeFloor();
     }
-    /************* states and entityIds ***************/ getHassEntities() {
-        return this._hass.entities;
+    getStructure() {
+        return this.structure;
     }
-    getHassStates() {
-        return this._hass.states;
-    }
-    getEntity(entityId) {
-        const entities = this.getHassEntities();
-        return entities[entityId];
-    }
-    getState(entityId) {
-        const states = this.getHassStates();
-        return states[entityId];
-    }
-    // returns true if the entity_id corresponds to a light object and no label conradicts this.
-    isLight(entityId) {
-        const entity = this.getEntity(entityId);
-        const notLight = entity.labels.includes('not_light');
-        return entityId.substring(0, 6) === "light." && !notLight;
-    }
-    getLightIds() {
-        const entities = this.getHassEntities();
-        const lightIds = Object.keys(entities).filter((entityId)=>this.isLight(entityId));
-        return lightIds;
-    }
-    // returns true if the entity_id corresponds to a theme select object
-    isTheme(entityId) {
-        return entityId.substring(0, 7) === "select." && entityId.includes("theme");
-    }
-    getThemeIds() {
-        const entities = this.getHassEntities();
-        const themeIds = Object.keys(entities).filter((entityId)=>this.isTheme(entityId));
-        return themeIds;
+    /************* states and entityIds ***************/ getHass() {
+        return this._hass;
     }
     setEntityIds() {
-        const lightIds = this.getLightIds();
-        const themeIds = this.getThemeIds();
+        const lightIds = (0, $d14817f641e94e06$export$e5295beccfcd4404)(this.getHass());
+        const themeIds = (0, $d14817f641e94e06$export$639f23662367b414)(this.getHass());
         this.entityIds = [
             ...lightIds,
             ...themeIds
@@ -12736,26 +12878,12 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
     setStates() {
         let states = {};
         this.entityIds.forEach((entityId)=>{
-            states[entityId] = this.getState(entityId);
+            states[entityId] = (0, $d14817f641e94e06$export$50fdfeece43146fd)(this.getHass(), entityId);
         });
         this.states = states;
     }
-    /********************************* Floor Structure ******************************/ // returns a dictionary of dictionaries.  The outer dictionary's keys are the floor_ids.
-    // the inner dictionary has floor_id and name keys.
-    getHassFloors() {
-        return this._hass.floors;
-    }
-    // adds the outer dictionary structure (with floor_ids as keys) to this._lightBundles
-    setFloorStructure() {
-        this.structure = {};
-        const floors = this.getHassFloors();
-        Object.entries(floors).forEach(([floorId, floor])=>{
-            const floorName = floor.name;
-            this.structure[floorId] = {
-                name: floorName,
-                structure: {}
-            };
-        });
+    /********************************* Floor Structure ******************************/ setFloorStructure() {
+        (0, $d14817f641e94e06$export$19df7d2072d90b46)(this.getHass(), this.getStructure());
     }
     getFloorStructure(floorId) {
         return this.structure[floorId].structure;
@@ -12763,147 +12891,26 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
     getFloorName(floorId) {
         return this.structure[floorId].name;
     }
-    /********************************* Area Structure **************************************/ getHassAreas() {
-        return this._hass.areas;
-    }
-    // determines whether a given area_id corresponds to an area on a floor with a given floor id.
-    isOnFloor(floorId, areaId) {
-        const areas = this.getHassAreas();
-        const area = areas[areaId];
-        return area.floor_id === floorId;
-    }
-    // adds the second dictionary structure (with area_ids as keys) to this._lightBundles
-    setAreaStructure() {
-        const areas = this.getHassAreas();
+    /********************************* Area Structure **************************************/ setAreaStructure() {
         Object.entries(this.structure).forEach(([floorId, floorDictionary])=>{
             let floorStructure = floorDictionary.structure;
-            Object.entries(areas).forEach(([areaId, area])=>{
-                const name = area.name;
-                this.isOnFloor(floorId, areaId) && (floorStructure[areaId] = {
-                    name: name,
-                    structure: {}
-                });
-            });
+            (0, $d14817f641e94e06$export$f45a0d26e841229c)(this.getHass(), floorStructure, floorId);
         });
     }
-    /******************************* Light Structure ****************************************/ getEntityArea(entityId) {
-        const entity = this.getEntity(entityId);
-        return entity.area_id;
-    }
-    // returns true if the provided entity_id has the given area_id, false otherwise.
-    isInArea(entityId, areaId) {
-        return this.getEntityArea(entityId) === areaId;
-    }
-    // if the provided light entity_id corresponds to valid theme entity_id, returns the theme id.  Otherwise,
-    // returns null,
-    getThemeId(lightId) {
-        const lightIdStub = lightId.substring(6);
-        const themeIds = this.getThemeIds();
-        let foundId = null;
-        themeIds.forEach((themeId)=>{
-            themeId.includes(lightIdStub) && (foundId = themeId);
-        });
-        return foundId;
-    }
-    hasTheme(lightId) {
-        return this.getThemeId(lightId) != null;
-    }
-    setThemeStructure(lightId, lightDictionary) {
-        const themeId = this.getThemeId(lightId);
-        lightDictionary.theme = themeId;
-        lightDictionary.entityIds.push(themeId);
-    }
-    getGroupIds() {
-        const lightIds = this.getLightIds();
-        const groupIds = lightIds.filter((lightId)=>{
-            const entity = this.getEntity(lightId);
-            return entity.platform === "group";
-        });
-        return groupIds;
-    }
-    getMemberIds(groupId) {
-        const state = this.getState(groupId);
-        return state.attributes.entity_id;
-    }
-    getAllMemberIds() {
-        let memberIds = [];
-        const groupIds = this.getGroupIds();
-        groupIds.forEach((groupId)=>{
-            memberIds = [
-                ...memberIds,
-                ...this.getMemberIds(groupId)
-            ];
-        });
-        return memberIds;
-    }
-    isInAGroup(lightId) {
-        const memberIds = this.getAllMemberIds();
-        return memberIds.includes(lightId);
-    }
-    isAGroup(lightId) {
-        const groupIds = this.getGroupIds();
-        return groupIds.includes(lightId);
-    }
-    setGroupStructure(lightId, lightDictionary) {
-        const memberIds = this.getMemberIds(lightId);
-        let members = {};
-        let entityIds = [];
-        memberIds.forEach((memberId)=>{
-            let memberDictionary = {
-                entityIds: [
-                    memberId
-                ]
-            };
-            this.hasTheme(memberId) && this.setThemeStructure(memberId, memberDictionary);
-            members[memberId] = memberDictionary;
-            entityIds = [
-                ...entityIds,
-                ...memberDictionary.entityIds
-            ];
-        });
-        lightDictionary.structure = members;
-        lightDictionary.entityIds = [
-            ...lightDictionary.entityIds,
-            ...entityIds
-        ];
-    }
-    isSoloLight(entityId) {
-        return this.isLight(entityId) && !this.isAGroup(entityId);
-    }
-    setLightIdStructure() {
-        const lightIds = this.getLightIds();
+    /******************************* Light Structure ****************************************/ setLightIdStructure() {
         Object.values(this.structure).forEach((floorDict)=>{
             let floorStructure = floorDict.structure;
             let floorEntityIds = [];
             Object.entries(floorStructure).forEach(([areaId, areaDict])=>{
-                let areaStructure = areaDict.structure;
-                let areaEntityIds = [];
-                lightIds.forEach((lightId)=>{
-                    if (this.isInArea(lightId, areaId) && !this.isInAGroup(lightId)) {
-                        let lightDictionary = {
-                            structure: {},
-                            entityIds: [
-                                lightId
-                            ]
-                        };
-                        this.hasTheme(lightId) && this.setThemeStructure(lightId, lightDictionary);
-                        this.isAGroup(lightId) && this.setGroupStructure(lightId, lightDictionary);
-                        areaStructure[lightId] = lightDictionary;
-                        areaEntityIds = [
-                            ...areaEntityIds,
-                            ...lightDictionary.entityIds
-                        ];
-                    }
-                });
-                areaDict.entityIds = areaEntityIds;
+                (0, $d14817f641e94e06$export$c982908e94e49fd1)(this.getHass(), areaDict, areaId);
                 floorEntityIds = [
                     ...floorEntityIds,
-                    ...areaEntityIds
+                    ...areaDict.entityIds
                 ];
             });
-            floorDict.entityIds = floorEntityIds;
-            const soloLightIds = floorEntityIds.filter((entityId)=>this.isSoloLight(entityId));
-            floorDict.soloLightIds = soloLightIds;
+            floorDict.entityIds = new Set(floorEntityIds);
+            const soloLightIds = floorEntityIds.filter((entityId)=>(0, $d14817f641e94e06$export$d3a5cc061b32c876)(this.getHass(), entityId));
+            floorDict.soloLightIds = new Set(soloLightIds);
         });
     }
     cleanStructure() {
@@ -12950,7 +12957,9 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
                 .changedEntityIds = ${this.changedEntityIds}
                 .states = ${this.states}
                 .isSelected = ${this.isFloor(floorId)}
-                .lightIds = ${this.structure[floorId].soloLightIds}
+                .lightIds = ${[
+            ...this.structure[floorId].soloLightIds
+        ]}
                 .title = ${this.structure[floorId].name}
                 @select = ${()=>this.onClick(floorId)}
             ></lighting-button>
@@ -12968,7 +12977,9 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
                 .changedEntityIds = ${this.changedEntityIds}
                 .states = ${this.states}
                 .structure = ${this.getFloorStructure()}
-                .entityIds = ${this.getFloorEntityIds()}
+                .entityIds = ${[
+            ...this.getFloorEntityIds()
+        ]}
                 .callService=${this._hass.callService}
             ></floor-panel>
         `);
@@ -12980,9 +12991,7 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
     ];
     // return html
     render() {
-        if (this._ready) {
-            console.log("echo");
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        if (this._ready) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <ha-card>
                     ${this.content()}
                     <div class="button-row">
@@ -12990,7 +12999,6 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
                     </div>
                 </ha-card>
             `;
-        }
     }
     // set card size parameters for ha
     getCardSize() {

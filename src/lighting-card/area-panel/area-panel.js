@@ -100,7 +100,7 @@ export class AreaPanel extends LitElement {
                 .lightId = ${lightId}
                 .themeId = ${this.getThemeId(lightId)}
                 .structure = ${this.getSubStructure(lightId)}
-                .entityIds = ${this.getSubEIs(lightId)}
+                .entityIds = ${[...this.getSubEIs(lightId)]}
                 .callService=${this.callService}
             ></light-component>
         `

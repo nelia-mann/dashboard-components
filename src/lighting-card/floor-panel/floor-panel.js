@@ -93,7 +93,7 @@ export class FloorPanel extends LitElement {
                 .states = ${this.getStates()}
                 .name = ${this.getAreaName(areaId)}
                 .structure = ${this.getSubStructure(areaId)}
-                .entityIds = ${this.getSubEIs(areaId)}
+                .entityIds = ${[...this.getSubEIs(areaId)]}
                 .callService = ${this.callService}
             ></area-panel>
         `
