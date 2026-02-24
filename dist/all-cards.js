@@ -12695,6 +12695,11 @@ function $d14817f641e94e06$var$addThemeStructure(hass, dictionary, lightId) {
         dictionary.entityIds.add(themeId);
     }
 }
+function $d14817f641e94e06$export$94ed8fccb207472(oldHass, newHass, themeId) {
+    const oldState = $d14817f641e94e06$export$50fdfeece43146fd(oldHass, themeId);
+    const newState = $d14817f641e94e06$export$50fdfeece43146fd(newHass, themeId);
+    return $d14817f641e94e06$var$isTheme(themeId) && oldState.state !== newState.state;
+}
 /********************************* groups ************************************************/ function $d14817f641e94e06$var$isGroup(hass, entityId) {
     const entity = $d14817f641e94e06$var$getEntity(hass, entityId);
     return entity.platform === "group";
@@ -12781,69 +12786,67 @@ function $d14817f641e94e06$export$c982908e94e49fd1(hass, dictionary, areaId) {
 function $d14817f641e94e06$export$d3a5cc061b32c876(hass, entityId) {
     return $d14817f641e94e06$var$isLight(hass, entityId) && !$d14817f641e94e06$var$isGroup(hass, entityId);
 }
+function $d14817f641e94e06$export$94356dcc961724c6(oldHass, newHass, lightId) {
+    const oldState = $d14817f641e94e06$export$50fdfeece43146fd(oldHass, lightId);
+    const newState = $d14817f641e94e06$export$50fdfeece43146fd(newHass, lightId);
+    if ($d14817f641e94e06$var$isLight(newHass, lightId)) return oldState.state !== newState.state || oldState.attributes.brightness !== newState.attributes.brightness || oldState.attributes.hs_color !== newState.attributes.hs_color;
+    else return false;
+}
 
 
 class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _hass;
     structure = {};
     entityIds = [];
-    _ready = false;
-    _structuresBuilt = false;
-    _changedEntities = false;
-    _needsRender = false;
     changedEntityIds = new Set();
     static get properties() {
         return {
+            states: {
+                state: true
+            },
             _floorId: {
                 state: true
             },
-            states: {
+            _isInitialized: {
                 state: true
             }
         };
     }
+    constructor(){
+        super();
+        this.states = {};
+        this._isInitialized = false;
+    }
     setConfig() {}
     set hass(hass) {
-        const oldHass = this._hass;
-        this._hass = hass;
-        if (!oldHass) {
-            this._changedEntities = true;
-            this._needsRender = true;
-            this.requestUpdate();
-            return;
-        }
-        this._changedEntities = this.detectStateChanges(oldHass, hass);
-        if (this._changedEntities) {
-            this._needsRender = true;
+        if (!this.isInitialized()) {
+            this.setHass(hass);
+            this.setStructures();
+            this.shouldInitialize() && this.initialize();
+        } else {
+            const oldHass = this.getHass(hass);
+            this.setHass(hass);
+            this.addRelevantChanges(oldHass, this.getHass());
             this.requestUpdate();
         }
     }
     update(changedProps) {
-        if (!this._structuresBuilt && this._hass) {
-            this.setStructures();
-            this._structuresBuilt = true;
-            this._needsRender = true;
-        }
-        if (this._changedEntities) {
-            this.updateStates();
-            this._changedEntities = false;
-        }
-        this._ready = this._structuresBuilt && !!this.entityIds.length > 0 && this.entityIds.every((id)=>this.states[id]);
+        this.hasRelevantChanges() && this.updateStates();
         super.update(changedProps);
-        this.changedEntityIds = new Set();
-        this._needsRender = false;
     }
     shouldUpdate(changedProps) {
-        return this._needsRender || !this._structuresBuilt || changedProps.has("_floorId") > 0;
+        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_isInitialized") || changedProps.has("_floorId");
     }
-    detectStateChanges(oldHass, newHass) {
+    addRelevantChanges(oldHass, newHass) {
         this.changedEntityIds = new Set();
-        for (const id of this.entityIds ?? []){
-            const oldState = oldHass.states[id];
-            const newState = newHass.states[id];
-            if (!oldState || !newState) continue;
-            if (oldState.state !== newState.state || oldState.attributes.brightness !== newState.attributes.brightness || oldState.attributes.rgb_color !== newState.attributes.rgb_color) this.changedEntityIds.add(id);
-        }
+        const entityIds = this.entityIds;
+        entityIds.forEach((entityId)=>{
+            const oldState = oldHass.states[entityId];
+            const newState = newHass.states[entityId];
+            if (oldState.state !== newState.state || oldState.attributes.brightness !== newState.attributes.brightness || oldState.attributes.hs_color !== newState.attributes.hs_color) this.changedEntityIds.add(entityId);
+        });
+    }
+    hasRelevantChanges() {
         return this.changedEntityIds.size > 0;
     }
     updateStates() {
@@ -12851,6 +12854,24 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
         changedIds.forEach((entityId)=>{
             this.states[entityId] = this._hass.states[entityId];
         });
+    }
+    setHass(hass) {
+        this._hass = hass;
+    }
+    isInitialized() {
+        return this._initialized;
+    }
+    initialize() {
+        this._initialized = true;
+    }
+    shouldInitialize() {
+        let should = true;
+        this.entityIds.length === 0 && (should = false);
+        const stateKeys = Object.keys(this.states);
+        this.entityIds.forEach((entityId)=>{
+            if (!stateKeys.includes(entityId)) should = false;
+        });
+        return should;
     }
     /************************************* Getting and Setting Structure **********************/ setStructures() {
         this.setEntityIds();
@@ -12991,7 +13012,10 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
     ];
     // return html
     render() {
-        if (this._ready) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        console.log("attempt");
+        if (this.isInitialized()) {
+            console.log("ping");
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <ha-card>
                     ${this.content()}
                     <div class="button-row">
@@ -12999,6 +13023,7 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
                     </div>
                 </ha-card>
             `;
+        }
     }
     // set card size parameters for ha
     getCardSize() {

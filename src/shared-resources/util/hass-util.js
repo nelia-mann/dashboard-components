@@ -95,6 +95,12 @@ function addThemeStructure(hass, dictionary, lightId) {
     }
 }
 
+function hasThemeChanges(oldHass, newHass, themeId) {
+    const oldState = getState(oldHass, themeId);
+    const newState = getState(newHass, themeId);
+    return (isTheme(themeId) && (oldState.state !== newState.state));
+}
+
 /********************************* groups ************************************************/
 
 function isGroup(hass, entityId) {
@@ -174,6 +180,18 @@ function isSoloLight(hass, entityId) {
     return (isLight(hass, entityId) && !isGroup(hass, entityId))
 }
 
+function hasLightChanges(oldHass, newHass, lightId) {
+    const oldState = getState(oldHass, lightId);
+    const newState = getState(newHass, lightId);
+    if (isLight(newHass, lightId)) {
+        return (
+            (oldState.state !== newState.state)
+            || (oldState.attributes.brightness !== newState.attributes.brightness)
+            || (oldState.attributes.hs_color !== newState.attributes.hs_color)
+        )
+    } else return false;
+}
+
 
 /********************************* exports ***********************************************/
 
@@ -185,4 +203,6 @@ export {
     addAreaStructure,
     addLightStructure,
     isSoloLight,
+    hasThemeChanges,
+    hasLightChanges
 }

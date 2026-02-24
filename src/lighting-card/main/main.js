@@ -13,6 +13,8 @@ import {
     addAreaStructure,
     addLightStructure,
     isSoloLight,
+    hasThemeChanges,
+    hasLightChanges
 } from '../../shared-resources/util/hass-util.js';
 
 export class LightingCard extends LitElement {
@@ -20,80 +22,67 @@ export class LightingCard extends LitElement {
     _hass;
     structure = {};
     entityIds = [];
-    _ready = false;
-    _structuresBuilt = false;
-    _changedEntities = false;
-    _needsRender = false;
     changedEntityIds = new Set();
 
     static get properties() {
         return {
+            states: { state: true },
             _floorId: { state: true },
-            states: { state: true }
+            _isInitialized: { state: true },
         };
+    }
+
+    constructor() {
+        super();
+        this.states = {};
+        this._isInitialized = false;
     }
 
     setConfig() {
     }
 
     set hass(hass) {
-        const oldHass = this._hass;
-        this._hass = hass;
-        if (!oldHass) {
-            this._changedEntities = true;
-            this._needsRender = true;
-            this.requestUpdate();
-            return;
-        }
-
-        this._changedEntities = this.detectStateChanges(oldHass, hass);
-        if (this._changedEntities) {
-            this._needsRender = true;
+        if (!this.isInitialized()) {
+            this.setHass(hass);
+            this.setStructures();
+            (this.shouldInitialize()) && (this.initialize());
+        } else {
+            const oldHass = this.getHass(hass);
+            this.setHass(hass);
+            this.addRelevantChanges(oldHass, this.getHass());
             this.requestUpdate();
         }
     }
 
     update(changedProps) {
-        if (!this._structuresBuilt && this._hass) {
-            this.setStructures();
-            this._structuresBuilt = true;
-            this._needsRender = true;
-        }
-
-        if (this._changedEntities) {
-            this.updateStates();
-            this._changedEntities = false;
-        }
-        this._ready = this._structuresBuilt && !!this.entityIds.length > 0 && this.entityIds.every(id => this.states[id]);
+        (this.hasRelevantChanges()) && (this.updateStates())
         super.update(changedProps);
-        this.changedEntityIds = new Set();
-        this._needsRender = false;
     }
 
     shouldUpdate(changedProps) {
-        return (this._needsRender
-            || !this._structuresBuilt
-            || changedProps.has("_floorId") > 0);
+        return (!this.isInitialized()
+            || this.hasRelevantChanges()
+            || changedProps.has("_isInitialized")
+            || changedProps.has("_floorId"));
     }
 
-    detectStateChanges(oldHass, newHass) {
+    addRelevantChanges(oldHass, newHass) {
         this.changedEntityIds = new Set();
-
-        for (const id of this.entityIds ?? []) {
-            const oldState = oldHass.states[id];
-            const newState = newHass.states[id];
-
-            if (!oldState || !newState) continue;
-
+        const entityIds = this.entityIds;
+        entityIds.forEach((entityId) => {
+            const oldState = oldHass.states[entityId];
+            const newState = newHass.states[entityId];
             if (
-                oldState.state !== newState.state ||
-                oldState.attributes.brightness !== newState.attributes.brightness ||
-                oldState.attributes.rgb_color !== newState.attributes.rgb_color
+                (oldState.state !== newState.state)
+                || (oldState.attributes.brightness !== newState.attributes.brightness)
+                || (oldState.attributes.hs_color !== newState.attributes.hs_color)
             ) {
-                this.changedEntityIds.add(id);
-            }
+                this.changedEntityIds.add(entityId)
+            };
+        })
+    }
 
-        }
+    hasRelevantChanges() {
         return this.changedEntityIds.size > 0;
     }
 
@@ -102,6 +91,30 @@ export class LightingCard extends LitElement {
         changedIds.forEach((entityId) => {
             this.states[entityId] = this._hass.states[entityId]
         })
+    }
+
+    setHass(hass) {
+        this._hass = hass;
+    }
+
+    isInitialized() {
+        return this._initialized;
+    }
+
+    initialize() {
+        this._initialized = true;
+    }
+
+    shouldInitialize() {
+        let should = true;
+        (this.entityIds.length === 0) && (should = false)
+        const stateKeys = Object.keys(this.states);
+        this.entityIds.forEach((entityId) => {
+            if (!stateKeys.includes(entityId)) {
+                should = false;
+            }
+        })
+        return should;
     }
 
 /************************************* Getting and Setting Structure **********************/
@@ -270,7 +283,9 @@ export class LightingCard extends LitElement {
 
     // return html
     render() {
-        if (this._ready) {
+        console.log("attempt")
+        if (this.isInitialized()) {
+            console.log("ping");
             return html`
                 <ha-card>
                     ${this.content()}
