@@ -61,6 +61,12 @@ function isInArea(hass, entityId, areaId) {
     return (areaId === getEntityAreaId(hass, entityId));
 }
 
+function getFloorAreaIds(hass, floorId) {
+    const areas = getHassAreas(hass);
+    const areaIds = Object.keys(areas).filter((areaId) => isAreaOnFloor(hass, floorId, areaId));
+    return areaIds;
+}
+
 /********************************* themes ************************************************/
 
 function isTheme(entityId) {
@@ -199,6 +205,7 @@ export {
     getState,
     getLightIds,
     getThemeIds,
+    getFloorAreaIds,
     addFloorStructure,
     addAreaStructure,
     addLightStructure,

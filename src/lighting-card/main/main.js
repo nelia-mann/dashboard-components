@@ -41,6 +41,8 @@ export class LightingCard extends LitElement {
     setConfig() {
     }
 
+    /*************************** lifecycle **************************************/
+
     set hass(hass) {
         if (!this.isInitialized()) {
             this.setHass(hass);

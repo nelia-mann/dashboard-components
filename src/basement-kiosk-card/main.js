@@ -1,80 +1,200 @@
 import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit-html/directives/repeat.js';
+import { rgba } from './../shared-resources/util/color-util.js';
+import { getFloorAreaIds, getState, hasLightChanges, hasThemeChanges } from './../shared-resources/util/hass-util.js';
 import styles from './main.styles.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
-import { rgba } from './color-util.js';
+
 
 export class BasementKioskCard extends LitElement {
 
-    // private properties
-    _hass;
+    FLOORID = "basement";
     _OPTIONS = ["lighting", "climate"];
-    _entityIds = [];
-    _floorId = "basement";
-    _structure = {};
+
+    _hass = {};
+    entityIds = [];
+    structure = {};
+    changedEntityIds = new Set();
 
     // internal reactive states
     static get properties() {
         return {
+            states: { state: true },
             _option: { state: true },
+            _isInitialized: { state: true}
         };
     }
 
-    /******************************* lifecycle *****************************/
-
     constructor() {
         super();
+        this.states = {};
         this._option = "lighting";
+        this._isInitialized = false;
     }
 
     // establish config information for card
     setConfig() {
     }
 
-    // gets the hass, and then creates the light bundles to be passed around.
+    /******************************* lifecycle *****************************/
+
     set hass(hass) {
-        this._hass = hass;
-        this.setStructures();
+        if (!this.isInitialized()) {
+            this.setHass(hass);
+            this.setStructures();
+            this.initialize();
+        } else {
+            const oldHass = this.getHass(hass);
+            this.setHass(hass);
+            this.addRelevantChanges(oldHass, this.getHass());
+            this.requestUpdate();
+        }
     }
 
-    /******************************* structure logic ***********************/
+    update(changedProps) {
+        (this.hasRelevantChanges()) && (this.updateStates())
+        super.update(changedProps);
+    }
 
-    getAreaIds() {
-        const areas = this._hass.areas;
-        const areaIds = Object.keys(areas).filter((areaId) => {
-            return areas[areaId].floor_id === this._floorId;
+    shouldUpdate(changedProps) {
+        return (!this.isInitialized()
+            || this.hasRelevantChanges()
+            || changedProps.has("_isInitialized")
+            || changedProps.has("_option"));
+    }
+
+    hasChanges(oldHass, newHass, entityId) {
+        return (hasThemeChanges(oldHass, newHass, entityId)
+            || hasLightChanges(oldHass, newHass, entityId));
+    }
+
+    addRelevantChanges(oldHass, newHass) {
+        this.changedEntityIds = new Set();
+        const entityIds = this.getEntityIds();
+        entityIds.forEach((entityId) => {
+            if (this.hasChanges(oldHass, newHass, entityId)) {
+                this.changedEntityIds.add(entityId)
+            };
         })
-        return areaIds;
+    }
+
+    hasRelevantChanges() {
+        return this.getCEIs().size > 0;
+    }
+
+    updateStates() {
+        const changedIds = this.getCEIs();
+        changedIds.forEach((entityId) => {
+            this.states[entityId] = this.getHass().states[entityId]
+        })
+    }
+
+    /******************************* Setting Structures ***********************/
+
+    initialize() {
+        this._initialized = true;
+    }
+
+    setHass(hass) {
+        this._hass = hass;
+    }
+
+    setOption(option) {
+        this._option = option;
+    }
+
+    setStructures() {
+        this.setEntityIds();
+        this.setStates();
+        this.setCategoryStructure();
+        this.setLightingStructure();
     }
 
     setEntityIds() {
-        const entities = this._hass.entities;
-        const areaIds = this.getAreaIds();
+        const entities = this.getHass().entities;
+        const areaIds = getFloorAreaIds(this.getHass(), this.FLOORID);
         const entityIds = Object.keys(entities).filter((entityId) => {
             const entity = entities[entityId];
             const areaId = entity.area_id;
             return areaIds.includes(areaId)
         })
-        this._entityIds = entityIds;
+        this.entityIds = entityIds;
     }
 
-    setStructures() {
-        this.setEntityIds();
+    setStates() {
+        let states = {};
+        this.getEntityIds().forEach((entityId) => {
+            states[entityId] = getState(this.getHass(), entityId);
+        })
+        this.states = states;
     }
 
-    /**********************************************************************/
+    setCategoryStructure() {
+        this.getOptions().forEach((option) => {
+            this.structure[option] = {name: option, structure: {}, entityIds: new Set()};
+        })
+    }
+
+    setLightingStructure() {
+        this.setLightingOuterStructure();
+    }
+
+    setLightingOuterStructure() {
+        let structure = {};
+        structure["basic_lighting"] = {name: "basic lighting", structure: {}, entityIds: new Set()};
+        structure["leds"] = {name: "LED lighting", structure: {}, entityIds: new Set()};
+        this.structure["lighting"].structure = structure;
+    }
+
+    /***************************** getter logic ***************************/
+
+    isInitialized() {
+        return this._initialized;
+    }
+
+    getHass() {
+        return this._hass;
+    }
+
+    getOptions() {
+        return this._OPTIONS;
+    }
+
+    getOption() {
+        return this._option;
+    }
+
+    getStructure() {
+        return this.structure;
+    }
+
+    getEntityIds() {
+        return this.entityIds;
+    }
+
+    isOption(option) {
+        return this.getOption() === option;
+    }
+
+    getCEIs() {
+        return this.changedEntityIds;
+    }
+
+    /************************** interactive logic ***************************/
 
     onClick(option) {
-        this._option = option;
+        this.setOption(option);
     }
+
+    /******************************* html/style logic ************************/
 
     getButtonStyle(option) {
         const rgb = [100, 100, 100]; // placeholder for fancy coloring choice
         let styles = {
             'background-color': rgba(rgb, .5)
         }
-        if (this._option === option) {
+        if (this.isOption(option)) {
             styles['outline'] = `solid ${rgba(rgb, 1)}`;
             styles['outline-offset'] = '-4px';
         }
@@ -95,7 +215,7 @@ export class BasementKioskCard extends LitElement {
     buttonRow() {
         return html`
             <div class="button-row">
-                ${repeat(this._OPTIONS, (option) => option, option => this.button(option))}
+                ${repeat(this.getOptions(), (option) => option, option => this.button(option))}
             </div>
         `
     }
@@ -117,12 +237,15 @@ export class BasementKioskCard extends LitElement {
 
     // return html
     render() {
-        return html`
-            <ha-card>
-                <div class="content">${this.content()}</div>
-                ${this.buttonRow()}
-            </ha-card>
-        `;
+        if (this.isInitialized()) {
+            console.log(this.getStructure());
+            return html`
+                <ha-card>
+                    <div class="content">${this.content()}</div>
+                    ${this.buttonRow()}
+                </ha-card>
+            `;
+        }
     }
 
     // set card size parameters for ha
