@@ -2,15 +2,25 @@ import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { rgba } from './../shared-resources/util/color-util.js';
-import { getFloorAreaIds, getState, hasLightChanges, hasThemeChanges } from './../shared-resources/util/hass-util.js';
+import {
+    getState,
+    hasLightChanges,
+    hasThemeChanges,
+    getEntityIdsWithLabel,
+    filterEntityIdsForLabel,
+} from './../shared-resources/util/hass-util.js';
 import styles from './main.styles.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
 
 
 export class BasementKioskCard extends LitElement {
 
-    FLOORID = "basement";
-    _OPTIONS = ["lighting", "climate"];
+    _LABEL = "basement_kiosk";
+    _LIGHTLABELS = {
+        basic_lighting: "basic lighting",
+        leds: "LED Lighting"
+    };
+    _OPTIONS = ["lighting"];
 
     _hass = {};
     entityIds = [];
@@ -112,13 +122,7 @@ export class BasementKioskCard extends LitElement {
     }
 
     setEntityIds() {
-        const entities = this.getHass().entities;
-        const areaIds = getFloorAreaIds(this.getHass(), this.FLOORID);
-        const entityIds = Object.keys(entities).filter((entityId) => {
-            const entity = entities[entityId];
-            const areaId = entity.area_id;
-            return areaIds.includes(areaId)
-        })
+        const entityIds = getEntityIdsWithLabel(this.getHass(), this.getLabel());
         this.entityIds = entityIds;
     }
 
@@ -142,9 +146,16 @@ export class BasementKioskCard extends LitElement {
 
     setLightingOuterStructure() {
         let structure = {};
-        structure["basic_lighting"] = {name: "basic lighting", structure: {}, entityIds: new Set()};
-        structure["leds"] = {name: "LED lighting", structure: {}, entityIds: new Set()};
+        const entityIds = this.getEntityIds();
+        Object.entries(this.getLightLabels()).forEach(([labelId, label]) => {
+            const subIds = filterEntityIdsForLabel(this.getHass(), entityIds, labelId);
+            structure[labelId] = { name: label, structure: {}, entityIds: subIds };
+        })
         this.structure["lighting"].structure = structure;
+    }
+
+    setBasicLightingStructure() {
+
     }
 
     /***************************** getter logic ***************************/
@@ -179,6 +190,14 @@ export class BasementKioskCard extends LitElement {
 
     getCEIs() {
         return this.changedEntityIds;
+    }
+
+    getLabel() {
+        return this._LABEL;
+    }
+
+    getLightLabels() {
+        return this._LIGHTLABELS;
     }
 
     /************************** interactive logic ***************************/
