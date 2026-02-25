@@ -1,9 +1,9 @@
 import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import styles from './slider.styles.js';
-import sharedStyles from '../../styles/shared-styles.js';
 import { rgba } from '../../util/color-util.js';
 import { getEntityId } from '../../util/state-util.js';
+import styles from './slider.styles.js';
+import sharedStyles from '../../styles/shared-styles.js';
 
 export class SliderBar extends LitElement {
 

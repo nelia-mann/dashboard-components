@@ -1,9 +1,10 @@
 import { html, LitElement } from 'lit';
-import '../../shared-resources/light-components/simple-light/simple-light.js';
-import './../popout-window/popout-window.js';
+import { getBrightness, getColorModes } from '../../shared-resources/light-components/util/light-util.js';
+import { isIntersection } from '../../shared-resources/util/logic-util.js';
 import styles from './light.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import { getBrightness, getColorModes } from '../../shared-resources/light-components/util/light-util.js';
+import '../../shared-resources/light-components/simple-light/simple-light.js';
+import './../popout-window/popout-window.js';
 
 export class LightComponent extends LitElement {
 
@@ -12,7 +13,7 @@ export class LightComponent extends LitElement {
     lightId;
     themeId;
     structure = {};
-    entityIds = [];
+    entityIds = new Set();
     _holding = false;
 
     static get properties() {
@@ -34,10 +35,6 @@ export class LightComponent extends LitElement {
 
     /************************************* lifecycle **********************************/
 
-    update(changedProps) {
-        super.update(changedProps);
-    }
-
     shouldUpdate(changedProps) {
         return (!this.isInitialized()
             || this.hasRelevantChanges()
@@ -50,7 +47,7 @@ export class LightComponent extends LitElement {
     }
 
     hasRelevantChanges() {
-        return this.getEntityIds().some((entityId) => (this.getCEIs().has(entityId)))
+        return isIntersection(this.getCEIs(), this.getEntityIds());
     }
 
     /********************************** getter and setter logic *****************************/

@@ -1,8 +1,8 @@
 import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
+import { getThemeGradient, getThemeOutline } from './theme-util.js';
 import styles from './button.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
-import { getThemeGradient, getThemeOutline } from './theme-util.js';
 
 export class ThemeButton extends LitElement {
 
@@ -21,10 +21,6 @@ export class ThemeButton extends LitElement {
     }
 
     /********************* lifecycle ******************************/
-
-    update(changedProps) {
-        super.update(changedProps);
-    }
 
     shouldUpdate(changedProps) {
         return (!this.isInitialized()

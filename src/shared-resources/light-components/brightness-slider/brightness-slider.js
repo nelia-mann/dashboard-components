@@ -26,10 +26,6 @@ export class BrightnessSlider extends LitElement {
 
     /******************************* lifecycle **********************************/
 
-    update(changedProps) {
-        super.update(changedProps);
-    }
-
     shouldUpdate(changedProps) {
         return (!this.isInitialized()
             || this.hasRelevantChanges()

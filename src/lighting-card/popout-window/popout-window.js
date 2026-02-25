@@ -1,17 +1,17 @@
 import { html, LitElement } from 'lit';
-import { mdiCloseCircleOutline } from '@mdi/js';
+import { getName } from '../../shared-resources/util/state-util.js';
+import { isIntersection } from '../../shared-resources/util/logic-util.js';
+import { closeCircleOutline } from '../../shared-resources/util/mdi-util.js';
 import styles from './popout.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import '../../shared-resources/light-components/light-control/light-control.js';
 import '../../shared-resources/light-components/light-group-control/light-group-control.js';
-import { getName } from '../../shared-resources/util/state-util.js';
 
 export class PopoutWindow extends LitElement {
 
     lightId;
     themeId;
     structure = {};
-    entityIds = [];
+    entityIds = new Set();
 
     static get properties() {
         return {
@@ -30,10 +30,6 @@ export class PopoutWindow extends LitElement {
     }
 
     /******************************* lifecycle **********************************/
-
-    update(changedProps) {
-        super.update(changedProps);
-    }
 
     shouldUpdate(changedProps) {
         return (!this.isInitialized()
@@ -59,7 +55,7 @@ export class PopoutWindow extends LitElement {
     }
 
     hasRelevantChanges() {
-        return this.getEntityIds().some((entityId) => (this.getCEIs().has(entityId)))
+        return isIntersection(this.getCEIs(), this.getEntityIds());
     }
 
     /************************ getter and setter logic *************************/
@@ -132,7 +128,7 @@ export class PopoutWindow extends LitElement {
                     <div></div>
                     <div class="large-heading">${name}</div>
                     <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
-                        <ha-svg-icon .path=${mdiCloseCircleOutline}"></ha-svg-icon>
+                        <ha-svg-icon .path=${closeCircleOutline}"></ha-svg-icon>
                     </button>
                 </div>
                 <light-group-control
@@ -159,10 +155,6 @@ export class PopoutWindow extends LitElement {
                 `;
         }
     }
-
-
-
-
 
 }
 

@@ -1,15 +1,16 @@
 import { html, LitElement } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
-import '../../light-components/light-icon/light-icon.js';
+import { getName } from '../../util/state-util.js';
+import { isIntersection } from '../../util/logic-util.js';
 import styles from './light.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
-import { getName } from '../../util/state-util.js';
+import '../../light-components/light-icon/light-icon.js';
 
 export class SimpleLight extends LitElement {
 
     lightId;
     structure = {};
-    entityIds = [];
+    entityIds = new Set();
 
     static get properties() {
         return {
@@ -28,10 +29,6 @@ export class SimpleLight extends LitElement {
 
     /************************************* lifecycle **********************************/
 
-    update(changedProps) {
-        super.update(changedProps);
-    }
-
     shouldUpdate(changedProps) {
         return (!this.isInitialized()
             || this.hasRelevantChanges()
@@ -43,7 +40,7 @@ export class SimpleLight extends LitElement {
     }
 
     hasRelevantChanges() {
-        return this.getEntityIds().some((entityId) => (this.getCEIs().has(entityId)))
+        return isIntersection(this.getCEIs(), this.getEntityIds());
     }
 
     /********************************** getter and setter logic *****************************/

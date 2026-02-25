@@ -1,9 +1,9 @@
 import { html, LitElement } from 'lit';
 import { tempGradient, getMinTemp, getMaxTemp, getColorTemp } from '../util/light-util.js';
+import { getEntityId } from '../../util/state-util.js';
 import styles from './colortemp-slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../../general-components/slider/slider.js';
-import { getEntityId } from '../../util/state-util.js';
 
 export class ColorTempSlider extends LitElement {
 
@@ -23,10 +23,6 @@ export class ColorTempSlider extends LitElement {
     }
 
     /******************************* lifecycle **********************************/
-
-    update(changedProps) {
-        super.update(changedProps);
-    }
 
     shouldUpdate(changedProps) {
         return (!this.isInitialized()

@@ -1,18 +1,19 @@
 import { html, LitElement } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
+import { getColor } from '../util/light-util.js';
+import { getName, isGroup } from '../../util/state-util.js';
+import { isIntersection } from '../../util/logic-util.js';
 import styles from './group.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../light-control/light-control.js';
-import { getColor } from '../util/light-util.js';
-import { getName, isGroup } from '../../util/state-util.js';
 
 export class LightGroupControl extends LitElement {
 
     lightId;
     themeId;
     structure = {};
-    entityIds = [];
+    entityIds = new Set();
 
     static get properties() {
         return {
@@ -32,10 +33,6 @@ export class LightGroupControl extends LitElement {
 
     /******************************* lifecycle **********************************/
 
-    update(changedProps) {
-        super.update(changedProps);
-    }
-
     shouldUpdate(changedProps) {
         return (!this.isInitialized()
             || this.hasRelevantChanges()
@@ -49,7 +46,7 @@ export class LightGroupControl extends LitElement {
     }
 
     hasRelevantChanges() {
-        return this.getEntityIds().some((entityId) => (this.getCEIs().has(entityId)))
+        return isIntersection(this.getCEIs(), this.getEntityIds());
     }
 
     /************************ getter and setter logic *************************/

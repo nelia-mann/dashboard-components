@@ -1,11 +1,9 @@
 import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import styles from './wheel.styles.js';
-import sharedStyles from '../../styles/shared-styles.js';
 import { hsGradient, getHSColor } from '../util/light-util.js';
 import { getEntityId } from '../../util/state-util.js';
-
-
+import styles from './wheel.styles.js';
+import sharedStyles from '../../styles/shared-styles.js';
 
 export class ColorWheel extends LitElement {
 

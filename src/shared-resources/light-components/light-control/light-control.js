@@ -1,12 +1,13 @@
 import { html, LitElement } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { mdiBrightness6, mdiCreationOutline } from '@mdi/js';
-import styles from './light-control.styles.js';
-import sharedStyles from '../../styles/shared-styles.js';
+import { brightness6, creationOutline } from '../../util/mdi-util.js';
 import { rgba, ONLIGHT, INDIGO } from '../../util/color-util.js';
 import { getColorModes, getBrightness, tempGradientFull, tempBorder, hsGradient } from '../util/light-util.js';
 import { getEntityId } from '../../util/state-util.js';
+import { isIntersection } from '../../util/logic-util.js';
+import styles from './light-control.styles.js';
+import sharedStyles from '../../styles/shared-styles.js';
 import '../light-icon/light-icon.js';
 import '../brightness-slider/brightness-slider.js';
 import '../colortemp-slider/colortemp-slider.js';
@@ -38,10 +39,6 @@ export class LightControl extends LitElement {
 
     /******************************* lifecycle *******************************/
 
-    update(changedProps) {
-        super.update(changedProps);
-    }
-
     shouldUpdate(changedProps) {
         return (!this._initialized
             || this.hasRelevantChanges()
@@ -56,7 +53,7 @@ export class LightControl extends LitElement {
     }
 
     hasRelevantChanges() {
-        return this.getEntityIds().some((entityId) => (this.getCEIs().has(entityId)))
+        return isIntersection(this.getCEIs(), this.getEntityIds());
     }
 
     /*********************** getter and setter logic ***********************/
@@ -101,7 +98,7 @@ export class LightControl extends LitElement {
         let entityIds = [getEntityId(this.getLightState())];
         const themeState = this.getThemeState();
         (themeState) && (entityIds.push(getEntityId(themeState)));
-        return entityIds;
+        return new Set(entityIds);
     }
 
     /************************* build options structure logic ***************/
@@ -185,10 +182,10 @@ export class LightControl extends LitElement {
                     ></light-icon>`;
                 break;
             case 'brightness':
-                content = html`<ha-svg-icon .path=${mdiBrightness6}></ha-svg-icon>`;
+                content = html`<ha-svg-icon .path=${brightness6}></ha-svg-icon>`;
                 break;
             case 'theme':
-                content = html`<ha-svg-icon .path=${mdiCreationOutline}></ha-svg-icon>`;
+                content = html`<ha-svg-icon .path=${creationOutline}></ha-svg-icon>`;
                 break;
         }
         return content;

@@ -1,9 +1,9 @@
 import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { mdiLightbulb, mdiLightbulbOff, mdiLightbulbGroup, mdiLightbulbGroupOff } from '@mdi/js';
-import styles from './icon.styles.js';
+import { lightbulb, lightbulbOff, lightbulbGroup, lightbulbGroupOff } from '../../util/mdi-util.js';
 import { getColor } from '../util/light-util.js';
 import { isOn, isGroup, getEntityId } from '../../util/state-util.js';
+import styles from './icon.styles.js';
 
 export class LightIcon extends LitElement {
 
@@ -24,11 +24,6 @@ export class LightIcon extends LitElement {
     }
 
     /*********************************** lifecycle **********************************/
-
-
-    update(changedProps) {
-        super.update(changedProps)
-    }
 
     shouldUpdate(changedProps) {
         return (!this.isInitialized()
@@ -66,13 +61,13 @@ export class LightIcon extends LitElement {
     /**************************** style/html logic ***************************/
 
     lightbulb() {
-        let lightbulb;
+        let lightbulbPath;
         if (isGroup(this.getLightState())) {
-            (isOn(this.getLightState())) ? (lightbulb = mdiLightbulbGroup) : (lightbulb = mdiLightbulbGroupOff);
+            (isOn(this.getLightState())) ? (lightbulbPath = lightbulbGroup) : (lightbulbPath = lightbulbGroupOff);
         } else {
-            (isOn(this.getLightState())) ? (lightbulb = mdiLightbulb) : (lightbulb = mdiLightbulbOff);
+            (isOn(this.getLightState())) ? (lightbulbPath = lightbulb) : (lightbulbPath = lightbulbOff);
         }
-        return lightbulb;
+        return lightbulbPath;
     }
 
     getColor() {

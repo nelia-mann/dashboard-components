@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
+import { isIntersection } from '../../shared-resources/util/logic-util.js';
 import styles from './area.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import '../light-component/light-component.js';
@@ -8,7 +9,7 @@ export class AreaPanel extends LitElement {
 
     name;
     structure = {};
-    entityIds = [];
+    entityIds = new Set();
 
     static get properties() {
         return {
@@ -27,10 +28,6 @@ export class AreaPanel extends LitElement {
 
     /*************************************** lifecycle **************************************/
 
-    update(changedProps) {
-        super.update(changedProps);
-    }
-
     shouldUpdate(changedProps) {
         return (!this.isInitialized())
             || this.hasRelevantChanges()
@@ -42,7 +39,7 @@ export class AreaPanel extends LitElement {
     }
 
     hasRelevantChanges() {
-        return this.getEntityIds().some((entityId) => (this.getCEIs().has(entityId)))
+        return isIntersection(this.getCEIs(), this.getEntityIds());
     }
 
     /******************************* getter and setter logic *******************************/
@@ -100,7 +97,7 @@ export class AreaPanel extends LitElement {
                 .lightId = ${lightId}
                 .themeId = ${this.getThemeId(lightId)}
                 .structure = ${this.getSubStructure(lightId)}
-                .entityIds = ${[...this.getSubEIs(lightId)]}
+                .entityIds = ${this.getSubEIs(lightId)}
                 .callService=${this.callService}
             ></light-component>
         `

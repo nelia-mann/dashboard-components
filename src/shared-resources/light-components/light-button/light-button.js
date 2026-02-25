@@ -1,13 +1,14 @@
 import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import styles from './button.styles.js';
-import sharedStyles from '../../styles/shared-styles.js';
 import { interpolateRGB, OFF, ONLIGHT, rgba } from './../../util/color-util.js';
 import { isOn } from './../../util/state-util.js';
+import { isIntersection } from '../../util/logic-util.js';
+import styles from './button.styles.js';
+import sharedStyles from '../../styles/shared-styles.js';
 
 export class LightingButton extends LitElement {
 
-    lightIds = [];
+    lightIds = new Set();
     title;
     _total;
 
@@ -49,13 +50,9 @@ export class LightingButton extends LitElement {
         this.initialize();
     }
 
-    // runs after every update
-    updated() {
-    }
-
     // helper to determine if should update
     hasRelevantChanges() {
-        return this.getLightIds().some(entityId => this.getCEIs().has(entityId));
+        return isIntersection(this.getCEIs(), this.getLightIds());
     }
 
     /************************* getter and setter logic ***********************/
@@ -89,7 +86,7 @@ export class LightingButton extends LitElement {
     }
 
     setTotal() {
-        this._total = this.getLightIds().length;
+        this._total = this.getLightIds().size;
     }
 
     getTotal() {

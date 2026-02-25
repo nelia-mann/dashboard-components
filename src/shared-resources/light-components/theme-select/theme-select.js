@@ -1,9 +1,9 @@
 import { html, LitElement } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
-import styles from './theme.styles.js';
-import sharedStyles from '../../styles/shared-styles.js';
 import { getThemeGradient, getThemeOutline } from './theme-util.js';
 import { getEntityId, getState, getAttributes } from '../../util/state-util.js';
+import styles from './theme.styles.js';
+import sharedStyles from '../../styles/shared-styles.js';
 import './theme-button.js';
 
 
