@@ -9,8 +9,8 @@ export default css`
         flex-flow: column nowrap;
         justify-content: space-between;
         align-items: center;
-        height: 570px;
-        width: 900px;
+        height: 585px;
+        width: 915px;
         outline: solid;
         border-radius: 0px;
     }

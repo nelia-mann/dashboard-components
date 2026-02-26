@@ -990,8 +990,8 @@ var $adca349e2834660d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         flex-flow: column nowrap;
         justify-content: space-between;
         align-items: center;
-        height: 570px;
-        width: 900px;
+        height: 585px;
+        width: 915px;
         outline: solid;
         border-radius: 0px;
     }
