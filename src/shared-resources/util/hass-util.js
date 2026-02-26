@@ -22,11 +22,33 @@ function getHassFloors(hass) {
     return hass.floors;
 }
 
-function addFloorStructure(hass, structure) {
+function filterEntityIdsForFloor(hass, entityIds, floorId) {
+    const theseIds = [...entityIds];
+    const filteredIds = theseIds.filter((entityId) => {
+        const areaId = getEntityAreaId(hass, entityId);
+        if (areaId) {
+            return floorId === getAreaFloor(hass, areaId);
+        } else {
+            return false;
+        }
+    });
+    return new Set(filteredIds);
+}
+
+function addFloorStructure(hass, structure, entityIds) {
     const floors = getHassFloors(hass);
     Object.entries(floors).forEach(([floorId, floor]) => {
         const floorName = floor.name;
-        structure[floorId] = { name: floorName, structure: {}, entityIds: new Set() };
+        const filteredIds = filterEntityIdsForFloor(hass, entityIds, floorId);
+        const soloLightIds = [...filteredIds].filter((entityId) => isSoloLight(hass, entityId));
+        if (filteredIds.size > 0) {
+            structure[floorId] = {
+                name: floorName,
+                structure: {},
+                entityIds: filteredIds,
+                soloLightIds: new Set(soloLightIds)
+            };
+        }
     })
 }
 
@@ -52,16 +74,6 @@ function isAreaOnFloor(hass, floorId, areaId) {
     return (getAreaFloor(hass, areaId) === floorId);
 }
 
-function addAreaStructure(hass, structure, floorId) {
-    const areas = getHassAreas(hass);
-    Object.entries(areas).forEach(([areaId, area]) => {
-        const areaName = getAreaName(hass, areaId);
-        if (isAreaOnFloor(hass, floorId, areaId)) {
-            structure[areaId] = { name: areaName, structure: {}, entityIds: new Set() };
-        }
-    })
-}
-
 function getEntityAreaId(hass, entityId) {
     const entity = getEntity(hass, entityId);
     return entity.area_id;
@@ -72,7 +84,7 @@ function isInArea(hass, entityId, areaId) {
 }
 
 function getUniqueAreaIds(hass, entityIds) {
-    const areaIds = entityIds.map((entityId) => {
+    const areaIds = [...entityIds].map((entityId) => {
         return getEntityAreaId(hass, entityId)
     })
     return [... new Set(areaIds)];
@@ -84,12 +96,16 @@ function filterEntityIdsForArea(hass, entityIds, areaId) {
     return new Set(filteredIds);
 }
 
-function addAreaStructure2(hass, structure, areaIds, entityIds) {
+function addAreaStructure(hass, dictionary) {
+    const entityIds = dictionary.entityIds;
+    let structure = dictionary.structure;
+    const areaIds = getUniqueAreaIds(hass, entityIds);
     areaIds.forEach((areaId) => {
+        const ids = filterEntityIdsForArea(hass, entityIds, areaId);
         structure[areaId] = {
             name: getAreaName(hass, areaId),
             structure: {},
-            entityIds: new Set()
+            entityIds: ids
         };
     })
 }
@@ -193,20 +209,17 @@ function getLightIds(hass) {
     return new Set(lightIds);
 }
 
-function addLightStructure(hass, dictionary, areaId) {
-    const lightIds = getLightIds(hass);
+function addLightStructure(hass, dictionary) {
     let structure = dictionary.structure;
-    let entityIds = [...dictionary.entityIds];
-    lightIds.forEach((lightId) => {
-        if (isInArea(hass, lightId, areaId) && !isLightInAGroup(hass, lightId)) {
-            let lightDictionary = { structure: {}, entityIds: new Set([lightId]) };
-            addThemeStructure(hass, lightDictionary, lightId);
-            addLightGroupStructure(hass, lightDictionary, lightId);
-            structure[lightId] = lightDictionary;
-            entityIds = [...entityIds, ...lightDictionary.entityIds];
+    const entityIds = dictionary.entityIds;
+    entityIds.forEach((entityId) => {
+        if (isLight(hass, entityId) && !isLightInAGroup(hass, entityId)) {
+            let lightDictionary = { structure: {}, entityIds: new Set([entityId]) };
+            addThemeStructure(hass, lightDictionary, entityId);
+            addLightGroupStructure(hass, lightDictionary, entityId);
+            structure[entityId] = lightDictionary;
         }
     })
-    dictionary.entityIds = new Set(entityIds);
 }
 
 function isSoloLight(hass, entityId) {
@@ -258,8 +271,6 @@ function filterEntityIdsForLabel(hass, entityIds, labelId) {
 
 export {
     getState,
-    getLightIds,
-    getThemeIds,
     addFloorStructure,
     addAreaStructure,
     addLightStructure,

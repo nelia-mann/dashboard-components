@@ -3,14 +3,12 @@ import { keyed } from 'lit/directives/keyed.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import {
     getState,
-    getLightIds,
-    getThemeIds,
     addFloorStructure,
-    addAreaStructure,
     addLightStructure,
-    isSoloLight,
     hasThemeChanges,
-    hasLightChanges
+    hasLightChanges,
+    getEntityIdsWithLabel,
+    addAreaStructure,
 } from '../../shared-resources/util/hass-util.js';
 import styles from './main.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
@@ -18,6 +16,8 @@ import "../floor-panel/floor-panel.js";
 import "../../shared-resources/light-components/light-button/light-button.js";
 
 export class LightingCard extends LitElement {
+
+    _LABEL = "lighting";
 
     _hass;
     structure = {};
@@ -114,13 +114,10 @@ export class LightingCard extends LitElement {
         this.setFloorStructure();
         this.setAreaStructure();
         this.setLightStructure();
-        this.cleanStructure();
     }
 
     setEntityIds() {
-        const lightIds = getLightIds(this.getHass());
-        const themeIds = getThemeIds(this.getHass());
-        this.entityIds = [...lightIds, ...themeIds];
+        this.entityIds = getEntityIdsWithLabel(this.getHass(), this.getLabel());
     }
 
     setStates() {
@@ -132,44 +129,21 @@ export class LightingCard extends LitElement {
     }
 
     setFloorStructure() {
-        addFloorStructure(this.getHass(), this.getStructure())
+        addFloorStructure(this.getHass(), this.getStructure(), this.getEntityIds());
     }
 
     setAreaStructure() {
-        Object.entries(this.structure).forEach(([floorId, floorDictionary]) => {
-            let floorStructure = floorDictionary.structure;
-            addAreaStructure(this.getHass(), floorStructure, floorId)
+        Object.values(this.structure).forEach((floorDictionary) => {
+            addAreaStructure(this.getHass(), floorDictionary)
         })
     }
 
     setLightStructure() {
         Object.values(this.structure).forEach((floorDict) => {
             let floorStructure = floorDict.structure;
-            let floorEntityIds = [];
-            Object.entries(floorStructure).forEach(([areaId, areaDict]) => {
-                addLightStructure(this.getHass(), areaDict, areaId);
-                floorEntityIds = [...floorEntityIds, ...areaDict.entityIds];
+            Object.values(floorStructure).forEach((areaDict) => {
+                addLightStructure(this.getHass(), areaDict);
             })
-            floorDict.entityIds = new Set(floorEntityIds);
-            const soloLightIds = floorEntityIds.filter((entityId) => isSoloLight(this.getHass(), entityId));
-            floorDict.soloLightIds = new Set(soloLightIds);
-        })
-    }
-
-    cleanStructure() {
-        Object.entries(this.structure).forEach(([floorId, floorDictionary]) => {
-            let floorStructure = floorDictionary.structure;
-            Object.entries(floorStructure).forEach(([areaId, areaDictionary]) => {
-                const areaStructure = areaDictionary.structure;
-                const areaKeys = Object.keys(areaStructure);
-                if (areaKeys.length === 0) {
-                    delete floorStructure[areaId];
-                }
-            })
-            const floorKeys = Object.keys(floorStructure);
-            if (floorKeys.length === 0) {
-                delete this.structure[floorId]
-            }
         })
     }
 
@@ -180,6 +154,10 @@ export class LightingCard extends LitElement {
     }
 
     /************************* Floor Selection Structure ***********************************************/
+
+    getLabel() {
+        return this._LABEL;
+    }
 
     isInitialized() {
         return this._initialized;

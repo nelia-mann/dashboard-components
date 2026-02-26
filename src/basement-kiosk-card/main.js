@@ -8,6 +8,9 @@ import {
     hasThemeChanges,
     getEntityIdsWithLabel,
     filterEntityIdsForLabel,
+    addAreaStructure,
+    isSoloLight,
+    addLightStructure
 } from './../shared-resources/util/hass-util.js';
 import styles from './main.styles.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
@@ -20,7 +23,7 @@ export class BasementKioskCard extends LitElement {
         basic_lighting: "basic lighting",
         leds: "LED Lighting"
     };
-    _OPTIONS = ["lighting"];
+    _OPTIONLABELS = { lighting: "lighting" };
 
     _hass = {};
     entityIds = [];
@@ -117,7 +120,7 @@ export class BasementKioskCard extends LitElement {
     setStructures() {
         this.setEntityIds();
         this.setStates();
-        this.setCategoryStructure();
+        this.setOptionStructure();
         this.setLightingStructure();
     }
 
@@ -134,28 +137,51 @@ export class BasementKioskCard extends LitElement {
         this.states = states;
     }
 
-    setCategoryStructure() {
+    setOptionStructure() {
+        const entityIds = this.getEntityIds()
         this.getOptions().forEach((option) => {
-            this.structure[option] = {name: option, structure: {}, entityIds: new Set()};
+            const filteredIds = filterEntityIdsForLabel(this.getHass(), entityIds, option)
+            this.structure[option] = {name: this.getOptionName(option), structure: {}, entityIds: filteredIds};
         })
+        const lightingIds = [...this.getLightingIds()];
+        const soloLightIds = lightingIds.filter((entityId) => isSoloLight(this.getHass(), entityId));
+        this.structure.lighting.soloLightIds = new Set(soloLightIds);
     }
 
     setLightingStructure() {
         this.setLightingOuterStructure();
+        this.setBasicLightingAreaStructure();
+        this.setBasicLightingLightStructure();
+        this.setLEDLightStructure();
     }
 
     setLightingOuterStructure() {
         let structure = {};
-        const entityIds = this.getEntityIds();
+        const entityIds = this.getLightingIds();
         Object.entries(this.getLightLabels()).forEach(([labelId, label]) => {
             const subIds = filterEntityIdsForLabel(this.getHass(), entityIds, labelId);
-            structure[labelId] = { name: label, structure: {}, entityIds: subIds };
+            structure[labelId] = {
+                name: label,
+                structure: {},
+                entityIds: subIds,
+            };
         })
         this.structure["lighting"].structure = structure;
     }
 
-    setBasicLightingStructure() {
+    setBasicLightingAreaStructure() {
+        addAreaStructure(this.getHass(), this.getBasicLightingDict())
+    }
 
+    setBasicLightingLightStructure() {
+        const basicLightingStructure = this.getBasicLightingDict().structure;
+        Object.values(basicLightingStructure).forEach((areaDict) => {
+            addLightStructure(this.getHass(), areaDict);
+        })
+    }
+
+    setLEDLightStructure() {
+        addLightStructure(this.getHass(), this.getLEDDict());
     }
 
     /***************************** getter logic ***************************/
@@ -169,7 +195,7 @@ export class BasementKioskCard extends LitElement {
     }
 
     getOptions() {
-        return this._OPTIONS;
+        return Object.keys(this._OPTIONLABELS);
     }
 
     getOption() {
@@ -200,6 +226,30 @@ export class BasementKioskCard extends LitElement {
         return this._LIGHTLABELS;
     }
 
+    getOptionName(option) {
+        return this._OPTIONLABELS[option];
+    }
+
+    getLightingDict() {
+        return this.getStructure().lighting;
+    }
+
+    getLightingIds() {
+        return this.getLightingDict().entityIds;
+    }
+
+    getLightingStructure() {
+        return this.getLightingDict().structure;
+    }
+
+    getBasicLightingDict() {
+        return this.getLightingStructure().basic_lighting;
+    }
+
+    getLEDDict() {
+        return this.getLightingStructure().leds;
+    }
+
     /************************** interactive logic ***************************/
 
     onClick(option) {
@@ -226,7 +276,7 @@ export class BasementKioskCard extends LitElement {
             @click=${() => this.onClick(option)}
             style=${styleMap(this.getButtonStyle(option))}
         >
-            <div class="small-heading"> ${option} </div>
+            <div class="small-heading"> ${this.getOptionName(option)} </div>
             <div class="sub-info"> sub-info </div>
         </div>`
     }

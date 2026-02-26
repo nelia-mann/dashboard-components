@@ -845,14 +845,30 @@ function $d14817f641e94e06$export$50fdfeece43146fd(hass, entityId) {
 /********************************* floors ************************************************/ function $d14817f641e94e06$var$getHassFloors(hass) {
     return hass.floors;
 }
-function $d14817f641e94e06$export$19df7d2072d90b46(hass, structure) {
+function $d14817f641e94e06$var$filterEntityIdsForFloor(hass, entityIds, floorId) {
+    const theseIds = [
+        ...entityIds
+    ];
+    const filteredIds = theseIds.filter((entityId)=>{
+        const areaId = $d14817f641e94e06$var$getEntityAreaId(hass, entityId);
+        if (areaId) return floorId === $d14817f641e94e06$var$getAreaFloor(hass, areaId);
+        else return false;
+    });
+    return new Set(filteredIds);
+}
+function $d14817f641e94e06$export$19df7d2072d90b46(hass, structure, entityIds) {
     const floors = $d14817f641e94e06$var$getHassFloors(hass);
     Object.entries(floors).forEach(([floorId, floor])=>{
         const floorName = floor.name;
-        structure[floorId] = {
+        const filteredIds = $d14817f641e94e06$var$filterEntityIdsForFloor(hass, entityIds, floorId);
+        const soloLightIds = [
+            ...filteredIds
+        ].filter((entityId)=>$d14817f641e94e06$export$d3a5cc061b32c876(hass, entityId));
+        if (filteredIds.size > 0) structure[floorId] = {
             name: floorName,
             structure: {},
-            entityIds: new Set()
+            entityIds: filteredIds,
+            soloLightIds: new Set(soloLightIds)
         };
     });
 }
@@ -871,17 +887,6 @@ function $d14817f641e94e06$var$getAreaFloor(hass, areaId) {
 function $d14817f641e94e06$var$isAreaOnFloor(hass, floorId, areaId) {
     return $d14817f641e94e06$var$getAreaFloor(hass, areaId) === floorId;
 }
-function $d14817f641e94e06$export$f45a0d26e841229c(hass, structure, floorId) {
-    const areas = $d14817f641e94e06$var$getHassAreas(hass);
-    Object.entries(areas).forEach(([areaId, area])=>{
-        const areaName = $d14817f641e94e06$var$getAreaName(hass, areaId);
-        if ($d14817f641e94e06$var$isAreaOnFloor(hass, floorId, areaId)) structure[areaId] = {
-            name: areaName,
-            structure: {},
-            entityIds: new Set()
-        };
-    });
-}
 function $d14817f641e94e06$var$getEntityAreaId(hass, entityId) {
     const entity = $d14817f641e94e06$var$getEntity(hass, entityId);
     return entity.area_id;
@@ -890,7 +895,9 @@ function $d14817f641e94e06$var$isInArea(hass, entityId, areaId) {
     return areaId === $d14817f641e94e06$var$getEntityAreaId(hass, entityId);
 }
 function $d14817f641e94e06$var$getUniqueAreaIds(hass, entityIds) {
-    const areaIds = entityIds.map((entityId)=>{
+    const areaIds = [
+        ...entityIds
+    ].map((entityId)=>{
         return $d14817f641e94e06$var$getEntityAreaId(hass, entityId);
     });
     return [
@@ -904,26 +911,30 @@ function $d14817f641e94e06$var$filterEntityIdsForArea(hass, entityIds, areaId) {
     const filteredIds = arrayIds.filter((entityId)=>$d14817f641e94e06$var$isInArea(hass, entityId, areaId));
     return new Set(filteredIds);
 }
-function $d14817f641e94e06$var$addAreaStructure2(hass, structure, areaIds, entityIds) {
+function $d14817f641e94e06$export$f45a0d26e841229c(hass, dictionary) {
+    const entityIds = dictionary.entityIds;
+    let structure = dictionary.structure;
+    const areaIds = $d14817f641e94e06$var$getUniqueAreaIds(hass, entityIds);
     areaIds.forEach((areaId)=>{
+        const ids = $d14817f641e94e06$var$filterEntityIdsForArea(hass, entityIds, areaId);
         structure[areaId] = {
             name: $d14817f641e94e06$var$getAreaName(hass, areaId),
             structure: {},
-            entityIds: new Set()
+            entityIds: ids
         };
     });
 }
 /********************************* themes ************************************************/ function $d14817f641e94e06$var$isTheme(entityId) {
     return entityId.substring(0, 7) === "select." && entityId.includes("theme");
 }
-function $d14817f641e94e06$export$639f23662367b414(hass) {
+function $d14817f641e94e06$var$getThemeIds(hass) {
     const entities = $d14817f641e94e06$var$getHassEntities(hass);
     const themeIds = Object.keys(entities).filter((entityId)=>$d14817f641e94e06$var$isTheme(entityId));
     return new Set(themeIds);
 }
 function $d14817f641e94e06$var$getAssociatedThemeId(hass, lightId) {
     const lightIdStub = lightId.substring(6);
-    const themeIds = $d14817f641e94e06$export$639f23662367b414(hass);
+    const themeIds = $d14817f641e94e06$var$getThemeIds(hass);
     let foundId = null;
     themeIds.forEach((themeId)=>{
         themeId.includes(lightIdStub) && (foundId = themeId);
@@ -954,7 +965,7 @@ function $d14817f641e94e06$var$getGroupMemberIds(hass, entityId) {
     return state.attributes.entity_id;
 }
 function $d14817f641e94e06$var$getAllLightGroupMemberIds(hass) {
-    const lightIds = $d14817f641e94e06$export$e5295beccfcd4404(hass);
+    const lightIds = $d14817f641e94e06$var$getLightIds(hass);
     let groupMemberIds = [];
     lightIds.forEach((lightId)=>{
         if ($d14817f641e94e06$var$isGroup(hass, lightId)) groupMemberIds = [
@@ -998,35 +1009,27 @@ function $d14817f641e94e06$var$addLightGroupStructure(hass, dictionary, lightId)
     const notLight = entity.labels.includes('not_light');
     return entityId.substring(0, 6) === "light." && !notLight;
 }
-function $d14817f641e94e06$export$e5295beccfcd4404(hass) {
+function $d14817f641e94e06$var$getLightIds(hass) {
     const entities = $d14817f641e94e06$var$getHassEntities(hass);
     const lightIds = Object.keys(entities).filter((entityId)=>$d14817f641e94e06$var$isLight(hass, entityId));
     return new Set(lightIds);
 }
-function $d14817f641e94e06$export$c982908e94e49fd1(hass, dictionary, areaId) {
-    const lightIds = $d14817f641e94e06$export$e5295beccfcd4404(hass);
+function $d14817f641e94e06$export$c982908e94e49fd1(hass, dictionary) {
     let structure = dictionary.structure;
-    let entityIds = [
-        ...dictionary.entityIds
-    ];
-    lightIds.forEach((lightId)=>{
-        if ($d14817f641e94e06$var$isInArea(hass, lightId, areaId) && !$d14817f641e94e06$var$isLightInAGroup(hass, lightId)) {
+    const entityIds = dictionary.entityIds;
+    entityIds.forEach((entityId)=>{
+        if ($d14817f641e94e06$var$isLight(hass, entityId) && !$d14817f641e94e06$var$isLightInAGroup(hass, entityId)) {
             let lightDictionary = {
                 structure: {},
                 entityIds: new Set([
-                    lightId
+                    entityId
                 ])
             };
-            $d14817f641e94e06$var$addThemeStructure(hass, lightDictionary, lightId);
-            $d14817f641e94e06$var$addLightGroupStructure(hass, lightDictionary, lightId);
-            structure[lightId] = lightDictionary;
-            entityIds = [
-                ...entityIds,
-                ...lightDictionary.entityIds
-            ];
+            $d14817f641e94e06$var$addThemeStructure(hass, lightDictionary, entityId);
+            $d14817f641e94e06$var$addLightGroupStructure(hass, lightDictionary, entityId);
+            structure[entityId] = lightDictionary;
         }
     });
-    dictionary.entityIds = new Set(entityIds);
 }
 function $d14817f641e94e06$export$d3a5cc061b32c876(hass, entityId) {
     return $d14817f641e94e06$var$isLight(hass, entityId) && !$d14817f641e94e06$var$isGroup(hass, entityId);
@@ -1202,9 +1205,9 @@ class $b256115b19ea84ae$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
         basic_lighting: "basic lighting",
         leds: "LED Lighting"
     };
-    _OPTIONS = [
-        "lighting"
-    ];
+    _OPTIONLABELS = {
+        lighting: "lighting"
+    };
     _hass = {};
     entityIds = [];
     structure = {};
@@ -1281,7 +1284,7 @@ class $b256115b19ea84ae$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
     setStructures() {
         this.setEntityIds();
         this.setStates();
-        this.setCategoryStructure();
+        this.setOptionStructure();
         this.setLightingStructure();
     }
     setEntityIds() {
@@ -1295,21 +1298,31 @@ class $b256115b19ea84ae$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
         });
         this.states = states;
     }
-    setCategoryStructure() {
+    setOptionStructure() {
+        const entityIds = this.getEntityIds();
         this.getOptions().forEach((option)=>{
+            const filteredIds = (0, $d14817f641e94e06$export$2343572398f433de)(this.getHass(), entityIds, option);
             this.structure[option] = {
-                name: option,
+                name: this.getOptionName(option),
                 structure: {},
-                entityIds: new Set()
+                entityIds: filteredIds
             };
         });
+        const lightingIds = [
+            ...this.getLightingIds()
+        ];
+        const soloLightIds = lightingIds.filter((entityId)=>(0, $d14817f641e94e06$export$d3a5cc061b32c876)(this.getHass(), entityId));
+        this.structure.lighting.soloLightIds = new Set(soloLightIds);
     }
     setLightingStructure() {
         this.setLightingOuterStructure();
+        this.setBasicLightingAreaStructure();
+        this.setBasicLightingLightStructure();
+        this.setLEDLightStructure();
     }
     setLightingOuterStructure() {
         let structure = {};
-        const entityIds = this.getEntityIds();
+        const entityIds = this.getLightingIds();
         Object.entries(this.getLightLabels()).forEach(([labelId, label])=>{
             const subIds = (0, $d14817f641e94e06$export$2343572398f433de)(this.getHass(), entityIds, labelId);
             structure[labelId] = {
@@ -1320,7 +1333,18 @@ class $b256115b19ea84ae$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
         });
         this.structure["lighting"].structure = structure;
     }
-    setBasicLightingStructure() {}
+    setBasicLightingAreaStructure() {
+        (0, $d14817f641e94e06$export$f45a0d26e841229c)(this.getHass(), this.getBasicLightingDict());
+    }
+    setBasicLightingLightStructure() {
+        const basicLightingStructure = this.getBasicLightingDict().structure;
+        Object.values(basicLightingStructure).forEach((areaDict)=>{
+            (0, $d14817f641e94e06$export$c982908e94e49fd1)(this.getHass(), areaDict);
+        });
+    }
+    setLEDLightStructure() {
+        (0, $d14817f641e94e06$export$c982908e94e49fd1)(this.getHass(), this.getLEDDict());
+    }
     /***************************** getter logic ***************************/ isInitialized() {
         return this._initialized;
     }
@@ -1328,7 +1352,7 @@ class $b256115b19ea84ae$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
         return this._hass;
     }
     getOptions() {
-        return this._OPTIONS;
+        return Object.keys(this._OPTIONLABELS);
     }
     getOption() {
         return this._option;
@@ -1350,6 +1374,24 @@ class $b256115b19ea84ae$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
     }
     getLightLabels() {
         return this._LIGHTLABELS;
+    }
+    getOptionName(option) {
+        return this._OPTIONLABELS[option];
+    }
+    getLightingDict() {
+        return this.getStructure().lighting;
+    }
+    getLightingIds() {
+        return this.getLightingDict().entityIds;
+    }
+    getLightingStructure() {
+        return this.getLightingDict().structure;
+    }
+    getBasicLightingDict() {
+        return this.getLightingStructure().basic_lighting;
+    }
+    getLEDDict() {
+        return this.getLightingStructure().leds;
     }
     /************************** interactive logic ***************************/ onClick(option) {
         this.setOption(option);
@@ -1375,7 +1417,7 @@ class $b256115b19ea84ae$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
             @click=${()=>this.onClick(option)}
             style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getButtonStyle(option))}
         >
-            <div class="small-heading"> ${option} </div>
+            <div class="small-heading"> ${this.getOptionName(option)} </div>
             <div class="sub-info"> sub-info </div>
         </div>`;
     }
@@ -12830,6 +12872,7 @@ customElements.define("lighting-button", $97ffa901314cba74$export$1e5763623e0cb5
 
 
 class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _LABEL = "lighting";
     _hass;
     structure = {};
     entityIds = [];
@@ -12907,15 +12950,9 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
         this.setFloorStructure();
         this.setAreaStructure();
         this.setLightStructure();
-        this.cleanStructure();
     }
     setEntityIds() {
-        const lightIds = (0, $d14817f641e94e06$export$e5295beccfcd4404)(this.getHass());
-        const themeIds = (0, $d14817f641e94e06$export$639f23662367b414)(this.getHass());
-        this.entityIds = [
-            ...lightIds,
-            ...themeIds
-        ];
+        this.entityIds = (0, $d14817f641e94e06$export$cab3e0b0f4327749)(this.getHass(), this.getLabel());
     }
     setStates() {
         let states = {};
@@ -12925,40 +12962,19 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
         this.states = states;
     }
     setFloorStructure() {
-        (0, $d14817f641e94e06$export$19df7d2072d90b46)(this.getHass(), this.getStructure());
+        (0, $d14817f641e94e06$export$19df7d2072d90b46)(this.getHass(), this.getStructure(), this.getEntityIds());
     }
     setAreaStructure() {
-        Object.entries(this.structure).forEach(([floorId, floorDictionary])=>{
-            let floorStructure = floorDictionary.structure;
-            (0, $d14817f641e94e06$export$f45a0d26e841229c)(this.getHass(), floorStructure, floorId);
+        Object.values(this.structure).forEach((floorDictionary)=>{
+            (0, $d14817f641e94e06$export$f45a0d26e841229c)(this.getHass(), floorDictionary);
         });
     }
     setLightStructure() {
         Object.values(this.structure).forEach((floorDict)=>{
             let floorStructure = floorDict.structure;
-            let floorEntityIds = [];
-            Object.entries(floorStructure).forEach(([areaId, areaDict])=>{
-                (0, $d14817f641e94e06$export$c982908e94e49fd1)(this.getHass(), areaDict, areaId);
-                floorEntityIds = [
-                    ...floorEntityIds,
-                    ...areaDict.entityIds
-                ];
+            Object.values(floorStructure).forEach((areaDict)=>{
+                (0, $d14817f641e94e06$export$c982908e94e49fd1)(this.getHass(), areaDict);
             });
-            floorDict.entityIds = new Set(floorEntityIds);
-            const soloLightIds = floorEntityIds.filter((entityId)=>(0, $d14817f641e94e06$export$d3a5cc061b32c876)(this.getHass(), entityId));
-            floorDict.soloLightIds = new Set(soloLightIds);
-        });
-    }
-    cleanStructure() {
-        Object.entries(this.structure).forEach(([floorId, floorDictionary])=>{
-            let floorStructure = floorDictionary.structure;
-            Object.entries(floorStructure).forEach(([areaId, areaDictionary])=>{
-                const areaStructure = areaDictionary.structure;
-                const areaKeys = Object.keys(areaStructure);
-                if (areaKeys.length === 0) delete floorStructure[areaId];
-            });
-            const floorKeys = Object.keys(floorStructure);
-            if (floorKeys.length === 0) delete this.structure[floorId];
         });
     }
     initializeFloor() {
@@ -12966,7 +12982,10 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
         const floorIds = Object.keys(structure);
         this.setFloorId(floorIds[0]);
     }
-    /************************* Floor Selection Structure ***********************************************/ isInitialized() {
+    /************************* Floor Selection Structure ***********************************************/ getLabel() {
+        return this._LABEL;
+    }
+    isInitialized() {
         return this._initialized;
     }
     getHass() {
