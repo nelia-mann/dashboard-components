@@ -1446,15 +1446,12 @@ class $b256115b19ea84ae$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
     ];
     // return html
     render() {
-        if (this.isInitialized()) {
-            console.log(this.getStructure());
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <ha-card>
                     <div class="content">${this.content()}</div>
                     ${this.buttonRow()}
                 </ha-card>
             `;
-        }
     }
     // set card size parameters for ha
     getCardSize() {
@@ -12875,7 +12872,7 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
     _LABEL = "lighting";
     _hass;
     structure = {};
-    entityIds = [];
+    entityIds = new Set();
     changedEntityIds = new Set();
     static get properties() {
         return {

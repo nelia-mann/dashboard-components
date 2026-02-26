@@ -307,7 +307,6 @@ export class BasementKioskCard extends LitElement {
     // return html
     render() {
         if (this.isInitialized()) {
-            console.log(this.getStructure());
             return html`
                 <ha-card>
                     <div class="content">${this.content()}</div>

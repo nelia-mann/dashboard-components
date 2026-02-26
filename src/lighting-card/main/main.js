@@ -21,7 +21,7 @@ export class LightingCard extends LitElement {
 
     _hass;
     structure = {};
-    entityIds = [];
+    entityIds = new Set();
     changedEntityIds = new Set();
 
     static get properties() {
