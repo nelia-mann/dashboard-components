@@ -330,15 +330,15 @@ export class BasementKioskCard extends LitElement {
     }
 
     getCardSize() {
-        return 8;
+        return 10;
     }
 
     getGridOptions() {
         return {
-            rows: 9,
-            columns: 24,
-            min_rows: 9,
-            max_rows: 9
+            rows: 10,
+            columns: 27,
+            min_rows: 10,
+            max_rows: 10
         }
     }
 

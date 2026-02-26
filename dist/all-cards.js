@@ -990,8 +990,8 @@ var $adca349e2834660d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         flex-flow: column nowrap;
         justify-content: space-between;
         align-items: center;
-        height: 585px;
-        width: 915px;
+        height: 570px;
+        width: 900px;
         outline: solid;
         border-radius: 0px;
     }
@@ -12134,14 +12134,14 @@ class $380e8338b10894eb$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
             `;
     }
     getCardSize() {
-        return 8;
+        return 10;
     }
     getGridOptions() {
         return {
-            rows: 9,
-            columns: 24,
-            min_rows: 9,
-            max_rows: 9
+            rows: 10,
+            columns: 27,
+            min_rows: 10,
+            max_rows: 10
         };
     }
 }
