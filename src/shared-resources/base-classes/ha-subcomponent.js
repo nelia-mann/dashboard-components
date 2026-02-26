@@ -1,6 +1,6 @@
 import { LitElement } from 'lit';
 
-export class HaSubcomponent extends LitElement {
+export class HaSubComponent extends LitElement {
 
     static properties = {
         changedEntityIds: { state: true },
@@ -39,7 +39,7 @@ export class HaSubcomponent extends LitElement {
             if (set2.has(member)) return true
         }
         return false;
-}
+    }
 
     /********************************* basic getters and setters *****************************/
 
@@ -48,7 +48,7 @@ export class HaSubcomponent extends LitElement {
     }
 
     initialize() {
-        this._initialize = true;
+        this._initialized = true;
     }
 
     getCEIs() {

@@ -1543,15 +1543,69 @@ var $82c9a4f372f10553$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-function $c59085e74a7c5f10$export$f214bde4f1bb3242(set1, set2) {
-    set1.size > set2.size && ([set1, set2] = [
-        set2,
-        set1
-    ]);
-    for (const member of set1){
-        if (set2.has(member)) return true;
+
+class $c0664485052839c4$export$1dc45fe673c170 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    static properties = {
+        changedEntityIds: {
+            state: true
+        },
+        states: {
+            state: true
+        },
+        _initialized: {
+            state: true
+        }
+    };
+    constructor(){
+        super();
+        this.changedEntityIds = new Set();
+        this.states = {};
+        this._initialized = false;
+        this.structure = {};
+        this.entityIds = new Set();
     }
-    return false;
+    shouldUpdate(changedProps) {
+        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_initialized") || this.updateTrigger(changedProps);
+    }
+    firstUpdated() {
+        this.onFirstUpdate();
+        this.initialize();
+    }
+    hasRelevantChanges() {
+        return this.isIntersection(this.getCEIs(), this.getEntityIds());
+    }
+    isIntersection(set1, set2) {
+        set1.size > set2.size && ([set1, set2] = [
+            set2,
+            set1
+        ]);
+        for (const member of set1){
+            if (set2.has(member)) return true;
+        }
+        return false;
+    }
+    /********************************* basic getters and setters *****************************/ isInitialized() {
+        return this._initialized;
+    }
+    initialize() {
+        this._initialized = true;
+    }
+    getCEIs() {
+        return this.changedEntityIds;
+    }
+    getStates() {
+        return this.states;
+    }
+    getEntityIds() {
+        return this.entityIds;
+    }
+    getStructure() {
+        return this.structure;
+    }
+    /********************************* hooks for subclasses **********************************/ updateTrigger(changedProps) {
+        return false;
+    }
+    onFirstUpdate() {}
 }
 
 
@@ -1760,6 +1814,17 @@ var $e677bb25dbafca7d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+
+function $c59085e74a7c5f10$export$f214bde4f1bb3242(set1, set2) {
+    set1.size > set2.size && ([set1, set2] = [
+        set2,
+        set1
+    ]);
+    for (const member of set1){
+        if (set2.has(member)) return true;
+    }
+    return false;
+}
 
 
 
@@ -12253,68 +12318,30 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $ab210b2da7b39b9d$ex
 customElements.define("light-group-control", $72eef9afa85dc31d$export$3e3323ffc8ae8085);
 
 
-class $1f5cf4012e444c80$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    lightId;
-    themeId;
-    structure = {};
-    entityIds = new Set();
-    static get properties() {
-        return {
-            opened: {
-                type: Boolean,
-                reflect: true
-            },
-            changedEntityIds: {
-                state: true
-            },
-            states: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
+class $1f5cf4012e444c80$export$506b69e3dcbd131b extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    static properties = {
+        ...super.properties,
+        opened: {
+            type: Boolean,
+            reflect: true
+        }
+    };
     constructor(){
         super();
-        this.changedEntityIds = new Set();
-        this.states = {};
-        this._initialized = false;
+        this.lightId = '';
+        this.themeId = '';
     }
-    /******************************* lifecycle **********************************/ shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("opened") || changedProps.has("_initialized");
+    /******************************* lifecycle **********************************/ updateTrigger(changedProps) {
+        return changedProps.has("opened");
     }
-    firstUpdated() {
-        this.initialize();
-    }
-    // Lifecycle method to open/close the native dialog
-    updated(changedProperties) {
-        if (changedProperties.has('opened')) {
+    updated(changedProps) {
+        if (changedProps.has('opened')) {
             const dialog = this.shadowRoot.querySelector('dialog');
-            if (this.isOpen()) dialog.showModal(); // Opens the dialog modally, disabling content behind it
-            else dialog.close();
+            this.isOpen() ? dialog.showModal() : dialog.close();
         }
     }
-    hasRelevantChanges() {
-        return (0, $c59085e74a7c5f10$export$f214bde4f1bb3242)(this.getCEIs(), this.getEntityIds());
-    }
-    /************************ getter and setter logic *************************/ isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
-    getStates() {
-        return this.states;
-    }
-    getState(entityId) {
+    /************************ getter and setter logic *************************/ getState(entityId) {
         return this.getStates()[entityId];
-    }
-    getStructure() {
-        return this.structure;
-    }
-    getCEIs() {
-        return this.changedEntityIds;
     }
     getMainId() {
         return this.lightId;
@@ -12327,9 +12354,6 @@ class $1f5cf4012e444c80$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
     closeOpen() {
         this.opened = false;
-    }
-    getEntityIds() {
-        return this.entityIds;
     }
     /************************ interactive logic *******************************/ closeModal() {
         this.closeOpen();
@@ -12376,55 +12400,25 @@ class $1f5cf4012e444c80$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
 customElements.define("popout-window", $1f5cf4012e444c80$export$506b69e3dcbd131b);
 
 
-class $e9bf7f26b8252164$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+class $e9bf7f26b8252164$export$5e33b198135dff7b extends (0, $c0664485052839c4$export$1dc45fe673c170) {
     _HOLD_DURATION = 500;
-    lightId;
-    themeId;
-    structure = {};
-    entityIds = new Set();
-    _holding = false;
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            states: {
-                state: true
-            },
-            isModalOpen: {
-                type: Boolean
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
+    static properties = {
+        ...super.properties,
+        isModalOpen: {
+            state: true
+        }
+    };
     constructor(){
         super();
-        this.changedEntityIds = new Set();
-        this.states = {};
         this.isModalOpen = false;
-        this._initialized = false;
+        this.lightId = '';
+        this.themeId = '';
+        this._holding = false;
     }
-    /************************************* lifecycle **********************************/ shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("isModalOpen") || changedProps.has("_initialized");
+    updateTrigger(changedProps) {
+        return changedProps.has("isModalOpen");
     }
-    firstUpdated() {
-        this.initialize();
-    }
-    hasRelevantChanges() {
-        return (0, $c59085e74a7c5f10$export$f214bde4f1bb3242)(this.getCEIs(), this.getEntityIds());
-    }
-    /********************************** getter and setter logic *****************************/ isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-    isHolding() {
+    /********************** getter and setter logic ********************************************/ isHolding() {
         return this._holding;
     }
     raiseHold() {
@@ -12432,9 +12426,6 @@ class $e9bf7f26b8252164$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     }
     lowerHold() {
         this._holding = true;
-    }
-    getStates() {
-        return this.states;
     }
     getLightState(lightId) {
         return this.getStates()[lightId];
@@ -12448,14 +12439,8 @@ class $e9bf7f26b8252164$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     getThemeId() {
         return this.themeId;
     }
-    getStructure() {
-        return this.structure;
-    }
     getLightIds() {
         return Object.keys(this.getStructure());
-    }
-    getEntityIds() {
-        return this.entityIds;
     }
     openModal() {
         this.isModalOpen = true;
@@ -12466,7 +12451,7 @@ class $e9bf7f26b8252164$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     getDuration() {
         return this._HOLD_DURATION;
     }
-    /********************************** interactive logic ***********************************/ onDown() {
+    /********************************* interactive logic **********************************/ onDown() {
         this.lowerHold();
         setTimeout(()=>{
             this.onHold();
@@ -12534,58 +12519,13 @@ class $e9bf7f26b8252164$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
 customElements.define("light-component", $e9bf7f26b8252164$export$5e33b198135dff7b);
 
 
-class $f93889c4c3188e64$export$f07dc1717dcb8b95 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    name;
-    structure = {};
-    entityIds = new Set();
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            states: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
+class $f93889c4c3188e64$export$f07dc1717dcb8b95 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
     constructor(){
         super();
-        this.changedEntityIds = new Set();
-        this.states = {};
-        this._initialized = false;
-    }
-    /*************************************** lifecycle **************************************/ shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_initialized");
-    }
-    firstUpdated() {
-        this.initialize();
-    }
-    hasRelevantChanges() {
-        return (0, $c59085e74a7c5f10$export$f214bde4f1bb3242)(this.getCEIs(), this.getEntityIds());
-    }
-    /******************************* getter and setter logic *******************************/ isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
+        this.name = '';
     }
     getAreaName() {
         return this.name;
-    }
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-    getEntityIds() {
-        return this.entityIds;
-    }
-    getStructure() {
-        return this.structure;
-    }
-    getStates() {
-        return this.states;
     }
     getSubStructure(lightId) {
         return this.getStructure()[lightId].structure;
@@ -12596,7 +12536,7 @@ class $f93889c4c3188e64$export$f07dc1717dcb8b95 extends (0, $ab210b2da7b39b9d$ex
     getThemeId(lightId) {
         return this.getStructure()[lightId].theme;
     }
-    /************************************* interactive logic *******************************/ /************************************* html/style logic ********************************/ getLightDisplay(lightId) {
+    getLightDisplay(lightId) {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <light-component
                 class="outlined"
@@ -12627,55 +12567,7 @@ class $f93889c4c3188e64$export$f07dc1717dcb8b95 extends (0, $ab210b2da7b39b9d$ex
 customElements.define("area-panel", $f93889c4c3188e64$export$f07dc1717dcb8b95);
 
 
-class $8d2a857b49dddd4c$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    structure = {};
-    entityIds = new Set();
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            states: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
-    constructor(){
-        super();
-        this.changedEntityIds = new Set();
-        this.states = {};
-        this._initialized = false;
-    }
-    /******************************** lifecycle ***********************************/ shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_initialized");
-    }
-    firstUpdated() {
-        this.initialize();
-    }
-    hasRelevantChanges() {
-        return (0, $c59085e74a7c5f10$export$f214bde4f1bb3242)(this.getCEIs(), this.getEntityIds());
-    }
-    /******************************* getter and setter logic ***********************/ isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-    getStates() {
-        return this.states;
-    }
-    getEntityIds() {
-        return this.entityIds;
-    }
-    getStructure() {
-        return this.structure;
-    }
+class $8d2a857b49dddd4c$export$8ff612b8b93103f2 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
     getAreaName(areaId) {
         return this.getStructure()[areaId].name;
     }
@@ -12685,7 +12577,7 @@ class $8d2a857b49dddd4c$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$ex
     getSubEIs(areaId) {
         return this.getStructure()[areaId].entityIds;
     }
-    /******************************* interactive logic *****************************/ /******************************* html/style logic ******************************/ getAreaDisplay(areaId) {
+    getAreaDisplay(areaId) {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <area-panel
                 .changedEntityIds = ${this.getCEIs()}

@@ -1,87 +1,41 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { getName } from '../../shared-resources/util/state-util.js';
-import { isIntersection } from '../../shared-resources/util/logic-util.js';
 import { closeCircleOutline } from '../../shared-resources/util/mdi-util.js';
+import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
 import styles from './popout.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import '../../shared-resources/light-components/light-group-control/light-group-control.js';
 
-export class PopoutWindow extends LitElement {
+export class PopoutWindow extends HaSubComponent {
 
-    lightId;
-    themeId;
-    structure = {};
-    entityIds = new Set();
-
-    static get properties() {
-        return {
-            opened: { type: Boolean, reflect: true },
-            changedEntityIds: { state: true },
-            states: { state: true },
-            _initialized: { state: true }
-        }
+    static properties = {
+        ...super.properties,
+        opened: { type: Boolean, reflect: true }
     }
 
     constructor() {
         super();
-        this.changedEntityIds = new Set();
-        this.states = {};
-        this._initialized = false;
+        this.lightId = '';
+        this.themeId = '';
     }
 
     /******************************* lifecycle **********************************/
 
-    shouldUpdate(changedProps) {
-        return (!this.isInitialized()
-            || this.hasRelevantChanges()
-            || changedProps.has("opened")
-            || changedProps.has("_initialized"))
+    updateTrigger(changedProps) {
+        return changedProps.has("opened")
     }
 
-    firstUpdated() {
-        this.initialize();
-    }
-
-    // Lifecycle method to open/close the native dialog
-    updated(changedProperties) {
-        if (changedProperties.has('opened')) {
-        const dialog = this.shadowRoot.querySelector('dialog');
-        if (this.isOpen()) {
-            dialog.showModal(); // Opens the dialog modally, disabling content behind it
-        } else {
-            dialog.close();
+    updated(changedProps) {
+        if (changedProps.has('opened')) {
+            const dialog = this.shadowRoot.querySelector('dialog');
+            (this.isOpen()) ? (dialog.showModal()) : (dialog.close());
         }
-        }
-    }
-
-    hasRelevantChanges() {
-        return isIntersection(this.getCEIs(), this.getEntityIds());
     }
 
     /************************ getter and setter logic *************************/
 
-    isInitialized() {
-        return this._initialized;
-    }
-
-    initialize() {
-        this._initialized = true;
-    }
-
-    getStates() {
-        return this.states;
-    }
-
     getState(entityId) {
         return this.getStates()[entityId];
-    }
-
-    getStructure() {
-        return this.structure;
-    }
-
-    getCEIs() {
-        return this.changedEntityIds;
     }
 
     getMainId() {
@@ -99,11 +53,6 @@ export class PopoutWindow extends LitElement {
     closeOpen() {
         this.opened = false;
     }
-
-    getEntityIds() {
-        return this.entityIds;
-    }
-
 
     /************************ interactive logic *******************************/
 

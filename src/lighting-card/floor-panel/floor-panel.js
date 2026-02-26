@@ -1,71 +1,11 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
-import { isIntersection } from '../../shared-resources/util/logic-util.js';
+import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
 import styles from './floor.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import '../area-panel/area-panel.js';
 
-export class FloorPanel extends LitElement {
-
-    structure = {};
-    entityIds = new Set();
-
-    static get properties() {
-        return {
-            changedEntityIds: { state: true },
-            states: { state: true },
-            _initialized: { state: true }
-        }
-    }
-
-    constructor() {
-        super();
-        this.changedEntityIds = new Set();
-        this.states = {};
-        this._initialized = false;
-    }
-
-    /******************************** lifecycle ***********************************/
-
-    shouldUpdate(changedProps) {
-        return (!this.isInitialized()
-            || this.hasRelevantChanges()
-            || changedProps.has("_initialized"))
-    }
-
-    firstUpdated() {
-        this.initialize();
-    }
-
-    hasRelevantChanges() {
-        return isIntersection(this.getCEIs(), this.getEntityIds());
-    }
-
-    /******************************* getter and setter logic ***********************/
-
-    isInitialized() {
-        return this._initialized;
-    }
-
-    initialize() {
-        this._initialized = true;
-    }
-
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-
-    getStates() {
-        return this.states;
-    }
-
-    getEntityIds() {
-        return this.entityIds;
-    }
-
-    getStructure() {
-        return this.structure;
-    }
+export class FloorPanel extends HaSubComponent {
 
     getAreaName(areaId) {
         return this.getStructure()[areaId].name;
@@ -78,10 +18,6 @@ export class FloorPanel extends LitElement {
     getSubEIs(areaId) {
         return this.getStructure()[areaId].entityIds;
     }
-
-    /******************************* interactive logic *****************************/
-
-    /******************************* html/style logic ******************************/
 
     getAreaDisplay(areaId) {
         return html`

@@ -1,68 +1,33 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { getBrightness, getColorModes } from '../../shared-resources/light-components/util/light-util.js';
-import { isIntersection } from '../../shared-resources/util/logic-util.js';
+import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
 import styles from './light.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import '../../shared-resources/light-components/simple-light/simple-light.js';
 import './../popout-window/popout-window.js';
 
-export class LightComponent extends LitElement {
+export class LightComponent extends HaSubComponent {
 
     _HOLD_DURATION = 500;
 
-    lightId;
-    themeId;
-    structure = {};
-    entityIds = new Set();
-    _holding = false;
-
-    static get properties() {
-        return {
-            changedEntityIds: { state: true },
-            states: { state: true },
-            isModalOpen: { type: Boolean },
-            _initialized: { state: true }
-        }
+    static properties = {
+        ...super.properties,
+        isModalOpen: { state: true },
     }
 
     constructor() {
         super();
-        this.changedEntityIds = new Set();
-        this.states = {};
         this.isModalOpen = false;
-        this._initialized = false;
+        this.lightId = '';
+        this.themeId = '';
+        this._holding = false;
     }
 
-    /************************************* lifecycle **********************************/
-
-    shouldUpdate(changedProps) {
-        return (!this.isInitialized()
-            || this.hasRelevantChanges()
-            || changedProps.has("isModalOpen")
-            || changedProps.has("_initialized"))
+    updateTrigger(changedProps) {
+        return changedProps.has("isModalOpen");
     }
 
-    firstUpdated() {
-        this.initialize();
-    }
-
-    hasRelevantChanges() {
-        return isIntersection(this.getCEIs(), this.getEntityIds());
-    }
-
-    /********************************** getter and setter logic *****************************/
-
-    isInitialized() {
-        return this._initialized;
-    }
-
-    initialize() {
-        this._initialized = true;
-    }
-
-    getCEIs() {
-        return this.changedEntityIds
-    }
+    /********************** getter and setter logic ********************************************/
 
     isHolding() {
         return this._holding;
@@ -74,10 +39,6 @@ export class LightComponent extends LitElement {
 
     lowerHold() {
         this._holding = true;
-    }
-
-    getStates() {
-        return this.states;
     }
 
     getLightState(lightId) {
@@ -96,16 +57,8 @@ export class LightComponent extends LitElement {
         return this.themeId;
     }
 
-    getStructure() {
-        return this.structure;
-    }
-
     getLightIds() {
         return Object.keys(this.getStructure());
-    }
-
-    getEntityIds() {
-        return this.entityIds;
     }
 
     openModal() {
@@ -120,7 +73,7 @@ export class LightComponent extends LitElement {
         return this._HOLD_DURATION;
     }
 
-    /********************************** interactive logic ***********************************/
+    /********************************* interactive logic **********************************/
 
     onDown() {
         this.lowerHold();

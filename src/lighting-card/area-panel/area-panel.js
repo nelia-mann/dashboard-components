@@ -1,75 +1,19 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
-import { isIntersection } from '../../shared-resources/util/logic-util.js';
+import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
 import styles from './area.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import '../light-component/light-component.js';
 
-export class AreaPanel extends LitElement {
-
-    name;
-    structure = {};
-    entityIds = new Set();
-
-    static get properties() {
-        return {
-            changedEntityIds: { state: true },
-            states: { state: true },
-            _initialized: { state: true}
-        }
-    }
+export class AreaPanel extends HaSubComponent {
 
     constructor() {
         super();
-        this.changedEntityIds = new Set();
-        this.states = {};
-        this._initialized = false;
-    }
-
-    /*************************************** lifecycle **************************************/
-
-    shouldUpdate(changedProps) {
-        return (!this.isInitialized())
-            || this.hasRelevantChanges()
-            || changedProps.has("_initialized")
-    }
-
-    firstUpdated() {
-        this.initialize();
-    }
-
-    hasRelevantChanges() {
-        return isIntersection(this.getCEIs(), this.getEntityIds());
-    }
-
-    /******************************* getter and setter logic *******************************/
-
-    isInitialized() {
-        return this._initialized;
-    }
-
-    initialize() {
-        this._initialized = true;
+        this.name = '';
     }
 
     getAreaName() {
         return this.name;
-    }
-
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-
-    getEntityIds() {
-        return this.entityIds;
-    }
-
-    getStructure() {
-        return this.structure;
-    }
-
-    getStates() {
-        return this.states;
     }
 
     getSubStructure(lightId) {
@@ -83,10 +27,6 @@ export class AreaPanel extends LitElement {
     getThemeId(lightId) {
         return this.getStructure()[lightId].theme;
     }
-
-    /************************************* interactive logic *******************************/
-
-    /************************************* html/style logic ********************************/
 
     getLightDisplay(lightId) {
         return html`
