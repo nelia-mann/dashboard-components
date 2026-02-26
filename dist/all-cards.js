@@ -1815,17 +1815,6 @@ var $e677bb25dbafca7d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-function $c59085e74a7c5f10$export$f214bde4f1bb3242(set1, set2) {
-    set1.size > set2.size && ([set1, set2] = [
-        set2,
-        set1
-    ]);
-    for (const member of set1){
-        if (set2.has(member)) return true;
-    }
-    return false;
-}
-
 
 
 var $1d3d994b3d9f3c99$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
@@ -9306,6 +9295,7 @@ var $04557c061247a0a6$export$a14c803a1714faa3 = "M18.5,19.13C20,17.77 20,15.18 2
 
 
 
+
 var $6ebd1da0712f968b$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     ha-svg-icon {
@@ -9319,46 +9309,27 @@ var $6ebd1da0712f968b$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 `;
 
 
-class $4135704356e7d3a7$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            lightState: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
+class $4135704356e7d3a7$export$82acdd66a4e4bf90 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    static properties = {
+        ...super.properties,
+        lightState: {
+            state: true
+        }
+    };
     constructor(){
         super();
-        this.changedEntityIds = new Set();
-        this.themeState = {};
-        this._initialized = false;
+        this.lightState = {};
     }
-    /*********************************** lifecycle **********************************/ shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_initialized") || changedProps.has("lightState");
+    /*********************************** lifecycle **********************************/ updateTrigger(changedProps) {
+        return changedProps.has("lightState");
     }
-    firstUpdated() {
-        this.initialize();
-    }
-    hasRelevantChanges() {
-        return this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState()));
-    }
-    /****************************** getter and setter logic *************************/ isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
-    getLightState() {
+    /****************************** getter and setter logic *************************/ getLightState() {
         return this.lightState;
     }
-    getCEIs() {
-        return this.changedEntityIds;
+    getEntityIds() {
+        return new Set([
+            (0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState())
+        ]);
     }
     /**************************** style/html logic ***************************/ lightbulb() {
         let lightbulbPath;
@@ -9366,12 +9337,9 @@ class $4135704356e7d3a7$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
         else (0, $4ab534091a4f77ec$export$1a2d97de39ecbb75)(this.getLightState()) ? lightbulbPath = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulbPath = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
         return lightbulbPath;
     }
-    getColor() {
-        return (0, $6d3ca277783cacc8$export$5551a2d24ff40153)(this.getLightState());
-    }
     getStyles() {
         let styles = {
-            "color": this.getColor()
+            "color": (0, $6d3ca277783cacc8$export$5551a2d24ff40153)(this.getLightState())
         };
         return styles;
     }
@@ -9385,51 +9353,12 @@ class $4135704356e7d3a7$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
 customElements.define("light-icon", $4135704356e7d3a7$export$82acdd66a4e4bf90);
 
 
-class $ae7626f348d3623a$export$381c54979eeec740 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    lightId;
-    structure = {};
-    entityIds = new Set();
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            states: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
+class $ae7626f348d3623a$export$381c54979eeec740 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
     constructor(){
         super();
-        this.changedEntityIds = new Set();
-        this.states = {};
-        this._initialized = false;
+        this.lightId = '';
     }
-    /************************************* lifecycle **********************************/ shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_initialized");
-    }
-    firstUpdated() {
-        this.initialize();
-    }
-    hasRelevantChanges() {
-        return (0, $c59085e74a7c5f10$export$f214bde4f1bb3242)(this.getCEIs(), this.getEntityIds());
-    }
-    /********************************** getter and setter logic *****************************/ isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-    getStates() {
-        return this.states;
-    }
-    getLightState(lightId) {
+    /********************************** getter and setter logic *****************************/ getLightState(lightId) {
         return this.getStates()[lightId];
     }
     getMainId() {
@@ -9438,14 +9367,8 @@ class $ae7626f348d3623a$export$381c54979eeec740 extends (0, $ab210b2da7b39b9d$ex
     getMainState() {
         return this.getLightState(this.getMainId());
     }
-    getStructure() {
-        return this.structure;
-    }
     getLightIds() {
         return Object.keys(this.getStructure());
-    }
-    getEntityIds() {
-        return this.entityIds;
     }
     /********************************** interactive logic ***********************************/ onClick() {
         if (this.callService) {
@@ -9674,6 +9597,7 @@ var $2a56fe717a5ec2a6$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+
 var $ae9105d0e2173251$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     slider-bar {
@@ -9685,6 +9609,7 @@ var $ae9105d0e2173251$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: center;
     }
 `;
+
 
 
 
@@ -9769,68 +9694,51 @@ var $ef1a79c6631dfc4e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    max;
-    min;
-    startValue;
-    units = '';
-    background = '';
-    colorCode = [
-        0,
-        0,
-        0
-    ];
-    _isDown = false;
-    _flag = false;
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            state: {
-                state: true
-            },
-            _value: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
-    // when first constructed
+class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    static properties = {
+        ...super.properties,
+        state: {
+            state: true
+        },
+        _value: {
+            state: true
+        }
+    };
     constructor(){
         super();
         this.state = {};
-        this.changedEntityIds = new Set();
-        this._initialized = false;
+        this.max = 0;
+        this.min = 0;
+        this.startValue = 0;
+        this.units = '';
+        this.background = '';
+        this.colorCode = [
+            0,
+            0,
+            0
+        ];
+        this._isDown = false;
+        this._flag = false;
     }
-    /************************** lifecycle *****************************/ // each time an update occurs resulting in rerendering
-    update(changedProps) {
+    /************************** lifecycle *****************************/ update(changedProps) {
         !this.getChangeFlag() && this.setInitialValue();
         super.update(changedProps);
     }
-    // determines if an update should occur
-    shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_value") || changedProps.has("_initialized");
+    updateTrigger(changedProps) {
+        return changedProps.has("_value");
     }
-    // runs after the first update
-    firstUpdated() {
+    onFirstUpdate() {
         this.setInitialValue();
-        this.initialize();
     }
-    // runs after every update
     updated() {
         !this.isDown() && this.lowerChangeFlag();
     }
-    // helper to determine if should update
     hasRelevantChanges() {
         const isStateChanged = this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getState()));
         const isUp = !this.isDown();
         const isNew = this.getValue() != this.getStateValue();
         return isStateChanged && isUp && isNew;
     }
-    // syncs the value to an external change
     setInitialValue() {
         this.getStateValue() ? this.setValue(this.getStateValue()) : this.setValue(this.getMin());
     }
@@ -9849,17 +9757,8 @@ class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     getStateValue() {
         return this.startValue;
     }
-    isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
     getState() {
         return this.state;
-    }
-    getCEIs() {
-        return this.changedEntityIds;
     }
     addUnits(value) {
         let newValue = String(Math.round(value));
@@ -9967,46 +9866,24 @@ class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
 customElements.define("slider-bar", $9d406f50450a5172$export$5ff34efdd1b9ed54);
 
 
-class $289a3d4763775a85$export$2541e764ec89469 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            lightState: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
+class $289a3d4763775a85$export$2541e764ec89469 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    static properties = {
+        ...super.properties,
+        lightState: {
+            state: true
+        }
+    };
     constructor(){
         super();
-        this.changedEntityIds = new Set();
         this.lightState = {};
-        this._initialized = false;
     }
-    /******************************* lifecycle **********************************/ shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_initialized");
-    }
-    firstUpdated() {
-        this.initialize();
-    }
-    hasRelevantChanges() {
-        return this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState()));
-    }
-    /************************ getter and setter logic *************************/ isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
-    getLightState() {
+    /************************ getter and setter logic *************************/ getLightState() {
         return this.lightState;
     }
-    getCEIs() {
-        return this.changedEntityIds;
+    getEntityIds() {
+        return new Set([
+            (0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState())
+        ]);
     }
     /************************ interactive logic *******************************/ handleCallService(e) {
         const value = e.detail;
@@ -10047,6 +9924,7 @@ customElements.define("brightness-slider", $289a3d4763775a85$export$2541e764ec89
 
 
 
+
 var $25e401c3c55763f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     slider-bar {
@@ -10062,46 +9940,24 @@ var $25e401c3c55763f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-class $3d80432ed0534279$export$e97d95246d8cbf24 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            lightState: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
+class $3d80432ed0534279$export$e97d95246d8cbf24 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    static properties = {
+        ...super.properties,
+        lightState: {
+            state: true
+        }
+    };
     constructor(){
         super();
-        this.changedEntityIds = new Set();
         this.lightState = {};
-        this._initialized = false;
     }
-    /******************************* lifecycle **********************************/ shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_initialized");
-    }
-    firstUpdated() {
-        this.initialize();
-    }
-    hasRelevantChanges() {
-        return this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState()));
-    }
-    /************************ getter and setter logic *************************/ isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
-    getLightState() {
+    /************************ getter and setter logic *************************/ getLightState() {
         return this.lightState;
     }
-    getCEIs() {
-        return this.changedEntityIds;
+    getEntityIds() {
+        return new Set([
+            (0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState())
+        ]);
     }
     /************************ interactive logic *******************************/ handleCallService(e) {
         const value = e.detail;
@@ -10146,6 +10002,7 @@ customElements.define("colortemp-slider", $3d80432ed0534279$export$e97d95246d8cb
 
 
 
+
 var $0c1278e39028d633$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .wheel {
@@ -10176,46 +10033,36 @@ var $0c1278e39028d633$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
     _box;
-    _isDown = false;
-    _flag = false;
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            lightState: {
-                state: true
-            },
-            _hue: {
-                state: true
-            },
-            _saturation: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
+    static properties = {
+        ...super.properties,
+        lightState: {
+            state: true
+        },
+        _hue: {
+            state: true
+        },
+        _saturation: {
+            state: true
+        }
+    };
     constructor(){
         super();
-        this.changedEntityIds = new Set();
         this.lightState = {};
-        this._initialized = false;
+        this._isDown = false;
+        this._flag = false;
     }
     /****************************** lifecycle **************************************/ update(changedProps) {
         !this.getChangeFlag() && this.setInitialValues();
         super.update(changedProps);
     }
-    shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_hue") || changedProps.has("_saturation") || changedProps.has("_initialized");
+    updateTrigger(changedProps) {
+        return changedProps.has("_hue") || changedProps.has("_saturation");
     }
-    firstUpdated() {
+    onFirstUpdate() {
         this.setBox(this.renderRoot.querySelector('.wheel-background'));
         this.setInitialValues();
-        this.initialize();
     }
     updated() {
         !this.isDown() && this.lowerChangeFlag();
@@ -10255,12 +10102,6 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     setIsDown(boolean) {
         this._isDown = boolean;
     }
-    isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
     getRect() {
         return this._box.getBoundingClientRect();
     }
@@ -10269,9 +10110,6 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     }
     getLightState() {
         return this.lightState;
-    }
-    getCEIs() {
-        return this.changedEntityIds;
     }
     getChangeFlag() {
         return this._flag;
@@ -11719,6 +11557,7 @@ function $9fad138f4964f803$export$cc5233436f23d8d4(theme) {
 
 
 
+
 var $650a21d87e85f0eb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     theme-button {
@@ -11817,40 +11656,30 @@ class $65629b7f5a2a2127$export$91a69db4fc637fd9 extends (0, $ab210b2da7b39b9d$ex
 customElements.define("theme-button", $65629b7f5a2a2127$export$91a69db4fc637fd9);
 
 
-class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    _flag = false;
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            themeState: {
-                state: true
-            },
-            _option: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
+class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    static properties = {
+        ...super.properties,
+        themeState: {
+            state: true
+        },
+        _option: {
+            state: true
+        }
+    };
     constructor(){
         super();
-        this.changedEntityIds = new Set();
         this.themeState = {};
-        this._initialized = false;
+        this._flag = false;
     }
     /************* lifecycle ***********************************************/ update(changedProps) {
         !this.getChangeFlag() && this.setInitialValue();
         super.update(changedProps);
     }
-    shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_option") || changedProps.has("_initialized");
+    updateTrigger(changedProps) {
+        return changedProps.has("_option");
     }
-    firstUpdated() {
+    onFirstUpdate() {
         this.setInitialValue();
-        this.initialize();
     }
     hasRelevantChanges() {
         const isStateChanged = this.getCEIs().has((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getThemeState()));
@@ -11864,13 +11693,7 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
     setInitialValue() {
         this.setOption((0, $4ab534091a4f77ec$export$50fdfeece43146fd)(this.getThemeState()));
     }
-    /************************ getter and setter logic **************************/ isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
-    getThemeState() {
+    /************************ getter and setter logic **************************/ getThemeState() {
         return this.themeState;
     }
     getOptions() {
@@ -11885,9 +11708,6 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
     }
     isSelected(option) {
         return option === this.getOption();
-    }
-    getCEIs() {
-        return this.changedEntityIds;
     }
     getChangeFlag() {
         return this._flag;
@@ -11941,59 +11761,37 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
 customElements.define("theme-select", $8e27fe42aa65588c$export$1b9e02e625a724dc);
 
 
-class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    _options = [];
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            lightState: {
-                state: true
-            },
-            themeState: {
-                state: true
-            },
-            _option: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
+class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    static properties = {
+        ...super.properties,
+        lightState: {
+            state: true
+        },
+        themeState: {
+            state: true
+        },
+        _option: {
+            state: true
+        }
+    };
     constructor(){
         super();
-        this.changedEntityIds = new Set();
         this.lightState = {};
         this.themeState = {};
         this._option = '';
-        this._initialized = false;
+        this._options = [];
     }
-    /******************************* lifecycle *******************************/ shouldUpdate(changedProps) {
-        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_option") || changedProps.has("_initialized") || changedProps.has("lightState");
+    /******************************* lifecycle *******************************/ updateTrigger(changedProps) {
+        return changedProps.has("lightState") || changedProps.has("_option");
     }
-    firstUpdated() {
+    onFirstUpdate() {
         this.buildOptions();
-        this.initialize();
-    }
-    hasRelevantChanges() {
-        return (0, $c59085e74a7c5f10$export$f214bde4f1bb3242)(this.getCEIs(), this.getEntityIds());
     }
     /*********************** getter and setter logic ***********************/ getLightState() {
         return this.lightState;
     }
     getThemeState() {
         return this.themeState;
-    }
-    isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
-    getCEIs() {
-        return this.changedEntityIds;
     }
     getOption() {
         return this._option;
@@ -12176,50 +11974,25 @@ class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
 customElements.define("light-control", $ee6aaf60e5f69fab$export$5ebffa7af4af21de);
 
 
-class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    lightId;
-    themeId;
-    structure = {};
-    entityIds = new Set();
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            states: {
-                state: true
-            },
-            _selectedId: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
+class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    static properties = {
+        ...super.properties,
+        _selectedId: {
+            state: true
+        }
+    };
     constructor(){
         super();
-        this.changedEntityIds = new Set();
-        this.states = {};
-        this._initialized = false;
+        this.lightId = '';
+        this.themeId = '';
     }
-    /******************************* lifecycle **********************************/ shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_selectedId") || changedProps.has("_initialized");
+    /******************************* lifecycle **********************************/ updateTrigger(changedProps) {
+        return changedProps.has("_selectedId");
     }
-    firstUpdated() {
+    onFirstUpdate() {
         this.setSelectedId(this.getMainId());
-        this.initialize();
     }
-    hasRelevantChanges() {
-        return (0, $c59085e74a7c5f10$export$f214bde4f1bb3242)(this.getCEIs(), this.getEntityIds());
-    }
-    /************************ getter and setter logic *************************/ isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
-    isSelected(lightId) {
+    /************************ getter and setter logic *************************/ isSelected(lightId) {
         return this._selectedId === lightId;
     }
     getState(entityId) {
@@ -12230,9 +12003,6 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $ab210b2da7b39b9d$ex
     }
     setSelectedId(lightId) {
         this._selectedId = lightId;
-    }
-    getStructure() {
-        return this.structure;
     }
     getMainId() {
         return this.lightId;
@@ -12245,12 +12015,6 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $ab210b2da7b39b9d$ex
         if (this.isSelected(this.getMainId())) themeId = this.themeId;
         else themeId = this.getStructure()[this.getSelectedId()].theme;
         if (themeId) return this.getState(themeId);
-    }
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-    getEntityIds() {
-        return this.entityIds;
     }
     /************************ interactive logic *******************************/ onSelect(lightId) {
         this.setSelectedId(lightId);
@@ -12637,64 +12401,27 @@ var $e4e2ec4e85649f95$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-class $97ffa901314cba74$export$1e5763623e0cb555 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    lightIds = new Set();
-    title;
-    _total;
-    static get properties() {
-        return {
-            changedEntityIds: {
-                state: true
-            },
-            states: {
-                state: true
-            },
-            isSelected: {
-                state: true
-            },
-            _initialized: {
-                state: true
-            }
-        };
-    }
+class $97ffa901314cba74$export$1e5763623e0cb555 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    static properties = {
+        ...super.properties,
+        isSelected: {
+            state: true
+        }
+    };
     constructor(){
         super();
-        this.changedEntityIds = new Set();
-        this.states = {};
         this.isSelected = false;
-        this._initialized = false;
+        this.title = '';
+        this._total = 0;
     }
-    /************* lifecycle ***********************************************/ // each time an update occurs resulting in rerendering
-    update(changedProps) {
-        super.update(changedProps);
+    /************* lifecycle ***********************************************/ updateTrigger(changedProps) {
+        return changedProps.has('isSelected');
     }
-    // determines if an update should occur
-    shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("isSelected") || changedProps.has("_initialized");
-    }
-    // runs after the first update
-    firstUpdated() {
+    onFirstUpdate() {
         this.setTotal();
-        this.initialize();
     }
-    // helper to determine if should update
-    hasRelevantChanges() {
-        return (0, $c59085e74a7c5f10$export$f214bde4f1bb3242)(this.getCEIs(), this.getLightIds());
-    }
-    /************************* getter and setter logic ***********************/ isInitialized() {
-        return this._initialized;
-    }
-    initialize() {
-        this._initialized = true;
-    }
-    selected() {
+    /************************* getter and setter logic ***********************/ selected() {
         return this.isSelected;
-    }
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-    getLightIds() {
-        return this.lightIds;
     }
     isLightOn(lightId) {
         return (0, $4ab534091a4f77ec$export$1a2d97de39ecbb75)(this.states[lightId]);
@@ -12703,7 +12430,7 @@ class $97ffa901314cba74$export$1e5763623e0cb555 extends (0, $ab210b2da7b39b9d$ex
         return this.title;
     }
     setTotal() {
-        this._total = this.getLightIds().size;
+        this._total = this.getEntityIds().size;
     }
     getTotal() {
         return this._total;
@@ -12713,7 +12440,7 @@ class $97ffa901314cba74$export$1e5763623e0cb555 extends (0, $ab210b2da7b39b9d$ex
     }
     /********************************html/style logic ***************************/ getLightData() {
         let on = 0;
-        this.getLightIds().forEach((lightId)=>{
+        this.getEntityIds().forEach((lightId)=>{
             this.isLightOn(lightId) && (on = on + 1);
         });
         return [
@@ -12922,7 +12649,7 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
                 .isSelected = ${this.isFloor(floorId)}
-                .lightIds = ${this.getSoloLightIds(floorId)}
+                .entityIds = ${this.getSoloLightIds(floorId)}
                 .title = ${this.getFloorName(floorId)}
                 @select = ${()=>this.onClick(floorId)}
             ></lighting-button>

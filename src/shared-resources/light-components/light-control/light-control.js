@@ -1,11 +1,11 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { brightness6, creationOutline } from '../../util/mdi-util.js';
 import { rgba, ONLIGHT, INDIGO } from '../../util/color-util.js';
 import { getColorModes, getBrightness, tempGradientFull, tempBorder, hsGradient } from '../util/light-util.js';
 import { getEntityId } from '../../util/state-util.js';
-import { isIntersection } from '../../util/logic-util.js';
+import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './light-control.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../light-icon/light-icon.js';
@@ -14,46 +14,31 @@ import '../colortemp-slider/colortemp-slider.js';
 import '../color-wheel/color-wheel.js';
 import '../theme-select/theme-select.js';
 
-export class LightControl extends LitElement {
+export class LightControl extends HaSubComponent {
 
-    _options = [];
-
-    static get properties() {
-        return {
-            changedEntityIds: { state: true },
-            lightState: { state: true },
-            themeState: { state: true },
-            _option: { state: true },
-            _initialized: { state: true }
-        }
+    static properties = {
+        ...super.properties,
+        lightState: { state: true },
+        themeState: { state: true },
+        _option: { state: true }
     }
 
     constructor() {
         super();
-        this.changedEntityIds = new Set();
         this.lightState = {};
         this.themeState = {};
         this._option = '';
-        this._initialized = false;
+        this._options = [];
     }
 
     /******************************* lifecycle *******************************/
 
-    shouldUpdate(changedProps) {
-        return (!this._initialized
-            || this.hasRelevantChanges()
-            || changedProps.has("_option")
-            || changedProps.has("_initialized")
-            || changedProps.has("lightState"))
+    updateTrigger(changedProps) {
+        return changedProps.has("lightState") || changedProps.has("_option")
     }
 
-    firstUpdated() {
+    onFirstUpdate() {
         this.buildOptions();
-        this.initialize();
-    }
-
-    hasRelevantChanges() {
-        return isIntersection(this.getCEIs(), this.getEntityIds());
     }
 
     /*********************** getter and setter logic ***********************/
@@ -64,18 +49,6 @@ export class LightControl extends LitElement {
 
     getThemeState() {
         return this.themeState;
-    }
-
-    isInitialized() {
-        return this._initialized;
-    }
-
-    initialize() {
-        this._initialized = true;
-    }
-
-    getCEIs() {
-        return this.changedEntityIds;
     }
 
     getOption() {

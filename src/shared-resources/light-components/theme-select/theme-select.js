@@ -1,51 +1,40 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { getThemeGradient, getThemeOutline } from './theme-util.js';
 import { getEntityId, getState, getAttributes } from '../../util/state-util.js';
+import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './theme.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import './theme-button.js';
 
 
-export class ThemeSelect extends LitElement {
+export class ThemeSelect extends HaSubComponent {
 
-    _flag = false;
-
-    static get properties() {
-        return {
-            changedEntityIds: { state: true },
-            themeState: { state: true },
-            _option: { state: true },
-            _initialized: { state: true }
-        }
+    static properties = {
+        ...super.properties,
+        themeState: { state: true },
+        _option: { state: true }
     }
 
     constructor() {
         super();
-        this.changedEntityIds = new Set();
         this.themeState = {};
-        this._initialized = false;
+        this._flag = false;
     }
 
     /************* lifecycle ***********************************************/
-
-
 
     update(changedProps) {
         (!this.getChangeFlag()) && (this.setInitialValue());
         super.update(changedProps);
     }
 
-    shouldUpdate(changedProps) {
-        return (!this.isInitialized()
-            || this.hasRelevantChanges()
-            || changedProps.has("_option")
-            || changedProps.has("_initialized"))
+    updateTrigger(changedProps) {
+        return changedProps.has("_option");
     }
 
-    firstUpdated() {
+    onFirstUpdate() {
         this.setInitialValue();
-        this.initialize();
     }
 
     hasRelevantChanges() {
@@ -64,14 +53,6 @@ export class ThemeSelect extends LitElement {
     }
 
     /************************ getter and setter logic **************************/
-
-    isInitialized() {
-        return this._initialized;
-    }
-
-    initialize() {
-        this._initialized = true;
-    }
 
     getThemeState() {
         return this.themeState;
@@ -92,10 +73,6 @@ export class ThemeSelect extends LitElement {
 
     isSelected(option) {
         return (option === this.getOption());
-    }
-
-    getCEIs() {
-        return this.changedEntityIds;
     }
 
     getChangeFlag() {

@@ -1,32 +1,27 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { hsGradient, getHSColor } from '../util/light-util.js';
 import { getEntityId } from '../../util/state-util.js';
+import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './wheel.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 
-export class ColorWheel extends LitElement {
+export class ColorWheel extends HaSubComponent {
 
     _box;
-    _isDown = false;
-    _flag = false;
 
-
-    static get properties() {
-        return {
-            changedEntityIds: { state: true },
-            lightState: { state: true },
-            _hue: { state: true },
-            _saturation: { state: true },
-            _initialized: { state: true }
-        }
+    static properties = {
+        ...super.properties,
+        lightState: { state: true },
+        _hue: { state: true },
+        _saturation: { state: true }
     }
 
     constructor() {
         super();
-        this.changedEntityIds = new Set();
         this.lightState = {};
-        this._initialized = false;
+        this._isDown = false;
+        this._flag = false;
     }
 
     /****************************** lifecycle **************************************/
@@ -36,18 +31,13 @@ export class ColorWheel extends LitElement {
         super.update(changedProps);
     }
 
-    shouldUpdate(changedProps) {
-        return (!this.isInitialized()
-            || this.hasRelevantChanges()
-            || changedProps.has("_hue")
-            || changedProps.has("_saturation")
-            || changedProps.has("_initialized"))
+    updateTrigger(changedProps) {
+        return changedProps.has("_hue") || changedProps.has("_saturation")
     }
 
-    firstUpdated() {
+    onFirstUpdate() {
         this.setBox(this.renderRoot.querySelector('.wheel-background'));
         this.setInitialValues();
-        this.initialize();
     }
 
     updated() {
@@ -100,14 +90,6 @@ export class ColorWheel extends LitElement {
         this._isDown = boolean;
     }
 
-    isInitialized() {
-        return this._initialized;
-    }
-
-    initialize() {
-        this._initialized = true;
-    }
-
     getRect() {
         return this._box.getBoundingClientRect();
     }
@@ -118,10 +100,6 @@ export class ColorWheel extends LitElement {
 
     getLightState() {
         return this.lightState;
-    }
-
-    getCEIs() {
-        return this.changedEntityIds;
     }
 
     getChangeFlag() {
@@ -229,7 +207,7 @@ export class ColorWheel extends LitElement {
                     ${this.getDot()}
                 </div>
             </div>
-        `
+        `;
     }
 
 }

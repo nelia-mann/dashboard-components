@@ -225,7 +225,7 @@ export class LightingCard extends LitElement {
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
                 .isSelected = ${this.isFloor(floorId)}
-                .lightIds = ${this.getSoloLightIds(floorId)}
+                .entityIds = ${this.getSoloLightIds(floorId)}
                 .title = ${this.getFloorName(floorId)}
                 @select = ${() => this.onClick(floorId)}
             ></lighting-button>

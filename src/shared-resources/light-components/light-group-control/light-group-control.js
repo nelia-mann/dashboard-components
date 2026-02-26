@@ -1,63 +1,37 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { getColor } from '../util/light-util.js';
 import { getName, isGroup } from '../../util/state-util.js';
-import { isIntersection } from '../../util/logic-util.js';
+import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './group.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../light-control/light-control.js';
 
-export class LightGroupControl extends LitElement {
+export class LightGroupControl extends HaSubComponent {
 
-    lightId;
-    themeId;
-    structure = {};
-    entityIds = new Set();
-
-    static get properties() {
-        return {
-            changedEntityIds: { state: true },
-            states: { state: true },
-            _selectedId: { state: true },
-            _initialized: { state: true }
-        }
+    static properties = {
+        ...super.properties,
+        _selectedId: { state: true }
     }
 
     constructor() {
         super();
-        this.changedEntityIds = new Set();
-        this.states = {};
-        this._initialized = false;
+        this.lightId = '';
+        this.themeId = '';
     }
 
     /******************************* lifecycle **********************************/
 
-    shouldUpdate(changedProps) {
-        return (!this.isInitialized()
-            || this.hasRelevantChanges()
-            || changedProps.has("_selectedId")
-            || changedProps.has("_initialized"))
+    updateTrigger(changedProps) {
+        return changedProps.has("_selectedId");
     }
 
-    firstUpdated() {
+    onFirstUpdate() {
         this.setSelectedId(this.getMainId());
-        this.initialize();
-    }
-
-    hasRelevantChanges() {
-        return isIntersection(this.getCEIs(), this.getEntityIds());
     }
 
     /************************ getter and setter logic *************************/
-
-    isInitialized() {
-        return this._initialized;
-    }
-
-    initialize() {
-        this._initialized = true;
-    }
 
     isSelected(lightId) {
         return (this._selectedId === lightId);
@@ -73,10 +47,6 @@ export class LightGroupControl extends LitElement {
 
     setSelectedId(lightId) {
         this._selectedId = lightId;
-    }
-
-    getStructure() {
-        return this.structure;
     }
 
     getMainId() {
@@ -97,14 +67,6 @@ export class LightGroupControl extends LitElement {
         if (themeId) {
             return this.getState(themeId);
         }
-    }
-
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-
-    getEntityIds() {
-        return this.entityIds;
     }
 
     /************************ interactive logic *******************************/

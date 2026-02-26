@@ -2,65 +2,50 @@ import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { rgba } from '../../util/color-util.js';
 import { getEntityId } from '../../util/state-util.js';
+import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 
-export class SliderBar extends LitElement {
+export class SliderBar extends HaSubComponent {
 
-    max;
-    min;
-    startValue;
-    units = '';
-    background = '';
-    colorCode = [0, 0, 0];
-    _isDown = false;
-    _flag = false;
-
-    static get properties() {
-        return {
-            changedEntityIds: { state: true },
-            state: { state: true },
-            _value: { state: true },
-            _initialized: { state: true }
-        }
+    static properties = {
+        ...super.properties,
+        state: { state: true },
+        _value: { state: true }
     }
 
-    // when first constructed
     constructor() {
         super();
         this.state = {};
-        this.changedEntityIds = new Set();
-        this._initialized = false;
+        this.max = 0;
+        this.min = 0;
+        this.startValue = 0;
+        this.units = '';
+        this.background = '';
+        this.colorCode = [0, 0, 0];
+        this._isDown = false;
+        this._flag = false;
     }
 
     /************************** lifecycle *****************************/
 
-    // each time an update occurs resulting in rerendering
     update(changedProps) {
         (!this.getChangeFlag()) && (this.setInitialValue());
         super.update(changedProps);
     }
 
-    // determines if an update should occur
-    shouldUpdate(changedProps) {
-        return (!this.isInitialized()
-            || this.hasRelevantChanges()
-            || changedProps.has("_value")
-            || changedProps.has("_initialized"))
+    updateTrigger(changedProps) {
+        return changedProps.has("_value");
     }
 
-    // runs after the first update
-    firstUpdated() {
+    onFirstUpdate() {
         this.setInitialValue();
-        this.initialize();
     }
 
-    // runs after every update
     updated() {
         (!this.isDown()) && (this.lowerChangeFlag());
     }
 
-    // helper to determine if should update
     hasRelevantChanges() {
         const isStateChanged = this.getCEIs().has(getEntityId(this.getState()));
         const isUp = !this.isDown();
@@ -68,7 +53,6 @@ export class SliderBar extends LitElement {
         return (isStateChanged && isUp && isNew);
     }
 
-    // syncs the value to an external change
     setInitialValue() {
         (this.getStateValue()) ? (this.setValue(this.getStateValue())) : (this.setValue(this.getMin()));
     }
@@ -95,20 +79,8 @@ export class SliderBar extends LitElement {
         return this.startValue;
     }
 
-    isInitialized() {
-        return this._initialized;
-    }
-
-    initialize() {
-        this._initialized = true;
-    }
-
     getState() {
         return this.state;
-    }
-
-    getCEIs() {
-        return this.changedEntityIds;
     }
 
     addUnits(value) {

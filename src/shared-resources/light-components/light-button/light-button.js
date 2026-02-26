@@ -1,80 +1,39 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { interpolateRGB, OFF, ONLIGHT, rgba } from './../../util/color-util.js';
 import { isOn } from './../../util/state-util.js';
-import { isIntersection } from '../../util/logic-util.js';
+import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './button.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 
-export class LightingButton extends LitElement {
+export class LightingButton extends HaSubComponent {
 
-    lightIds = new Set();
-    title;
-    _total;
-
-    static get properties() {
-        return {
-            changedEntityIds: { state: true },
-            states: { state: true},
-            isSelected: { state: true },
-            _initialized: { state: true}
-        }
+    static properties = {
+        ...super.properties,
+        isSelected: { state: true },
     }
 
     constructor() {
         super();
-        this.changedEntityIds = new Set();
-        this.states = {};
         this.isSelected = false;
-        this._initialized = false;
+        this.title = '';
+        this._total = 0;
     }
 
     /************* lifecycle ***********************************************/
 
-    // each time an update occurs resulting in rerendering
-    update(changedProps) {
-        super.update(changedProps);
+    updateTrigger(changedProps) {
+        return changedProps.has('isSelected');
     }
 
-    // determines if an update should occur
-    shouldUpdate(changedProps) {
-        return (!this.isInitialized()
-            || this.hasRelevantChanges()
-            || changedProps.has("isSelected")
-            || changedProps.has("_initialized"))
-    }
-
-    // runs after the first update
-    firstUpdated() {
+    onFirstUpdate() {
         this.setTotal();
-        this.initialize();
-    }
-
-    // helper to determine if should update
-    hasRelevantChanges() {
-        return isIntersection(this.getCEIs(), this.getLightIds());
     }
 
     /************************* getter and setter logic ***********************/
 
-    isInitialized() {
-        return this._initialized;
-    }
-
-    initialize() {
-        this._initialized = true;
-    }
-
     selected() {
         return this.isSelected;
-    }
-
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-
-    getLightIds() {
-        return this.lightIds;
     }
 
     isLightOn(lightId) {
@@ -86,7 +45,7 @@ export class LightingButton extends LitElement {
     }
 
     setTotal() {
-        this._total = this.getLightIds().size;
+        this._total = this.getEntityIds().size;
     }
 
     getTotal() {
@@ -103,7 +62,7 @@ export class LightingButton extends LitElement {
 
     getLightData() {
         let on = 0;
-        this.getLightIds().forEach((lightId) => {
+        this.getEntityIds().forEach((lightId) => {
             (this.isLightOn(lightId)) && (on = on + 1);
         })
         return [on, this.getTotal()];
