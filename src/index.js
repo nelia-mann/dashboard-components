@@ -1,4 +1,4 @@
-import { BasementKioskCard } from "./basement-kiosk-card/main.js";
+import { BasementKioskCard } from "./basement-kiosk-card/main/main.js";
 import { LightingCard } from "./lighting-card/main/main.js";
 import { ClockCard } from "./clock-card/main.js";
 

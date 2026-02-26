@@ -1,4 +1,4 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { rgba } from '../../util/color-util.js';
 import { getEntityId } from '../../util/state-util.js';

@@ -1,0 +1,59 @@
+import { html } from 'lit';
+import { repeat } from 'lit-html/directives/repeat.js';
+import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
+import styles from './area.styles.js';
+import sharedStyles from '../../shared-resources/styles/shared-styles.js';
+import '../../shared-resources/light-components/simple-light/simple-light.js';
+
+export class AreaPanel2 extends HaSubComponent {
+
+    constructor() {
+        super();
+        this.name = '';
+    }
+
+    getAreaName() {
+        return this.name;
+    }
+
+    getSubStructure(lightId) {
+        return this.getStructure()[lightId].structure;
+    }
+
+    getSubEIs(lightId) {
+        return this.getStructure()[lightId].entityIds;
+    }
+
+    getThemeId(lightId) {
+        return this.getStructure()[lightId].theme;
+    }
+
+    getLightDisplay(lightId) {
+        return html`
+            <simple-light
+                class="outlined"
+                .changedEntityIds=${this.getCEIs()}
+                .states=${this.getStates()}
+                .lightId=${lightId}
+                .structure=${this.getSubStructure(lightId)}
+                .entityIds=${this.getSubEIs(lightId)}
+                .callService=${this.callService}
+            >
+            </simple-light>
+        `
+    }
+
+    static styles = [sharedStyles, styles];
+
+    render() {
+        if (this.isInitialized()) {
+            const lightIds = Object.keys(this.getStructure());
+            return html`
+                <div class="small-heading">${this.getAreaName()}</div>
+                ${repeat(lightIds, (lightId) => lightId, lightId => this.getLightDisplay(lightId))}
+            `
+        }
+    }
+}
+
+customElements.define("area-panel2", AreaPanel2);

@@ -2,7 +2,7 @@ import { css } from 'lit';
 
 export default css`
     ha-card {
-        padding: 25px;
+        padding: 10px;
         padding-top: 5px;
         margin: 0px;
         display: flex;
@@ -15,13 +15,13 @@ export default css`
         border-radius: 0px;
     }
 
-    .content {
+    lighting-panel {
         display: flex;
         flex-flow: row nowrap;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
-        height: 520px;
-        width: 100%;
+        height: 470px;
+        width: 900px;
     }
 
     .button-row {
@@ -35,15 +35,11 @@ export default css`
         padding: 0px;
     }
 
-    .button {
+    lighting-button {
         height: 100%;
         width: 160px;
-        padding: 0px;
+        padding: 5px;
         border: none;
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
     }
 
 `;

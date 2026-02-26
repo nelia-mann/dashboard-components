@@ -648,41 +648,6 @@ class $107bb7d062dde330$export$befdefbdce210f91 {
 }
 
 
-/**
- * @license
- * Copyright 2018 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */ const $19f464fcda7d2482$var$n = "important", $19f464fcda7d2482$var$i = " !" + $19f464fcda7d2482$var$n, $19f464fcda7d2482$export$1e5b4ce2fa884e6a = (0, $107bb7d062dde330$export$99b43ad1ed32e735)(class extends (0, $107bb7d062dde330$export$befdefbdce210f91) {
-    constructor(t){
-        if (super(t), t.type !== (0, $107bb7d062dde330$export$9ba3b3f20a85bfa).ATTRIBUTE || "style" !== t.name || t.strings?.length > 2) throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.");
-    }
-    render(t) {
-        return Object.keys(t).reduce((e, r)=>{
-            const s = t[r];
-            return null == s ? e : e + `${r = r.includes("-") ? r : r.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g, "-$&").toLowerCase()}:${s};`;
-        }, "");
-    }
-    update(e, [r]) {
-        const { style: s } = e.element;
-        if (void 0 === this.ft) return this.ft = new Set(Object.keys(r)), this.render(r);
-        for (const t of this.ft)null == r[t] && (this.ft.delete(t), t.includes("-") ? s.removeProperty(t) : s[t] = null);
-        for(const t in r){
-            const e = r[t];
-            if (null != e) {
-                this.ft.add(t);
-                const r = "string" == typeof e && e.endsWith($19f464fcda7d2482$var$i);
-                t.includes("-") || r ? s.setProperty(t, r ? e.slice(0, -11) : e, r ? $19f464fcda7d2482$var$n : "") : s[t] = e;
-            }
-        }
-        return 0, $f58f44579a4747ac$export$9c068ae9cc5db4e8;
-    }
-});
-
-
-
-
-
-
 
 /**
  * @license
@@ -777,57 +742,6 @@ class $107bb7d062dde330$export$befdefbdce210f91 {
         return this.ut = a, (0, $311430566e21b48b$export$ea70d9dd5965b1c8)(s, v), $f58f44579a4747ac$export$9c068ae9cc5db4e8;
     }
 });
-
-
-const $884a87e59af13a5c$export$a004fc522c1a4845 = [
-    255,
-    193,
-    7
-]; // color in rgb (yellow)
-const $884a87e59af13a5c$export$e59310e5bf013385 = [
-    127,
-    97,
-    3
-]; // should be black-ish yellow
-const $884a87e59af13a5c$export$173de64b5ad0d5b4 = [
-    158,
-    158,
-    158
-]; // color in rgb (gray)
-const $884a87e59af13a5c$export$f353bac13bc8bab2 = [
-    68,
-    115,
-    158
-]; // color in rgb (steel blue)
-const $884a87e59af13a5c$export$af126f6aeedfb296 = [
-    41,
-    0,
-    255
-]; // blue color
-const $884a87e59af13a5c$export$4a58048e5a424e1a = [
-    45,
-    100
-];
-function $884a87e59af13a5c$var$setScale(a, b, t) {
-    let result = a;
-    if (t > 1) result = b;
-    else if (t < 0) result = a;
-    else result = a + (b - a) * t;
-    return result;
-}
-function $884a87e59af13a5c$export$4e46ac54fc82cf3b(rgbArray, opacity) {
-    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`;
-}
-function $884a87e59af13a5c$export$dd0fba3206c57e56(rgbA, rgbB, t) {
-    const red = $884a87e59af13a5c$var$setScale(rgbA[0], rgbB[0], t);
-    const green = $884a87e59af13a5c$var$setScale(rgbA[1], rgbB[1], t);
-    const blue = $884a87e59af13a5c$var$setScale(rgbA[2], rgbB[2], t);
-    return [
-        red,
-        green,
-        blue
-    ];
-}
 
 
 /********************************states and entities ****************************************/ function $d14817f641e94e06$var$getHassEntities(hass) {
@@ -1067,9 +981,9 @@ function $d14817f641e94e06$export$2343572398f433de(hass, entityIds, labelId) {
 
 
 
-var $d199366d3f52e7dc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+var $adca349e2834660d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
     ha-card {
-        padding: 25px;
+        padding: 10px;
         padding-top: 5px;
         margin: 0px;
         display: flex;
@@ -1082,13 +996,13 @@ var $d199366d3f52e7dc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         border-radius: 0px;
     }
 
-    .content {
+    lighting-panel {
         display: flex;
         flex-flow: row nowrap;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
-        height: 520px;
-        width: 100%;
+        height: 470px;
+        width: 900px;
     }
 
     .button-row {
@@ -1102,15 +1016,11 @@ var $d199366d3f52e7dc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         padding: 0px;
     }
 
-    .button {
+    lighting-button {
         height: 100%;
         width: 160px;
-        padding: 0px;
+        padding: 5px;
         border: none;
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
     }
 
 `;
@@ -1199,349 +1109,6 @@ var $5ef9aa738cbaab3a$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 `;
 
 
-class $b256115b19ea84ae$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    _LABEL = "basement_kiosk";
-    _LIGHTLABELS = {
-        basic_lighting: "basic lighting",
-        leds: "LED Lighting"
-    };
-    _OPTIONLABELS = {
-        lighting: "lighting"
-    };
-    _hass = {};
-    entityIds = [];
-    structure = {};
-    changedEntityIds = new Set();
-    // internal reactive states
-    static get properties() {
-        return {
-            states: {
-                state: true
-            },
-            _option: {
-                state: true
-            },
-            _isInitialized: {
-                state: true
-            }
-        };
-    }
-    constructor(){
-        super();
-        this.states = {};
-        this._option = "lighting";
-        this._isInitialized = false;
-    }
-    // establish config information for card
-    setConfig() {}
-    /******************************* lifecycle *****************************/ set hass(hass) {
-        if (!this.isInitialized()) {
-            this.setHass(hass);
-            this.setStructures();
-            this.initialize();
-        } else {
-            const oldHass = this.getHass(hass);
-            this.setHass(hass);
-            this.addRelevantChanges(oldHass, this.getHass());
-            this.requestUpdate();
-        }
-    }
-    update(changedProps) {
-        this.hasRelevantChanges() && this.updateStates();
-        super.update(changedProps);
-    }
-    shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_isInitialized") || changedProps.has("_option");
-    }
-    hasChanges(oldHass, newHass, entityId) {
-        return (0, $d14817f641e94e06$export$94ed8fccb207472)(oldHass, newHass, entityId) || (0, $d14817f641e94e06$export$94356dcc961724c6)(oldHass, newHass, entityId);
-    }
-    addRelevantChanges(oldHass, newHass) {
-        this.changedEntityIds = new Set();
-        const entityIds = this.getEntityIds();
-        entityIds.forEach((entityId)=>{
-            if (this.hasChanges(oldHass, newHass, entityId)) this.changedEntityIds.add(entityId);
-        });
-    }
-    hasRelevantChanges() {
-        return this.getCEIs().size > 0;
-    }
-    updateStates() {
-        const changedIds = this.getCEIs();
-        changedIds.forEach((entityId)=>{
-            this.states[entityId] = this.getHass().states[entityId];
-        });
-    }
-    /******************************* Setting Structures ***********************/ initialize() {
-        this._initialized = true;
-    }
-    setHass(hass) {
-        this._hass = hass;
-    }
-    setOption(option) {
-        this._option = option;
-    }
-    setStructures() {
-        this.setEntityIds();
-        this.setStates();
-        this.setOptionStructure();
-        this.setLightingStructure();
-    }
-    setEntityIds() {
-        const entityIds = (0, $d14817f641e94e06$export$cab3e0b0f4327749)(this.getHass(), this.getLabel());
-        this.entityIds = entityIds;
-    }
-    setStates() {
-        let states = {};
-        this.getEntityIds().forEach((entityId)=>{
-            states[entityId] = (0, $d14817f641e94e06$export$50fdfeece43146fd)(this.getHass(), entityId);
-        });
-        this.states = states;
-    }
-    setOptionStructure() {
-        const entityIds = this.getEntityIds();
-        this.getOptions().forEach((option)=>{
-            const filteredIds = (0, $d14817f641e94e06$export$2343572398f433de)(this.getHass(), entityIds, option);
-            this.structure[option] = {
-                name: this.getOptionName(option),
-                structure: {},
-                entityIds: filteredIds
-            };
-        });
-        const lightingIds = [
-            ...this.getLightingIds()
-        ];
-        const soloLightIds = lightingIds.filter((entityId)=>(0, $d14817f641e94e06$export$d3a5cc061b32c876)(this.getHass(), entityId));
-        this.structure.lighting.soloLightIds = new Set(soloLightIds);
-    }
-    setLightingStructure() {
-        this.setLightingOuterStructure();
-        this.setBasicLightingAreaStructure();
-        this.setBasicLightingLightStructure();
-        this.setLEDLightStructure();
-    }
-    setLightingOuterStructure() {
-        let structure = {};
-        const entityIds = this.getLightingIds();
-        Object.entries(this.getLightLabels()).forEach(([labelId, label])=>{
-            const subIds = (0, $d14817f641e94e06$export$2343572398f433de)(this.getHass(), entityIds, labelId);
-            structure[labelId] = {
-                name: label,
-                structure: {},
-                entityIds: subIds
-            };
-        });
-        this.structure["lighting"].structure = structure;
-    }
-    setBasicLightingAreaStructure() {
-        (0, $d14817f641e94e06$export$f45a0d26e841229c)(this.getHass(), this.getBasicLightingDict());
-    }
-    setBasicLightingLightStructure() {
-        const basicLightingStructure = this.getBasicLightingDict().structure;
-        Object.values(basicLightingStructure).forEach((areaDict)=>{
-            (0, $d14817f641e94e06$export$c982908e94e49fd1)(this.getHass(), areaDict);
-        });
-    }
-    setLEDLightStructure() {
-        (0, $d14817f641e94e06$export$c982908e94e49fd1)(this.getHass(), this.getLEDDict());
-    }
-    /***************************** getter logic ***************************/ isInitialized() {
-        return this._initialized;
-    }
-    getHass() {
-        return this._hass;
-    }
-    getOptions() {
-        return Object.keys(this._OPTIONLABELS);
-    }
-    getOption() {
-        return this._option;
-    }
-    getStructure() {
-        return this.structure;
-    }
-    getEntityIds() {
-        return this.entityIds;
-    }
-    isOption(option) {
-        return this.getOption() === option;
-    }
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-    getLabel() {
-        return this._LABEL;
-    }
-    getLightLabels() {
-        return this._LIGHTLABELS;
-    }
-    getOptionName(option) {
-        return this._OPTIONLABELS[option];
-    }
-    getLightingDict() {
-        return this.getStructure().lighting;
-    }
-    getLightingIds() {
-        return this.getLightingDict().entityIds;
-    }
-    getLightingStructure() {
-        return this.getLightingDict().structure;
-    }
-    getBasicLightingDict() {
-        return this.getLightingStructure().basic_lighting;
-    }
-    getLEDDict() {
-        return this.getLightingStructure().leds;
-    }
-    /************************** interactive logic ***************************/ onClick(option) {
-        this.setOption(option);
-    }
-    /******************************* html/style logic ************************/ getButtonStyle(option) {
-        const rgb = [
-            100,
-            100,
-            100
-        ]; // placeholder for fancy coloring choice
-        let styles = {
-            'background-color': (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(rgb, .5)
-        };
-        if (this.isOption(option)) {
-            styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(rgb, 1)}`;
-            styles['outline-offset'] = '-4px';
-        }
-        return styles;
-    }
-    button(option) {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
-            class="button outlined"
-            @click=${()=>this.onClick(option)}
-            style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getButtonStyle(option))}
-        >
-            <div class="small-heading"> ${this.getOptionName(option)} </div>
-            <div class="sub-info"> sub-info </div>
-        </div>`;
-    }
-    buttonRow() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="button-row">
-                ${(0, $6db6ff6394e885e6$export$76d90c956114f2c2)(this.getOptions(), (option)=>option, (option)=>this.button(option))}
-            </div>
-        `;
-    }
-    content() {
-        let panel = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
-        switch(this._option){
-            case "lighting":
-                panel = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div> Lighting Placeholder </div>`;
-                break;
-            case "climate":
-                panel = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div> Climate Placeholder </div>`;
-                break;
-        }
-        return panel;
-    }
-    static styles = [
-        (0, $d199366d3f52e7dc$export$2e2bcd8739ae039),
-        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039)
-    ];
-    // return html
-    render() {
-        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <ha-card>
-                    <div class="content">${this.content()}</div>
-                    ${this.buttonRow()}
-                </ha-card>
-            `;
-    }
-    // set card size parameters for ha
-    getCardSize() {
-        return 8;
-    }
-    getGridOptions() {
-        return {
-            rows: 9,
-            columns: 24,
-            min_rows: 9,
-            max_rows: 9
-        };
-    }
-}
-
-
-
-
-
-
-/**
- * @license
- * Copyright 2021 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */ const $bf5aa997e63c2265$export$8dbf9c790527241e = (0, $107bb7d062dde330$export$99b43ad1ed32e735)(class extends (0, $107bb7d062dde330$export$befdefbdce210f91) {
-    constructor(){
-        super(...arguments), this.key = (0, $f58f44579a4747ac$export$45b790e32b2810ee);
-    }
-    render(r, t) {
-        return this.key = r, t;
-    }
-    update(r, [t, e]) {
-        return t !== this.key && ((0, $311430566e21b48b$export$ea70d9dd5965b1c8)(r), this.key = t), e;
-    }
-});
-
-
-
-
-
-
-
-var $82c9a4f372f10553$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-    ha-card {
-        padding: 25px;
-        padding-top: 5px;
-        margin: 0px;
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: space-between;
-        align-items: center;
-        height: 500px;
-        width: 800px;
-    }
-
-    floor-panel {
-        width: 100%;
-        height: 400px;
-        margin: 0px;
-        padding: 0px;
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
-    }
-
-    .button-row {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-around;
-        align-items: center;
-        width: 100%;
-        height: 50px;
-        margin: 0px;
-        padding: 0px;
-    }
-
-    lighting-button {
-        height: 100%;
-        width: 160px;
-        padding: 5px;
-        border: none;
-    }
-
-
-`;
-
-
-
-
 
 
 class $c0664485052839c4$export$1dc45fe673c170 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
@@ -1610,11 +1177,17 @@ class $c0664485052839c4$export$1dc45fe673c170 extends (0, $ab210b2da7b39b9d$expo
 
 
 
-var $55f2297f92e0e7a1$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-    area-panel {
-        margin-left: 10px;
-        margin-right: 10px;
-        margin-top: 20px;
+var $26a9e256b3b138b1$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    basic-lighting-panel {
+    }
+
+    led-lighting-panel {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
     }
 
 `;
@@ -1625,11 +1198,23 @@ var $55f2297f92e0e7a1$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-var $bca01a03e150b8a1$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+var $55f8fc7300967977$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
-    light-component {
+
+
+`;
+
+
+
+
+
+
+
+var $5ec01ae751ab51a6$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    simple-light {
         width: 180px;
-        height: 25px;
+        height: 20px;
         padding: 10px;
         padding-top: 8px;
         padding-bottom: 5px;
@@ -1664,157 +1249,6 @@ function $4ab534091a4f77ec$export$7d9f7e9c1c02b41e(state) {
 }
 
 
-const $6d3ca277783cacc8$var$STEPS = 10;
-const $6d3ca277783cacc8$var$MAXTEMP = 9000;
-const $6d3ca277783cacc8$var$MINTEMP = 1500;
-const $6d3ca277783cacc8$var$MINTEMPSAFE = 2000;
-function $6d3ca277783cacc8$export$5ee105321a1a6648(lightState) {
-    return (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).supported_color_modes;
-}
-function $6d3ca277783cacc8$var$getRGB(lightState) {
-    return (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).rgb_color;
-}
-function $6d3ca277783cacc8$export$33cacb20a48e02bf(lightState) {
-    return (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).brightness;
-}
-function $6d3ca277783cacc8$export$81cd3a8150946066(lightState) {
-    let brightnessPct = 100;
-    let brightness = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).brightness;
-    brightness && (brightnessPct = brightness * 100 / 255);
-    return brightnessPct;
-}
-function $6d3ca277783cacc8$export$ea3cc22fc7f3ca28(lightState) {
-    let hsColor = (0, $884a87e59af13a5c$export$4a58048e5a424e1a);
-    let hsColorAttr = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).hs_color;
-    hsColorAttr && (hsColor = hsColorAttr);
-    return hsColor;
-}
-function $6d3ca277783cacc8$var$getHalfRGB(lightState) {
-    const rgb = $6d3ca277783cacc8$var$getRGB(lightState);
-    return [
-        rgb[0] / 2,
-        rgb[1] / 2,
-        rgb[2] / 2
-    ];
-}
-function $6d3ca277783cacc8$export$5551a2d24ff40153(lightState) {
-    let rgb = (0, $884a87e59af13a5c$export$f353bac13bc8bab2);
-    if ((0, $4ab534091a4f77ec$export$1a2d97de39ecbb75)(lightState)) {
-        if ($6d3ca277783cacc8$var$getRGB(lightState)) rgb = (0, $884a87e59af13a5c$export$dd0fba3206c57e56)($6d3ca277783cacc8$var$getHalfRGB(lightState), $6d3ca277783cacc8$var$getRGB(lightState), $6d3ca277783cacc8$export$81cd3a8150946066(lightState) / 100);
-        else rgb = (0, $884a87e59af13a5c$export$dd0fba3206c57e56)((0, $884a87e59af13a5c$export$e59310e5bf013385), (0, $884a87e59af13a5c$export$a004fc522c1a4845), $6d3ca277783cacc8$export$81cd3a8150946066(lightState) / 100);
-    }
-    return (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(rgb, 1);
-}
-function $6d3ca277783cacc8$export$18ec4b0de54438e3(lightState) {
-    let min = $6d3ca277783cacc8$var$MINTEMP;
-    const minAttr = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).min_color_temp_kelvin;
-    minAttr && (min = minAttr);
-    return min;
-}
-function $6d3ca277783cacc8$export$b9f60e8a0f490976(lightState) {
-    let max = $6d3ca277783cacc8$var$MAXTEMP;
-    const maxAttr = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).max_color_temp_kelvin;
-    maxAttr && (max = maxAttr);
-    return max;
-}
-function $6d3ca277783cacc8$export$af79b6bdd49ea8f2(lightState) {
-    let temp = $6d3ca277783cacc8$var$MINTEMPSAFE;
-    const tempAttr = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).color_temp_kelvin;
-    tempAttr && (temp = tempAttr);
-    return temp;
-}
-function $6d3ca277783cacc8$var$getTempRed(temp) {
-    let red;
-    if (temp <= 6600) red = 255;
-    else {
-        red = temp / 100 - 60;
-        red = Math.round(329.698727446 * red ** -0.1332047592);
-    }
-    red < 0 && (red = 0);
-    red > 255 && (red = 255);
-    return red;
-}
-function $6d3ca277783cacc8$var$getTempGreen(temp) {
-    let green;
-    if (temp <= 6600) {
-        green = temp / 100;
-        green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
-    } else {
-        green = temp / 100 - 60;
-        green = Math.round(288.1221695283 * green ** -0.0755148492);
-    }
-    green < 0 && (green = 0);
-    green > 255 && (green = 255);
-    return green;
-}
-function $6d3ca277783cacc8$var$getTempBlue(temp) {
-    let blue;
-    if (temp > 6600) blue = 255;
-    else if (temp <= 1900) blue = 0;
-    else {
-        blue = temp / 100 - 10;
-        blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
-    }
-    blue < 0 && (blue = 0);
-    blue > 255 && (blue = 255);
-    return blue;
-}
-function $6d3ca277783cacc8$var$getTempColor(temp) {
-    return [
-        $6d3ca277783cacc8$var$getTempRed(temp),
-        $6d3ca277783cacc8$var$getTempGreen(temp),
-        $6d3ca277783cacc8$var$getTempBlue(temp)
-    ];
-}
-function $6d3ca277783cacc8$export$5b5356aa7e20fd72(minTemp, maxTemp) {
-    let output = `linear-gradient(to top`;
-    const steps = $6d3ca277783cacc8$var$STEPS;
-    for(let step = 0; step <= steps; step++){
-        const temp = (minTemp * (steps - step) + maxTemp * step) / steps;
-        const rgb = $6d3ca277783cacc8$var$getTempColor(temp);
-        const result = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(rgb, 1);
-        const percent = Math.round(step * 100 / steps);
-        output = output + `, ` + result + ` ${percent}%`;
-    }
-    output = output + `)`;
-    return output;
-}
-function $6d3ca277783cacc8$export$bca49aacb0a7b300() {
-    return $6d3ca277783cacc8$export$5b5356aa7e20fd72($6d3ca277783cacc8$var$MINTEMP, $6d3ca277783cacc8$var$MAXTEMP);
-}
-function $6d3ca277783cacc8$export$bb0cdaadb7fd443b() {
-    return (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)($6d3ca277783cacc8$var$getTempColor($6d3ca277783cacc8$var$MINTEMP), 1);
-}
-function $6d3ca277783cacc8$export$475133aea461e763() {
-    let output = 'radial-gradient(circle at center, white 0%, transparent 100%), ';
-    output = output + 'conic-gradient( from 0deg';
-    const steps = $6d3ca277783cacc8$var$STEPS;
-    for(let step = 0; step <= steps; step++){
-        const angle = Math.round(step * 360 / steps);
-        output = output + `, hsl(${angle}, 100%, 50%)`;
-    }
-    output = output + `)`;
-    return output;
-}
-
-
-
-
-var $e677bb25dbafca7d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-
-    popout-window {
-    }
-
-    simple-light {
-    }
-
-`;
-
-
-
-
-
-
 
 
 var $1d3d994b3d9f3c99$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
@@ -1836,6 +1270,40 @@ var $1d3d994b3d9f3c99$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 `;
 
+
+
+
+
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */ const $19f464fcda7d2482$var$n = "important", $19f464fcda7d2482$var$i = " !" + $19f464fcda7d2482$var$n, $19f464fcda7d2482$export$1e5b4ce2fa884e6a = (0, $107bb7d062dde330$export$99b43ad1ed32e735)(class extends (0, $107bb7d062dde330$export$befdefbdce210f91) {
+    constructor(t){
+        if (super(t), t.type !== (0, $107bb7d062dde330$export$9ba3b3f20a85bfa).ATTRIBUTE || "style" !== t.name || t.strings?.length > 2) throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.");
+    }
+    render(t) {
+        return Object.keys(t).reduce((e, r)=>{
+            const s = t[r];
+            return null == s ? e : e + `${r = r.includes("-") ? r : r.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g, "-$&").toLowerCase()}:${s};`;
+        }, "");
+    }
+    update(e, [r]) {
+        const { style: s } = e.element;
+        if (void 0 === this.ft) return this.ft = new Set(Object.keys(r)), this.render(r);
+        for (const t of this.ft)null == r[t] && (this.ft.delete(t), t.includes("-") ? s.removeProperty(t) : s[t] = null);
+        for(const t in r){
+            const e = r[t];
+            if (null != e) {
+                this.ft.add(t);
+                const r = "string" == typeof e && e.endsWith($19f464fcda7d2482$var$i);
+                t.includes("-") || r ? s.setProperty(t, r ? e.slice(0, -11) : e, r ? $19f464fcda7d2482$var$n : "") : s[t] = e;
+            }
+        }
+        return 0, $f58f44579a4747ac$export$9c068ae9cc5db4e8;
+    }
+});
 
 
 
@@ -9292,6 +8760,191 @@ var $04557c061247a0a6$export$a14c803a1714faa3 = "M18.5,19.13C20,17.77 20,15.18 2
 
 
 
+const $884a87e59af13a5c$export$a004fc522c1a4845 = [
+    255,
+    193,
+    7
+]; // color in rgb (yellow)
+const $884a87e59af13a5c$export$e59310e5bf013385 = [
+    127,
+    97,
+    3
+]; // should be black-ish yellow
+const $884a87e59af13a5c$export$173de64b5ad0d5b4 = [
+    158,
+    158,
+    158
+]; // color in rgb (gray)
+const $884a87e59af13a5c$export$f353bac13bc8bab2 = [
+    68,
+    115,
+    158
+]; // color in rgb (steel blue)
+const $884a87e59af13a5c$export$af126f6aeedfb296 = [
+    41,
+    0,
+    255
+]; // blue color
+const $884a87e59af13a5c$export$4a58048e5a424e1a = [
+    45,
+    100
+];
+function $884a87e59af13a5c$var$setScale(a, b, t) {
+    let result = a;
+    if (t > 1) result = b;
+    else if (t < 0) result = a;
+    else result = a + (b - a) * t;
+    return result;
+}
+function $884a87e59af13a5c$export$4e46ac54fc82cf3b(rgbArray, opacity) {
+    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`;
+}
+function $884a87e59af13a5c$export$dd0fba3206c57e56(rgbA, rgbB, t) {
+    const red = $884a87e59af13a5c$var$setScale(rgbA[0], rgbB[0], t);
+    const green = $884a87e59af13a5c$var$setScale(rgbA[1], rgbB[1], t);
+    const blue = $884a87e59af13a5c$var$setScale(rgbA[2], rgbB[2], t);
+    return [
+        red,
+        green,
+        blue
+    ];
+}
+
+
+
+const $6d3ca277783cacc8$var$STEPS = 10;
+const $6d3ca277783cacc8$var$MAXTEMP = 9000;
+const $6d3ca277783cacc8$var$MINTEMP = 1500;
+const $6d3ca277783cacc8$var$MINTEMPSAFE = 2000;
+function $6d3ca277783cacc8$export$5ee105321a1a6648(lightState) {
+    return (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).supported_color_modes;
+}
+function $6d3ca277783cacc8$var$getRGB(lightState) {
+    return (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).rgb_color;
+}
+function $6d3ca277783cacc8$export$33cacb20a48e02bf(lightState) {
+    return (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).brightness;
+}
+function $6d3ca277783cacc8$export$81cd3a8150946066(lightState) {
+    let brightnessPct = 100;
+    let brightness = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).brightness;
+    brightness && (brightnessPct = brightness * 100 / 255);
+    return brightnessPct;
+}
+function $6d3ca277783cacc8$export$ea3cc22fc7f3ca28(lightState) {
+    let hsColor = (0, $884a87e59af13a5c$export$4a58048e5a424e1a);
+    let hsColorAttr = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).hs_color;
+    hsColorAttr && (hsColor = hsColorAttr);
+    return hsColor;
+}
+function $6d3ca277783cacc8$var$getHalfRGB(lightState) {
+    const rgb = $6d3ca277783cacc8$var$getRGB(lightState);
+    return [
+        rgb[0] / 2,
+        rgb[1] / 2,
+        rgb[2] / 2
+    ];
+}
+function $6d3ca277783cacc8$export$5551a2d24ff40153(lightState) {
+    let rgb = (0, $884a87e59af13a5c$export$f353bac13bc8bab2);
+    if ((0, $4ab534091a4f77ec$export$1a2d97de39ecbb75)(lightState)) {
+        if ($6d3ca277783cacc8$var$getRGB(lightState)) rgb = (0, $884a87e59af13a5c$export$dd0fba3206c57e56)($6d3ca277783cacc8$var$getHalfRGB(lightState), $6d3ca277783cacc8$var$getRGB(lightState), $6d3ca277783cacc8$export$81cd3a8150946066(lightState) / 100);
+        else rgb = (0, $884a87e59af13a5c$export$dd0fba3206c57e56)((0, $884a87e59af13a5c$export$e59310e5bf013385), (0, $884a87e59af13a5c$export$a004fc522c1a4845), $6d3ca277783cacc8$export$81cd3a8150946066(lightState) / 100);
+    }
+    return (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(rgb, 1);
+}
+function $6d3ca277783cacc8$export$18ec4b0de54438e3(lightState) {
+    let min = $6d3ca277783cacc8$var$MINTEMP;
+    const minAttr = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).min_color_temp_kelvin;
+    minAttr && (min = minAttr);
+    return min;
+}
+function $6d3ca277783cacc8$export$b9f60e8a0f490976(lightState) {
+    let max = $6d3ca277783cacc8$var$MAXTEMP;
+    const maxAttr = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).max_color_temp_kelvin;
+    maxAttr && (max = maxAttr);
+    return max;
+}
+function $6d3ca277783cacc8$export$af79b6bdd49ea8f2(lightState) {
+    let temp = $6d3ca277783cacc8$var$MINTEMPSAFE;
+    const tempAttr = (0, $4ab534091a4f77ec$export$fe94072fee8a6976)(lightState).color_temp_kelvin;
+    tempAttr && (temp = tempAttr);
+    return temp;
+}
+function $6d3ca277783cacc8$var$getTempRed(temp) {
+    let red;
+    if (temp <= 6600) red = 255;
+    else {
+        red = temp / 100 - 60;
+        red = Math.round(329.698727446 * red ** -0.1332047592);
+    }
+    red < 0 && (red = 0);
+    red > 255 && (red = 255);
+    return red;
+}
+function $6d3ca277783cacc8$var$getTempGreen(temp) {
+    let green;
+    if (temp <= 6600) {
+        green = temp / 100;
+        green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
+    } else {
+        green = temp / 100 - 60;
+        green = Math.round(288.1221695283 * green ** -0.0755148492);
+    }
+    green < 0 && (green = 0);
+    green > 255 && (green = 255);
+    return green;
+}
+function $6d3ca277783cacc8$var$getTempBlue(temp) {
+    let blue;
+    if (temp > 6600) blue = 255;
+    else if (temp <= 1900) blue = 0;
+    else {
+        blue = temp / 100 - 10;
+        blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
+    }
+    blue < 0 && (blue = 0);
+    blue > 255 && (blue = 255);
+    return blue;
+}
+function $6d3ca277783cacc8$var$getTempColor(temp) {
+    return [
+        $6d3ca277783cacc8$var$getTempRed(temp),
+        $6d3ca277783cacc8$var$getTempGreen(temp),
+        $6d3ca277783cacc8$var$getTempBlue(temp)
+    ];
+}
+function $6d3ca277783cacc8$export$5b5356aa7e20fd72(minTemp, maxTemp) {
+    let output = `linear-gradient(to top`;
+    const steps = $6d3ca277783cacc8$var$STEPS;
+    for(let step = 0; step <= steps; step++){
+        const temp = (minTemp * (steps - step) + maxTemp * step) / steps;
+        const rgb = $6d3ca277783cacc8$var$getTempColor(temp);
+        const result = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(rgb, 1);
+        const percent = Math.round(step * 100 / steps);
+        output = output + `, ` + result + ` ${percent}%`;
+    }
+    output = output + `)`;
+    return output;
+}
+function $6d3ca277783cacc8$export$bca49aacb0a7b300() {
+    return $6d3ca277783cacc8$export$5b5356aa7e20fd72($6d3ca277783cacc8$var$MINTEMP, $6d3ca277783cacc8$var$MAXTEMP);
+}
+function $6d3ca277783cacc8$export$bb0cdaadb7fd443b() {
+    return (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)($6d3ca277783cacc8$var$getTempColor($6d3ca277783cacc8$var$MINTEMP), 1);
+}
+function $6d3ca277783cacc8$export$475133aea461e763() {
+    let output = 'radial-gradient(circle at center, white 0%, transparent 100%), ';
+    output = output + 'conic-gradient( from 0deg';
+    const steps = $6d3ca277783cacc8$var$STEPS;
+    for(let step = 0; step <= steps; step++){
+        const angle = Math.round(step * 360 / steps);
+        output = output + `, hsl(${angle}, 100%, 50%)`;
+    }
+    output = output + `)`;
+    return output;
+}
+
 
 
 
@@ -9410,51 +9063,106 @@ class $ae7626f348d3623a$export$381c54979eeec740 extends (0, $c0664485052839c4$ex
 customElements.define("simple-light", $ae7626f348d3623a$export$381c54979eeec740);
 
 
-
-
-
-
-
-var $459b71b1865a1feb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-    dialog {
-        padding: 20px;
-        border: none;
+class $fb8c46e64d02c066$export$aaaf37ff7602e909 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    constructor(){
+        super();
+        this.name = '';
     }
-
-    dialog[open] {
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
+    getAreaName() {
+        return this.name;
     }
-
-    .modal-header {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-        align-items: center;
-        margin: 20px;
-        margin-top: -10px;
-        background: none;
-        padding-top: none;
-        padding-bottom: none;
-        height: 40px;
-        width: 100%;
+    getSubStructure(lightId) {
+        return this.getStructure()[lightId].structure;
     }
-
-    .close-button {
-        font-size: 15px;
-        border: none;
-        background: none;
+    getSubEIs(lightId) {
+        return this.getStructure()[lightId].entityIds;
     }
+    getThemeId(lightId) {
+        return this.getStructure()[lightId].theme;
+    }
+    getLightDisplay(lightId) {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <simple-light
+                class="outlined"
+                .changedEntityIds=${this.getCEIs()}
+                .states=${this.getStates()}
+                .lightId=${lightId}
+                .structure=${this.getSubStructure(lightId)}
+                .entityIds=${this.getSubEIs(lightId)}
+                .callService=${this.callService}
+            >
+            </simple-light>
+        `;
+    }
+    static styles = [
+        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
+        (0, $5ec01ae751ab51a6$export$2e2bcd8739ae039)
+    ];
+    render() {
+        if (this.isInitialized()) {
+            const lightIds = Object.keys(this.getStructure());
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <div class="small-heading">${this.getAreaName()}</div>
+                ${(0, $6db6ff6394e885e6$export$76d90c956114f2c2)(lightIds, (lightId)=>lightId, (lightId)=>this.getLightDisplay(lightId))}
+            `;
+        }
+    }
+}
+customElements.define("area-panel2", $fb8c46e64d02c066$export$aaaf37ff7602e909);
+
+
+class $5ddda6c7ecd98b1c$export$4723b834af4c134d extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    getAreaName(areaId) {
+        return this.getStructure()[areaId].name;
+    }
+    getSubStructure(areaId) {
+        return this.getStructure()[areaId].structure;
+    }
+    getSubEIs(areaId) {
+        return this.getStructure()[areaId].entityIds;
+    }
+    getAreaDisplay(areaId) {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <area-panel2
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .name = ${this.getAreaName(areaId)}
+                .structure = ${this.getSubStructure(areaId)}
+                .entityIds = ${this.getSubEIs(areaId)}
+                .callService = ${this.callService}
+            ></area-panel2>
+        `;
+    }
+    getAreaDisplays() {
+        const areaIds = Object.keys(this.getStructure());
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div class="large-heading"> Basic Lighting </div>
+            ${(0, $6db6ff6394e885e6$export$76d90c956114f2c2)(areaIds, (areaId)=>areaId, (areaId)=>this.getAreaDisplay(areaId))}`;
+    }
+    static styles = [
+        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
+        (0, $55f8fc7300967977$export$2e2bcd8739ae039)
+    ];
+    render() {
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${this.getAreaDisplays()}`;
+    }
+}
+customElements.define("basic-lighting-panel", $5ddda6c7ecd98b1c$export$4723b834af4c134d);
+
+
+
+
+
+var $31849f357eef40d0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     light-group-control {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-around;
         align-items: center;
+        height: 100%;
     }
+
 `;
 
 
@@ -12082,6 +11790,539 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
 customElements.define("light-group-control", $72eef9afa85dc31d$export$3e3323ffc8ae8085);
 
 
+class $41ddf9b0887adb38$export$a4fcb651605e1026 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    /******************************* getter and setter logic *************************/ getMainId() {
+        return Object.keys(this.getStructure())[0];
+    }
+    getThemeId() {
+        return this.getStructure()[this.getMainId()].theme;
+    }
+    getSubStructure() {
+        return this.getStructure()[this.getMainId()].structure;
+    }
+    /****************************** html/style logic *********************************/ static styles = [
+        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
+        (0, $31849f357eef40d0$export$2e2bcd8739ae039)
+    ];
+    contents() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div class="large-heading"> LED Lighting </div>
+            <light-group-control
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .lightId = ${this.getMainId()}
+                .themeId = ${this.getThemeId()}
+                .structure = ${this.getSubStructure()}
+                .entityIds = ${this.getEntityIds()}
+                .callService=${this.callService}
+            ></light-group-control>
+        `;
+    }
+    render() {
+        if (this.isInitialized()) return this.contents();
+    }
+}
+customElements.define("led-lighting-panel", $41ddf9b0887adb38$export$a4fcb651605e1026);
+
+
+class $c202eb4067c1daae$export$1af8c631bdcc9a4c extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    /****************************** getter and setter logic **************************/ getSubDict(option) {
+        return this.getStructure()[option];
+    }
+    getSubStructure(option) {
+        return this.getSubDict(option).structure;
+    }
+    getSubEntityIds(option) {
+        return this.getSubDict(option).entityIds;
+    }
+    /****************************** html/style logic *********************************/ static styles = [
+        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
+        (0, $26a9e256b3b138b1$export$2e2bcd8739ae039)
+    ];
+    basicLightingPanel() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <basic-lighting-panel
+                class="outlined"
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .structure = ${this.getSubStructure("basic_lighting")}
+                .entityIds = ${this.getSubEntityIds("basic_lighting")}
+                .callService=${this.callService}
+            ></basic-lighting-panel>
+        `;
+    }
+    ledLightingPanel() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <led-lighting-panel
+                class="outlined"
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .structure = ${this.getSubStructure("leds")}
+                .entityIds = ${this.getSubEntityIds("leds")}
+                .callService=${this.callService}
+            ></led-lighting-panel>
+        `;
+    }
+    render() {
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                ${this.basicLightingPanel()}
+                ${this.ledLightingPanel()}
+            `;
+    }
+}
+customElements.define("lighting-panel", $c202eb4067c1daae$export$1af8c631bdcc9a4c);
+
+
+class $380e8338b10894eb$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _LABEL = "basement_kiosk";
+    _LIGHTLABELS = {
+        basic_lighting: "basic lighting",
+        leds: "LED Lighting"
+    };
+    _OPTIONLABELS = {
+        lighting: "lighting"
+    };
+    _hass = {};
+    entityIds = [];
+    structure = {};
+    changedEntityIds = new Set();
+    // internal reactive states
+    static get properties() {
+        return {
+            states: {
+                state: true
+            },
+            _option: {
+                state: true
+            },
+            _isInitialized: {
+                state: true
+            }
+        };
+    }
+    constructor(){
+        super();
+        this.states = {};
+        this._option = "lighting";
+        this._isInitialized = false;
+    }
+    // establish config information for card
+    setConfig() {}
+    /******************************* lifecycle *****************************/ set hass(hass) {
+        if (!this.isInitialized()) {
+            this.setHass(hass);
+            this.setStructures();
+            this.initialize();
+        } else {
+            const oldHass = this.getHass(hass);
+            this.setHass(hass);
+            this.addRelevantChanges(oldHass, this.getHass());
+            this.requestUpdate();
+        }
+    }
+    update(changedProps) {
+        this.hasRelevantChanges() && this.updateStates();
+        super.update(changedProps);
+    }
+    shouldUpdate(changedProps) {
+        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_isInitialized") || changedProps.has("_option");
+    }
+    hasChanges(oldHass, newHass, entityId) {
+        return (0, $d14817f641e94e06$export$94ed8fccb207472)(oldHass, newHass, entityId) || (0, $d14817f641e94e06$export$94356dcc961724c6)(oldHass, newHass, entityId);
+    }
+    addRelevantChanges(oldHass, newHass) {
+        this.changedEntityIds = new Set();
+        const entityIds = this.getEntityIds();
+        entityIds.forEach((entityId)=>{
+            if (this.hasChanges(oldHass, newHass, entityId)) this.changedEntityIds.add(entityId);
+        });
+    }
+    hasRelevantChanges() {
+        return this.getCEIs().size > 0;
+    }
+    updateStates() {
+        const changedIds = this.getCEIs();
+        changedIds.forEach((entityId)=>{
+            this.states[entityId] = this.getHass().states[entityId];
+        });
+    }
+    /******************************* Setting Structures ***********************/ initialize() {
+        this._initialized = true;
+    }
+    setHass(hass) {
+        this._hass = hass;
+    }
+    setOption(option) {
+        this._option = option;
+    }
+    setStructures() {
+        this.setEntityIds();
+        this.setStates();
+        this.setOptionStructure();
+        this.setLightingStructure();
+    }
+    setEntityIds() {
+        const entityIds = (0, $d14817f641e94e06$export$cab3e0b0f4327749)(this.getHass(), this.getLabel());
+        this.entityIds = entityIds;
+    }
+    setStates() {
+        let states = {};
+        this.getEntityIds().forEach((entityId)=>{
+            states[entityId] = (0, $d14817f641e94e06$export$50fdfeece43146fd)(this.getHass(), entityId);
+        });
+        this.states = states;
+    }
+    setOptionStructure() {
+        const entityIds = this.getEntityIds();
+        this.getOptions().forEach((option)=>{
+            const filteredIds = (0, $d14817f641e94e06$export$2343572398f433de)(this.getHass(), entityIds, option);
+            this.structure[option] = {
+                name: this.getOptionName(option),
+                structure: {},
+                entityIds: filteredIds
+            };
+        });
+        const lightingIds = [
+            ...this.getLightingIds()
+        ];
+        const soloLightIds = lightingIds.filter((entityId)=>(0, $d14817f641e94e06$export$d3a5cc061b32c876)(this.getHass(), entityId));
+        this.structure.lighting.soloLightIds = new Set(soloLightIds);
+    }
+    setLightingStructure() {
+        this.setLightingOuterStructure();
+        this.setBasicLightingAreaStructure();
+        this.setBasicLightingLightStructure();
+        this.setLEDLightStructure();
+    }
+    setLightingOuterStructure() {
+        let structure = {};
+        const entityIds = this.getLightingIds();
+        Object.entries(this.getLightLabels()).forEach(([labelId, label])=>{
+            const subIds = (0, $d14817f641e94e06$export$2343572398f433de)(this.getHass(), entityIds, labelId);
+            structure[labelId] = {
+                name: label,
+                structure: {},
+                entityIds: subIds
+            };
+        });
+        this.structure["lighting"].structure = structure;
+    }
+    setBasicLightingAreaStructure() {
+        (0, $d14817f641e94e06$export$f45a0d26e841229c)(this.getHass(), this.getBasicLightingDict());
+    }
+    setBasicLightingLightStructure() {
+        const basicLightingStructure = this.getBasicLightingDict().structure;
+        Object.values(basicLightingStructure).forEach((areaDict)=>{
+            (0, $d14817f641e94e06$export$c982908e94e49fd1)(this.getHass(), areaDict);
+        });
+    }
+    setLEDLightStructure() {
+        (0, $d14817f641e94e06$export$c982908e94e49fd1)(this.getHass(), this.getLEDDict());
+    }
+    /***************************** getter logic ***************************/ isInitialized() {
+        return this._initialized;
+    }
+    getHass() {
+        return this._hass;
+    }
+    getOptions() {
+        return Object.keys(this._OPTIONLABELS);
+    }
+    getOption() {
+        return this._option;
+    }
+    getStructure() {
+        return this.structure;
+    }
+    getEntityIds() {
+        return this.entityIds;
+    }
+    isOption(option) {
+        return this.getOption() === option;
+    }
+    getCEIs() {
+        return this.changedEntityIds;
+    }
+    getLabel() {
+        return this._LABEL;
+    }
+    getLightLabels() {
+        return this._LIGHTLABELS;
+    }
+    getOptionName(option) {
+        return this._OPTIONLABELS[option];
+    }
+    getLightingDict() {
+        return this.getStructure().lighting;
+    }
+    getLightingIds() {
+        return this.getLightingDict().entityIds;
+    }
+    getLightingStructure() {
+        return this.getLightingDict().structure;
+    }
+    getLightingEntityIds() {
+        return this.getLightingDict().entityIds;
+    }
+    getBasicLightingDict() {
+        return this.getLightingStructure().basic_lighting;
+    }
+    getLEDDict() {
+        return this.getLightingStructure().leds;
+    }
+    getSoloLightIds() {
+        return this.getLightingDict().soloLightIds;
+    }
+    getStates() {
+        return this.states;
+    }
+    /************************** interactive logic ***************************/ onClick(option) {
+        this.setOption(option);
+    }
+    /******************************* html/style logic ************************/ button(option) {
+        switch(option){
+            case "lighting":
+                return this.lightingButton();
+        }
+    }
+    lightingButton() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <lighting-button
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .isSelected = ${this.isOption("lighting")}
+                .entityIds = ${this.getSoloLightIds()}
+                .title = ${"lighting"}
+                @select = ${()=>this.onClick("lighting")}
+            ></lighting-button>
+        `;
+    }
+    buttonRow() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div class="button-row">
+                ${(0, $6db6ff6394e885e6$export$76d90c956114f2c2)(this.getOptions(), (option)=>option, (option)=>this.button(option))}
+            </div>
+        `;
+    }
+    lightingPanel() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <lighting-panel
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .structure = ${this.getLightingStructure()}
+                .entityIds = ${this.getLightingEntityIds()}
+                .callService=${this._hass.callService}
+            ></lighting-panel>
+        `;
+    }
+    content() {
+        switch(this._option){
+            case "lighting":
+                return this.lightingPanel();
+        }
+    }
+    static styles = [
+        (0, $adca349e2834660d$export$2e2bcd8739ae039),
+        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039)
+    ];
+    render() {
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <ha-card>
+                    <div class="content">${this.content()}</div>
+                    ${this.buttonRow()}
+                </ha-card>
+            `;
+    }
+    getCardSize() {
+        return 8;
+    }
+    getGridOptions() {
+        return {
+            rows: 9,
+            columns: 24,
+            min_rows: 9,
+            max_rows: 9
+        };
+    }
+}
+
+
+
+
+
+
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */ const $bf5aa997e63c2265$export$8dbf9c790527241e = (0, $107bb7d062dde330$export$99b43ad1ed32e735)(class extends (0, $107bb7d062dde330$export$befdefbdce210f91) {
+    constructor(){
+        super(...arguments), this.key = (0, $f58f44579a4747ac$export$45b790e32b2810ee);
+    }
+    render(r, t) {
+        return this.key = r, t;
+    }
+    update(r, [t, e]) {
+        return t !== this.key && ((0, $311430566e21b48b$export$ea70d9dd5965b1c8)(r), this.key = t), e;
+    }
+});
+
+
+
+
+
+
+
+var $82c9a4f372f10553$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+    ha-card {
+        padding: 25px;
+        padding-top: 5px;
+        margin: 0px;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+        align-items: center;
+        height: 500px;
+        width: 800px;
+    }
+
+    floor-panel {
+        width: 100%;
+        height: 400px;
+        margin: 0px;
+        padding: 0px;
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .button-row {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    lighting-button {
+        height: 100%;
+        width: 160px;
+        padding: 5px;
+        border: none;
+    }
+
+
+`;
+
+
+
+
+
+
+
+var $55f2297f92e0e7a1$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+    area-panel {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 20px;
+    }
+
+`;
+
+
+
+
+
+
+
+var $bca01a03e150b8a1$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    light-component {
+        width: 180px;
+        height: 25px;
+        padding: 10px;
+        padding-top: 8px;
+        padding-bottom: 5px;
+        margin: 10px;
+        touch-action: none;
+        display: flex;
+        flex-flow: row nowrap;
+    }
+`;
+
+
+
+
+
+
+
+var $e677bb25dbafca7d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    popout-window {
+    }
+
+    simple-light {
+    }
+
+`;
+
+
+
+
+
+
+
+
+
+var $459b71b1865a1feb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+    dialog {
+        padding: 20px;
+        border: none;
+    }
+
+    dialog[open] {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .modal-header {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px;
+        margin-top: -10px;
+        background: none;
+        padding-top: none;
+        padding-bottom: none;
+        height: 40px;
+        width: 100%;
+    }
+
+    .close-button {
+        font-size: 15px;
+        border: none;
+        background: none;
+    }
+
+    light-group-control {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+`;
+
+
+
+
 class $1f5cf4012e444c80$export$506b69e3dcbd131b extends (0, $c0664485052839c4$export$1dc45fe673c170) {
     static properties = {
         ...super.properties,
@@ -13982,7 +14223,7 @@ class $741bb6fd7db99b7d$export$f9a8f96aa5e2999e extends (0, $ab210b2da7b39b9d$ex
 }
 
 
-customElements.define("basement-kiosk-card", (0, $b256115b19ea84ae$export$4890c87e00873e93));
+customElements.define("basement-kiosk-card", (0, $380e8338b10894eb$export$4890c87e00873e93));
 customElements.define("lighting-card", (0, $47449652e0f27169$export$686541059e7b9ad));
 customElements.define("clock-card", (0, $741bb6fd7db99b7d$export$f9a8f96aa5e2999e));
 window.customCards = window.customCards || [];

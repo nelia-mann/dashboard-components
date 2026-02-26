@@ -1,7 +1,5 @@
 import { html, LitElement } from 'lit';
-import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit-html/directives/repeat.js';
-import { rgba } from './../shared-resources/util/color-util.js';
 import {
     getState,
     hasLightChanges,
@@ -11,9 +9,10 @@ import {
     addAreaStructure,
     isSoloLight,
     addLightStructure
-} from './../shared-resources/util/hass-util.js';
+} from '../../shared-resources/util/hass-util.js';
 import styles from './main.styles.js';
-import sharedStyles from '../shared-resources/styles/shared-styles.js';
+import sharedStyles from '../../shared-resources/styles/shared-styles.js';
+import '../lighting/lighting.js';
 
 
 export class BasementKioskCard extends LitElement {
@@ -242,12 +241,24 @@ export class BasementKioskCard extends LitElement {
         return this.getLightingDict().structure;
     }
 
+    getLightingEntityIds() {
+        return this.getLightingDict().entityIds;
+    }
+
     getBasicLightingDict() {
         return this.getLightingStructure().basic_lighting;
     }
 
     getLEDDict() {
         return this.getLightingStructure().leds;
+    }
+
+    getSoloLightIds() {
+        return this.getLightingDict().soloLightIds
+    }
+
+    getStates() {
+        return this.states;
     }
 
     /************************** interactive logic ***************************/
@@ -258,27 +269,24 @@ export class BasementKioskCard extends LitElement {
 
     /******************************* html/style logic ************************/
 
-    getButtonStyle(option) {
-        const rgb = [100, 100, 100]; // placeholder for fancy coloring choice
-        let styles = {
-            'background-color': rgba(rgb, .5)
+    button(option) {
+        switch (option) {
+            case "lighting":
+                return this.lightingButton();
         }
-        if (this.isOption(option)) {
-            styles['outline'] = `solid ${rgba(rgb, 1)}`;
-            styles['outline-offset'] = '-4px';
-        }
-        return styles;
     }
 
-    button(option) {
-        return html`<div
-            class="button outlined"
-            @click=${() => this.onClick(option)}
-            style=${styleMap(this.getButtonStyle(option))}
-        >
-            <div class="small-heading"> ${this.getOptionName(option)} </div>
-            <div class="sub-info"> sub-info </div>
-        </div>`
+    lightingButton() {
+        return html`
+            <lighting-button
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .isSelected = ${this.isOption("lighting")}
+                .entityIds = ${this.getSoloLightIds()}
+                .title = ${"lighting"}
+                @select = ${() => this.onClick("lighting")}
+            ></lighting-button>
+        `
     }
 
     buttonRow() {
@@ -289,22 +297,27 @@ export class BasementKioskCard extends LitElement {
         `
     }
 
+    lightingPanel() {
+        return html`
+            <lighting-panel
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .structure = ${this.getLightingStructure()}
+                .entityIds = ${this.getLightingEntityIds()}
+                .callService=${this._hass.callService}
+            ></lighting-panel>
+        `
+    }
+
     content() {
-        let panel = html``;
         switch (this._option) {
             case "lighting":
-                panel = html`<div> Lighting Placeholder </div>`;
-                break;
-            case "climate":
-                panel = html`<div> Climate Placeholder </div>`;
-                break;
+                return this.lightingPanel();
         }
-        return panel;
     }
 
     static styles = [styles, sharedStyles];
 
-    // return html
     render() {
         if (this.isInitialized()) {
             return html`
@@ -316,7 +329,6 @@ export class BasementKioskCard extends LitElement {
         }
     }
 
-    // set card size parameters for ha
     getCardSize() {
         return 8;
     }
