@@ -11,7 +11,6 @@ export default css`
         align-items: center;
         height: 570px;
         width: 900px;
-        outline: solid;
         border-radius: 0px;
     }
 
@@ -20,7 +19,7 @@ export default css`
         flex-flow: row nowrap;
         justify-content: space-between;
         align-items: center;
-        height: 470px;
+        height: 485px;
         width: 900px;
     }
 

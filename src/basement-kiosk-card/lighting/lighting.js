@@ -31,7 +31,6 @@ export class LightingPanel extends HaSubComponent {
     basicLightingPanel() {
         return html`
             <basic-lighting-panel
-                class="outlined"
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
                 .structure = ${this.getSubStructure("basic_lighting")}

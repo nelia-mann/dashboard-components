@@ -992,7 +992,6 @@ var $adca349e2834660d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: center;
         height: 570px;
         width: 900px;
-        outline: solid;
         border-radius: 0px;
     }
 
@@ -1001,7 +1000,7 @@ var $adca349e2834660d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         flex-flow: row nowrap;
         justify-content: space-between;
         align-items: center;
-        height: 470px;
+        height: 485px;
         width: 900px;
     }
 
@@ -1180,14 +1179,25 @@ class $c0664485052839c4$export$1dc45fe673c170 extends (0, $ab210b2da7b39b9d$expo
 var $26a9e256b3b138b1$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     basic-lighting-panel {
-    }
-
-    led-lighting-panel {
+        margin-left: 10px;
+        margin-top: 10px;
+        padding-left: 10px;
         display: flex;
         flex-flow: column nowrap;
         justify-content: space-between;
         align-items: center;
         height: 100%;
+    }
+
+    led-lighting-panel {
+        margin-top: 10px;
+        margin-right: 10px;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+        width: 640px;
     }
 
 `;
@@ -9136,7 +9146,6 @@ class $5ddda6c7ecd98b1c$export$4723b834af4c134d extends (0, $c0664485052839c4$ex
     getAreaDisplays() {
         const areaIds = Object.keys(this.getStructure());
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="large-heading"> Basic Lighting </div>
             ${(0, $6db6ff6394e885e6$export$76d90c956114f2c2)(areaIds, (areaId)=>areaId, (areaId)=>this.getAreaDisplay(areaId))}`;
     }
     static styles = [
@@ -9158,9 +9167,10 @@ var $31849f357eef40d0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     light-group-control {
         display: flex;
         flex-flow: row nowrap;
-        justify-content: space-around;
+        justify-content: flex-start;
         align-items: center;
         height: 100%;
+        width: 100%;
     }
 
 `;
@@ -9177,7 +9187,6 @@ var $31849f357eef40d0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 var $fadc1205a54f7f23$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .select-lights {
-        width: 100%;
         display: flex;
         flex-flow: column nowrap;
         align-items: flex-start;
@@ -9206,7 +9215,7 @@ var $fadc1205a54f7f23$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     light-control {
         display: flex;
         flex-flow: row nowrap;
-        justify-content: space-around;
+        justify-content: flex-start;
         align-items: center;
     }
 
@@ -11842,7 +11851,6 @@ class $c202eb4067c1daae$export$1af8c631bdcc9a4c extends (0, $c0664485052839c4$ex
     basicLightingPanel() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <basic-lighting-panel
-                class="outlined"
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
                 .structure = ${this.getSubStructure("basic_lighting")}

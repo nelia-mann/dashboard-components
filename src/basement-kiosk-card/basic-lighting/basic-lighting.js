@@ -35,7 +35,6 @@ export class BasicLightingPanel extends HaSubComponent {
     getAreaDisplays() {
         const areaIds = Object.keys(this.getStructure());
         return html`
-            <div class="large-heading"> Basic Lighting </div>
             ${repeat(areaIds, (areaId) => areaId, (areaId) => this.getAreaDisplay(areaId))}`
     }
 

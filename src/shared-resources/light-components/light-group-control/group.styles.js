@@ -3,7 +3,6 @@
 export default css`
 
     .select-lights {
-        width: 100%;
         display: flex;
         flex-flow: column nowrap;
         align-items: flex-start;
@@ -32,7 +31,7 @@ export default css`
     light-control {
         display: flex;
         flex-flow: row nowrap;
-        justify-content: space-around;
+        justify-content: flex-start;
         align-items: center;
     }
 
