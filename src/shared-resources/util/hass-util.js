@@ -40,6 +40,7 @@ function addFloorStructure(hass, structure, entityIds) {
     Object.entries(floors).forEach(([floorId, floor]) => {
         const floorName = floor.name;
         const filteredIds = filterEntityIdsForFloor(hass, entityIds, floorId);
+        console.log(filteredIds);
         const soloLightIds = [...filteredIds].filter((entityId) => isSoloLight(hass, entityId));
         if (filteredIds.size > 0) {
             structure[floorId] = {

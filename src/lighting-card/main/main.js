@@ -25,11 +25,6 @@ export class LightingCard extends HaMainComponent {
         _floorId: { state: true }
     }
 
-    constructor() {
-        super();
-        this._isInitialized = false;
-    }
-
     /*************************** lifecycle **************************************/
 
 
@@ -42,10 +37,6 @@ export class LightingCard extends HaMainComponent {
     }
 
 /************************************* Setting Structures ****************************/
-
-    setFloorId(floorId) {
-        this._floorId = floorId;
-    }
 
     setStructures() {
         this.setEntityIds();
@@ -94,6 +85,10 @@ export class LightingCard extends HaMainComponent {
     }
 
     /************************* Floor Selection Structure ***********************************************/
+
+    setFloorId(floorId) {
+        this._floorId = floorId;
+    }
 
     getLabel() {
         return this._LABEL;

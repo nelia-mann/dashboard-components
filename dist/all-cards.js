@@ -872,6 +872,7 @@ function $d14817f641e94e06$export$19df7d2072d90b46(hass, structure, entityIds) {
     Object.entries(floors).forEach(([floorId, floor])=>{
         const floorName = floor.name;
         const filteredIds = $d14817f641e94e06$var$filterEntityIdsForFloor(hass, entityIds, floorId);
+        console.log(filteredIds);
         const soloLightIds = [
             ...filteredIds
         ].filter((entityId)=>$d14817f641e94e06$export$d3a5cc061b32c876(hass, entityId));
@@ -13036,10 +13037,6 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $f0d92478ce7b526e$exp
             state: true
         }
     };
-    constructor(){
-        super();
-        this._isInitialized = false;
-    }
     /*************************** lifecycle **************************************/ hasChanges(oldHass, newHass, entityId) {
         return (0, $d14817f641e94e06$export$94ed8fccb207472)(oldHass, newHass, entityId) || (0, $d14817f641e94e06$export$94356dcc961724c6)(oldHass, newHass, entityId);
     }
@@ -13048,10 +13045,7 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $f0d92478ce7b526e$exp
             '_floorId'
         ];
     }
-    /************************************* Setting Structures ****************************/ setFloorId(floorId) {
-        this._floorId = floorId;
-    }
-    setStructures() {
+    /************************************* Setting Structures ****************************/ setStructures() {
         this.setEntityIds();
         this.setStates();
         this.setFloorStructure();
@@ -13090,7 +13084,10 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $f0d92478ce7b526e$exp
         const floorIds = Object.keys(structure);
         this.setFloorId(floorIds[0]);
     }
-    /************************* Floor Selection Structure ***********************************************/ getLabel() {
+    /************************* Floor Selection Structure ***********************************************/ setFloorId(floorId) {
+        this._floorId = floorId;
+    }
+    getLabel() {
         return this._LABEL;
     }
     getFloorStructure(floorId) {
