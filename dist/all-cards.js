@@ -9287,9 +9287,6 @@ var $31849f357eef40d0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-
-
-
 var $fadc1205a54f7f23$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .select-lights {
@@ -11600,7 +11597,7 @@ class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $c0664485052839c4$ex
         themeState: {
             state: true
         },
-        _option: {
+        option: {
             state: true
         }
     };
@@ -11608,17 +11605,13 @@ class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $c0664485052839c4$ex
         super();
         this.lightState = {};
         this.themeState = {};
-        this._option = '';
-        this._options = [];
+        this.option = '';
     }
     /******************************* lifecycle *******************************/ getTriggers() {
         return [
             "lightState",
-            "_option"
+            "option"
         ];
-    }
-    onFirstUpdate() {
-        this.buildOptions();
     }
     /*********************** getter and setter logic ***********************/ getLightState() {
         return this.lightState;
@@ -11627,16 +11620,10 @@ class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $c0664485052839c4$ex
         return this.themeState;
     }
     getOption() {
-        return this._option;
-    }
-    setOption(option) {
-        this._option = option;
+        return this.option;
     }
     isSelected(option) {
         return this.getOption() === option;
-    }
-    getOptions() {
-        return this._options;
     }
     getEntityIds() {
         let entityIds = [
@@ -11646,97 +11633,7 @@ class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $c0664485052839c4$ex
         themeState && entityIds.push((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(themeState));
         return new Set(entityIds);
     }
-    /************************* build options structure logic ***************/ isBrightness() {
-        return (0, $6d3ca277783cacc8$export$33cacb20a48e02bf)(this.getLightState()) !== undefined;
-    }
-    isHSColor() {
-        return (0, $6d3ca277783cacc8$export$5ee105321a1a6648)(this.getLightState()).includes('hs');
-    }
-    isCTColor() {
-        return (0, $6d3ca277783cacc8$export$5ee105321a1a6648)(this.getLightState()).includes('color_temp');
-    }
-    isTheme() {
-        return this.getThemeState() && Object.keys(this.getThemeState()).length > 0;
-    }
-    buildOptions() {
-        let options = [
-            'onOff'
-        ];
-        this.isBrightness() && options.push('brightness');
-        this.isCTColor() && options.push('color_temp_kelvin');
-        this.isHSColor() && options.push('hs_color');
-        this.isTheme() && options.push('theme');
-        this._options = options;
-    }
-    /************************* interactive logic ***************************/ onSelect(option) {
-        if (option === 'onOff') {
-            const entityId = (0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState());
-            const data = {
-                entity_id: entityId
-            };
-            this.callService('light', 'toggle', data);
-            this.setOption(null);
-        } else this.setOption(option);
-    }
-    /************************** html/style logic ***************************/ getStyles(option) {
-        let styles = {};
-        let outline = '';
-        switch(option){
-            case 'brightness':
-                styles['background'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$a004fc522c1a4845), .2);
-                outline = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$a004fc522c1a4845), 1);
-                break;
-            case 'color_temp_kelvin':
-                styles['background'] = (0, $6d3ca277783cacc8$export$bca49aacb0a7b300)();
-                outline = (0, $6d3ca277783cacc8$export$bb0cdaadb7fd443b)();
-                break;
-            case 'hs_color':
-                styles['background'] = (0, $6d3ca277783cacc8$export$475133aea461e763)();
-                outline = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$af126f6aeedfb296), 1);
-                break;
-            case 'theme':
-                styles['background'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$a004fc522c1a4845), .2);
-                outline = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$a004fc522c1a4845), 1);
-                break;
-        }
-        if (this.isSelected(option)) {
-            styles['outline-offset'] = '-2px';
-            styles['outline'] = 'solid ' + outline;
-        }
-        return styles;
-    }
-    iconContent(option) {
-        let content;
-        switch(option){
-            case 'onOff':
-                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon
-                        .changedEntityIds = ${this.getCEIs()}
-                        .lightState=${this.getLightState()}
-                    ></light-icon>`;
-                break;
-            case 'brightness':
-                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80}></ha-svg-icon>`;
-                break;
-            case 'theme':
-                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$8b91c405b1f98ab9}></ha-svg-icon>`;
-                break;
-        }
-        return content;
-    }
-    icons() {
-        return (0, $6db6ff6394e885e6$export$76d90c956114f2c2)(this.getOptions(), (option)=>option, (option)=>{
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <div
-                    class="icon outlined"
-                    style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(option))}
-                    @click=${()=>this.onSelect(option)}
-                >
-                    ${this.iconContent(option)}
-                </div>
-            `;
-        });
-    }
-    brightnessBar() {
+    /************************** html/style logic ***************************/ brightnessBar() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <brightness-slider
                 class="outlined"
@@ -11797,9 +11694,6 @@ class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $c0664485052839c4$ex
     ];
     render() {
         if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <div class="control-column outlined">
-                    ${this.icons()}
-                </div>
                 ${this.optionControl()}
             `;
     }
@@ -11940,10 +11834,258 @@ class $0967e73e81854bfd$export$7b1c5bd79bb34852 extends (0, $c0664485052839c4$ex
 customElements.define("light-group-select", $0967e73e81854bfd$export$7b1c5bd79bb34852);
 
 
+
+
+
+
+
+
+
+
+
+const $6d29bae69684478d$var$SIZE = 210;
+const $6d29bae69684478d$var$LEFTMARGIN = 20;
+const $6d29bae69684478d$var$RIGHTMARGIN = 10;
+const $6d29bae69684478d$var$PADDING = 20;
+var $6d29bae69684478d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    .control-column {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-around;
+        align-items: center;
+        margin-left: 10px;
+    }
+
+    .icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    ha-svg-icon {
+        padding: 0%;
+        margin: 0%;
+        --mdc-icon-size: 20px;
+        height: 20px;
+        width: 20px;
+    }
+
+    brightness-slider {
+        margin-left: ${$6d29bae69684478d$var$LEFTMARGIN}px;
+        margin-right: ${$6d29bae69684478d$var$RIGHTMARGIN}px;
+        width: ${$6d29bae69684478d$var$SIZE}px;
+        height: ${$6d29bae69684478d$var$SIZE}px;
+        padding: ${$6d29bae69684478d$var$PADDING}px;
+    }
+
+    colortemp-slider {
+        margin-left: ${$6d29bae69684478d$var$LEFTMARGIN}px;
+        margin-right: ${$6d29bae69684478d$var$RIGHTMARGIN}px;
+        width: ${$6d29bae69684478d$var$SIZE}px;
+        height: ${$6d29bae69684478d$var$SIZE}px;
+        padding: ${$6d29bae69684478d$var$PADDING}px;
+    }
+
+    color-wheel {
+        position: relative;
+        width: ${$6d29bae69684478d$var$SIZE}px;
+        height: ${$6d29bae69684478d$var$SIZE}px;
+        margin-left: ${$6d29bae69684478d$var$LEFTMARGIN}px;
+        margin-right: ${$6d29bae69684478d$var$RIGHTMARGIN}px;
+        padding: ${$6d29bae69684478d$var$PADDING}px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    theme-select {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: center;
+        width: 450px;
+        height: 360px;
+        margin-left: ${$6d29bae69684478d$var$LEFTMARGIN}px;
+        margin-right: ${$6d29bae69684478d$var$RIGHTMARGIN}px;
+        padding: ${$6d29bae69684478d$var$PADDING}px;
+    }
+
+`;
+
+
+
+
+
+
+
+
+class $4af39bb2c674e2df$export$a67f2ddda7f43ae2 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    static properties = {
+        ...super.properties,
+        lightState: {
+            state: true
+        },
+        themeState: {
+            state: true
+        },
+        option: {
+            state: true
+        }
+    };
+    constructor(){
+        super();
+        this.lightState = {};
+        this.themeState = {};
+        this.option = '';
+        this._options = [];
+    }
+    /******************************* lifecycle *******************************/ getTriggers() {
+        return [
+            "lightState",
+            "option"
+        ];
+    }
+    onFirstUpdate() {
+        this.buildOptions();
+    }
+    /*********************** getter and setter logic ***********************/ getLightState() {
+        return this.lightState;
+    }
+    getThemeState() {
+        return this.themeState;
+    }
+    getOption() {
+        return this.option;
+    }
+    setOption(option) {
+        this.option = option;
+    }
+    isSelected(option) {
+        return this.getOption() === option;
+    }
+    getOptions() {
+        return this._options;
+    }
+    getEntityIds() {
+        let entityIds = [
+            (0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(this.getLightState())
+        ];
+        const themeState = this.getThemeState();
+        themeState && entityIds.push((0, $4ab534091a4f77ec$export$25d14d759b7df9bc)(themeState));
+        return new Set(entityIds);
+    }
+    /************************* build options structure logic ***************/ isBrightness() {
+        return (0, $6d3ca277783cacc8$export$33cacb20a48e02bf)(this.getLightState()) !== undefined;
+    }
+    isHSColor() {
+        return (0, $6d3ca277783cacc8$export$5ee105321a1a6648)(this.getLightState()).includes('hs');
+    }
+    isCTColor() {
+        return (0, $6d3ca277783cacc8$export$5ee105321a1a6648)(this.getLightState()).includes('color_temp');
+    }
+    isTheme() {
+        return this.getThemeState() && Object.keys(this.getThemeState()).length > 0;
+    }
+    buildOptions() {
+        let options = [
+            'onOff'
+        ];
+        this.isBrightness() && options.push('brightness');
+        this.isCTColor() && options.push('color_temp_kelvin');
+        this.isHSColor() && options.push('hs_color');
+        this.isTheme() && options.push('theme');
+        this._options = options;
+    }
+    /************************* interactive logic ***************************/ onSelect(option) {
+        this.dispatchEvent(new CustomEvent('select', {
+            detail: option
+        }));
+    }
+    /************************** html/style logic ***************************/ getStyles(option) {
+        let styles = {};
+        let outline = '';
+        switch(option){
+            case 'brightness':
+                styles['background'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$a004fc522c1a4845), .2);
+                outline = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$a004fc522c1a4845), 1);
+                break;
+            case 'color_temp_kelvin':
+                styles['background'] = (0, $6d3ca277783cacc8$export$bca49aacb0a7b300)();
+                outline = (0, $6d3ca277783cacc8$export$bb0cdaadb7fd443b)();
+                break;
+            case 'hs_color':
+                styles['background'] = (0, $6d3ca277783cacc8$export$475133aea461e763)();
+                outline = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$af126f6aeedfb296), 1);
+                break;
+            case 'theme':
+                styles['background'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$a004fc522c1a4845), .2);
+                outline = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$a004fc522c1a4845), 1);
+                break;
+        }
+        if (this.isSelected(option)) {
+            styles['outline-offset'] = '-2px';
+            styles['outline'] = 'solid ' + outline;
+        }
+        return styles;
+    }
+    iconContent(option) {
+        let content;
+        switch(option){
+            case 'onOff':
+                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon
+                        .changedEntityIds = ${this.getCEIs()}
+                        .lightState=${this.getLightState()}
+                    ></light-icon>`;
+                break;
+            case 'brightness':
+                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80}></ha-svg-icon>`;
+                break;
+            case 'theme':
+                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$8b91c405b1f98ab9}></ha-svg-icon>`;
+                break;
+        }
+        return content;
+    }
+    icons() {
+        return (0, $6db6ff6394e885e6$export$76d90c956114f2c2)(this.getOptions(), (option)=>option, (option)=>{
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <div
+                    class="icon outlined"
+                    style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(option))}
+                    @click=${()=>this.onSelect(option)}
+                >
+                    ${this.iconContent(option)}
+                </div>
+            `;
+        });
+    }
+    static styles = [
+        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
+        (0, $6d29bae69684478d$export$2e2bcd8739ae039)
+    ];
+    render() {
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <div class="control-column outlined">
+                    ${this.icons()}
+                </div>
+            `;
+    }
+}
+customElements.define("light-control-select", $4af39bb2c674e2df$export$a67f2ddda7f43ae2);
+
+
 class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
     static properties = {
         ...super.properties,
         selectedId: {
+            state: true
+        },
+        option: {
             state: true
         }
     };
@@ -11954,7 +12096,8 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
     }
     /******************************* lifecycle **********************************/ getTriggers() {
         return [
-            "selectedId"
+            "selectedId",
+            "option"
         ];
     }
     onFirstUpdate() {
@@ -11984,9 +12127,29 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
         else themeId = this.getStructure()[this.getSelectedId()].theme;
         if (themeId) return this.getState(themeId);
     }
-    /************************ interactive logic *******************************/ onSelect(e) {
+    getOption() {
+        return this.option;
+    }
+    setOption(option) {
+        this.option = option;
+    }
+    isOption(option) {
+        this.option;
+    }
+    /************************ interactive logic *******************************/ onSelectLight(e) {
         const lightId = e.detail;
         this.setSelectedId(lightId);
+    }
+    onSelectControl(e) {
+        const option = e.detail;
+        if (option === 'onOff') {
+            const entityId = this.getSelectedId();
+            const data = {
+                entity_id: entityId
+            };
+            this.callService('light', 'toggle', data);
+            this.setOption(null);
+        } else this.setOption(option);
     }
     /**************************** style/html logic ******************************/ lightControl() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
@@ -11994,6 +12157,7 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
                 .changedEntityIds = ${this.getCEIs()}
                 .lightState = ${this.selectedLightState()}
                 .themeState = ${this.selectedThemeState()}
+                .option = ${this.getOption()}
                 .callService=${this.callService}
             ></light-control>
         `;
@@ -12007,8 +12171,19 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
                 .structure = ${this.getStructure()}
                 .entityIds = ${this.getEntityIds()}
                 .selectedId = ${this.getSelectedId()}
-                @select = ${this.onSelect}
+                @select = ${this.onSelectLight}
             ></light-group-select>
+        `;
+    }
+    lightControlSelect() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <light-control-select
+                .changedEntityIds = ${this.getCEIs()}
+                .lightState = ${this.selectedLightState()}
+                .themeState = ${this.selectedThemeState()}
+                .option = ${this.getOption()}
+                @select = ${this.onSelectControl}
+            > ping </light-control-select>
         `;
     }
     static styles = [
@@ -12020,6 +12195,7 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
             const name = (0, $4ab534091a4f77ec$export$7d9f7e9c1c02b41e)(this.getState(this.getMainId()));
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 ${this.lightGroupSelect()}
+                ${this.lightControlSelect()}
                 ${this.lightControl()}
             `;
         }

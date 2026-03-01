@@ -1,19 +1,18 @@
 import { html } from 'lit';
-import { repeat } from 'lit-html/directives/repeat.js';
-import { styleMap } from 'lit/directives/style-map.js';
-import { getColor } from '../util/light-util.js';
-import { getName, isGroup } from '../../util/state-util.js';
+import { getName } from '../../util/state-util.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './group.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../light-control/light-control.js';
 import '../light-group-select/light-group-select.js';
+import '../light-control-select/light-control-select.js';
 
 export class LightGroupControl extends HaSubComponent {
 
     static properties = {
         ...super.properties,
-        selectedId: { state: true }
+        selectedId: { state: true },
+        option: { state: true }
     }
 
     constructor() {
@@ -25,7 +24,7 @@ export class LightGroupControl extends HaSubComponent {
     /******************************* lifecycle **********************************/
 
     getTriggers() {
-        return ["selectedId"];
+        return ["selectedId", "option"];
     }
 
     onFirstUpdate() {
@@ -70,11 +69,35 @@ export class LightGroupControl extends HaSubComponent {
         }
     }
 
+    getOption() {
+        return this.option;
+    }
+
+    setOption(option) {
+        this.option = option;
+    }
+
+    isOption(option) {
+        this.option === option;
+    }
+
     /************************ interactive logic *******************************/
 
-    onSelect(e) {
+    onSelectLight(e) {
         const lightId = e.detail;
         this.setSelectedId(lightId);
+    }
+
+    onSelectControl(e) {
+        const option = e.detail;
+        if (option === 'onOff') {
+            const entityId = this.getSelectedId();
+            const data = { entity_id: entityId }
+            this.callService('light', 'toggle', data)
+            this.setOption(null);
+        } else {
+            this.setOption(option);
+        }
     }
 
     /**************************** style/html logic ******************************/
@@ -85,6 +108,7 @@ export class LightGroupControl extends HaSubComponent {
                 .changedEntityIds = ${this.getCEIs()}
                 .lightState = ${this.selectedLightState()}
                 .themeState = ${this.selectedThemeState()}
+                .option = ${this.getOption()}
                 .callService=${this.callService}
             ></light-control>
         `
@@ -99,10 +123,22 @@ export class LightGroupControl extends HaSubComponent {
                 .structure = ${this.getStructure()}
                 .entityIds = ${this.getEntityIds()}
                 .selectedId = ${this.getSelectedId()}
-                @select = ${this.onSelect}
+                @select = ${this.onSelectLight}
             ></light-group-select>
         `
-        }
+    }
+
+    lightControlSelect() {
+        return html`
+            <light-control-select
+                .changedEntityIds = ${this.getCEIs()}
+                .lightState = ${this.selectedLightState()}
+                .themeState = ${this.selectedThemeState()}
+                .option = ${this.getOption()}
+                @select = ${this.onSelectControl}
+            > ping </light-control-select>
+        `
+    }
 
     static styles = [sharedStyles, styles];
 
@@ -111,6 +147,7 @@ export class LightGroupControl extends HaSubComponent {
             const name = getName(this.getState(this.getMainId()));
             return html`
                 ${this.lightGroupSelect()}
+                ${this.lightControlSelect()}
                 ${this.lightControl()}
             `
         }
