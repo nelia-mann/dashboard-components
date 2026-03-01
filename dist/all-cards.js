@@ -11807,10 +11807,57 @@ class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $c0664485052839c4$ex
 customElements.define("light-control", $ee6aaf60e5f69fab$export$5ebffa7af4af21de);
 
 
-class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+
+
+
+
+
+
+
+var $f0a7a27b9ff27025$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    .select-lights {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .light-inner {
+        width: 180px;
+        height: 25px;
+        padding: 10px;
+        padding-top: 8px;
+        padding-bottom: 5px;
+        margin: 10px;
+        touch-action: none;
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    .icons {
+        margin-right: 10px;
+        margin-left: 0px;
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    light-control {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+`;
+
+
+
+
+class $0967e73e81854bfd$export$7b1c5bd79bb34852 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
     static properties = {
         ...super.properties,
-        _selectedId: {
+        selectedId: {
             state: true
         }
     };
@@ -11821,38 +11868,25 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
     }
     /******************************* lifecycle **********************************/ getTriggers() {
         return [
-            "_selectedId"
+            "selectedId"
         ];
     }
-    onFirstUpdate() {
-        this.setSelectedId(this.getMainId());
-    }
     /************************ getter and setter logic *************************/ isSelected(lightId) {
-        return this._selectedId === lightId;
+        return this.selectedId === lightId;
     }
     getState(entityId) {
         return this.states[entityId];
     }
     getSelectedId() {
-        return this._selectedId;
-    }
-    setSelectedId(lightId) {
-        this._selectedId = lightId;
+        return this.selectedId;
     }
     getMainId() {
         return this.lightId;
     }
-    selectedLightState() {
-        return this.getState(this.getSelectedId());
-    }
-    selectedThemeState() {
-        let themeId;
-        if (this.isSelected(this.getMainId())) themeId = this.themeId;
-        else themeId = this.getStructure()[this.getSelectedId()].theme;
-        if (themeId) return this.getState(themeId);
-    }
     /************************ interactive logic *******************************/ onSelect(lightId) {
-        this.setSelectedId(lightId);
+        this.dispatchEvent(new CustomEvent('select', {
+            detail: lightId
+        }));
     }
     /**************************** style/html logic ******************************/ getStyles(lightId) {
         let styles = {};
@@ -11887,19 +11921,9 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
         const memberIds = Object.keys(this.getStructure());
         return (0, $6db6ff6394e885e6$export$76d90c956114f2c2)(memberIds, (memberId)=>memberId, (memberId)=>this.innerLight(memberId));
     }
-    lightControl() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <light-control
-                    .changedEntityIds = ${this.getCEIs()}
-                    .lightState = ${this.selectedLightState()}
-                    .themeState = ${this.selectedThemeState()}
-                    .callService=${this.callService}
-                ></light-control>
-            `;
-    }
     static styles = [
         (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
-        (0, $fadc1205a54f7f23$export$2e2bcd8739ae039)
+        (0, $f0a7a27b9ff27025$export$2e2bcd8739ae039)
     ];
     render() {
         if (this.isInitialized()) {
@@ -11909,8 +11933,95 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
                         ${this.innerLight(this.getMainId())}
                         ${this.lights()}
                     </div>
-                    ${this.lightControl()}
                 `;
+        }
+    }
+}
+customElements.define("light-group-select", $0967e73e81854bfd$export$7b1c5bd79bb34852);
+
+
+class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$export$1dc45fe673c170) {
+    static properties = {
+        ...super.properties,
+        selectedId: {
+            state: true
+        }
+    };
+    constructor(){
+        super();
+        this.lightId = '';
+        this.themeId = '';
+    }
+    /******************************* lifecycle **********************************/ getTriggers() {
+        return [
+            "selectedId"
+        ];
+    }
+    onFirstUpdate() {
+        this.setSelectedId(this.getMainId());
+    }
+    /************************ getter and setter logic *************************/ isSelected(lightId) {
+        return this.selectedId === lightId;
+    }
+    getState(entityId) {
+        return this.states[entityId];
+    }
+    getSelectedId() {
+        return this.selectedId;
+    }
+    setSelectedId(lightId) {
+        this.selectedId = lightId;
+    }
+    getMainId() {
+        return this.lightId;
+    }
+    selectedLightState() {
+        return this.getState(this.getSelectedId());
+    }
+    selectedThemeState() {
+        let themeId;
+        if (this.isSelected(this.getMainId())) themeId = this.themeId;
+        else themeId = this.getStructure()[this.getSelectedId()].theme;
+        if (themeId) return this.getState(themeId);
+    }
+    /************************ interactive logic *******************************/ onSelect(e) {
+        const lightId = e.detail;
+        this.setSelectedId(lightId);
+    }
+    /**************************** style/html logic ******************************/ lightControl() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <light-control
+                .changedEntityIds = ${this.getCEIs()}
+                .lightState = ${this.selectedLightState()}
+                .themeState = ${this.selectedThemeState()}
+                .callService=${this.callService}
+            ></light-control>
+        `;
+    }
+    lightGroupSelect() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <light-group-select
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .lightId = ${this.getMainId()}
+                .structure = ${this.getStructure()}
+                .entityIds = ${this.getEntityIds()}
+                .selectedId = ${this.getSelectedId()}
+                @select = ${this.onSelect}
+            ></light-group-select>
+        `;
+    }
+    static styles = [
+        (0, $5ef9aa738cbaab3a$export$2e2bcd8739ae039),
+        (0, $fadc1205a54f7f23$export$2e2bcd8739ae039)
+    ];
+    render() {
+        if (this.isInitialized()) {
+            const name = (0, $4ab534091a4f77ec$export$7d9f7e9c1c02b41e)(this.getState(this.getMainId()));
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                ${this.lightGroupSelect()}
+                ${this.lightControl()}
+            `;
         }
     }
 }

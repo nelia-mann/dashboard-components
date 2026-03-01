@@ -7,12 +7,13 @@ import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './group.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../light-control/light-control.js';
+import '../light-group-select/light-group-select.js';
 
 export class LightGroupControl extends HaSubComponent {
 
     static properties = {
         ...super.properties,
-        _selectedId: { state: true }
+        selectedId: { state: true }
     }
 
     constructor() {
@@ -24,7 +25,7 @@ export class LightGroupControl extends HaSubComponent {
     /******************************* lifecycle **********************************/
 
     getTriggers() {
-        return ["_selectedId"];
+        return ["selectedId"];
     }
 
     onFirstUpdate() {
@@ -34,7 +35,7 @@ export class LightGroupControl extends HaSubComponent {
     /************************ getter and setter logic *************************/
 
     isSelected(lightId) {
-        return (this._selectedId === lightId);
+        return (this.selectedId === lightId);
     }
 
     getState(entityId) {
@@ -42,11 +43,11 @@ export class LightGroupControl extends HaSubComponent {
     }
 
     getSelectedId() {
-        return this._selectedId;
+        return this.selectedId;
     }
 
     setSelectedId(lightId) {
-        this._selectedId = lightId;
+        this.selectedId = lightId;
     }
 
     getMainId() {
@@ -71,77 +72,49 @@ export class LightGroupControl extends HaSubComponent {
 
     /************************ interactive logic *******************************/
 
-    onSelect(lightId) {
+    onSelect(e) {
+        const lightId = e.detail;
         this.setSelectedId(lightId);
     }
 
     /**************************** style/html logic ******************************/
 
-        getStyles(lightId) {
-            let styles = {};
-            if (this.isSelected(lightId)) {
-                styles['outline'] = 'solid ' + getColor(this.getState(lightId));
-                styles['outline-offset'] = '-4px'
-            }
-            return styles;
+    lightControl() {
+        return html`
+            <light-control
+                .changedEntityIds = ${this.getCEIs()}
+                .lightState = ${this.selectedLightState()}
+                .themeState = ${this.selectedThemeState()}
+                .callService=${this.callService}
+            ></light-control>
+        `
+    }
+
+    lightGroupSelect() {
+        return html`
+            <light-group-select
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .lightId = ${this.getMainId()}
+                .structure = ${this.getStructure()}
+                .entityIds = ${this.getEntityIds()}
+                .selectedId = ${this.getSelectedId()}
+                @select = ${this.onSelect}
+            ></light-group-select>
+        `
         }
 
-        fontClass(lightId) {
-            if (isGroup(this.getState(lightId))) {
-                return 'small-heading';
-            } else {
-                return 'sub-info';
-            }
-        }
+    static styles = [sharedStyles, styles];
 
-        innerLight(lightId) {
+    render() {
+        if (this.isInitialized()) {
+            const name = getName(this.getState(this.getMainId()));
             return html`
-                <div
-                    class="light-inner outlined ${this.fontClass(lightId)}"
-                    style=${styleMap(this.getStyles(lightId))}
-                    @click=${() => this.onSelect(lightId)}
-                >
-                    <div class="icons">
-                        <light-icon
-                            .changedEntityIds=${this.getCEIs()}
-                            .lightState=${this.getState(lightId)}
-                        ></light-icon>
-                    </div>
-                    ${getName(this.getState(lightId))}
-                </div>
+                ${this.lightGroupSelect()}
+                ${this.lightControl()}
             `
         }
-
-        lights() {
-            const memberIds = Object.keys(this.getStructure());
-            return repeat(memberIds, (memberId) => memberId, (memberId) => this.innerLight(memberId))
-        }
-
-        lightControl() {
-            return html`
-                <light-control
-                    .changedEntityIds = ${this.getCEIs()}
-                    .lightState = ${this.selectedLightState()}
-                    .themeState = ${this.selectedThemeState()}
-                    .callService=${this.callService}
-                ></light-control>
-            `
-        }
-
-        static styles = [sharedStyles, styles];
-
-        render() {
-            if (this.isInitialized()) {
-                const name = getName(this.getState(this.getMainId()));
-                return html`
-                    <div class="select-lights">
-                        ${this.innerLight(this.getMainId())}
-                        ${this.lights()}
-                    </div>
-                    ${this.lightControl()}
-                `
-            }
-        }
+    }
 
 }
 
