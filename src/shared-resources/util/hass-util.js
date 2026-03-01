@@ -25,6 +25,7 @@ function getHassFloors(hass) {
 function filterEntityIdsForFloor(hass, entityIds, floorId) {
     const theseIds = [...entityIds];
     const filteredIds = theseIds.filter((entityId) => {
+        console.log(getEntity(hass, entityId))
         const areaId = getEntityAreaId(hass, entityId);
         if (areaId) {
             return floorId === getAreaFloor(hass, areaId);
@@ -37,7 +38,6 @@ function filterEntityIdsForFloor(hass, entityIds, floorId) {
 
 function addFloorStructure(hass, structure, entityIds) {
     const floors = getHassFloors(hass);
-    console.log(entityIds);
     Object.entries(floors).forEach(([floorId, floor]) => {
         const floorName = floor.name;
         const filteredIds = filterEntityIdsForFloor(hass, entityIds, floorId);

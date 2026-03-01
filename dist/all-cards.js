@@ -861,6 +861,7 @@ function $d14817f641e94e06$var$filterEntityIdsForFloor(hass, entityIds, floorId)
         ...entityIds
     ];
     const filteredIds = theseIds.filter((entityId)=>{
+        console.log($d14817f641e94e06$var$getEntity(hass, entityId));
         const areaId = $d14817f641e94e06$var$getEntityAreaId(hass, entityId);
         if (areaId) return floorId === $d14817f641e94e06$var$getAreaFloor(hass, areaId);
         else return false;
@@ -869,7 +870,6 @@ function $d14817f641e94e06$var$filterEntityIdsForFloor(hass, entityIds, floorId)
 }
 function $d14817f641e94e06$export$19df7d2072d90b46(hass, structure, entityIds) {
     const floors = $d14817f641e94e06$var$getHassFloors(hass);
-    console.log(entityIds);
     Object.entries(floors).forEach(([floorId, floor])=>{
         const floorName = floor.name;
         const filteredIds = $d14817f641e94e06$var$filterEntityIdsForFloor(hass, entityIds, floorId);
