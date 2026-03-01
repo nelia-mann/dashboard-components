@@ -869,10 +869,10 @@ function $d14817f641e94e06$var$filterEntityIdsForFloor(hass, entityIds, floorId)
 }
 function $d14817f641e94e06$export$19df7d2072d90b46(hass, structure, entityIds) {
     const floors = $d14817f641e94e06$var$getHassFloors(hass);
+    console.log(entityIds);
     Object.entries(floors).forEach(([floorId, floor])=>{
         const floorName = floor.name;
         const filteredIds = $d14817f641e94e06$var$filterEntityIdsForFloor(hass, entityIds, floorId);
-        console.log(filteredIds);
         const soloLightIds = [
             ...filteredIds
         ].filter((entityId)=>$d14817f641e94e06$export$d3a5cc061b32c876(hass, entityId));
