@@ -21,8 +21,8 @@ export class PopoutWindow extends HaSubComponent {
 
     /******************************* lifecycle **********************************/
 
-    updateTrigger(changedProps) {
-        return changedProps.has("opened")
+    getTriggers() {
+        return ["opened"];
     }
 
     updated(changedProps) {

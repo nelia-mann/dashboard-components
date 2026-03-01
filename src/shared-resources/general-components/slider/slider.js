@@ -34,8 +34,8 @@ export class SliderBar extends HaSubComponent {
         super.update(changedProps);
     }
 
-    updateTrigger(changedProps) {
-        return changedProps.has("_value");
+    getTriggers() {
+        return ["_value"];
     }
 
     onFirstUpdate() {

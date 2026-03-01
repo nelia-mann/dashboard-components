@@ -31,8 +31,8 @@ export class ColorWheel extends HaSubComponent {
         super.update(changedProps);
     }
 
-    updateTrigger(changedProps) {
-        return changedProps.has("_hue") || changedProps.has("_saturation")
+    getTriggers() {
+        return ["_hue", "_saturation"];
     }
 
     onFirstUpdate() {

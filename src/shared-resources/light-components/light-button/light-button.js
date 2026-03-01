@@ -22,8 +22,8 @@ export class LightingButton extends HaSubComponent {
 
     /************* lifecycle ***********************************************/
 
-    updateTrigger(changedProps) {
-        return changedProps.has('isSelected');
+    getTriggers() {
+        return ["isSelected"];
     }
 
     onFirstUpdate() {

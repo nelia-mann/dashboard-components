@@ -20,8 +20,8 @@ export class LightIcon extends HaSubComponent {
 
     /*********************************** lifecycle **********************************/
 
-    updateTrigger(changedProps) {
-        return changedProps.has("lightState");
+    getTriggers() {
+        return ["lightState"];
     }
 
     /****************************** getter and setter logic *************************/

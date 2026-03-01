@@ -23,8 +23,8 @@ export class LightComponent extends HaSubComponent {
         this._holding = false;
     }
 
-    updateTrigger(changedProps) {
-        return changedProps.has("isModalOpen");
+    getTriggers() {
+        return ["isModalOpen"];
     }
 
     /********************** getter and setter logic ********************************************/

@@ -33,8 +33,8 @@ export class LightControl extends HaSubComponent {
 
     /******************************* lifecycle *******************************/
 
-    updateTrigger(changedProps) {
-        return changedProps.has("lightState") || changedProps.has("_option")
+    getTriggers() {
+        return ["lightState", "_option"];
     }
 
     onFirstUpdate() {

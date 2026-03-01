@@ -29,8 +29,8 @@ export class ThemeSelect extends HaSubComponent {
         super.update(changedProps);
     }
 
-    updateTrigger(changedProps) {
-        return changedProps.has("_option");
+    getTriggers() {
+        return ["_option"];
     }
 
     onFirstUpdate() {

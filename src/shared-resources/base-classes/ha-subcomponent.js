@@ -24,6 +24,16 @@ export class HaSubComponent extends LitElement {
             || this.updateTrigger(changedProps))
     }
 
+    updateTrigger(changedProps) {
+        const triggers = this.getTriggers();
+        for (const trigger of triggers) {
+            if (changedProps.has(trigger)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     firstUpdated() {
         this.onFirstUpdate();
         this.initialize();
@@ -69,10 +79,10 @@ export class HaSubComponent extends LitElement {
 
     /********************************* hooks for subclasses **********************************/
 
-    updateTrigger(changedProps) {
-        return false;
-    }
-
     onFirstUpdate() { }
+
+    getTriggers() {
+        return [];
+    }
 
 }

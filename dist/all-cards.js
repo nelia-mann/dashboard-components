@@ -1230,6 +1230,13 @@ class $c0664485052839c4$export$1dc45fe673c170 extends (0, $ab210b2da7b39b9d$expo
     shouldUpdate(changedProps) {
         return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_initialized") || this.updateTrigger(changedProps);
     }
+    updateTrigger(changedProps) {
+        const triggers = this.getTriggers();
+        for (const trigger of triggers){
+            if (changedProps.has(trigger)) return true;
+        }
+        return false;
+    }
     firstUpdated() {
         this.onFirstUpdate();
         this.initialize();
@@ -1265,10 +1272,10 @@ class $c0664485052839c4$export$1dc45fe673c170 extends (0, $ab210b2da7b39b9d$expo
     getStructure() {
         return this.structure;
     }
-    /********************************* hooks for subclasses **********************************/ updateTrigger(changedProps) {
-        return false;
+    /********************************* hooks for subclasses **********************************/ onFirstUpdate() {}
+    getTriggers() {
+        return [];
     }
-    onFirstUpdate() {}
 }
 
 
@@ -9080,8 +9087,10 @@ class $4135704356e7d3a7$export$82acdd66a4e4bf90 extends (0, $c0664485052839c4$ex
         super();
         this.lightState = {};
     }
-    /*********************************** lifecycle **********************************/ updateTrigger(changedProps) {
-        return changedProps.has("lightState");
+    /*********************************** lifecycle **********************************/ getTriggers() {
+        return [
+            "lightState"
+        ];
     }
     /****************************** getter and setter logic *************************/ getLightState() {
         return this.lightState;
@@ -9538,8 +9547,10 @@ class $9d406f50450a5172$export$5ff34efdd1b9ed54 extends (0, $c0664485052839c4$ex
         !this.getChangeFlag() && this.setInitialValue();
         super.update(changedProps);
     }
-    updateTrigger(changedProps) {
-        return changedProps.has("_value");
+    getTriggers() {
+        return [
+            "_value"
+        ];
     }
     onFirstUpdate() {
         this.setInitialValue();
@@ -9871,8 +9882,11 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $c0664485052839c4$ex
         !this.getChangeFlag() && this.setInitialValues();
         super.update(changedProps);
     }
-    updateTrigger(changedProps) {
-        return changedProps.has("_hue") || changedProps.has("_saturation");
+    getTriggers() {
+        return [
+            "_hue",
+            "_saturation"
+        ];
     }
     onFirstUpdate() {
         this.setBox(this.renderRoot.querySelector('.wheel-background'));
@@ -11489,8 +11503,10 @@ class $8e27fe42aa65588c$export$1b9e02e625a724dc extends (0, $c0664485052839c4$ex
         !this.getChangeFlag() && this.setInitialValue();
         super.update(changedProps);
     }
-    updateTrigger(changedProps) {
-        return changedProps.has("_option");
+    getTriggers() {
+        return [
+            "_option"
+        ];
     }
     onFirstUpdate() {
         this.setInitialValue();
@@ -11595,8 +11611,11 @@ class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $c0664485052839c4$ex
         this._option = '';
         this._options = [];
     }
-    /******************************* lifecycle *******************************/ updateTrigger(changedProps) {
-        return changedProps.has("lightState") || changedProps.has("_option");
+    /******************************* lifecycle *******************************/ getTriggers() {
+        return [
+            "lightState",
+            "_option"
+        ];
     }
     onFirstUpdate() {
         this.buildOptions();
@@ -11800,8 +11819,10 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
         this.lightId = '';
         this.themeId = '';
     }
-    /******************************* lifecycle **********************************/ updateTrigger(changedProps) {
-        return changedProps.has("_selectedId");
+    /******************************* lifecycle **********************************/ getTriggers() {
+        return [
+            "_selectedId"
+        ];
     }
     onFirstUpdate() {
         this.setSelectedId(this.getMainId());
@@ -12372,8 +12393,10 @@ class $1f5cf4012e444c80$export$506b69e3dcbd131b extends (0, $c0664485052839c4$ex
         this.lightId = '';
         this.themeId = '';
     }
-    /******************************* lifecycle **********************************/ updateTrigger(changedProps) {
-        return changedProps.has("opened");
+    /******************************* lifecycle **********************************/ getTriggers() {
+        return [
+            "opened"
+        ];
     }
     updated(changedProps) {
         if (changedProps.has('opened')) {
@@ -12456,8 +12479,10 @@ class $e9bf7f26b8252164$export$5e33b198135dff7b extends (0, $c0664485052839c4$ex
         this.themeId = '';
         this._holding = false;
     }
-    updateTrigger(changedProps) {
-        return changedProps.has("isModalOpen");
+    getTriggers() {
+        return [
+            "isModalOpen"
+        ];
     }
     /********************** getter and setter logic ********************************************/ isHolding() {
         return this._holding;
@@ -12691,8 +12716,10 @@ class $97ffa901314cba74$export$1e5763623e0cb555 extends (0, $c0664485052839c4$ex
         this.title = '';
         this._total = 0;
     }
-    /************* lifecycle ***********************************************/ updateTrigger(changedProps) {
-        return changedProps.has('isSelected');
+    /************* lifecycle ***********************************************/ getTriggers() {
+        return [
+            "isSelected"
+        ];
     }
     onFirstUpdate() {
         this.setTotal();

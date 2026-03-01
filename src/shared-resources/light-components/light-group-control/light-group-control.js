@@ -23,8 +23,8 @@ export class LightGroupControl extends HaSubComponent {
 
     /******************************* lifecycle **********************************/
 
-    updateTrigger(changedProps) {
-        return changedProps.has("_selectedId");
+    getTriggers() {
+        return ["_selectedId"];
     }
 
     onFirstUpdate() {
