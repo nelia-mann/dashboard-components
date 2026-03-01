@@ -744,6 +744,103 @@ class $107bb7d062dde330$export$befdefbdce210f91 {
 });
 
 
+
+class $f0d92478ce7b526e$export$e0dec1ca6cc889f1 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _LABEL = "lighting";
+    _hass;
+    structure = {};
+    entityIds = new Set();
+    changedEntityIds = new Set();
+    static properties = {
+        states: {
+            state: true
+        },
+        _isInitialized: {
+            state: true
+        }
+    };
+    constructor(){
+        super();
+        this.states = {};
+        this._isInitialized = false;
+    }
+    setConfig() {}
+    /*************************** lifecycle **************************************/ set hass(hass) {
+        if (!this.isInitialized()) {
+            this.setHass(hass);
+            this.setStructures();
+            this.initialize();
+        } else {
+            const oldHass = this.getHass();
+            this.setHass(hass);
+            this.addRelevantChanges(oldHass, this.getHass());
+            this.requestUpdate();
+        }
+    }
+    update(changedProps) {
+        this.hasRelevantChanges() && this.updateStates();
+        super.update(changedProps);
+    }
+    shouldUpdate(changedProps) {
+        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_isInitialized") || this.updateTrigger(changedProps);
+    }
+    addRelevantChanges(oldHass, newHass) {
+        this.changedEntityIds = new Set();
+        const entityIds = this.getEntityIds();
+        entityIds.forEach((entityId)=>{
+            if (this.hasChanges(oldHass, newHass, entityId)) this.changedEntityIds.add(entityId);
+        });
+    }
+    hasRelevantChanges() {
+        return this.getCEIs().size > 0;
+    }
+    updateStates() {
+        const changedIds = this.getCEIs();
+        changedIds.forEach((entityId)=>{
+            this.states[entityId] = this.getHass().states[entityId];
+        });
+    }
+    updateTrigger(changedProps) {
+        const triggers = this.getTriggers();
+        for (const trigger of triggers){
+            if (changedProps.has(trigger)) return true;
+        }
+        return false;
+    }
+    initialize() {
+        this._initialized = true;
+    }
+    setHass(hass) {
+        this._hass = hass;
+    }
+    /********************************** hooks **************************************/ hasChanges(oldHass, newHass, entityId) {
+        return false;
+    }
+    getTriggers() {
+        return [];
+    }
+    setStructures() {}
+    /****************************** basic getter and setter logic *********************/ getCEIs() {
+        return this.changedEntityIds;
+    }
+    getEntityIds() {
+        return this.entityIds;
+    }
+    getStructure() {
+        return this.structure;
+    }
+    isInitialized() {
+        return this._initialized;
+    }
+    getStates() {
+        return this.states;
+    }
+    getHass() {
+        return this._hass;
+    }
+}
+
+
 /********************************states and entities ****************************************/ function $d14817f641e94e06$var$getHassEntities(hass) {
     return hass.entities;
 }
@@ -11881,7 +11978,7 @@ class $c202eb4067c1daae$export$1af8c631bdcc9a4c extends (0, $c0664485052839c4$ex
 customElements.define("lighting-panel", $c202eb4067c1daae$export$1af8c631bdcc9a4c);
 
 
-class $380e8338b10894eb$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+class $380e8338b10894eb$export$4890c87e00873e93 extends (0, $f0d92478ce7b526e$export$e0dec1ca6cc889f1) {
     _LABEL = "basement_kiosk";
     _LIGHTLABELS = {
         basic_lighting: "basic lighting",
@@ -11890,77 +11987,25 @@ class $380e8338b10894eb$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
     _OPTIONLABELS = {
         lighting: "lighting"
     };
-    _hass = {};
-    entityIds = [];
-    structure = {};
-    changedEntityIds = new Set();
-    // internal reactive states
-    static get properties() {
-        return {
-            states: {
-                state: true
-            },
-            _option: {
-                state: true
-            },
-            _isInitialized: {
-                state: true
-            }
-        };
-    }
+    static properties = {
+        ...super.properties,
+        _option: {
+            state: true
+        }
+    };
     constructor(){
         super();
-        this.states = {};
         this._option = "lighting";
-        this._isInitialized = false;
     }
-    // establish config information for card
-    setConfig() {}
-    /******************************* lifecycle *****************************/ set hass(hass) {
-        if (!this.isInitialized()) {
-            this.setHass(hass);
-            this.setStructures();
-            this.initialize();
-        } else {
-            const oldHass = this.getHass(hass);
-            this.setHass(hass);
-            this.addRelevantChanges(oldHass, this.getHass());
-            this.requestUpdate();
-        }
-    }
-    update(changedProps) {
-        this.hasRelevantChanges() && this.updateStates();
-        super.update(changedProps);
-    }
-    shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_isInitialized") || changedProps.has("_option");
-    }
-    hasChanges(oldHass, newHass, entityId) {
+    /******************************* lifecycle *****************************/ hasChanges(oldHass, newHass, entityId) {
         return (0, $d14817f641e94e06$export$94ed8fccb207472)(oldHass, newHass, entityId) || (0, $d14817f641e94e06$export$94356dcc961724c6)(oldHass, newHass, entityId);
     }
-    addRelevantChanges(oldHass, newHass) {
-        this.changedEntityIds = new Set();
-        const entityIds = this.getEntityIds();
-        entityIds.forEach((entityId)=>{
-            if (this.hasChanges(oldHass, newHass, entityId)) this.changedEntityIds.add(entityId);
-        });
+    getTriggers() {
+        return [
+            "_option"
+        ];
     }
-    hasRelevantChanges() {
-        return this.getCEIs().size > 0;
-    }
-    updateStates() {
-        const changedIds = this.getCEIs();
-        changedIds.forEach((entityId)=>{
-            this.states[entityId] = this.getHass().states[entityId];
-        });
-    }
-    /******************************* Setting Structures ***********************/ initialize() {
-        this._initialized = true;
-    }
-    setHass(hass) {
-        this._hass = hass;
-    }
-    setOption(option) {
+    /******************************* Setting Structures ***********************/ setOption(option) {
         this._option = option;
     }
     setStructures() {
@@ -12027,29 +12072,14 @@ class $380e8338b10894eb$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
     setLEDLightStructure() {
         (0, $d14817f641e94e06$export$c982908e94e49fd1)(this.getHass(), this.getLEDDict());
     }
-    /***************************** getter logic ***************************/ isInitialized() {
-        return this._initialized;
-    }
-    getHass() {
-        return this._hass;
-    }
-    getOptions() {
+    /***************************** getter logic ***************************/ getOptions() {
         return Object.keys(this._OPTIONLABELS);
     }
     getOption() {
         return this._option;
     }
-    getStructure() {
-        return this.structure;
-    }
-    getEntityIds() {
-        return this.entityIds;
-    }
     isOption(option) {
         return this.getOption() === option;
-    }
-    getCEIs() {
-        return this.changedEntityIds;
     }
     getLabel() {
         return this._LABEL;
@@ -12080,9 +12110,6 @@ class $380e8338b10894eb$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
     }
     getSoloLightIds() {
         return this.getLightingDict().soloLightIds;
-    }
-    getStates() {
-        return this.states;
     }
     /************************** interactive logic ***************************/ onClick(option) {
         this.setOption(option);
@@ -12153,6 +12180,7 @@ class $380e8338b10894eb$export$4890c87e00873e93 extends (0, $ab210b2da7b39b9d$ex
         };
     }
 }
+
 
 
 
@@ -12736,77 +12764,27 @@ class $97ffa901314cba74$export$1e5763623e0cb555 extends (0, $c0664485052839c4$ex
 customElements.define("lighting-button", $97ffa901314cba74$export$1e5763623e0cb555);
 
 
-class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+class $47449652e0f27169$export$686541059e7b9ad extends (0, $f0d92478ce7b526e$export$e0dec1ca6cc889f1) {
     _LABEL = "lighting";
-    _hass;
-    structure = {};
-    entityIds = new Set();
-    changedEntityIds = new Set();
-    static get properties() {
-        return {
-            states: {
-                state: true
-            },
-            _floorId: {
-                state: true
-            },
-            _isInitialized: {
-                state: true
-            }
-        };
-    }
+    static properties = {
+        ...super.properties,
+        _floorId: {
+            state: true
+        }
+    };
     constructor(){
         super();
-        this.states = {};
         this._isInitialized = false;
     }
-    setConfig() {}
-    /*************************** lifecycle **************************************/ set hass(hass) {
-        if (!this.isInitialized()) {
-            this.setHass(hass);
-            this.setStructures();
-            this.initializeFloor();
-            this.initialize();
-        } else {
-            const oldHass = this.getHass(hass);
-            this.setHass(hass);
-            this.addRelevantChanges(oldHass, this.getHass());
-            this.requestUpdate();
-        }
-    }
-    update(changedProps) {
-        this.hasRelevantChanges() && this.updateStates();
-        super.update(changedProps);
-    }
-    shouldUpdate(changedProps) {
-        return !this.isInitialized() || this.hasRelevantChanges() || changedProps.has("_isInitialized") || changedProps.has("_floorId");
-    }
-    hasChanges(oldHass, newHass, entityId) {
+    /*************************** lifecycle **************************************/ hasChanges(oldHass, newHass, entityId) {
         return (0, $d14817f641e94e06$export$94ed8fccb207472)(oldHass, newHass, entityId) || (0, $d14817f641e94e06$export$94356dcc961724c6)(oldHass, newHass, entityId);
     }
-    addRelevantChanges(oldHass, newHass) {
-        this.changedEntityIds = new Set();
-        const entityIds = this.getEntityIds();
-        entityIds.forEach((entityId)=>{
-            if (this.hasChanges(oldHass, newHass, entityId)) this.changedEntityIds.add(entityId);
-        });
+    getTriggers() {
+        return [
+            '_floorId'
+        ];
     }
-    hasRelevantChanges() {
-        return this.getCEIs().size > 0;
-    }
-    updateStates() {
-        const changedIds = this.getCEIs();
-        changedIds.forEach((entityId)=>{
-            this.states[entityId] = this.getHass().states[entityId];
-        });
-    }
-    /************************************* Setting Structures ****************************/ initialize() {
-        this._initialized = true;
-    }
-    setHass(hass) {
-        this._hass = hass;
-    }
-    setFloorId(floorId) {
+    /************************************* Setting Structures ****************************/ setFloorId(floorId) {
         this._floorId = floorId;
     }
     setStructures() {
@@ -12815,6 +12793,7 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
         this.setFloorStructure();
         this.setAreaStructure();
         this.setLightStructure();
+        this.initializeFloor();
     }
     setEntityIds() {
         this.entityIds = (0, $d14817f641e94e06$export$cab3e0b0f4327749)(this.getHass(), this.getLabel());
@@ -12849,24 +12828,6 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $ab210b2da7b39b9d$exp
     }
     /************************* Floor Selection Structure ***********************************************/ getLabel() {
         return this._LABEL;
-    }
-    isInitialized() {
-        return this._initialized;
-    }
-    getHass() {
-        return this._hass;
-    }
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-    getStructure() {
-        return this.structure;
-    }
-    getEntityIds() {
-        return this.entityIds;
-    }
-    getStates() {
-        return this.states;
     }
     getFloorStructure(floorId) {
         return this.getStructure()[floorId].structure;

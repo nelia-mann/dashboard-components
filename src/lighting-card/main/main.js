@@ -1,4 +1,5 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
+import { HaMainComponent } from '../../shared-resources/base-classes/ha-main-component.js';
 import { keyed } from 'lit/directives/keyed.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import {
@@ -15,94 +16,32 @@ import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import "../floor-panel/floor-panel.js";
 import "../../shared-resources/light-components/light-button/light-button.js";
 
-export class LightingCard extends LitElement {
+export class LightingCard extends HaMainComponent {
 
     _LABEL = "lighting";
 
-    _hass;
-    structure = {};
-    entityIds = new Set();
-    changedEntityIds = new Set();
-
-    static get properties() {
-        return {
-            states: { state: true },
-            _floorId: { state: true },
-            _isInitialized: { state: true },
-        };
+    static properties = {
+        ...super.properties,
+        _floorId: { state: true }
     }
 
     constructor() {
         super();
-        this.states = {};
         this._isInitialized = false;
-    }
-
-    setConfig() {
     }
 
     /*************************** lifecycle **************************************/
 
-    set hass(hass) {
-        if (!this.isInitialized()) {
-            this.setHass(hass);
-            this.setStructures();
-            this.initializeFloor();
-            this.initialize();
-        } else {
-            const oldHass = this.getHass(hass);
-            this.setHass(hass);
-            this.addRelevantChanges(oldHass, this.getHass());
-            this.requestUpdate();
-        }
-    }
-
-    update(changedProps) {
-        (this.hasRelevantChanges()) && (this.updateStates())
-        super.update(changedProps);
-    }
-
-    shouldUpdate(changedProps) {
-        return (!this.isInitialized()
-            || this.hasRelevantChanges()
-            || changedProps.has("_isInitialized")
-            || changedProps.has("_floorId"));
-    }
 
     hasChanges(oldHass, newHass, entityId) {
         return hasThemeChanges(oldHass, newHass, entityId) || hasLightChanges(oldHass, newHass, entityId);
     }
 
-    addRelevantChanges(oldHass, newHass) {
-        this.changedEntityIds = new Set();
-        const entityIds = this.getEntityIds();
-        entityIds.forEach((entityId) => {
-            if (this.hasChanges(oldHass, newHass, entityId)) {
-                this.changedEntityIds.add(entityId)
-            };
-        })
-    }
-
-    hasRelevantChanges() {
-        return this.getCEIs().size > 0;
-    }
-
-    updateStates() {
-        const changedIds = this.getCEIs();
-        changedIds.forEach((entityId) => {
-            this.states[entityId] = this.getHass().states[entityId]
-        })
+    getTriggers() {
+        return ['_floorId']
     }
 
 /************************************* Setting Structures ****************************/
-
-    initialize() {
-        this._initialized = true;
-    }
-
-    setHass(hass) {
-        this._hass = hass;
-    }
 
     setFloorId(floorId) {
         this._floorId = floorId;
@@ -114,6 +53,7 @@ export class LightingCard extends LitElement {
         this.setFloorStructure();
         this.setAreaStructure();
         this.setLightStructure();
+        this.initializeFloor();
     }
 
     setEntityIds() {
@@ -157,30 +97,6 @@ export class LightingCard extends LitElement {
 
     getLabel() {
         return this._LABEL;
-    }
-
-    isInitialized() {
-        return this._initialized;
-    }
-
-    getHass() {
-        return this._hass;
-    }
-
-    getCEIs() {
-        return this.changedEntityIds;
-    }
-
-    getStructure() {
-        return this.structure;
-    }
-
-    getEntityIds() {
-        return this.entityIds;
-    }
-
-    getStates() {
-        return this.states;
     }
 
     getFloorStructure(floorId) {

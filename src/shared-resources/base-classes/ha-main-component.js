@@ -1,5 +1,6 @@
 import { LitElement } from 'lit';
-export class LightingCard extends LitElement {
+
+export class HaMainComponent extends LitElement {
 
     _LABEL = "lighting";
 
@@ -8,12 +9,11 @@ export class LightingCard extends LitElement {
     entityIds = new Set();
     changedEntityIds = new Set();
 
-    static get properties() {
-        return {
-            states: { state: true },
-            _isInitialized: { state: true },
-        };
-    }
+    static properties = {
+        states: { state: true },
+        _isInitialized: { state: true },
+    };
+
 
     constructor() {
         super();
@@ -32,7 +32,7 @@ export class LightingCard extends LitElement {
             this.setStructures();
             this.initialize();
         } else {
-            const oldHass = this.getHass(hass);
+            const oldHass = this.getHass();
             this.setHass(hass);
             this.addRelevantChanges(oldHass, this.getHass());
             this.requestUpdate();
@@ -74,11 +74,11 @@ export class LightingCard extends LitElement {
 
     updateTrigger(changedProps) {
         const triggers = this.getTriggers();
-        triggers.forEach((trigger) => {
+        for (const trigger of triggers) {
             if (changedProps.has(trigger)) {
                 return true;
             }
-        })
+        }
         return false;
     }
 
@@ -101,7 +101,33 @@ export class LightingCard extends LitElement {
         return [];
     }
 
-    setStructure() {
+    setStructures() {
+    }
+
+    /****************************** basic getter and setter logic *********************/
+
+    getCEIs() {
+        return this.changedEntityIds;
+    }
+
+    getEntityIds() {
+        return this.entityIds;
+    }
+
+    getStructure() {
+        return this.structure;
+    }
+
+    isInitialized() {
+        return this._initialized;
+    }
+
+    getStates() {
+        return this.states;
+    }
+
+    getHass() {
+        return this._hass;
     }
 
 

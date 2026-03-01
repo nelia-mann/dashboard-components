@@ -1,5 +1,6 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
+import { HaMainComponent } from '../../shared-resources/base-classes/ha-main-component.js';
 import {
     getState,
     hasLightChanges,
@@ -15,7 +16,7 @@ import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import '../lighting/lighting.js';
 
 
-export class BasementKioskCard extends LitElement {
+export class BasementKioskCard extends HaMainComponent {
 
     _LABEL = "basement_kiosk";
     _LIGHTLABELS = {
@@ -24,93 +25,28 @@ export class BasementKioskCard extends LitElement {
     };
     _OPTIONLABELS = { lighting: "lighting" };
 
-    _hass = {};
-    entityIds = [];
-    structure = {};
-    changedEntityIds = new Set();
-
-    // internal reactive states
-    static get properties() {
-        return {
-            states: { state: true },
-            _option: { state: true },
-            _isInitialized: { state: true}
-        };
+    static properties = {
+        ...super.properties,
+        _option: { state: true },
     }
 
     constructor() {
         super();
-        this.states = {};
         this._option = "lighting";
-        this._isInitialized = false;
-    }
-
-    // establish config information for card
-    setConfig() {
     }
 
     /******************************* lifecycle *****************************/
-
-    set hass(hass) {
-        if (!this.isInitialized()) {
-            this.setHass(hass);
-            this.setStructures();
-            this.initialize();
-        } else {
-            const oldHass = this.getHass(hass);
-            this.setHass(hass);
-            this.addRelevantChanges(oldHass, this.getHass());
-            this.requestUpdate();
-        }
-    }
-
-    update(changedProps) {
-        (this.hasRelevantChanges()) && (this.updateStates())
-        super.update(changedProps);
-    }
-
-    shouldUpdate(changedProps) {
-        return (!this.isInitialized()
-            || this.hasRelevantChanges()
-            || changedProps.has("_isInitialized")
-            || changedProps.has("_option"));
-    }
 
     hasChanges(oldHass, newHass, entityId) {
         return (hasThemeChanges(oldHass, newHass, entityId)
             || hasLightChanges(oldHass, newHass, entityId));
     }
 
-    addRelevantChanges(oldHass, newHass) {
-        this.changedEntityIds = new Set();
-        const entityIds = this.getEntityIds();
-        entityIds.forEach((entityId) => {
-            if (this.hasChanges(oldHass, newHass, entityId)) {
-                this.changedEntityIds.add(entityId)
-            };
-        })
-    }
-
-    hasRelevantChanges() {
-        return this.getCEIs().size > 0;
-    }
-
-    updateStates() {
-        const changedIds = this.getCEIs();
-        changedIds.forEach((entityId) => {
-            this.states[entityId] = this.getHass().states[entityId]
-        })
+    getTriggers() {
+        return ["_option"]
     }
 
     /******************************* Setting Structures ***********************/
-
-    initialize() {
-        this._initialized = true;
-    }
-
-    setHass(hass) {
-        this._hass = hass;
-    }
 
     setOption(option) {
         this._option = option;
@@ -185,14 +121,6 @@ export class BasementKioskCard extends LitElement {
 
     /***************************** getter logic ***************************/
 
-    isInitialized() {
-        return this._initialized;
-    }
-
-    getHass() {
-        return this._hass;
-    }
-
     getOptions() {
         return Object.keys(this._OPTIONLABELS);
     }
@@ -201,20 +129,8 @@ export class BasementKioskCard extends LitElement {
         return this._option;
     }
 
-    getStructure() {
-        return this.structure;
-    }
-
-    getEntityIds() {
-        return this.entityIds;
-    }
-
     isOption(option) {
         return this.getOption() === option;
-    }
-
-    getCEIs() {
-        return this.changedEntityIds;
     }
 
     getLabel() {
@@ -257,9 +173,6 @@ export class BasementKioskCard extends LitElement {
         return this.getLightingDict().soloLightIds
     }
 
-    getStates() {
-        return this.states;
-    }
 
     /************************** interactive logic ***************************/
 

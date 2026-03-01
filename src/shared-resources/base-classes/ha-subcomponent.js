@@ -73,6 +73,6 @@ export class HaSubComponent extends LitElement {
         return false;
     }
 
-    onFirstUpdate() {}
+    onFirstUpdate() { }
 
 }
