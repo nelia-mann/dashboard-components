@@ -18,7 +18,6 @@ export class LightGroupSelect extends HaSubComponent {
     constructor() {
         super();
         this.lightId = '';
-        this.themeId = '';
     }
 
     /******************************* lifecycle **********************************/
@@ -97,12 +96,9 @@ export class LightGroupSelect extends HaSubComponent {
 
         render() {
             if (this.isInitialized()) {
-                const name = getName(this.getState(this.getMainId()));
                 return html`
-                    <div class="select-lights">
-                        ${this.innerLight(this.getMainId())}
-                        ${this.lights()}
-                    </div>
+                    ${this.innerLight(this.getMainId())}
+                    ${this.lights()}
                 `
             }
         }

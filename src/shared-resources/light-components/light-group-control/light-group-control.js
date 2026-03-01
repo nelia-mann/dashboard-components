@@ -131,6 +131,7 @@ export class LightGroupControl extends HaSubComponent {
     lightControlSelect() {
         return html`
             <light-control-select
+                class = "outlined"
                 .changedEntityIds = ${this.getCEIs()}
                 .lightState = ${this.selectedLightState()}
                 .themeState = ${this.selectedThemeState()}
@@ -144,7 +145,6 @@ export class LightGroupControl extends HaSubComponent {
 
     render() {
         if (this.isInitialized()) {
-            const name = getName(this.getState(this.getMainId()));
             return html`
                 ${this.lightGroupSelect()}
                 ${this.lightControlSelect()}

@@ -9289,37 +9289,26 @@ var $31849f357eef40d0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 var $fadc1205a54f7f23$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
-    .select-lights {
+    light-control {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    light-group-select {
         display: flex;
         flex-flow: column nowrap;
         align-items: flex-start;
         justify-content: center;
     }
 
-    .light-inner {
-        width: 180px;
-        height: 25px;
-        padding: 10px;
-        padding-top: 8px;
-        padding-bottom: 5px;
-        margin: 10px;
-        touch-action: none;
+    light-control-select {
         display: flex;
-        flex-flow: row nowrap;
-    }
-
-    .icons {
-        margin-right: 10px;
-        margin-left: 0px;
-        display: flex;
-        flex-flow: row nowrap;
-    }
-
-    light-control {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-start;
+        flex-flow: column nowrap;
+        justify-content: space-around;
         align-items: center;
+        margin-left: 10px;
     }
 
 `;
@@ -11710,13 +11699,6 @@ customElements.define("light-control", $ee6aaf60e5f69fab$export$5ebffa7af4af21de
 
 var $f0a7a27b9ff27025$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
-    .select-lights {
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: flex-start;
-        justify-content: center;
-    }
-
     .light-inner {
         width: 180px;
         height: 25px;
@@ -11736,13 +11718,6 @@ var $f0a7a27b9ff27025$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         flex-flow: row nowrap;
     }
 
-    light-control {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-start;
-        align-items: center;
-    }
-
 `;
 
 
@@ -11758,7 +11733,6 @@ class $0967e73e81854bfd$export$7b1c5bd79bb34852 extends (0, $c0664485052839c4$ex
     constructor(){
         super();
         this.lightId = '';
-        this.themeId = '';
     }
     /******************************* lifecycle **********************************/ getTriggers() {
         return [
@@ -11820,15 +11794,10 @@ class $0967e73e81854bfd$export$7b1c5bd79bb34852 extends (0, $c0664485052839c4$ex
         (0, $f0a7a27b9ff27025$export$2e2bcd8739ae039)
     ];
     render() {
-        if (this.isInitialized()) {
-            const name = (0, $4ab534091a4f77ec$export$7d9f7e9c1c02b41e)(this.getState(this.getMainId()));
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                    <div class="select-lights">
-                        ${this.innerLight(this.getMainId())}
-                        ${this.lights()}
-                    </div>
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                    ${this.innerLight(this.getMainId())}
+                    ${this.lights()}
                 `;
-        }
     }
 }
 customElements.define("light-group-select", $0967e73e81854bfd$export$7b1c5bd79bb34852);
@@ -11848,14 +11817,6 @@ const $6d29bae69684478d$var$LEFTMARGIN = 20;
 const $6d29bae69684478d$var$RIGHTMARGIN = 10;
 const $6d29bae69684478d$var$PADDING = 20;
 var $6d29bae69684478d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-
-    .control-column {
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: space-around;
-        align-items: center;
-        margin-left: 10px;
-    }
 
     .icon {
         width: 30px;
@@ -12069,11 +12030,7 @@ class $4af39bb2c674e2df$export$a67f2ddda7f43ae2 extends (0, $c0664485052839c4$ex
         (0, $6d29bae69684478d$export$2e2bcd8739ae039)
     ];
     render() {
-        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <div class="control-column outlined">
-                    ${this.icons()}
-                </div>
-            `;
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${this.icons()}`;
     }
 }
 customElements.define("light-control-select", $4af39bb2c674e2df$export$a67f2ddda7f43ae2);
@@ -12178,6 +12135,7 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
     lightControlSelect() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <light-control-select
+                class = "outlined"
                 .changedEntityIds = ${this.getCEIs()}
                 .lightState = ${this.selectedLightState()}
                 .themeState = ${this.selectedThemeState()}
@@ -12191,14 +12149,11 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
         (0, $fadc1205a54f7f23$export$2e2bcd8739ae039)
     ];
     render() {
-        if (this.isInitialized()) {
-            const name = (0, $4ab534091a4f77ec$export$7d9f7e9c1c02b41e)(this.getState(this.getMainId()));
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 ${this.lightGroupSelect()}
                 ${this.lightControlSelect()}
                 ${this.lightControl()}
             `;
-        }
     }
 }
 customElements.define("light-group-control", $72eef9afa85dc31d$export$3e3323ffc8ae8085);

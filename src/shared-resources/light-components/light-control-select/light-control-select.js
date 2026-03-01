@@ -175,11 +175,7 @@ export class LightControlSelect extends HaSubComponent {
 
     render() {
         if (this.isInitialized()) {
-            return html`
-                <div class="control-column outlined">
-                    ${this.icons()}
-                </div>
-            `
+            return html`${this.icons()}`
         }
     }
 

@@ -8,14 +8,6 @@ const PADDING = 20;
 
 export default css`
 
-    .control-column {
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: space-around;
-        align-items: center;
-        margin-left: 10px;
-    }
-
     .icon {
         width: 30px;
         height: 30px;
