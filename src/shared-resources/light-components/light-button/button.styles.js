@@ -2,6 +2,13 @@ import { css } from 'lit';
 
 export default css`
 
+    :host {
+        height: 100%;
+        width: 160px;
+        padding: 5px;
+        border: none;
+    }
+
     .button {
         height: 100%;
         width: 100%;

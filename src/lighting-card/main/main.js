@@ -39,7 +39,6 @@ export class LightingCard extends HaMainComponent {
 /************************************* Setting Structures ****************************/
 
     setStructures() {
-        console.log(this.getHass())
         this.setEntityIds();
         this.setStates();
         this.setFloorStructure();

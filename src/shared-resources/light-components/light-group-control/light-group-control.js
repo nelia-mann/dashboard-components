@@ -1,5 +1,4 @@
 import { html } from 'lit';
-import { getName } from '../../util/state-util.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './group.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';

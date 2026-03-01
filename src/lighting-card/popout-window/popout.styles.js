@@ -1,6 +1,10 @@
 import { css } from 'lit';
 
 export default css`
+
+    :host {
+    }
+
     dialog {
         padding: 20px;
         border: none;
@@ -34,10 +38,4 @@ export default css`
         background: none;
     }
 
-    light-group-control {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-around;
-        align-items: center;
-    }
 `;

@@ -1079,6 +1079,16 @@ function $d14817f641e94e06$export$2343572398f433de(hass, entityIds, labelId) {
 
 
 var $adca349e2834660d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    :host {
+        --wheel-width: 210px;
+        --wheel-left-margin: 20px;
+        --wheel-right-margin: 10px;
+        --wheel-padding: 20px;
+        --dot-width: 20px;
+        --margin-fix:  -10px;
+    }
+
     ha-card {
         padding: 10px;
         padding-top: 5px;
@@ -1366,6 +1376,10 @@ function $4ab534091a4f77ec$export$7d9f7e9c1c02b41e(state) {
 
 
 var $1d3d994b3d9f3c99$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    :host {
+    }
+
 
     .light-element {
         width: 100%;
@@ -9286,29 +9300,13 @@ var $31849f357eef40d0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-
 var $fadc1205a54f7f23$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
-    light-control {
+    :host {
         display: flex;
         flex-flow: row nowrap;
-        justify-content: flex-start;
-        align-items: center;
-    }
-
-    light-group-select {
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: flex-start;
-        justify-content: center;
-    }
-
-    light-control-select {
-        display: flex;
-        flex-flow: column nowrap;
         justify-content: space-around;
         align-items: center;
-        margin-left: 10px;
     }
 
 `;
@@ -9325,30 +9323,12 @@ const $2a56fe717a5ec2a6$var$RIGHTMARGIN = 10;
 const $2a56fe717a5ec2a6$var$PADDING = 20;
 var $2a56fe717a5ec2a6$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
-    .control-column {
+    :host {
         display: flex;
-        flex-flow: column nowrap;
-        justify-content: space-around;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
         align-items: center;
-        margin-left: 10px;
-    }
 
-    .icon {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 10px;
-    }
-
-    ha-svg-icon {
-        padding: 0%;
-        margin: 0%;
-        --mdc-icon-size: 20px;
-        height: 20px;
-        width: 20px;
     }
 
     brightness-slider {
@@ -9365,18 +9345,6 @@ var $2a56fe717a5ec2a6$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         width: ${$2a56fe717a5ec2a6$var$SIZE}px;
         height: ${$2a56fe717a5ec2a6$var$SIZE}px;
         padding: ${$2a56fe717a5ec2a6$var$PADDING}px;
-    }
-
-    color-wheel {
-        position: relative;
-        width: ${$2a56fe717a5ec2a6$var$SIZE}px;
-        height: ${$2a56fe717a5ec2a6$var$SIZE}px;
-        margin-left: ${$2a56fe717a5ec2a6$var$LEFTMARGIN}px;
-        margin-right: ${$2a56fe717a5ec2a6$var$RIGHTMARGIN}px;
-        padding: ${$2a56fe717a5ec2a6$var$PADDING}px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
     theme-select {
@@ -9811,6 +9779,18 @@ customElements.define("colortemp-slider", $3d80432ed0534279$export$e97d95246d8cb
 
 var $0c1278e39028d633$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
+    :host {
+        position: relative;
+        width: var(--wheel-width);
+        height: var(--wheel-width);
+        margin-left: var(--wheel-left-margin);
+        margin-right: var(--wheel-right-margin);
+        padding: var(--wheel-padding);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .wheel {
         position: relative;
         width: 100%;
@@ -9819,19 +9799,19 @@ var $0c1278e39028d633$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .wheel-background {
         position: absolute;
+        height: 100%;
+        width: 100%;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
         border-radius: 50%;
     }
 
     .dot {
         position: absolute;
-        width: 20px;
-        height: 20px;
-        margin-left: -10px;
-        margin-top: -10px;
+        width: var(--dot-width);
+        height: var(--dot-width);
+        margin-left: var(--margin-fix);
+        margin-top: var(--margin-fix);
         border-radius: 50%;
     }
 
@@ -9975,8 +9955,6 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $c0664485052839c4$ex
             Y
         ];
     }
-    // logic could be improved to derive "lightness"
-    // -- actually, maybe better to change how the color gradient works!
     getColor() {
         return `hsl(${this.getHue()}, 100%, ${100 - this.getSat() / 2}%)`;
     }
@@ -11694,6 +11672,14 @@ customElements.define("light-control", $ee6aaf60e5f69fab$export$5ebffa7af4af21de
 
 var $f0a7a27b9ff27025$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
+    :host {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+
     .light-inner {
         width: 180px;
         height: 25px;
@@ -11807,11 +11793,15 @@ customElements.define("light-group-select", $0967e73e81854bfd$export$7b1c5bd79bb
 
 
 
-const $6d29bae69684478d$var$SIZE = 210;
-const $6d29bae69684478d$var$LEFTMARGIN = 20;
-const $6d29bae69684478d$var$RIGHTMARGIN = 10;
-const $6d29bae69684478d$var$PADDING = 20;
 var $6d29bae69684478d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    :host {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-around;
+        align-items: center;
+        margin-left: 10px;
+    }
 
     .icon {
         width: 30px;
@@ -11829,46 +11819,6 @@ var $6d29bae69684478d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         --mdc-icon-size: 20px;
         height: 20px;
         width: 20px;
-    }
-
-    brightness-slider {
-        margin-left: ${$6d29bae69684478d$var$LEFTMARGIN}px;
-        margin-right: ${$6d29bae69684478d$var$RIGHTMARGIN}px;
-        width: ${$6d29bae69684478d$var$SIZE}px;
-        height: ${$6d29bae69684478d$var$SIZE}px;
-        padding: ${$6d29bae69684478d$var$PADDING}px;
-    }
-
-    colortemp-slider {
-        margin-left: ${$6d29bae69684478d$var$LEFTMARGIN}px;
-        margin-right: ${$6d29bae69684478d$var$RIGHTMARGIN}px;
-        width: ${$6d29bae69684478d$var$SIZE}px;
-        height: ${$6d29bae69684478d$var$SIZE}px;
-        padding: ${$6d29bae69684478d$var$PADDING}px;
-    }
-
-    color-wheel {
-        position: relative;
-        width: ${$6d29bae69684478d$var$SIZE}px;
-        height: ${$6d29bae69684478d$var$SIZE}px;
-        margin-left: ${$6d29bae69684478d$var$LEFTMARGIN}px;
-        margin-right: ${$6d29bae69684478d$var$RIGHTMARGIN}px;
-        padding: ${$6d29bae69684478d$var$PADDING}px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    theme-select {
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: flex-start;
-        align-items: center;
-        width: 450px;
-        height: 360px;
-        margin-left: ${$6d29bae69684478d$var$LEFTMARGIN}px;
-        margin-right: ${$6d29bae69684478d$var$RIGHTMARGIN}px;
-        padding: ${$6d29bae69684478d$var$PADDING}px;
     }
 
 `;
@@ -12468,6 +12418,16 @@ class $380e8338b10894eb$export$4890c87e00873e93 extends (0, $f0d92478ce7b526e$ex
 
 
 var $82c9a4f372f10553$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    :host {
+        --wheel-width: 210px;
+        --wheel-left-margin: 20px;
+        --wheel-right-margin: 10px;
+        --wheel-padding: 20px;
+        --dot-width: 20px;
+        --margin-fix:  -10px;
+    }
+
     ha-card {
         padding: 25px;
         padding-top: 5px;
@@ -12478,17 +12438,6 @@ var $82c9a4f372f10553$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: center;
         height: 500px;
         width: 800px;
-    }
-
-    floor-panel {
-        width: 100%;
-        height: 400px;
-        margin: 0px;
-        padding: 0px;
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
     }
 
     .button-row {
@@ -12502,14 +12451,6 @@ var $82c9a4f372f10553$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         padding: 0px;
     }
 
-    lighting-button {
-        height: 100%;
-        width: 160px;
-        padding: 5px;
-        border: none;
-    }
-
-
 `;
 
 
@@ -12519,7 +12460,29 @@ var $82c9a4f372f10553$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 var $55f2297f92e0e7a1$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-    area-panel {
+
+    :host {
+        width: 100%;
+        height: 400px;
+        margin: 0px;
+        padding: 0px;
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+`;
+
+
+
+
+
+
+
+var $bca01a03e150b8a1$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    :host {
         margin-left: 10px;
         margin-right: 10px;
         margin-top: 20px;
@@ -12533,9 +12496,9 @@ var $55f2297f92e0e7a1$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-var $bca01a03e150b8a1$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+var $e677bb25dbafca7d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
-    light-component {
+    :host {
         width: 180px;
         height: 25px;
         padding: 10px;
@@ -12545,21 +12508,6 @@ var $bca01a03e150b8a1$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         touch-action: none;
         display: flex;
         flex-flow: row nowrap;
-    }
-`;
-
-
-
-
-
-
-
-var $e677bb25dbafca7d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-
-    popout-window {
-    }
-
-    simple-light {
     }
 
 `;
@@ -12573,6 +12521,10 @@ var $e677bb25dbafca7d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 var $459b71b1865a1feb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    :host {
+    }
+
     dialog {
         padding: 20px;
         border: none;
@@ -12606,12 +12558,6 @@ var $459b71b1865a1feb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         background: none;
     }
 
-    light-group-control {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-around;
-        align-items: center;
-    }
 `;
 
 
@@ -12915,6 +12861,13 @@ customElements.define("floor-panel", $8d2a857b49dddd4c$export$8ff612b8b93103f2);
 
 var $e4e2ec4e85649f95$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
+    :host {
+        height: 100%;
+        width: 160px;
+        padding: 5px;
+        border: none;
+    }
+
     .button {
         height: 100%;
         width: 100%;
@@ -13045,7 +12998,6 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $f0d92478ce7b526e$exp
         ];
     }
     /************************************* Setting Structures ****************************/ setStructures() {
-        console.log(this.getHass());
         this.setEntityIds();
         this.setStates();
         this.setFloorStructure();

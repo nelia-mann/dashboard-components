@@ -2,6 +2,10 @@ import { css } from 'lit';
 
 export default css`
 
+    :host {
+    }
+
+
     .light-element {
         width: 100%;
         height: 100%;

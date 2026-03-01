@@ -1,6 +1,16 @@
 import { css } from 'lit';
 
 export default css`
+
+    :host {
+        --wheel-width: 210px;
+        --wheel-left-margin: 20px;
+        --wheel-right-margin: 10px;
+        --wheel-padding: 20px;
+        --dot-width: 20px;
+        --margin-fix:  -10px;
+    }
+
     ha-card {
         padding: 25px;
         padding-top: 5px;
@@ -13,17 +23,6 @@ export default css`
         width: 800px;
     }
 
-    floor-panel {
-        width: 100%;
-        height: 400px;
-        margin: 0px;
-        padding: 0px;
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
-    }
-
     .button-row {
         display: flex;
         flex-flow: row nowrap;
@@ -34,13 +33,5 @@ export default css`
         margin: 0px;
         padding: 0px;
     }
-
-    lighting-button {
-        height: 100%;
-        width: 160px;
-        padding: 5px;
-        border: none;
-    }
-
 
 `;

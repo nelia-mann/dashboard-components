@@ -2,6 +2,14 @@
 
 export default css`
 
+    :host {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+
     .light-inner {
         width: 180px;
         height: 25px;

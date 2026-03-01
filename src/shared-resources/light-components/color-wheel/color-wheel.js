@@ -165,8 +165,6 @@ export class ColorWheel extends HaSubComponent {
         return [X, Y]
     }
 
-    // logic could be improved to derive "lightness"
-    // -- actually, maybe better to change how the color gradient works!
     getColor() {
         return `hsl(${this.getHue()}, 100%, ${100 - this.getSat() / 2}%)`
     }
