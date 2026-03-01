@@ -25,7 +25,6 @@ function getHassFloors(hass) {
 function filterEntityIdsForFloor(hass, entityIds, floorId) {
     const theseIds = [...entityIds];
     const filteredIds = theseIds.filter((entityId) => {
-        console.log(getEntity(hass, entityId))
         const areaId = getEntityAreaId(hass, entityId);
         if (areaId) {
             return floorId === getAreaFloor(hass, areaId);

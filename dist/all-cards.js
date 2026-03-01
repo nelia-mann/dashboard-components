@@ -861,7 +861,6 @@ function $d14817f641e94e06$var$filterEntityIdsForFloor(hass, entityIds, floorId)
         ...entityIds
     ];
     const filteredIds = theseIds.filter((entityId)=>{
-        console.log($d14817f641e94e06$var$getEntity(hass, entityId));
         const areaId = $d14817f641e94e06$var$getEntityAreaId(hass, entityId);
         if (areaId) return floorId === $d14817f641e94e06$var$getAreaFloor(hass, areaId);
         else return false;
@@ -13046,6 +13045,7 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $f0d92478ce7b526e$exp
         ];
     }
     /************************************* Setting Structures ****************************/ setStructures() {
+        console.log(this.getHass());
         this.setEntityIds();
         this.setStates();
         this.setFloorStructure();
