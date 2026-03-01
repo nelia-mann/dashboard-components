@@ -1,9 +1,4 @@
 import { html } from 'lit';
-import { repeat } from 'lit-html/directives/repeat.js';
-import { styleMap } from 'lit/directives/style-map.js';
-import { brightness6, creationOutline } from '../../util/mdi-util.js';
-import { rgba, ONLIGHT, INDIGO } from '../../util/color-util.js';
-import { getColorModes, getBrightness, tempGradientFull, tempBorder, hsGradient } from '../util/light-util.js';
 import { getEntityId } from '../../util/state-util.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './light-control.styles.js';
