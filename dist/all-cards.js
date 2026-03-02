@@ -1081,12 +1081,38 @@ function $d14817f641e94e06$export$2343572398f433de(hass, entityIds, labelId) {
 var $adca349e2834660d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     :host {
+
+        --control-select-flex-flow: column nowrap;
+        --control-select-justify-content: space-around;
+        --control-select-align-items: center;
+        --control-select-margin-left: 10px;
+        --control-select-icon-width: 30px;
+        --control-select-icon-margin: 10px;
+        --control-select-icon-size: 20px;
+
+        --light-control-padding: 20px;
+        --light-control-margin-left: 20px;
+        --light-control-margin-right: 10px;
+
         --wheel-width: 210px;
-        --wheel-left-margin: 20px;
-        --wheel-right-margin: 10px;
-        --wheel-padding: 20px;
         --dot-width: 20px;
-        --margin-fix:  -10px;
+
+        --brightness-slider-width: 210px;
+        --brightness-slider-height: 210px;
+
+        --colortemp-slider-width: 210px;
+        --colortemp-slider-height: 210px;
+
+        --theme-select-flex-flow: column wrap;
+        --theme-select-align-items: center;
+        --theme-select-justify-content: flex-start;
+        --theme-select-height: 360px;
+        --theme-select-width:  450px;
+
+        --theme-button-padding-top: 1px;
+        --theme-button-padding-bottom: 1px;
+        --theme-button-margin: 5px;
+        --theme-button-width: 90px;
     }
 
     ha-card {
@@ -9317,10 +9343,6 @@ var $fadc1205a54f7f23$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-const $2a56fe717a5ec2a6$var$SIZE = 210;
-const $2a56fe717a5ec2a6$var$LEFTMARGIN = 20;
-const $2a56fe717a5ec2a6$var$RIGHTMARGIN = 10;
-const $2a56fe717a5ec2a6$var$PADDING = 20;
 var $2a56fe717a5ec2a6$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     :host {
@@ -9328,35 +9350,9 @@ var $2a56fe717a5ec2a6$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         flex-flow: row nowrap;
         justify-content: flex-start;
         align-items: center;
-
-    }
-
-    brightness-slider {
-        margin-left: ${$2a56fe717a5ec2a6$var$LEFTMARGIN}px;
-        margin-right: ${$2a56fe717a5ec2a6$var$RIGHTMARGIN}px;
-        width: ${$2a56fe717a5ec2a6$var$SIZE}px;
-        height: ${$2a56fe717a5ec2a6$var$SIZE}px;
-        padding: ${$2a56fe717a5ec2a6$var$PADDING}px;
-    }
-
-    colortemp-slider {
-        margin-left: ${$2a56fe717a5ec2a6$var$LEFTMARGIN}px;
-        margin-right: ${$2a56fe717a5ec2a6$var$RIGHTMARGIN}px;
-        width: ${$2a56fe717a5ec2a6$var$SIZE}px;
-        height: ${$2a56fe717a5ec2a6$var$SIZE}px;
-        padding: ${$2a56fe717a5ec2a6$var$PADDING}px;
-    }
-
-    theme-select {
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: flex-start;
-        align-items: center;
-        width: 450px;
-        height: 360px;
-        margin-left: ${$2a56fe717a5ec2a6$var$LEFTMARGIN}px;
-        margin-right: ${$2a56fe717a5ec2a6$var$RIGHTMARGIN}px;
-        padding: ${$2a56fe717a5ec2a6$var$PADDING}px;
+        padding: var(--light-control-padding, 20px);
+        margin-left: var(--light-control-margin-left, 20px);
+        margin-right: var(--light-control-margin-right, 10px);
     }
 
 `;
@@ -9372,14 +9368,11 @@ var $2a56fe717a5ec2a6$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 var $ae9105d0e2173251$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
-    slider-bar {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
+    :host {
+        width: var(--brightness-slider-width);
+        height: var(--brightness-slider-height);
     }
+
 `;
 
 
@@ -9393,6 +9386,15 @@ var $ae9105d0e2173251$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 const $ef1a79c6631dfc4e$var$_TOPMARGIN = 5;
 const $ef1a79c6631dfc4e$var$_BOTTOMMARGIN = 1;
 var $ef1a79c6631dfc4e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    :host {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+    }
 
     .values {
         height: 100%;
@@ -9701,14 +9703,11 @@ customElements.define("brightness-slider", $289a3d4763775a85$export$2541e764ec89
 
 var $25e401c3c55763f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
-    slider-bar {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
+    :host {
+        width: var(--colortemp-slider-width, 210px);
+        height: var(--colortemp-slider-height, 210px);
     }
+
 `;
 
 
@@ -9781,20 +9780,11 @@ var $0c1278e39028d633$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     :host {
         position: relative;
-        width: var(--wheel-width);
-        height: var(--wheel-width);
-        margin-left: var(--wheel-left-margin);
-        margin-right: var(--wheel-right-margin);
-        padding: var(--wheel-padding);
+        width: var(--wheel-width, 210px);
+        height: var(--wheel-width, 210px);
         display: flex;
         justify-content: center;
         align-items: center;
-    }
-
-    .wheel {
-        position: relative;
-        width: 100%;
-        height: 100%;
     }
 
     .wheel-background {
@@ -9808,10 +9798,10 @@ var $0c1278e39028d633$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .dot {
         position: absolute;
-        width: var(--dot-width);
-        height: var(--dot-width);
-        margin-left: var(--margin-fix);
-        margin-top: var(--margin-fix);
+        width: var(--dot-width, 20px);
+        height: var(--dot-width, 20px);
+        margin-left: calc(-1 * var(--dot-width, 20px) / 2);
+        margin-top: calc(-1 * var(--dot-width, 20px) / 2);
         border-radius: 50%;
     }
 
@@ -9981,7 +9971,6 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $c0664485052839c4$ex
     render() {
         const XY = this.getXY();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="wheel">
                 <div class="wheel-background outlined"
                     style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getBGStyle())}"
                     @pointerdown=${this.down}
@@ -9990,7 +9979,6 @@ class $bb0f3ca1b2cb13d8$export$f80663f808113381 extends (0, $c0664485052839c4$ex
                 >
                     ${this.getDot()}
                 </div>
-            </div>
         `;
     }
 }
@@ -11347,11 +11335,13 @@ function $9fad138f4964f803$export$cc5233436f23d8d4(theme) {
 
 var $650a21d87e85f0eb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
-    theme-button {
-        padding-top: 1px;
-        padding-bottom: 1px;
-        margin: 5px;
-        width: 90px;
+    :host {
+        display: flex;
+        flex-flow: var(--theme-select-flex-flow, column wrap);
+        justify-content: var(--theme-select-justify-content, flex-start);
+        align-items: var(--theme-select-align-items, center);
+        width: var(--theme-select-width, 450px);
+        height: var(--theme-select-height, 360px);
     }
 
 `;
@@ -11363,6 +11353,13 @@ var $650a21d87e85f0eb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 var $88924f19593e44bd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    :host {
+        padding-top: var(--theme-button-padding-top, 1px);
+        padding-bottom: var(--theme-button-padding-bottom, 1px);
+        margin: var(--theme-button-margin, 5px);
+        width: var(--theme-button-width, 90px);
+    }
 
     .option {
         width: 100%;
@@ -11598,7 +11595,6 @@ class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $c0664485052839c4$ex
     /************************** html/style logic ***************************/ brightnessBar() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <brightness-slider
-                class="outlined"
                 .changedEntityIds=${this.getCEIs()}
                 .lightState=${this.getLightState()}
                 .callService=${this.callService}
@@ -11607,7 +11603,6 @@ class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $c0664485052839c4$ex
     ctBar() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <colortemp-slider
-                class="outlined"
                 .changedEntityIds=${this.getCEIs()}
                 .lightState=${this.getLightState()}
                 .callService=${this.callService}
@@ -11615,7 +11610,6 @@ class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $c0664485052839c4$ex
     }
     colorWheel() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel
-            class="outlined"
             .changedEntityIds = ${this.getCEIs()}
             .lightState = ${this.getLightState()}
             .callService = ${this.callService}
@@ -11623,7 +11617,6 @@ class $ee6aaf60e5f69fab$export$5ebffa7af4af21de extends (0, $c0664485052839c4$ex
     }
     themeSelect() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-select
-            class="outlined"
             .changedEntityIds = ${this.getCEIs()}
             .themeState = ${this.getThemeState()}
             .callService = ${this.callService}
@@ -11797,28 +11790,24 @@ var $6d29bae69684478d$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     :host {
         display: flex;
-        flex-flow: column nowrap;
-        justify-content: space-around;
-        align-items: center;
-        margin-left: 10px;
+        flex-flow: var(--control-select-flex-flow, column nowrap);
+        justify-content: var(--control-select-justify-content, space-around);
+        align-items: var(--control-select-align-items, center);
+        margin-left: var(--control-select-margin-left, 10px);
     }
 
     .icon {
-        width: 30px;
-        height: 30px;
+        width: var(--control-select-icon-width, 30px);
+        height: var(--control-select-icon-width, 30px);
         border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 10px;
+        margin: var(--control-select-icon-margin, 10px);
     }
 
     ha-svg-icon {
-        padding: 0%;
-        margin: 0%;
-        --mdc-icon-size: 20px;
-        height: 20px;
-        width: 20px;
+        --mdc-icon-size: var(--control-select-icon-size, 20px);
     }
 
 `;
@@ -12036,7 +12025,7 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
         this.option = option;
     }
     isOption(option) {
-        this.option;
+        return this.option === option;
     }
     /************************ interactive logic *******************************/ onSelectLight(e) {
         const lightId = e.detail;
@@ -12053,9 +12042,14 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
             this.setOption(null);
         } else this.setOption(option);
     }
-    /**************************** style/html logic ******************************/ lightControl() {
+    /**************************** style/html logic ******************************/ getClass() {
+        if (this.isOption('brightness') || this.isOption('color_temp_kelvin') || this.isOption('theme') || this.isOption('hs_color')) return "outlined";
+        else return "";
+    }
+    lightControl() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <light-control
+                class = ${this.getClass()}
                 .changedEntityIds = ${this.getCEIs()}
                 .lightState = ${this.selectedLightState()}
                 .themeState = ${this.selectedThemeState()}
@@ -12420,12 +12414,42 @@ class $380e8338b10894eb$export$4890c87e00873e93 extends (0, $f0d92478ce7b526e$ex
 var $82c9a4f372f10553$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     :host {
+
+        --control-select-flex-flow: column nowrap;
+        --control-select-justify-content: space-around;
+        --control-select-align-items: center;
+        --control-select-margin-left: 10px;
+        --control-select-icon-width: 30px;
+        --control-select-icon-margin: 10px;
+        --control-select-icon-size: 20px;
+
+        --light-control-padding: 20px;
+        --light-control-margin-left: 20px;
+        --light-control-margin-right: 10px;
+
         --wheel-width: 210px;
-        --wheel-left-margin: 20px;
-        --wheel-right-margin: 10px;
-        --wheel-padding: 20px;
         --dot-width: 20px;
-        --margin-fix:  -10px;
+
+        --brightness-slider-width: 210px;
+        --brightness-slider-height: 210px;
+
+        --colortemp-slider-width: 210px;
+        --colortemp-slider-height: 210px;
+
+        --theme-select-flex-flow: column wrap;
+        --theme-select-align-items: center;
+        --theme-select-justify-content: flex-start;
+        --theme-select-padding: 20px;
+        --theme-select-margin-left: 20px;
+        --theme-select-margin-right: 10px;
+        --theme-select-height: 360px;
+        --theme-select-width: 450px;
+
+        --theme-button-padding-top: 1px;
+        --theme-button-padding-bottom: 1px;
+        --theme-button-margin: 5px;
+        --theme-button-width: 90px;
+
     }
 
     ha-card {

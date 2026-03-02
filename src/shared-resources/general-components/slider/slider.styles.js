@@ -5,6 +5,15 @@ const _BOTTOMMARGIN = 1;
 
 export default css`
 
+    :host {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
     .values {
         height: 100%;
         width: 35px;

@@ -2,11 +2,13 @@ import { css } from 'lit';
 
 export default css`
 
-    theme-button {
-        padding-top: 1px;
-        padding-bottom: 1px;
-        margin: 5px;
-        width: 90px;
+    :host {
+        display: flex;
+        flex-flow: var(--theme-select-flex-flow, column wrap);
+        justify-content: var(--theme-select-justify-content, flex-start);
+        align-items: var(--theme-select-align-items, center);
+        width: var(--theme-select-width, 450px);
+        height: var(--theme-select-height, 360px);
     }
 
 `;

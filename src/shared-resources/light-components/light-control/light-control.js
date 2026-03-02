@@ -61,7 +61,6 @@ export class LightControl extends HaSubComponent {
     brightnessBar() {
         return html`
             <brightness-slider
-                class="outlined"
                 .changedEntityIds=${this.getCEIs()}
                 .lightState=${this.getLightState()}
                 .callService=${this.callService}
@@ -71,7 +70,6 @@ export class LightControl extends HaSubComponent {
     ctBar() {
         return html`
             <colortemp-slider
-                class="outlined"
                 .changedEntityIds=${this.getCEIs()}
                 .lightState=${this.getLightState()}
                 .callService=${this.callService}
@@ -80,7 +78,6 @@ export class LightControl extends HaSubComponent {
 
     colorWheel() {
         return html`<color-wheel
-            class="outlined"
             .changedEntityIds = ${this.getCEIs()}
             .lightState = ${this.getLightState()}
             .callService = ${this.callService}
@@ -89,7 +86,6 @@ export class LightControl extends HaSubComponent {
 
     themeSelect() {
         return html`<theme-select
-            class="outlined"
             .changedEntityIds = ${this.getCEIs()}
             .themeState = ${this.getThemeState()}
             .callService = ${this.callService}

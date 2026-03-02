@@ -195,7 +195,6 @@ export class ColorWheel extends HaSubComponent {
     render() {
         const XY = this.getXY();
         return html`
-            <div class="wheel">
                 <div class="wheel-background outlined"
                     style="${styleMap(this.getBGStyle())}"
                     @pointerdown=${this.down}
@@ -204,7 +203,6 @@ export class ColorWheel extends HaSubComponent {
                 >
                     ${this.getDot()}
                 </div>
-            </div>
         `;
     }
 

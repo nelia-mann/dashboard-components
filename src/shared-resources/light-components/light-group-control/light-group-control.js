@@ -77,7 +77,7 @@ export class LightGroupControl extends HaSubComponent {
     }
 
     isOption(option) {
-        this.option === option;
+        return (this.option === option);
     }
 
     /************************ interactive logic *******************************/
@@ -101,9 +101,19 @@ export class LightGroupControl extends HaSubComponent {
 
     /**************************** style/html logic ******************************/
 
+    getClass() {
+        if (this.isOption('brightness')
+            || this.isOption('color_temp_kelvin')
+            || this.isOption('theme')
+            || this.isOption('hs_color')) {
+            return "outlined"
+        } else return "";
+    }
+
     lightControl() {
         return html`
             <light-control
+                class = ${this.getClass()}
                 .changedEntityIds = ${this.getCEIs()}
                 .lightState = ${this.selectedLightState()}
                 .themeState = ${this.selectedThemeState()}

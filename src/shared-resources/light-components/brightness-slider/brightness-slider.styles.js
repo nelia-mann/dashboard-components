@@ -2,12 +2,9 @@ import { css } from 'lit';
 
 export default css`
 
-    slider-bar {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
+    :host {
+        width: var(--brightness-slider-width);
+        height: var(--brightness-slider-height);
     }
+
 `;

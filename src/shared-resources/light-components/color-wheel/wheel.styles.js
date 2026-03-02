@@ -5,20 +5,11 @@ export default css`
 
     :host {
         position: relative;
-        width: var(--wheel-width);
-        height: var(--wheel-width);
-        margin-left: var(--wheel-left-margin);
-        margin-right: var(--wheel-right-margin);
-        padding: var(--wheel-padding);
+        width: var(--wheel-width, 210px);
+        height: var(--wheel-width, 210px);
         display: flex;
         justify-content: center;
         align-items: center;
-    }
-
-    .wheel {
-        position: relative;
-        width: 100%;
-        height: 100%;
     }
 
     .wheel-background {
@@ -32,10 +23,10 @@ export default css`
 
     .dot {
         position: absolute;
-        width: var(--dot-width);
-        height: var(--dot-width);
-        margin-left: var(--margin-fix);
-        margin-top: var(--margin-fix);
+        width: var(--dot-width, 20px);
+        height: var(--dot-width, 20px);
+        margin-left: calc(-1 * var(--dot-width, 20px) / 2);
+        margin-top: calc(-1 * var(--dot-width, 20px) / 2);
         border-radius: 50%;
     }
 
