@@ -9323,6 +9323,10 @@ var $459b71b1865a1feb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         overflow: hidden;
     }
 
+    dialog > * {
+        min-height: 0;
+    }
+
     .modal-header {
         display: flex;
         flex-flow: row nowrap;

@@ -18,6 +18,10 @@ export default css`
         overflow: hidden;
     }
 
+    dialog > * {
+        min-height: 0;
+    }
+
     .modal-header {
         display: flex;
         flex-flow: row nowrap;
