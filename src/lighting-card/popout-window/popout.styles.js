@@ -40,13 +40,4 @@ export default css`
         align-items: center;
     }
 
-    light-group-control {
-        height: 400px;
-        width: 300px;
-        display: flex;
-        flex-flow: var(--light-group-flex-flow, row nowrap);
-        justify-content: var(--light-group-justify-content, space-around);
-        align-items: var(--light-group-align-items, center);
-    }
-
 `;

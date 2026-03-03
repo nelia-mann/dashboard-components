@@ -44,6 +44,8 @@ export default css`
         --simple-light-icons-margin-left: 0px;
         --simple-light-icon-size: 20px;
 
+        --light-group-height: 300px;
+        --light-group-width: 500px;
         --light-group-flex-flow: row nowrap;
         --light-group-justify-content: space-around;
         --light-group-align-items: center;
