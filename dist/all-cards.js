@@ -9316,8 +9316,7 @@ var $459b71b1865a1feb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     dialog[open] {
-        display: flex;
-        flex-flow: column;
+        display: block;
     }
 
     dialog > * {
@@ -9357,8 +9356,6 @@ var $459b71b1865a1feb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 var $fadc1205a54f7f23$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     :host {
-        flex: 1;
-        min-height: 0;
         height: var(--light-group-height, 100%);
         width: var(--light-group-width, 100%);
         display: flex;

@@ -11,8 +11,7 @@ export default css`
     }
 
     dialog[open] {
-        display: flex;
-        flex-flow: column;
+        display: block;
     }
 
     dialog > * {
