@@ -11,9 +11,7 @@ export default css`
     }
 
     dialog[open] {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
+        display: block;
         overflow: hidden;
     }
 
