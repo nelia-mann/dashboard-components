@@ -44,9 +44,13 @@ export default css`
         align-items: center;
     }
 
-    .test {
-        height: 300px;
-        width: 400px;
+    light-group-control {
+        height: var(--light-group-height, 100%);
+        width: var(--light-group-width, 100%);
+        display: flex;
+        flex-flow: var(--light-group-flex-flow, row nowrap);
+        justify-content: var(--light-group-justify-content, space-around);
+        align-items: var(--light-group-align-items, center);
     }
 
 `;

@@ -93,29 +93,13 @@ export class PopoutWindow extends HaSubComponent {
         }
     }
 
-    contents2() {
-        if (this.isOpen()) {
-            const name = getName(this.getState(this.getMainId()));
-            return html`
-                <div class="modal-header">
-                    <div></div>
-                    <div class="large-heading">${name}</div>
-                    <div class="icon" @click="${this.closeModal}">
-                        <ha-svg-icon .path=${closeCircleOutline}"></ha-svg-icon>
-                    </div>
-                </div>
-                <div class="test">placeholder3</div>
-                `
-        }
-    }
-
     static styles = [sharedStyles, styles];
 
     render() {
         if (this.isInitialized()) {
             return html`
                 <dialog class="outlined" @close="${this.handleClose}">
-                    ${this.contents2()}
+                    ${this.contents()}
                 </dialog>
                 `;
         }
