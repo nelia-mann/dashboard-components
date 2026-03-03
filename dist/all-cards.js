@@ -9319,6 +9319,7 @@ var $459b71b1865a1feb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         display: flex;
         flex-direction: column;
         align-items: stretch;
+        overflow: hidden;
     }
 
     dialog > * {
@@ -9365,6 +9366,14 @@ var $fadc1205a54f7f23$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         justify-content: var(--light-group-justify-content, space-around);
         align-items: var(--light-group-align-items, center);
     }
+
+    .test {
+        height: 200px;
+        width: 300px;
+        outline: solid;
+    }
+
+
 
 `;
 
@@ -12164,9 +12173,7 @@ class $72eef9afa85dc31d$export$3e3323ffc8ae8085 extends (0, $c0664485052839c4$ex
     ];
     render() {
         if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                ${this.lightGroupSelect()}
-                ${this.lightControlSelect()}
-                ${this.lightControl()}
+                <div class="test"> placeholder </div>
             `;
     }
 }

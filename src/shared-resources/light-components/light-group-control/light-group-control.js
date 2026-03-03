@@ -155,9 +155,7 @@ export class LightGroupControl extends HaSubComponent {
     render() {
         if (this.isInitialized()) {
             return html`
-                ${this.lightGroupSelect()}
-                ${this.lightControlSelect()}
-                ${this.lightControl()}
+                <div class="test"> placeholder </div>
             `
         }
     }

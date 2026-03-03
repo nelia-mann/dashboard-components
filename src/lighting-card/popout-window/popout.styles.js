@@ -14,6 +14,7 @@ export default css`
         display: flex;
         flex-direction: column;
         align-items: stretch;
+        overflow: hidden;
     }
 
     dialog > * {
