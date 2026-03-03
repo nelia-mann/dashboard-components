@@ -99,7 +99,7 @@ export class PopoutWindow extends HaSubComponent {
         if (this.isInitialized()) {
             return html`
                 <dialog class="outlined" @close="${this.handleClose}">
-                    ${this.contents()}
+                    <div class="test"> placeholder 2</div>
                 </dialog>
                 `;
         }
