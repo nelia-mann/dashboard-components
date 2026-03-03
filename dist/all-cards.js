@@ -9316,7 +9316,9 @@ var $459b71b1865a1feb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     dialog[open] {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
     }
 
     dialog > * {
