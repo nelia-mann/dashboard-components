@@ -4,10 +4,11 @@ export default css`
 
     :host {
 
-        --ha-card-padding: 10px;
-        --ha-card-padding-top: 5px;
+        --ha-card-padding: 0px;
+        --ha-card-padding-top: 0px;
         --ha-card-height: 570px;
         --ha-card-width: 900px;
+        --ha-card-border-width: 0px;
 
         --button-row-height: 50px;
         --button-row-width: 100%;

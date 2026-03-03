@@ -11,7 +11,6 @@ export default css`
         align-items: center;
         height: var(--ha-card-height, 570px);
         width: var(--ha-card-width, 900px);
-        border-radius: 0px;
     }
 
     .button-row {
