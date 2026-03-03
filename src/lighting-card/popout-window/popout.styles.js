@@ -45,8 +45,8 @@ export default css`
     }
 
     light-group-control {
-        height: var(--light-group-height, 100%);
-        width: var(--light-group-width, 100%);
+        height: 100%;
+        width: 100%;
         display: flex;
         flex-flow: var(--light-group-flex-flow, row nowrap);
         justify-content: var(--light-group-justify-content, space-around);
