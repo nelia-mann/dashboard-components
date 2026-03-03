@@ -9316,12 +9316,10 @@ var $459b71b1865a1feb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     dialog[open] {
-        display: block;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: stretch;
         overflow: hidden;
-    }
-
-    dialog > * {
-        min-height: 0;
     }
 
     .modal-header {
@@ -12233,7 +12231,7 @@ class $1f5cf4012e444c80$export$506b69e3dcbd131b extends (0, $c0664485052839c4$ex
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div class="modal-header">
                     <div></div>
-                    <div class="large-heading">${name} NEW2 </div>
+                    <div class="large-heading">${name} NEW3 </div>
                     <div class="icon" @click="${this.closeModal}">
                         <ha-svg-icon .path=${0, $04557c061247a0a6$export$cdf8f7e64334eb05}"></ha-svg-icon>
                     </div>

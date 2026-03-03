@@ -11,12 +11,10 @@ export default css`
     }
 
     dialog[open] {
-        display: block;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: stretch;
         overflow: hidden;
-    }
-
-    dialog > * {
-        min-height: 0;
     }
 
     .modal-header {
