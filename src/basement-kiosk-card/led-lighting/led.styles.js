@@ -2,13 +2,20 @@ import { css } from 'lit';
 
 export default css`
 
-    light-group-control {
+    :host {
+        margin-top: var(--led-margin-top, 10px);
+        margin-right: var(--led-margin-right, 10px);
+        padding-left: var(--led-padding-left, 10px);
+        height: var(--led-height, 100%);
+        width: var(--led-width, 640px);
         display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-start;
+        flex-flow: column nowrap;
+        justify-content: space-between;
         align-items: center;
-        height: 100%;
-        width: 100%;
+    }
+
+    .large-heading {
+        height: var(--led-large-heading-height, 40px);
     }
 
 `;

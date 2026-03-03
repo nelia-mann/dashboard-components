@@ -4,7 +4,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { getColor } from '../util/light-util.js';
 import { getName, isGroup } from '../../util/state-util.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
-import styles from './select.styles.js';
+import styles from './group-select.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../light-control/light-control.js';
 
@@ -76,7 +76,7 @@ export class LightGroupSelect extends HaSubComponent {
                     style=${styleMap(this.getStyles(lightId))}
                     @click=${() => this.onSelect(lightId)}
                 >
-                    <div class="icons">
+                    <div class="icon">
                         <light-icon
                             .changedEntityIds=${this.getCEIs()}
                             .lightState=${this.getState(lightId)}

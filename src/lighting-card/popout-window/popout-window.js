@@ -76,9 +76,9 @@ export class PopoutWindow extends HaSubComponent {
                 <div class="modal-header">
                     <div></div>
                     <div class="large-heading">${name}</div>
-                    <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
+                    <div class="icon" @click="${this.closeModal}">
                         <ha-svg-icon .path=${closeCircleOutline}"></ha-svg-icon>
-                    </button>
+                    </div>
                 </div>
                 <light-group-control
                     .changedEntityIds = ${this.getCEIs()}

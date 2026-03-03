@@ -12,8 +12,9 @@ import {
     addAreaStructure,
 } from '../../shared-resources/util/hass-util.js';
 import styles from './main.styles.js';
+import layoutStyles from './layout-styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import "../floor-panel/floor-panel.js";
+import "../../shared-resources/light-components/floor-panel/floor-panel.js";
 import "../../shared-resources/light-components/light-button/light-button.js";
 
 export class LightingCard extends HaMainComponent {
@@ -163,7 +164,7 @@ export class LightingCard extends HaMainComponent {
     }
 
     // pull styles
-    static styles = [sharedStyles, styles];
+    static styles = [sharedStyles, layoutStyles, styles];
 
     // return html
     render() {

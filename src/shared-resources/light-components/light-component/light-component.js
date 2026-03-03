@@ -1,10 +1,10 @@
 import { html } from 'lit';
-import { getBrightness, getColorModes } from '../../shared-resources/light-components/util/light-util.js';
-import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
+import { getBrightness, getColorModes } from '../util/light-util.js';
+import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './light.styles.js';
-import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import '../../shared-resources/light-components/simple-light/simple-light.js';
-import './../popout-window/popout-window.js';
+import sharedStyles from '../../styles/shared-styles.js';
+import '../simple-light/simple-light.js';
+import '../../../lighting-card/popout-window/popout-window.js';
 
 export class LightComponent extends HaSubComponent {
 

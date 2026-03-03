@@ -1,11 +1,11 @@
 import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
-import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
+import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './area.styles.js';
-import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import '../../shared-resources/light-components/simple-light/simple-light.js';
+import sharedStyles from '../../styles/shared-styles.js';
+import '../light-component/light-component.js';
 
-export class AreaPanel2 extends HaSubComponent {
+export class AreaPanel extends HaSubComponent {
 
     constructor() {
         super();
@@ -30,16 +30,16 @@ export class AreaPanel2 extends HaSubComponent {
 
     getLightDisplay(lightId) {
         return html`
-            <simple-light
+            <light-component
                 class="outlined"
-                .changedEntityIds=${this.getCEIs()}
-                .states=${this.getStates()}
-                .lightId=${lightId}
-                .structure=${this.getSubStructure(lightId)}
-                .entityIds=${this.getSubEIs(lightId)}
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .lightId = ${lightId}
+                .themeId = ${this.getThemeId(lightId)}
+                .structure = ${this.getSubStructure(lightId)}
+                .entityIds = ${this.getSubEIs(lightId)}
                 .callService=${this.callService}
-            >
-            </simple-light>
+            ></light-component>
         `
     }
 
@@ -56,4 +56,4 @@ export class AreaPanel2 extends HaSubComponent {
     }
 }
 
-customElements.define("area-panel2", AreaPanel2);
+customElements.define("area-panel", AreaPanel);

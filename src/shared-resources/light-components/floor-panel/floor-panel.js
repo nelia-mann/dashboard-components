@@ -1,8 +1,8 @@
 import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
-import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
+import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './floor.styles.js';
-import sharedStyles from '../../shared-resources/styles/shared-styles.js';
+import sharedStyles from '../../styles/shared-styles.js';
 import '../area-panel/area-panel.js';
 
 export class FloorPanel extends HaSubComponent {

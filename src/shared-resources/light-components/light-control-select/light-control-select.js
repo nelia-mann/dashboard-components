@@ -161,11 +161,13 @@ export class LightControlSelect extends HaSubComponent {
         return repeat(this.getOptions(), (option) => option, option => {
             return html`
                 <div
-                    class="icon outlined"
+                    class="icon-window outlined"
                     style=${styleMap(this.getStyles(option))}
                     @click=${() => this.onSelect(option)}
                 >
+                    <div class="icon">
                     ${this.iconContent(option)}
+                    </div>
                 </div>
             `
         })

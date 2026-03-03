@@ -4,30 +4,29 @@ export default css`
 
     :host {
         height: 100%;
-        width: 160px;
-        padding: 5px;
+        width: var(--light-button-width, 160px);
+        padding: var(--light-button-padding, 5px);
         border: none;
     }
 
     .button {
         height: 100%;
         width: 100%;
-        padding: 0px;
-        border: none;
         display: flex;
+        border: none;
         flex-flow: column nowrap;
         justify-content: center;
         align-items: center;
     }
 
     .small-heading {
-        margin-top: 7px;
-        margin-bottom: -7px;
+        margin-top: var(--light-button-heading-margin-top, 7px);
+        margin-bottom: var(--light-button-heading-margin-bottom, -7px);
     }
 
     .sub-info {
-        margin-bottom: 10px;
-        margin-top: 1px;
+        margin-bottom: var(--light-button-sub-info-margin-bottom, 10px);
+        margin-top: var(--light-button-sub-info-margin-top, 1px);
     }
 
 `;

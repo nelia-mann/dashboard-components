@@ -2,7 +2,7 @@ import { html } from 'lit';
 import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
 import styles from './lighting.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import '../basic-lighting/basic-lighting.js';
+import '../../shared-resources/light-components/floor-panel/floor-panel.js';
 import '../led-lighting/led-lighting.js';
 
 export class LightingPanel extends HaSubComponent {
@@ -30,13 +30,13 @@ export class LightingPanel extends HaSubComponent {
 
     basicLightingPanel() {
         return html`
-            <basic-lighting-panel
+            <floor-panel
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
                 .structure = ${this.getSubStructure("basic_lighting")}
                 .entityIds = ${this.getSubEntityIds("basic_lighting")}
                 .callService=${this.callService}
-            ></basic-lighting-panel>
+            ></floor-panel>
         `
     }
 

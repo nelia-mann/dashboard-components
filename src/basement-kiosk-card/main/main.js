@@ -12,6 +12,7 @@ import {
     addLightStructure
 } from '../../shared-resources/util/hass-util.js';
 import styles from './main.styles.js';
+import layoutStyles from './layout-styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import '../lighting/lighting.js';
 
@@ -229,7 +230,7 @@ export class BasementKioskCard extends HaMainComponent {
         }
     }
 
-    static styles = [styles, sharedStyles];
+    static styles = [styles, layoutStyles, sharedStyles];
 
     render() {
         if (this.isInitialized()) {

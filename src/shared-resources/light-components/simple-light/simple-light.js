@@ -47,10 +47,13 @@ export class SimpleLight extends HaSubComponent {
         let lightIds = this.getLightIds();
         (lightIds.length === 0) && (lightIds = [this.getMainId()])
         result = repeat(lightIds, (lightId) => lightId, (lightId) => {
-            return html`<light-icon
-                    .changedEntityIds=${this.getCEIs()}
-                    .lightState=${this.getLightState(lightId)}
-                ></light-icon>`
+            return html`<div class="icon">
+                    <light-icon
+                        .changedEntityIds=${this.getCEIs()}
+                        .lightState=${this.getLightState(lightId)}
+                    ></light-icon>
+                </div>
+                `
         })
         return result;
     }

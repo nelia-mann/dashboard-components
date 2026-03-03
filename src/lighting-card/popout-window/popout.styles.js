@@ -6,7 +6,7 @@ export default css`
     }
 
     dialog {
-        padding: 20px;
+        padding: var(--dialog-padding, 20px);
         border: none;
     }
 
@@ -23,19 +23,22 @@ export default css`
         flex-flow: row nowrap;
         justify-content: space-between;
         align-items: center;
-        margin: 20px;
-        margin-top: -10px;
-        background: none;
-        padding-top: none;
-        padding-bottom: none;
-        height: 40px;
+        margin: var(--modal-header-margin, 20px);
+        margin-top: var(--modal-header-margin-top, -10px);
+        height: var(--modal-header-height, 40px);
         width: 100%;
+        background: none;
     }
 
-    .close-button {
-        font-size: 15px;
-        border: none;
-        background: none;
+    .icon {
+        margin: 0px;
+        padding: 0px;
+        width: var(--close-modal-icon-size, 20px);
+        height: var(--close-modal-icon-size, 20px);
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
     }
 
 `;

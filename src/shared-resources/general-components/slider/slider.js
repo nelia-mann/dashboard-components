@@ -168,12 +168,15 @@ export class SliderBar extends HaSubComponent {
         if (this.isInitialized()) {
             return html`
                 <div class="values">
+                    <div class="pad-top"></div>
                     <div class="inner-values">
                         <div class="top-value"> ${this.addUnits(this.getMax())} </div>
                         <div class="bottom-value"> ${this.addUnits(this.getMin())} </div>
                     </div>
+                    <div class="pad-bottom"></div>
                 </div>
                 <div class="slider outlined">
+                    <div class="pad"></div>
                     <div class="inner-slider">
                         <div
                             class="shown-slider"
@@ -191,13 +194,16 @@ export class SliderBar extends HaSubComponent {
                             @change="${this.handleOnChange}"
                         ></input>
                     </div>
+                    <div class="pad"></div>
                 </div>
                 <div class="values">
+                    <div class="pad-top"></div>
                     <div class="inner-values">
                         <div class="current-value" style="${styleMap(this.getStyleLevel())}">
                             ${this.addUnits(this.getValue())}
                         </div>
                     </div>
+                    <div class="pad-bottom"></div>
                 </div>
             `
         }

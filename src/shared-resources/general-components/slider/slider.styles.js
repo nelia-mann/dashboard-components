@@ -1,8 +1,5 @@
 import { css } from 'lit';
 
-const _TOPMARGIN = 5;
-const _BOTTOMMARGIN = 1;
-
 export default css`
 
     :host {
@@ -16,27 +13,48 @@ export default css`
 
     .values {
         height: 100%;
-        width: 35px;
-        padding-top: ${_TOPMARGIN + 25}%;
-    }
-
-    .inner-values {
-        position: relative;
-        height: ${100 - _TOPMARGIN - _BOTTOMMARGIN}%;
-        width: 100%;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: center;
     }
 
     .slider {
         height: 100%;
-        width: 40px;
-        margin-left: 5px;
-        padding-top: ${_TOPMARGIN}%;
+        width: var(--slider-width, 40px);
+        margin-left: var(--slider-text-padding, 5px);
+        margin-right: var(--slider-text-padding, 5px);
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pad {
+        width: 100%;
+        height: var(--slider-margin, 5%);
     }
 
     .inner-slider {
         position: relative;
-        height: ${100 - _TOPMARGIN - _BOTTOMMARGIN}%;
+        height: calc(100% - 2 * var(--slider-margin, 5%));
         width: 100%;
+    }
+
+    .pad-top {
+        width: 100%;
+        height: calc(var(--slider-text-offset, 5%) + var(--slider-margin, 5%));
+    }
+
+    .inner-values {
+        position: relative;
+        height: calc(100% - 2 * var(--slider-margin, 5%));
+        width: 100%;
+    }
+
+    .pad-bottom {
+        width: 100%;
+        height: calc(-1 * var(--slider-text-offset, 5%) + var(--slider-margin, 5%));
     }
 
     .actual-slider {
@@ -60,26 +78,25 @@ export default css`
 
     .shown-level {
         position: absolute;
-        left: -10%;
-        width: 120%;
-        height: 2%;
+        left: calc(-1 * var(--slider-level-offset, 10%));
+        width: calc(100% + 2 * var(--slider-level-offset, 10%));
+        height: var(--slider-level-height, 2%);
 }
 
     .bottom-value {
         position: absolute;
         bottom: 0%;
-        right: 0px;
+        right: 0%;
     }
 
     .top-value {
         position: absolute;
         bottom: 100%;
-        right: 0px;
+        right: 0%;
     }
 
     .current-value {
         position: absolute;
-        left: 5px;
     }
 
 `;
