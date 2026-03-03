@@ -75,7 +75,7 @@ export class PopoutWindow extends HaSubComponent {
             return html`
                 <div class="modal-header">
                     <div></div>
-                    <div class="large-heading">${name}</div>
+                    <div class="large-heading">${name} NEW </div>
                     <div class="icon" @click="${this.closeModal}">
                         <ha-svg-icon .path=${closeCircleOutline}"></ha-svg-icon>
                     </div>
