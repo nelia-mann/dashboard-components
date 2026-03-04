@@ -29,7 +29,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
 
         --ha-card-padding: 0px;
         --ha-card-padding-top: 0px;
-        --ha-card-height: 585px;
+        --ha-card-height: 575px;
         --ha-card-width: 920px;
         --ha-card-border-width: 0px;
 
@@ -759,7 +759,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                 .themeState = ${this.selectedThemeState()}
                 .option = ${this.getOption()}
                 .callService=${this.callService}
-            ></light-control>
+            > ping </light-control>
         `}lightGroupSelect(){return F`
             <light-group-select
                 .changedEntityIds = ${this.getCEIs()}
