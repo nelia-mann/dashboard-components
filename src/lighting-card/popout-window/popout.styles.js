@@ -13,7 +13,7 @@ export default css`
     dialog[open] {
         display: flex;
         flex-flow: column nowrap;
-        align-items: stretch;
+        align-items: center;
         overflow: hidden;
     }
 

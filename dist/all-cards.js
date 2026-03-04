@@ -9318,7 +9318,7 @@ var $459b71b1865a1feb$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     dialog[open] {
         display: flex;
         flex-flow: column nowrap;
-        align-items: stretch;
+        align-items: center;
         overflow: hidden;
     }
 
@@ -12870,8 +12870,8 @@ var $c12230f991c021d5$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         --simple-light-icons-margin-left: 0px;
         --simple-light-icon-size: 20px;
 
-        --light-group-height: 300px;
-        --light-group-width: 500px;
+        --light-group-height: 100%;
+        --light-group-width: 100%;
         --light-group-flex-flow: row nowrap;
         --light-group-justify-content: space-around;
         --light-group-align-items: center;
