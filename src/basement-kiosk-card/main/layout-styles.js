@@ -6,8 +6,8 @@ export default css`
 
         --ha-card-padding: 0px;
         --ha-card-padding-top: 0px;
-        --ha-card-height: 570px;
-        --ha-card-width: 900px;
+        --ha-card-height: 585px;
+        --ha-card-width: 920px;
         --ha-card-border-width: 0px;
 
         --button-row-height: 50px;
