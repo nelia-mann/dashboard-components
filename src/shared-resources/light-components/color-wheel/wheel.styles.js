@@ -19,6 +19,7 @@ export default css`
         top: 0;
         left: 0;
         border-radius: 50%;
+        touch-action: none;
     }
 
     .dot {
