@@ -123,7 +123,7 @@ export class LightGroupControl extends HaSubComponent {
                 .themeState = ${this.selectedThemeState()}
                 .option = ${this.getOption()}
                 .callService=${this.callService}
-            > ping </light-control>
+            ></light-control>
         `
     }
 
