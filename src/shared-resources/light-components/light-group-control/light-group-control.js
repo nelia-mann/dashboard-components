@@ -95,7 +95,11 @@ export class LightGroupControl extends HaSubComponent {
             this.callService('light', 'toggle', data)
             this.setOption(null);
         } else {
-            this.setOption(option);
+            if (option === this.getOption()) {
+                this.setOption(null);
+            } else {
+                this.setOption(option);
+            }
         }
     }
 

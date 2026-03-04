@@ -108,8 +108,6 @@ export class LightControl extends HaSubComponent {
             case 'theme':
                 panel = this.themeSelect();
                 break;
-            default:
-                panel = '';
         }
         return panel;
     }
