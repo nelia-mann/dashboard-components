@@ -35,8 +35,11 @@ export class SimpleLight extends HaSubComponent {
 
     onClick() {
         if (this.callService) {
-            const data = { entity_id: this.getMainId() };
-            this.callService('light', 'toggle', data)
+            const entityId = this.getMainId();
+            const idStructure = entityId.split('.');
+            const type = idStructure[0];
+            const data = { entity_id: entityId };
+            this.callService(type, 'toggle', data)
         }
     }
 

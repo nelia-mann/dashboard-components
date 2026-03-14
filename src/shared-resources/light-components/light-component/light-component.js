@@ -69,6 +69,10 @@ export class LightComponent extends HaSubComponent {
         this.isModalOpen = false;
     }
 
+    isOpen() {
+        return this.isModalOpen;
+    }
+
     getDuration() {
         return this._HOLD_DURATION;
     }
@@ -82,14 +86,12 @@ export class LightComponent extends HaSubComponent {
 
     onUp() {
         this.raiseHold();
+        (!this.isOpen()) && (this.onClick());
     }
 
     onHold() {
-        if (this.isHolding()) {
+        if (this.isHolding() && this.hasOptions()) {
             this.openModal();
-        }
-        else {
-            this.onClick();
         }
     }
 
@@ -98,8 +100,11 @@ export class LightComponent extends HaSubComponent {
     }
 
     onClick() {
-        const data = { entity_id: this.getMainId() };
-        this.callService('light', 'toggle', data)
+        const entityId = this.getMainId();
+        const idStructure = entityId.split('.');
+        const type = idStructure[0];
+        const data = { entity_id: entityId };
+        this.callService(type, 'toggle', data)
     }
 
     /************************************ style/html logic **********************************/

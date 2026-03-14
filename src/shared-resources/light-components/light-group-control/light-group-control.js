@@ -91,8 +91,10 @@ export class LightGroupControl extends HaSubComponent {
         const option = e.detail;
         if (option === 'onOff') {
             const entityId = this.getSelectedId();
-            const data = { entity_id: entityId }
-            this.callService('light', 'toggle', data)
+            const idStructure = entityId.split('.');
+            const type = idStructure[0];
+            const data = { entity_id: entityId };
+            this.callService(type, 'toggle', data)
             this.setOption(null);
         } else {
             if (option === this.getOption()) {

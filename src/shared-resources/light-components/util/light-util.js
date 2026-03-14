@@ -7,7 +7,12 @@ const MINTEMP = 1500;
 const MINTEMPSAFE = 2000;
 
 function getColorModes(lightState) {
-    return (getAttributes(lightState).supported_color_modes);
+    const attribute = getAttributes(lightState).supported_color_modes;
+    if (attribute) {
+        return attribute;
+    } else {
+        return [];
+    }
 }
 
 function getRGB(lightState) {

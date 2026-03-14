@@ -70,10 +70,6 @@ function getAreaFloor(hass, areaId) {
     return getArea(hass, areaId).floor_id;
 }
 
-function isAreaOnFloor(hass, floorId, areaId) {
-    return (getAreaFloor(hass, areaId) === floorId);
-}
-
 function getEntityAreaId(hass, entityId) {
     const entity = getEntity(hass, entityId);
     return entity.area_id;
@@ -198,8 +194,8 @@ function addLightGroupStructure(hass, dictionary, lightId) {
 
 function isLight(hass, entityId) {
     const entity = getEntity(hass, entityId);
-    const notLight = entity.labels.includes('not_light');
-    return (entityId.substring(0, 6) === "light.") && (!notLight);
+    const isLight = entity.labels.includes('light');
+    return isLight;
 }
 
 function getLightIds(hass) {
