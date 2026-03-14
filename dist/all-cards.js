@@ -852,7 +852,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                 .entityIds = ${this.getSubEIs(t)}
                 .callService = ${this.callService}
             ></area-panel>
-        `}getAreaDisplays(){let t=Object.keys(this.getStructure());return F`${tv(t,t=>t,t=>this.getAreaDisplay(t))}`}static styles=[tR,tF];render(){if(this.isInitialized())return F`${this.getAreaDisplays()}`}});var ej=n`
+        `}getAreaDisplays(){let t=Object.keys(this.getStructure()).sort();return F`${tv(t,t=>t,t=>this.getAreaDisplay(t))}`}static styles=[tR,tF];render(){if(this.isInitialized())return F`${this.getAreaDisplays()}`}});var ej=n`
 
     :host {
         margin-top: var(--led-margin-top, 10px);

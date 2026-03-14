@@ -33,7 +33,7 @@ export class FloorPanel extends HaSubComponent {
     }
 
     getAreaDisplays() {
-        const areaIds = Object.keys(this.getStructure());
+        const areaIds = Object.keys(this.getStructure()).sort();
         return html`${repeat(areaIds, (areaId) => areaId, (areaId) => this.getAreaDisplay(areaId))}`
     }
 
