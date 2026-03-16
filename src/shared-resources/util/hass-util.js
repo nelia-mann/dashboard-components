@@ -16,6 +16,17 @@ function getState(hass, entityId) {
     return getHassStates(hass)[entityId];
 }
 
+function hasAttributeChanges(oldHass, newHass, entityId, attributes) {
+    const oldState = getState(oldHass, entityId);
+    const newState = getState(newHass, entityId);
+    if (oldState.state !== newState.state) {
+        return true;
+    }
+    return attributes.some((attribute) => {
+        return (oldState.attributes[attribute] !== newState.attributes[attribute])
+    })
+}
+
 /********************************* floors ************************************************/
 
 function getHassFloors(hass) {
@@ -92,9 +103,7 @@ function filterEntityIdsForArea(hass, entityIds, areaId) {
     return new Set(filteredIds);
 }
 
-function addAreaStructure(hass, dictionary) {
-    const entityIds = dictionary.entityIds;
-    let structure = dictionary.structure;
+function addAreaStructure(hass, structure, entityIds) {
     const areaIds = getUniqueAreaIds(hass, entityIds);
     areaIds.forEach((areaId) => {
         const ids = filterEntityIdsForArea(hass, entityIds, areaId);
@@ -138,12 +147,6 @@ function addThemeStructure(hass, dictionary, lightId) {
         dictionary.theme = themeId;
         dictionary.entityIds.add(themeId);
     }
-}
-
-function hasThemeChanges(oldHass, newHass, themeId) {
-    const oldState = getState(oldHass, themeId);
-    const newState = getState(newHass, themeId);
-    return (isTheme(themeId) && (oldState.state !== newState.state));
 }
 
 /********************************* groups ************************************************/
@@ -223,15 +226,26 @@ function isSoloLight(hass, entityId) {
 }
 
 function hasLightChanges(oldHass, newHass, lightId) {
-    const oldState = getState(oldHass, lightId);
-    const newState = getState(newHass, lightId);
+    let attributes = [];
     if (isLight(newHass, lightId)) {
-        return (
-            (oldState.state !== newState.state)
-            || (oldState.attributes.brightness !== newState.attributes.brightness)
-            || (oldState.attributes.hs_color !== newState.attributes.hs_color)
-        )
-    } else return false;
+        attributes = ["brightness", "hs_color"];
+    }
+    return hasAttributeChanges(oldHass, newHass, lightId, attributes);
+}
+
+/********************************* climate entities **********************************************/
+
+function isThermostat(entityId) {
+    const type = entityId.split('.')[0];
+    return (type === "climate");
+}
+
+function hasClimateChanges(oldHass, newHass, entityId) {
+    let attributes = [];
+    if (isThermostat(entityId)) {
+        attributes = ["current_temperature", "temperature", "hvac_action"];
+    }
+    return hasAttributeChanges(oldHass, newHass, entityId, attributes)
 }
 
 /********************************* label manipulation ************************************/
@@ -271,8 +285,8 @@ export {
     addAreaStructure,
     addLightStructure,
     isSoloLight,
-    hasThemeChanges,
     hasLightChanges,
     getEntityIdsWithLabel,
     filterEntityIdsForLabel,
+    hasClimateChanges
 }

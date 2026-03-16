@@ -4,7 +4,6 @@ import { HaMainComponent } from '../../shared-resources/base-classes/ha-main-com
 import {
     getState,
     hasLightChanges,
-    hasThemeChanges,
     getEntityIdsWithLabel,
     filterEntityIdsForLabel,
     addAreaStructure,
@@ -39,8 +38,7 @@ export class BasementKioskCard extends HaMainComponent {
     /******************************* lifecycle *****************************/
 
     hasChanges(oldHass, newHass, entityId) {
-        return (hasThemeChanges(oldHass, newHass, entityId)
-            || hasLightChanges(oldHass, newHass, entityId));
+        return hasLightChanges(oldHass, newHass, entityId);
     }
 
     getTriggers() {
@@ -106,7 +104,9 @@ export class BasementKioskCard extends HaMainComponent {
     }
 
     setBasicLightingAreaStructure() {
-        addAreaStructure(this.getHass(), this.getBasicLightingDict())
+        const basicLightingStructure = this.getBasicLightingDict().structure;
+        const basicLightingIds = this.getBasicLightingDict().entityIds;
+        addAreaStructure(this.getHass(), basicLightingStructure, basicLightingIds);
     }
 
     setBasicLightingLightStructure() {

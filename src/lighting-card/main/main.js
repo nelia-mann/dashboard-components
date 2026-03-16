@@ -6,7 +6,6 @@ import {
     getState,
     addFloorStructure,
     addLightStructure,
-    hasThemeChanges,
     hasLightChanges,
     getEntityIdsWithLabel,
     addAreaStructure,
@@ -30,7 +29,7 @@ export class LightingCard extends HaMainComponent {
 
 
     hasChanges(oldHass, newHass, entityId) {
-        return hasThemeChanges(oldHass, newHass, entityId) || hasLightChanges(oldHass, newHass, entityId);
+        return hasLightChanges(oldHass, newHass, entityId);
     }
 
     getTriggers() {
@@ -66,7 +65,7 @@ export class LightingCard extends HaMainComponent {
 
     setAreaStructure() {
         Object.values(this.structure).forEach((floorDictionary) => {
-            addAreaStructure(this.getHass(), floorDictionary)
+            addAreaStructure(this.getHass(), floorDictionary.structure, floorDictionary.entityIds);
         })
     }
 
