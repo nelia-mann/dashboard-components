@@ -6,4 +6,11 @@ export {
     mdiLightbulbOff as lightbulbOff,
     mdiLightbulbGroupOff as lightbulbGroupOff,
     mdiLightbulbGroup as lightbulbGroup,
+    mdiSnowflake as snowflake,
+    mdiFire as fire,
+    mdiPower as power,
+    mdiExclamation as exclamation,
+    mdiSlashForward as slash
+
+
 } from '@mdi/js';

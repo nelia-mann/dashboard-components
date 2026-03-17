@@ -13,6 +13,7 @@ import styles from './main.styles.js';
 import layoutStyles from './layout-styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import "../../shared-resources/climate-components/climate-button/climate-button.js";
+import "../area-panel/area-panel.js";
 
 export class ClimateCard extends HaMainComponent {
 
@@ -21,6 +22,7 @@ export class ClimateCard extends HaMainComponent {
     _INCLUDEINIDS = ["living_room", "small_guest_room", "bedroom"];
     _KEYS = ["min", "max", "temp", "mode", "heatpump", "thermostat", "dominanthp", "tie_main"];
     _CLIMATEKEYS = ["temp", "mode", "heatpump"];
+    _DOMID = "dominanthp";
 
     static properties = {
         ...super.properties,
@@ -65,9 +67,13 @@ export class ClimateCard extends HaMainComponent {
     }
 
     setClimateStructure() {
-        const generalIds = this.getStructure()[this._GENERALID].entityIds;
+        let generalIds = this.getStructure()[this._GENERALID].entityIds;
+        const filteredIds = [...filterEntityIdsForLabel(this.getHass(), generalIds, this._DOMID)];
+        const domId = filteredIds[0];
+        generalIds.delete(domId);
         delete this.getStructure()[this._GENERALID];
         Object.entries(this.getStructure()).forEach(([areaId, dictionary]) => {
+            dictionary.entityIds.add(domId);
             dictionary.structure.climate = { structure: {}, entityIds: dictionary.entityIds };
             this.addKeyStructure(dictionary.structure.climate);
             this.addClimateIds(dictionary.structure.climate);
@@ -140,6 +146,18 @@ export class ClimateCard extends HaMainComponent {
         return this.getAreaClimate(areaId).structure;
     }
 
+    getAreaStructure() {
+        return this.getStructure()[this.getAreaId()].structure;
+    }
+
+    getAreaEIs() {
+        return this.getStructure()[this.getAreaId()].entityIds;
+    }
+
+    getThisAreaName() {
+        return this.getStructure()[this.getAreaId()].name;
+    }
+
     /********************************* interactive logic **********************************/
 
     onClick(areaId) {
@@ -171,7 +189,14 @@ export class ClimateCard extends HaMainComponent {
     // generates panel content, based on currently selected floor.
     content() {
         return keyed(this.getAreaId(), html`
-            <div> Placeholder Panel </div>
+            <area-climate-panel
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getAreaEIs()}
+                .structure = ${this.getAreaStructure()}
+                .title = ${this.getThisAreaName()}
+                .callService = ${this._hass.callService}
+            ></area-climate-panel>
         `);
     }
 
