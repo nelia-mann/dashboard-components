@@ -20,9 +20,9 @@ export class ModeControls extends HaSubComponent {
     }
 
     isDominant() {
-        dominantHPid = this.getStates()[this.getDominantId()].state;
-        actualHPid = this.getStructure().heatpump;
-        return actualHPid === dominantHPid;
+        const hpId = this.getStructure().heatpump
+        const domHpId = this.getStates()[this.getDominantId()].state
+        return hpId === domHpId;
     }
 
     getModes() {
@@ -139,7 +139,7 @@ export class ModeControls extends HaSubComponent {
     }
 
     dominateButton() {
-        if (this.getDominateId()) {
+        if (this.getDominantId()) {
             return html`
                 <div class="button outlined"
                     style=${styleMap(this.getModeStyles(this.getMode(), this.isDominant()))}>
@@ -150,7 +150,7 @@ export class ModeControls extends HaSubComponent {
 
     render() {
         if (this.isInitialized()) {
-            console.log("ping2")
+            console.log("ping")
             return html`
                 ${this.modeButtons()}
                 ${this.dominateButton()}

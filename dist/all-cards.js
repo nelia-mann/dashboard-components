@@ -13571,9 +13571,9 @@ class $2964133bd969709f$export$5d11a2c32d678853 extends (0, $c0664485052839c4$ex
         return this.getStructure().dominanthp;
     }
     isDominant() {
-        dominantHPid = this.getStates()[this.getDominantId()].state;
-        actualHPid = this.getStructure().heatpump;
-        return actualHPid === dominantHPid;
+        const hpId = this.getStructure().heatpump;
+        const domHpId = this.getStates()[this.getDominantId()].state;
+        return hpId === domHpId;
     }
     getModes() {
         const options = this.getStates()[this.getModeId()].attributes.options;
@@ -13681,7 +13681,7 @@ class $2964133bd969709f$export$5d11a2c32d678853 extends (0, $c0664485052839c4$ex
         `;
     }
     dominateButton() {
-        if (this.getDominateId()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        if (this.getDominantId()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div class="button outlined"
                     style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getModeStyles(this.getMode(), this.isDominant()))}>
                     <ha-svg-icon .path=${0, $04557c061247a0a6$export$98d40ccad881c732}}></ha-svg-icon>
@@ -13689,7 +13689,7 @@ class $2964133bd969709f$export$5d11a2c32d678853 extends (0, $c0664485052839c4$ex
     }
     render() {
         if (this.isInitialized()) {
-            console.log("ping2");
+            console.log("ping");
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 ${this.modeButtons()}
                 ${this.dominateButton()}
