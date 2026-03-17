@@ -4,7 +4,6 @@ import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import { OFF, COOL, HOT, climateGradient, rgba } from './../../util/color-util.js';
 import styles from './button.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
-import { FloorPanel } from '../../light-components/floor-panel/floor-panel.js';
 
 export class ClimateButton extends HaSubComponent {
 
@@ -83,21 +82,21 @@ export class ClimateButton extends HaSubComponent {
                 styles['background-color'] = rgba(OFF, 0.5);
                 if (this.selected()) {
                     styles['outline'] = `solid ${rgba(OFF, 1.0)}`;
-                    styles['outline-offset'] = '-4px';
+                    styles['outline-offset'] = '-3px';
                 }
                 break;
             case 'heat':
                 styles['background-color'] = rgba(HOT, 0.5);
                 if (this.selected()) {
                     styles['outline'] = `solid ${rgba(HOT, 1.0)}`;
-                    styles['outline-offset'] = '-4px';
+                    styles['outline-offset'] = '-3px';
                 }
                 break;
             case 'cool':
                 styles['background-color'] = rgba(COOL, 0.5);
                 if (this.selected()) {
                     styles['outline'] = `solid ${rgba(COOL, 1.0)}`;
-                    styles['outline-offset'] = '-4px';
+                    styles['outline-offset'] = '-3px';
                 }
                 break;
             case 'heat-cool':
@@ -114,7 +113,7 @@ export class ClimateButton extends HaSubComponent {
                             styles['outline'] = `solid ${rgba(OFF, 1.0)}`;
                             break;
                     }
-                    styles['outline-offset'] = '-4px';
+                    styles['outline-offset'] = '-3px';
                 }
         }
         return styles;

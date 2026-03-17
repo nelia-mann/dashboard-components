@@ -1,6 +1,8 @@
 import { html } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
+import { OFF, COOL, HOT, climateGradient, rgba } from './../../util/color-util.js';
 import { snowflake, fire, power, slash, exclamation } from '../../util/mdi-util.js';
 import styles from './mode.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
@@ -13,13 +15,95 @@ export class ModeControls extends HaSubComponent {
         return this.getStructure().mode;
     }
 
-    getDominateId() {
+    getDominantId() {
         return this.getStructure().dominanthp;
+    }
+
+    isDominant() {
+        dominantHPid = this.getStates()[this.getDominantId()].state;
+        actualHPid = this.getStructure().heatpump;
+        return actualHPid === dominantHPid;
     }
 
     getModes() {
         const options = this.getStates()[this.getModeId()].attributes.options;
         return options;
+    }
+
+    getMode() {
+        const modeId = this.getStructure().mode;
+        return this.getStates()[modeId].state;
+    }
+
+    getAction() {
+        const hpId = this.getStructure().heatpump;
+        const hpState = this.getStates()[hpId].state;
+        let action = "off";
+        switch (hpState) {
+            case 'heat':
+                action = "heating";
+                break;
+            case 'cool':
+                action = "cooling";
+                break;
+            case 'off':
+                if (this.getMode() !== "off") {
+                    action = "idle";
+                } else { action = "off" };
+                break;
+        }
+        return action;
+    }
+
+    isMode(mode) {
+        return mode === this.getMode();
+    }
+
+    getModeStyles(mode, outline) {
+        let styles = {};
+        switch (mode) {
+            case 'off':
+                styles['background-color'] = rgba(OFF, 0.5);
+                if (outline) {
+                    styles['outline'] = `solid ${rgba(OFF, 1.0)}`;
+                    styles['outline-offset'] = '-3px';
+                }
+                break;
+            case 'heat':
+                styles['background-color'] = rgba(HOT, 0.5);
+                if (outline) {
+                    styles['outline'] = `solid ${rgba(HOT, 1.0)}`;
+                    styles['outline-offset'] = '-3px';
+                }
+                break;
+            case 'cool':
+                styles['background-color'] = rgba(COOL, 0.5);
+                if (outline) {
+                    styles['outline'] = `solid ${rgba(COOL, 1.0)}`;
+                    styles['outline-offset'] = '-3px';
+                }
+                break;
+            case 'heat-cool':
+                styles['background'] = climateGradient();
+                if (outline) {
+                    switch (this.getAction()) {
+                        case 'heating':
+                            styles['outline'] = `solid ${rgba(HOT, 1.0)}`;
+                            break;
+                        case 'cooling':
+                            styles['outline'] = `solid ${rgba(COOL, 1.0)}`;
+                            break;
+                        case 'idle':
+                            styles['outline'] = `solid ${rgba(OFF, 1.0)}`;
+                            break;
+                        case 'off':
+                            styles['outline'] = `solid ${rgba(OFF, 1.0)}`;
+                            break;
+                    }
+                    styles['outline-offset'] = '-3px';
+                }
+        }
+        return styles;
     }
 
     modeButton(mode) {
@@ -41,7 +125,11 @@ export class ModeControls extends HaSubComponent {
                     <ha-svg-icon .path=${fire}}></ha-svg-icon>
                 `
         }
-        return html`<div class="button outlined"> ${icon} </div>`
+        return html`<div class="button outlined"
+            style=${styleMap(this.getModeStyles(mode, this.isMode(mode)))}
+        >
+            ${icon}
+        </div>`
     }
 
     modeButtons() {
@@ -53,7 +141,8 @@ export class ModeControls extends HaSubComponent {
     dominateButton() {
         if (this.getDominateId()) {
             return html`
-                <div class="button outlined">
+                <div class="button outlined"
+                    style=${styleMap(this.getModeStyles(this.getMode(), this.isDominant()))}>
                     <ha-svg-icon .path=${exclamation}}></ha-svg-icon>
                 </div>`
         }

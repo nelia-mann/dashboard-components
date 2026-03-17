@@ -13358,7 +13358,6 @@ var $34c84ffa4e379bea$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-
 class $98a3bb72c97f06e9$export$80929655775f1a8a extends (0, $c0664485052839c4$export$1dc45fe673c170) {
     static properties = {
         ...super.properties,
@@ -13421,21 +13420,21 @@ class $98a3bb72c97f06e9$export$80929655775f1a8a extends (0, $c0664485052839c4$ex
                 styles['background-color'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$173de64b5ad0d5b4), 0.5);
                 if (this.selected()) {
                     styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$173de64b5ad0d5b4), 1.0)}`;
-                    styles['outline-offset'] = '-4px';
+                    styles['outline-offset'] = '-3px';
                 }
                 break;
             case 'heat':
                 styles['background-color'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$e55f544a3c07b086), 0.5);
                 if (this.selected()) {
                     styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$e55f544a3c07b086), 1.0)}`;
-                    styles['outline-offset'] = '-4px';
+                    styles['outline-offset'] = '-3px';
                 }
                 break;
             case 'cool':
                 styles['background-color'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$ce739723b0c5da78), 0.5);
                 if (this.selected()) {
                     styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$ce739723b0c5da78), 1.0)}`;
-                    styles['outline-offset'] = '-4px';
+                    styles['outline-offset'] = '-3px';
                 }
                 break;
             case 'heat-cool':
@@ -13452,7 +13451,7 @@ class $98a3bb72c97f06e9$export$80929655775f1a8a extends (0, $c0664485052839c4$ex
                             styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$173de64b5ad0d5b4), 1.0)}`;
                             break;
                     }
-                    styles['outline-offset'] = '-4px';
+                    styles['outline-offset'] = '-3px';
                 }
         }
         return styles;
@@ -13529,6 +13528,8 @@ var $45aa06a2db28e6f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+
+
 var $20be8ad0f51f5739$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     :host {
@@ -13566,12 +13567,88 @@ class $2964133bd969709f$export$5d11a2c32d678853 extends (0, $c0664485052839c4$ex
     getModeId() {
         return this.getStructure().mode;
     }
-    getDominateId() {
+    getDominantId() {
         return this.getStructure().dominanthp;
+    }
+    isDominant() {
+        dominantHPid = this.getStates()[this.getDominantId()].state;
+        actualHPid = this.getStructure().heatpump;
+        return actualHPid === dominantHPid;
     }
     getModes() {
         const options = this.getStates()[this.getModeId()].attributes.options;
         return options;
+    }
+    getMode() {
+        const modeId = this.getStructure().mode;
+        return this.getStates()[modeId].state;
+    }
+    getAction() {
+        const hpId = this.getStructure().heatpump;
+        const hpState = this.getStates()[hpId].state;
+        let action = "off";
+        switch(hpState){
+            case 'heat':
+                action = "heating";
+                break;
+            case 'cool':
+                action = "cooling";
+                break;
+            case 'off':
+                if (this.getMode() !== "off") action = "idle";
+                else action = "off";
+                break;
+        }
+        return action;
+    }
+    isMode(mode) {
+        return mode === this.getMode();
+    }
+    getModeStyles(mode, outline) {
+        let styles = {};
+        switch(mode){
+            case 'off':
+                styles['background-color'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$173de64b5ad0d5b4), 0.5);
+                if (outline) {
+                    styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$173de64b5ad0d5b4), 1.0)}`;
+                    styles['outline-offset'] = '-3px';
+                }
+                break;
+            case 'heat':
+                styles['background-color'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$e55f544a3c07b086), 0.5);
+                if (outline) {
+                    styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$e55f544a3c07b086), 1.0)}`;
+                    styles['outline-offset'] = '-3px';
+                }
+                break;
+            case 'cool':
+                styles['background-color'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$ce739723b0c5da78), 0.5);
+                if (outline) {
+                    styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$ce739723b0c5da78), 1.0)}`;
+                    styles['outline-offset'] = '-3px';
+                }
+                break;
+            case 'heat-cool':
+                styles['background'] = (0, $884a87e59af13a5c$export$13c490566dc8ffda)();
+                if (outline) {
+                    switch(this.getAction()){
+                        case 'heating':
+                            styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$e55f544a3c07b086), 1.0)}`;
+                            break;
+                        case 'cooling':
+                            styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$ce739723b0c5da78), 1.0)}`;
+                            break;
+                        case 'idle':
+                            styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$173de64b5ad0d5b4), 1.0)}`;
+                            break;
+                        case 'off':
+                            styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$173de64b5ad0d5b4), 1.0)}`;
+                            break;
+                    }
+                    styles['outline-offset'] = '-3px';
+                }
+        }
+        return styles;
     }
     modeButton(mode) {
         let icon;
@@ -13592,7 +13669,11 @@ class $2964133bd969709f$export$5d11a2c32d678853 extends (0, $c0664485052839c4$ex
                     <ha-svg-icon .path=${0, $04557c061247a0a6$export$4da3b2f7039a2b2c}}></ha-svg-icon>
                 `;
         }
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div class="button outlined"> ${icon} </div>`;
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div class="button outlined"
+            style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getModeStyles(mode, this.isMode(mode)))}
+        >
+            ${icon}
+        </div>`;
     }
     modeButtons() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
@@ -13601,7 +13682,8 @@ class $2964133bd969709f$export$5d11a2c32d678853 extends (0, $c0664485052839c4$ex
     }
     dominateButton() {
         if (this.getDominateId()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <div class="button outlined">
+                <div class="button outlined"
+                    style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getModeStyles(this.getMode(), this.isDominant()))}>
                     <ha-svg-icon .path=${0, $04557c061247a0a6$export$98d40ccad881c732}}></ha-svg-icon>
                 </div>`;
     }
