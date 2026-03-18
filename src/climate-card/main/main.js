@@ -209,7 +209,7 @@ export class ClimateCard extends HaMainComponent {
             return html`
                 <ha-card>
                     ${this.content()}
-                    <div class="button-row">
+                    <div class="button-row2">
                         ${this.areaButtons()}
                     </div>
                 </ha-card>

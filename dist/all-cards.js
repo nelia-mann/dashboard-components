@@ -1126,7 +1126,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         width: var(--ha-card-width, 900px);
     }
 
-    .button-row {
+    .button-row2 {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-around;
@@ -1337,7 +1337,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         `)}static styles=[tU,eY,eK];render(){if(this.isInitialized())return N`
                 <ha-card>
                     ${this.content()}
-                    <div class="button-row">
+                    <div class="button-row2">
                         ${this.areaButtons()}
                     </div>
                 </ha-card>

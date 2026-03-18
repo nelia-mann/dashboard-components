@@ -13,7 +13,7 @@ export default css`
         width: var(--ha-card-width, 900px);
     }
 
-    .button-row {
+    .button-row2 {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-around;
