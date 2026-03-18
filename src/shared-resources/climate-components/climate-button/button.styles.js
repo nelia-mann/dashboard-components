@@ -4,8 +4,8 @@ export default css`
 
     :host {
         height: 100%;
-        width: var(--light-button-width, 160px);
-        padding: var(--light-button-padding, 5px);
+        width: var(--climate-button-width, 160px);
+        padding: var(--cliamte-button-padding, 5px);
         border: none;
     }
 
@@ -20,13 +20,13 @@ export default css`
     }
 
     .small-heading {
-        margin-top: var(--light-button-heading-margin-top, 7px);
-        margin-bottom: var(--light-button-heading-margin-bottom, -7px);
+        margin-top: var(--climate-button-heading-margin-top, 7px);
+        margin-bottom: var(--climate-button-heading-margin-bottom, -7px);
     }
 
     .sub-info {
-        margin-bottom: var(--light-button-sub-info-margin-bottom, 10px);
-        margin-top: var(--light-button-sub-info-margin-top, 1px);
+        margin-bottom: var(--climate-button-sub-info-margin-bottom, 10px);
+        margin-top: var(--climate-button-sub-info-margin-top, 1px);
     }
 
 `;

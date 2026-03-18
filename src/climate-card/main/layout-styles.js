@@ -12,6 +12,13 @@ export default css`
         --button-row-height: 50px;
         --button-row-width: 100%;
 
+        --climate-button-width: 160px;
+        --climate-button-padding: 5px;
+        --climate-button-heading-margin-top: 7px;
+        --climate-button-heading-margin-bottom: -7px;
+        --climate-button-sub-info-margin-bottom: 10px;
+        --climate-button-sub-info-margin-top: 1px;
+
         --area-panel-width: 100%;
         --area-panel-height, 400px;
         --area-panel-flex-flow: row nowrap;

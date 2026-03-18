@@ -20,6 +20,7 @@ export default css`
         align-items: center;
         width: var(--button-row-width, 100%);
         height: var(--button-row-height, 50px);
+        outline: solid;
     }
 
 `;
