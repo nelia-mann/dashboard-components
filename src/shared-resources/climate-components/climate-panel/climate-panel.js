@@ -26,7 +26,7 @@ export class ClimatePanel extends HaSubComponent {
                     .states = ${this.getStates()}
                     .entityIds = ${this.getControlEIs()}
                     .structure = ${this.getStructure()}
-                    .callServive = ${this.callService}
+                    .callService = ${this.callService}
                 ></mode-controls>
             `
         }
