@@ -13,14 +13,13 @@ export default css`
         width: var(--ha-card-width, 900px);
     }
 
-    .button-row2 {
+    .button-row {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-around;
         align-items: center;
         width: var(--button-row-width, 100%);
         height: var(--button-row-height, 50px);
-        outline: solid;
     }
 
 `;

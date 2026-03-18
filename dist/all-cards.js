@@ -1126,14 +1126,13 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         width: var(--ha-card-width, 900px);
     }
 
-    .button-row2 {
+    .button-row {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-around;
         align-items: center;
         width: var(--button-row-width, 100%);
         height: var(--button-row-height, 50px);
-        outline: solid;
     }
 
 `,eY=n`
@@ -1337,7 +1336,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         `)}static styles=[tU,eY,eK];render(){if(this.isInitialized())return N`
                 <ha-card>
                     ${this.content()}
-                    <div class="button-row2">
+                    <div class="button-row">
                         ${this.areaButtons()}
                     </div>
                 </ha-card>
