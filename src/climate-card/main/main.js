@@ -20,9 +20,17 @@ export class ClimateCard extends HaMainComponent {
     _LABEL = "climate";
     _GENERALID = "general";
     _INCLUDEINIDS = ["living_room", "small_guest_room", "bedroom"];
-    _KEYS = ["min", "max", "temp", "mode", "heatpump", "thermostat", "dominanthp", "tie_main"];
+    _KEYS = ["min",
+        "max",
+        "temp",
+        "mode",
+        "heatpump",
+        "thermostat",
+        "tie_main",
+        "rank",
+        "script"];
     _CLIMATEKEYS = ["temp", "mode", "heatpump"];
-    _DOMID = "dominanthp";
+    _SCRIPTKEY = "script"
 
     static properties = {
         ...super.properties,
@@ -68,12 +76,12 @@ export class ClimateCard extends HaMainComponent {
 
     setClimateStructure() {
         let generalIds = this.getStructure()[this._GENERALID].entityIds;
-        const filteredIds = [...filterEntityIdsForLabel(this.getHass(), generalIds, this._DOMID)];
-        const domId = filteredIds[0];
-        generalIds.delete(domId);
+        const filteredIds = [...filterEntityIdsForLabel(this.getHass(), generalIds, this._SCRIPTKEY)];
+        const scriptId = filteredIds[0];
+        generalIds.delete(scriptId);
         delete this.getStructure()[this._GENERALID];
         Object.entries(this.getStructure()).forEach(([areaId, dictionary]) => {
-            dictionary.entityIds.add(domId);
+            dictionary.entityIds.add(scriptId);
             dictionary.structure.climate = { structure: {}, entityIds: dictionary.entityIds };
             this.addKeyStructure(dictionary.structure.climate);
             this.addClimateIds(dictionary.structure.climate);

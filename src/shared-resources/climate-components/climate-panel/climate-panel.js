@@ -11,8 +11,8 @@ export class ClimatePanel extends HaSubComponent {
     getControlEIs() {
         let entityIds = new Set();
         entityIds.add(this.getStructure().mode);
-        if (this.getStructure().dominanthp) {
-            entityIds.add(this.getStructure().dominanthp);
+        if (this.getStructure().rank) {
+            entityIds.add(this.getStructure().rank);
         }
         return entityIds;
     }

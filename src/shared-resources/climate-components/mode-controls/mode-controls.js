@@ -2,7 +2,7 @@ import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
-import { getModeStyles, getAction, getMode } from '../util/climate-util.js';
+import { getModeStyles, getMode } from '../util/climate-util.js';
 import { snowflake, fire, power, slash, exclamation } from '../../util/mdi-util.js';
 import styles from './mode.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
@@ -13,14 +13,10 @@ export class ModeControls extends HaSubComponent {
         return this.getStructure().mode;
     }
 
-    getDominantId() {
-        return this.getStructure().dominanthp;
-    }
-
     isDominant() {
-        const hpId = this.getStructure().heatpump;
-        const domHpId = this.getStates()[this.getDominantId()].state;
-        return hpId === domHpId;
+        const rankId = this.getStructure().rank;
+        const rank = Number(this.getStates()[rankId].state);
+        return rank === 1;
     }
 
     getModes() {
@@ -48,12 +44,14 @@ export class ModeControls extends HaSubComponent {
     }
 
     setDominant() {
-        const entityId = this.getDominantId();
+        const entityId = this.getStructure().script
         const data = {
             entity_id: entityId,
-            option: this.getHPId()
+            variables: {
+                heatpump_entity: this.getHPId()
+            }
         }
-        this.callService('input_select', 'select_option', data)
+        this.callService('script', 'turn_on', data)
     }
 
     /************************************** html/style logic *********************************/
@@ -101,7 +99,7 @@ export class ModeControls extends HaSubComponent {
     }
 
     dominateButton() {
-        if (this.getDominantId()) {
+        if (this.getStructure().rank) {
             return html`
                 <div class="button outlined"
                     style=${styleMap(this.getDomStyles())}
