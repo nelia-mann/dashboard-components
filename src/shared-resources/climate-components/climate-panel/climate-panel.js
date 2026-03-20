@@ -24,52 +24,51 @@ export class ClimatePanel extends HaSubComponent {
         entityIds.add(this.getStructure().min);
         entityIds.add(this.getStructure().temp);
         entityIds.add(this.getStructure().max);
+        entityIds.add(this.getStructure().mode);
         return entityIds;
     }
 
-    getTemp() {
-        const entityId = this.getStructure().temp;
+    getState(key) {
+        const entityId = this.getStructure()[key];
         const state = this.getStates()[entityId];
-        return Number(state.state);
+        return state.state;
     }
 
-    getMinTemp() {
-        const entityId = this.getStructure().min;
+    getAttribute(key, attribute) {
+        const entityId = this.getStructure()[key];
         const state = this.getStates()[entityId];
-        return Number(state.state);
-    }
-
-    getMaxTemp() {
-        const entityId = this.getStructure().max;
-        const state = this.getStates()[entityId];
-        return Number(state.state);
-    }
-
-    getMinExtreme() {
-        const entityId = this.getStructure().min;
-        const state = this.getStates()[entityId];
-        const min = state.attributes.min;
-        return min;
-    }
-
-    getMaxExtreme() {
-        const entityId = this.getStructure().max;
-        const state = this.getStates()[entityId];
-        const max = state.attributes.max;
-        return max;
+        return state.attributes[attribute]
     }
 
     getSliderStructure() {
         let structure = {};
-        structure.value = this.getTemp();
-        structure.minExtreme = this.getMinExtreme();
-        structure.maxExtreme = this.getMaxExtreme();
-        structure.minValue = this.getMinTemp();
-        structure.maxValue = this.getMaxTemp();
+        structure.value = Number(this.getState("temp"));
+        structure.minExtreme = Number(this.getAttribute("min", "min"));
+        structure.maxExtreme = Number(this.getAttribute("max", "max"));
         structure.minColor = HOT;
         structure.maxColor = COOL;
+        if (['heat', 'heat-cool'].includes(this.getState("mode"))) {
+            structure.minValue = Number(this.getState("min"));
+        }
+        if (['cool', 'heat-cool'].includes(this.getState("mode"))) {
+            structure.maxValue = Number(this.getState("max"));
+        }
         return structure;
     }
+
+    handleCallService(e) {
+        const details = e.detail;
+        const key = details[0];
+        const entityId = this.getStructure()[key];
+        const value = details[1];
+        const data = {
+            entity_id: entityId,
+            value: value
+        }
+        this.callService('input_number', 'set_value', data);
+    }
+
+
 
     render() {
         if (this.isInitialized()) {
@@ -80,6 +79,7 @@ export class ClimatePanel extends HaSubComponent {
                         .states = ${this.getStates()}
                         .entityIds = ${this.getSliderEIs()}
                         .structure=${this.getSliderStructure()}
+                        @change=${this.handleCallService}
                     ></double-circular-slider>
                 </div>
                 <mode-controls

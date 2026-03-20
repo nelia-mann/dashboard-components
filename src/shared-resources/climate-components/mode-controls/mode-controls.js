@@ -28,10 +28,6 @@ export class ModeControls extends HaSubComponent {
         return getMode(this.getStructure(), this.getStates());
     }
 
-    getHPId() {
-        return this.getStructure().heatpump;
-    }
-
     /*********************************** interactive logic ***********************************/
 
     selectMode(mode) {
@@ -48,7 +44,7 @@ export class ModeControls extends HaSubComponent {
         const data = {
             entity_id: entityId,
             variables: {
-                heatpump_entity: this.getHPId()
+                mode_entity: this.getModeId()
             }
         }
         this.callService('script', 'turn_on', data)

@@ -3,11 +3,11 @@ const HALFLIGHT = [127, 97, 3]; // should be black-ish yellow
 const OFF = [158, 158, 158]; // color in rgb (gray)
 const OFFLIGHT = [68, 115, 158]; // color in rgb (steel blue)
 const INDIGO = [41, 0, 255]; // blue color
+const COOL = [33, 150, 243];
+const HOT = [255, 111, 34];
 
 const ONLIGHTHS = [45, 100];
 
-const MAXCLIMATETEMP = 100000;
-const MINCLIMATETEMP = 1000;
 const STEPS = 10;
 
 function setScale(a, b, t) {
@@ -24,6 +24,13 @@ function setScale(a, b, t) {
 
 function rgba(rgbArray, opacity) {
     return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`
+}
+
+function rgbp(rgbArray, paleness) {
+    const red = setScale(255, rgbArray[0], paleness);
+    const green = setScale(255, rgbArray[1], paleness);
+    const blue = setScale(255, rgbArray[2], paleness);
+    return `rgb(${red}, ${green}, ${blue})`
 }
 
 function interpolateRGB(rgbA, rgbB, t) {
@@ -99,18 +106,19 @@ function tempGradient(minTemp, maxTemp) {
     return tempGradientGeneral(minTemp, maxTemp, 'to top', 1);
 }
 
-
-
 function climateGradient() {
-    return tempGradientGeneral(1000, 12000, 'to left', .5);
+    let output = `linear-gradient(to left, `;
+    output = output + rgba(COOL, .5) + `0%, `;
+    output = output + rgba([255, 255, 255], .5) + `50%, `;
+    output = output + rgba(HOT, .5) + `100%)`;
+    return output;
 }
 
-const COOL = getTempColor(MAXCLIMATETEMP);
-const HOT = getTempColor(MINCLIMATETEMP);
 
 export {
     interpolateRGB,
     rgba,
+    rgbp,
     getTempColor,
     tempGradient,
     climateGradient,

@@ -1,9 +1,10 @@
 import { OFF, COOL, HOT, climateGradient, rgba } from './../../util/color-util.js';
 
+
 function getTemp(structure, states) {
     const entityId = structure.temp;
     const state = states[entityId];
-    const value = state.state;
+    const value = (Number(state.state).toFixed(1)).toString();
     const unit = state.attributes.unit_of_measurement;
     return value + " " + unit;
 }
