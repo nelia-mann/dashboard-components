@@ -21,9 +21,15 @@ export class DoubleCircularSlider extends HaSubComponent {
         super();
         this.structure = {};
         this._whichValue = 'none';
+        this._flag = false;
     }
 
     /************************** lifecycle *****************************/
+
+    update(changedProps) {
+        (!this.getChangeFlag()) && (this.setInitialValues());
+        super.update(changedProps);
+    }
 
     getTriggers() {
         return ["_minValue", "_maxValue"];
@@ -39,6 +45,18 @@ export class DoubleCircularSlider extends HaSubComponent {
     }
 
     /****************************** getter and setter logic *************************/
+
+    getChangeFlag() {
+        return this._flag;
+    }
+
+    raiseChangeFlag() {
+        this._flag = true;
+    }
+
+    lowerChangeFlag() {
+        this._flag = false;
+    }
 
     getMinExtreme() {
         return this.structure.minExtreme;
@@ -212,6 +230,7 @@ export class DoubleCircularSlider extends HaSubComponent {
     down(e) {
         this.setWhichValue(e);
         if (this.getWhichValue() !== 'none') {
+            this.raiseChangeFlag();
             this.move(e);
         }
     }
@@ -219,6 +238,7 @@ export class DoubleCircularSlider extends HaSubComponent {
     up(e) {
         this.handleMessage();
         this.clearWhichValue();
+        this.lowerChangeFlag();
     }
 
     move(e) {
