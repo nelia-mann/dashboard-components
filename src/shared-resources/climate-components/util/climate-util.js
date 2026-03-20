@@ -1,4 +1,5 @@
 import { OFF, COOL, HOT, climateGradient, rgba } from './../../util/color-util.js';
+
 function getTemp(structure, states) {
     const entityId = structure.temp;
     const state = states[entityId];
