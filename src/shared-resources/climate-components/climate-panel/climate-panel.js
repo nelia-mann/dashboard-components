@@ -1,7 +1,6 @@
 import { html } from 'lit';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import { COOL, HOT } from './../../util/color-util.js';
-import { getTemp } from './../util/climate-util.js';
 import styles from './climate.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import './../mode-controls/mode-controls.js';
@@ -46,11 +45,25 @@ export class ClimatePanel extends HaSubComponent {
         return Number(state.state);
     }
 
+    getMinExtreme() {
+        const entityId = this.getStructure().min;
+        const state = this.getStates()[entityId];
+        const min = state.attributes.min;
+        return min;
+    }
+
+    getMaxExtreme() {
+        const entityId = this.getStructure().max;
+        const state = this.getStates()[entityId];
+        const max = state.attributes.max;
+        return max;
+    }
+
     getSliderStructure() {
         let structure = {};
         structure.value = this.getTemp();
-        structure.minExtreme = 50;
-        structure.maxExtreme = 90;
+        structure.minExtreme = this.getMinExtreme();
+        structure.maxExtreme = this.getMaxExtreme();
         structure.minValue = this.getMinTemp();
         structure.maxValue = this.getMaxTemp();
         structure.minColor = HOT;
