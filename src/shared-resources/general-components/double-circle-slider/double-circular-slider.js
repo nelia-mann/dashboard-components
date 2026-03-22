@@ -173,6 +173,8 @@ export class DoubleCircularSlider extends HaSubComponent {
             result = html`<var class="one">${min}</var><sup class="one">${units}</sup>`
         } else if (max) {
             result = html`<var class="one">${max}</var><sup class="one">${units}</sup>`
+        } else {
+            result = html`<var class="one"> OFF </var>`
         }
         return result;
     }
@@ -184,7 +186,9 @@ export class DoubleCircularSlider extends HaSubComponent {
     }
 
     getUpperText() {
-        return html`<div class="upper">${this.getUpper().toUpperCase()}</div>`;
+        let upper = this.getUpper();
+        (upper === 'off') && (upper = html`&thinsp;`);
+        return html`<div class="upper">${upper}</div>`;
     }
 
     /******************************* geometric logic *******************************/
