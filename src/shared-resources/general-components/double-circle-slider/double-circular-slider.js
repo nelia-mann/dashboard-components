@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
-import { OFF, rgba, rgbp } from '../../util/color-util.js';
+import { OFF, rgba } from '../../util/color-util.js';
 import styles from './slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 
@@ -338,11 +338,23 @@ export class DoubleCircularSlider extends HaSubComponent {
         return path;
     }
 
+    backArc() {
+        let start = this.getAngle(this.getMinExtreme());
+        let end = this.getAngle(this.getMaxExtreme());
+        if (this.getMinValue()) {
+            start = this.getAngle(this.getMinValue());
+        }
+        if (this.getMaxValue()) {
+            end = this.getAngle(this.getMaxValue());
+        }
+        return this.arc(start, end, rgba(OFF, .25));
+    }
+
     minArc() {
         if (!this.getMinValue()) return null;
         const start = this.getAngle(this.getMinExtreme());
         const end = this.getAngle(this.getMinValue());
-        return this.arc(start, end, rgbp(this.getMinColor(), .5))
+        return this.arc(start, end, rgba(this.getMinColor(), .5))
     }
 
     minDifference() {
@@ -356,7 +368,7 @@ export class DoubleCircularSlider extends HaSubComponent {
         if (!this.getMaxValue()) return null;
         const start = this.getAngle(this.getMaxValue());
         const end = this.getAngle(this.getMaxExtreme());
-        return this.arc(start, end, rgbp(this.getMaxColor(), .5))
+        return this.arc(start, end, rgba(this.getMaxColor(), .5))
     }
 
     maxDifference() {
@@ -401,7 +413,6 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     render() {
         if (this.isInitialized()) {
-            const offset = this.getAngle(this.getMinExtreme());
             return html`
                 <div class="info" style=${styleMap(this.getStyles())}>
                     ${this.getUpperText()}
@@ -414,7 +425,7 @@ export class DoubleCircularSlider extends HaSubComponent {
                     @pointerup=${this.up}
                     @pointermove=${this.move}
                 >
-                    ${this.arc(offset, 2 * Math.PI -  offset, rgba(OFF, .25))}
+                    ${this.backArc()}
                     ${this.minArc()}
                     ${this.minDifference()}
                     ${this.minDot(false)}
