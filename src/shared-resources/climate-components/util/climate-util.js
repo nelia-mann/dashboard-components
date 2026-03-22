@@ -20,15 +20,15 @@ function getAction(structure, states) {
     let action = "off";
     switch (hpState) {
         case 'heat':
-            action = "heating";
+            action = "Heating";
             break;
         case 'cool':
-            action = "cooling";
+            action = "Cooling";
             break;
         case 'off':
             if (getMode(structure, states) !== "off") {
-                action = "idle";
-            } else { action = "off" };
+                action = "Idle";
+            } else { action = "Off" };
             break;
     }
     return action;
@@ -62,16 +62,16 @@ function getModeStyles(structure, states, mode, outline) {
             styles['background'] = climateGradient();
             if (outline) {
                 switch (getAction(structure, states)) {
-                    case 'heating':
+                    case 'Heating':
                         styles['outline'] = `solid ${rgba(HOT, 1.0)}`;
                         break;
-                    case 'cooling':
+                    case 'Cooling':
                         styles['outline'] = `solid ${rgba(COOL, 1.0)}`;
                         break;
-                    case 'idle':
+                    case 'Idle':
                         styles['outline'] = `solid ${rgba(OFF, 1.0)}`;
                         break;
-                    case 'off':
+                    case 'Off':
                         styles['outline'] = `solid ${rgba(OFF, 1.0)}`;
                         break;
                 }

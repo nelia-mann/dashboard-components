@@ -7,9 +7,9 @@ import sharedStyles from '../../styles/shared-styles.js';
 
 export class DoubleCircularSlider extends HaSubComponent {
 
-    offsetAngle = 30;
+    offsetAngle = 40;
     thickness = .08;
-    tolerance = .1;
+    tolerance = .16;
 
     static properties = {
         ...super.properties,

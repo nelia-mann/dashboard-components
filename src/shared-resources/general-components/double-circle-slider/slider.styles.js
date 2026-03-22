@@ -38,47 +38,47 @@ export default css`
     }
 
     .center {
-        height: 80px;
+        height: var(--center-text-height, 80px);
         width: 100%;
         display: flex;
         flex-flow: row nowrap;
         justify-content: center;
         align-items: center;
+        font-weight: var(--center-weight, 400)
     }
 
     var {
-        font-size: 300%;
+        font-size: var(--range-font-size, 300%);
         font-style: normal !important;
-        font-weight: 400;
     }
 
     var.one {
-        font-size: 400%;
+        font-size: var(--solo-font-size, 400%);
     }
 
     .upper {
-        margin-bottom: 0px;
-        font-size: 150%;
+        font-size: var(--upper-font-size, 150%);
+        font-weight: var(--upper-weight);
     }
 
     .lower {
-        margin-top: 0px;
-        font-size: 150%;
+        font-size: var(--lower-font-size, 150%);
         display: flex;
         flex-flow: row nowrap;
         justify-content: center;
         align-items: center;
+        font-weight: var(--lower-weight);
     }
 
     sup {
-        font-size: 150%;
+        font-size: calc(var(--range-font-size, 300%) / var(--sup-factor));
         position: relative;
-        top: -0.4em;
+        top: var(--superscript-offset, -0.4em);
         line-height: 0;
     }
 
     sup.one {
-        font-size: 200%;
+        font-size: calc(var(--solo-font-size, 400%) / var(--sup-factor));
     }
 
 `

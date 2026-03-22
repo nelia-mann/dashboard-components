@@ -44,16 +44,27 @@ export default css`
         --thermostat-height: 350px;
         --thermostat-width: 100%;
 
-        --circular-slider-height: 85%;
+        --circular-slider-height: 92%;
         --circular-slider-top-margin: 15px;
 
-        --adjust-button-row-width: 66%;
+        --adjust-button-row-width: 85%;
 
-        --adjust-pair-width: 95px;
-        --adjust-pair-margin-top: -15px;
+        --adjust-pair-width: 110px;
+        --adjust-pair-margin-top: -40px;
 
         --plus-minus-circle-size: 40px;
         --plus-minus-sizes: 60%;
+
+        --range-font-size: var(--Huge-font);
+        --solo-font-size: var(--HUGE-font);
+        --upper-font-size: var(--large-font);
+        --lower-font-size: var(--large-font);
+        --superscript-offset: -0.5em;
+        --center-text-height: 80px;
+        --upper-weight: 500;
+        --lower-weight: 400;
+        --center-weight: 400;
+        --sup-factor: 2.5;
 
     }
     `;

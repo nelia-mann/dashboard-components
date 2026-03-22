@@ -2,21 +2,29 @@ import { css } from 'lit';
 
 export default css`
 
-    * {
+    :host {
         font-family: "Roboto", "Noto", sans-serif;
         ---mdc-icon-size: 20px;
+        --small-font: 85%;
+        --normal-font: 100%;
+        --large-font: 150%;
+        --Large-font: 200%;
+        --LARGE-font: 250%;
+        --huge-font: 300%;
+        --Huge-font: 350%;
+        --HUGE-font: 400%;
     }
 
     .small-heading {
         font-weight: 700;
-        font-size: 105%;
+        font-size: var(--normal-font);
         margin: 0px;
         padding: 0px;
     }
 
     .large-heading {
         font-weight: 600;
-        font-size: 200%;
+        font-size: var(--Large-font);
         margin: 0px;
         padding: 0px;
     }
@@ -25,7 +33,7 @@ export default css`
         padding: 0px;
         margin: 0px;
         font-weight: 400;
-        font-size: 85%;
+        font-size: var(--small-font);
     }
 
     .outlined {
