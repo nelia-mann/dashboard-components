@@ -4,7 +4,6 @@ export default css`
 
     ha-card {
         padding: var(--ha-card-padding, 10px);
-        padding-top: var(--ha-card-padding-top, 5px);
         display: flex;
         flex-flow: column nowrap;
         justify-content: space-between;

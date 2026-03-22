@@ -10,7 +10,10 @@ export {
     mdiFire as fire,
     mdiPower as power,
     mdiExclamation as exclamation,
-    mdiSlashForward as slash
+    mdiSlashForward as slash,
+    mdiMinus as minus,
+    mdiPlus as plus,
+    mdiThermometer as thermometer,
 
 
 } from '@mdi/js';

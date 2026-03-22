@@ -4,8 +4,7 @@ export default css`
 
     :host {
 
-        --ha-card-padding: 25px;
-        --ha-card-padding-top: 5px;
+        --ha-card-padding: 15px;
         --ha-card-height: 500px;
         --ha-card-width: 800px;
 
@@ -31,15 +30,30 @@ export default css`
         --climate-panel-justify-content: space-between;
         --climate-panel-align-items: center;
 
-        --mode-control-width: 100%;
+        --mode-control-width: 95%;
         --mode-control-height: 50px;
         --mode-control-flex-flow: row nowrap;
-        --mode-control-justify-content: space-between;
-        --mode-control-align-items: center;
+        --mode-control-justify-content: space-around;
+        --mode-control-align-items: flex-start;
 
-        --mode-control-button-width: 60px;
+        --mode-control-button-width: 55px;
         --mode-control-button-height: 40px;
         --mode-control-button-margin-correction-l: -10px;
         --mode-control-button-margin-correction-r: -14px;
+
+        --thermostat-height: 350px;
+        --thermostat-width: 100%;
+
+        --circular-slider-height: 85%;
+        --circular-slider-top-margin: 15px;
+
+        --adjust-button-row-width: 66%;
+
+        --adjust-pair-width: 95px;
+        --adjust-pair-margin-top: -15px;
+
+        --plus-minus-circle-size: 40px;
+        --plus-minus-sizes: 60%;
+
     }
     `;

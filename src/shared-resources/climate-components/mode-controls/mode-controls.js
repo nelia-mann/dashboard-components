@@ -89,8 +89,9 @@ export class ModeControls extends HaSubComponent {
     }
 
     modeButtons() {
+
         return html`
-            ${repeat(this.getModes(), (mode) => mode, mode => this.modeButton(mode))}
+            ${repeat(this.getModes().sort().reverse(), (mode) => mode, mode => this.modeButton(mode))}
         `
     }
 

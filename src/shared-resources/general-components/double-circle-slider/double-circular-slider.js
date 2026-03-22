@@ -1,14 +1,14 @@
-import { html, mathml } from 'lit';
+import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
-import { OFF, rgba, rgbp } from './../../util/color-util.js';
+import { OFF, rgba, rgbp } from '../../util/color-util.js';
 import styles from './slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 
 export class DoubleCircularSlider extends HaSubComponent {
 
     offsetAngle = 30;
-    thickness = .07;
+    thickness = .08;
     tolerance = .1;
 
     static properties = {
@@ -33,6 +33,10 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     getTriggers() {
         return ["_minValue", "_maxValue"];
+    }
+
+    updated() {
+        (this.getWhichValue() == 'none') && (this.lowerChangeFlag());
     }
 
     onFirstUpdate() {
@@ -86,6 +90,10 @@ export class DoubleCircularSlider extends HaSubComponent {
         return this.structure.value;
     }
 
+    getSeparation() {
+        return this.structure.separation;
+    }
+
     setMinValue(value) {
         if (value < this.getMinExtreme()) {
             this._minValue = this.getMinExtreme();
@@ -116,7 +124,7 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     getMinMax() {
         if (this.getMaxValue()) {
-            return this.getMaxValue() - 0.2;
+            return this.getMaxValue() - this.getSeparation();
         } else {
             return this.getMaxExtreme();
         }
@@ -124,12 +132,60 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     getMaxMin() {
         if (this.getMinValue()) {
-            return this.getMinValue() + 0.2;
+            return this.getMinValue() + this.getSeparation();
         } else {
             return this.getMinExtreme();
         }
     }
 
+    getUnits() {
+        let units = '';
+        (this.structure.units) && (units = this.structure.units);
+        return units;
+    }
+
+    getUpper() {
+        let upper = '';
+        (this.structure.upper) && (upper = this.structure.upper);
+        return upper;
+    }
+
+    getIcon() {
+        let icon = html``;
+        if (this.structure.icon) {
+            icon = html`<ha-svg-icon .path="${this.structure.icon}"></ha-svg-icon>`
+        }
+        return icon;
+    }
+
+    /******************************* text logic ************************************/
+
+    getRange() {
+        let result = html``;
+        let min = this.getMinValue();
+        let max = this.getMaxValue();
+        (min) && (min = min.toFixed(1));
+        (max) && (max = max.toFixed(1));
+        const units = this.getUnits();
+        if (min && max) {
+            result = html`<var>${min}</var><sup>${units}</sup><var>&thinsp;-&thinsp;${max}</var><sup>${units}</sup>`
+        } else if (min) {
+            result = html`<var class="one">${min}</var><sup class="one">${units}</sup>`
+        } else if (max) {
+            result = html`<var class="one">${max}</var><sup class="one">${units}</sup>`
+        }
+        return result;
+    }
+
+    getLowerText() {
+        const units = this.getUnits();
+        const value = this.getValue().toFixed(1);
+        return html`<div class="lower"> ${this.getIcon()}  ${value} ${units}</div>`
+    }
+
+    getUpperText() {
+        return html`<div class="upper">${this.getUpper().toUpperCase()}</div>`;
+    }
 
     /******************************* geometric logic *******************************/
 
@@ -214,8 +270,7 @@ export class DoubleCircularSlider extends HaSubComponent {
         return this._whichValue;
     }
 
-    shouldUp(radius, newValue) {
-        if (Math.abs(radius - (1 - this.thickness)) > this.tolerance) return true;
+    shouldUp(newValue) {
         if (this.getWhichValue() == 'min') {
             return (this.getMinMax() < newValue || newValue < this.getMinExtreme())
         }
@@ -238,7 +293,6 @@ export class DoubleCircularSlider extends HaSubComponent {
     up(e) {
         this.handleMessage();
         this.clearWhichValue();
-        this.lowerChangeFlag();
     }
 
     move(e) {
@@ -249,10 +303,9 @@ export class DoubleCircularSlider extends HaSubComponent {
             const yFromCenter = mouseCoords[1] - 1;
             let angle = Math.atan2(-xFromCenter, yFromCenter) % (2 * Math.PI);
             (angle < 0) && (angle = angle + 2 * Math.PI);
-            const radius = Math.sqrt(xFromCenter ** 2 + yFromCenter ** 2);
             const newValue = this.getNewValue(angle);
             (which === 'min') ? (this.setMinValue(newValue)) : (this.setMaxValue(newValue));
-            (this.shouldUp(radius, newValue)) && (this.up(e));
+            (this.shouldUp(newValue)) && (this.up(e));
         }
     }
 
@@ -268,6 +321,12 @@ export class DoubleCircularSlider extends HaSubComponent {
     }
 
     /**************************** style/html logic ***************************/
+
+    getStyles() {
+        let styles = {};
+        styles['background'] = this.structure.background;
+        return styles;
+    }
 
     arc(startAngle, stopAngle, stroke) {
         const ns = "http://www.w3.org/2000/svg";
@@ -338,13 +397,18 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     static styles = [sharedStyles, styles];
 
+
+
     render() {
         if (this.isInitialized()) {
             const offset = this.getAngle(this.getMinExtreme());
             return html`
+                <div class="info" style=${styleMap(this.getStyles())}>
+                    ${this.getUpperText()}
+                    <div class="center">${this.getRange()}</div>
+                    ${this.getLowerText()}
+                </div>
                 <svg
-                    width="100%"
-                    height="100%"
                     viewBox="0 0 2 2"
                     @pointerdown=${this.down}
                     @pointerup=${this.up}

@@ -28,7 +28,7 @@ export class AreaClimatePanel extends HaSubComponent {
     render() {
         if (this.isInitialized()) {
             return html`
-                <climate-panel
+                <climate-panel class="outlined"
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
                     .entityIds = ${this.getClimateEIs()}
