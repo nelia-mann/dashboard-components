@@ -17,7 +17,7 @@ export class ClimatePanel extends HaSubComponent {
     getControlEIs() {
         let entityIds = new Set();
         entityIds.add(this.getStructure().mode);
-        entityIds.add(this.getStructure().heatpump)
+        entityIds.add(this.getStructure().heatpump);
         if (this.getStructure().rank) {
             entityIds.add(this.getStructure().rank);
         }
@@ -130,9 +130,9 @@ export class ClimatePanel extends HaSubComponent {
     getBackground() {
         const action = this.getAction();
         let background = ``;
-        if (['heating', 'cooling'].includes(action)) {
+        if (['Heating', 'Cooling'].includes(action)) {
             let color = HOT;
-            (action === 'cooling') && (color = COOL);
+            (action === 'Cooling') && (color = COOL);
             background = `radial-gradient(circle at center, ${rgba(color, .2)} 0, ${rgba(color, 0)} 60%)`
         }
         return background;
