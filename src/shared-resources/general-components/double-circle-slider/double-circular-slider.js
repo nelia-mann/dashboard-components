@@ -61,14 +61,6 @@ export class DoubleCircularSlider extends HaSubComponent {
         return this._IRIS;
     }
 
-    clearWhichValue() {
-        this._whichValue = 'none';
-    }
-
-    getWhichValue() {
-        return this._whichValue;
-    }
-
     getTolerance() {
         return 2 * this._THICKNESS;
     }
@@ -79,6 +71,14 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     getOffset() {
         return this._OFFSETANGLE;
+    }
+
+    clearWhichValue() {
+        this._whichValue = 'none';
+    }
+
+    getWhichValue() {
+        return this._whichValue;
     }
 
     getChangeFlag() {
@@ -131,6 +131,18 @@ export class DoubleCircularSlider extends HaSubComponent {
         if (colorMode === 'max') return this.getMaxColor();
     }
 
+    getUnits() {
+        let units = '';
+        (this.structure.units) && (units = this.structure.units);
+        return units;
+    }
+
+    getUpper() {
+        let upper = '';
+        (this.structure.upper) && (upper = this.structure.upper);
+        return upper;
+    }
+
     setMinValue(value) {
         if (value < this.getMinExtreme()) {
             this._minValue = this.getMinExtreme();
@@ -173,18 +185,6 @@ export class DoubleCircularSlider extends HaSubComponent {
         } else {
             return this.getMinExtreme();
         }
-    }
-
-    getUnits() {
-        let units = '';
-        (this.structure.units) && (units = this.structure.units);
-        return units;
-    }
-
-    getUpper() {
-        let upper = '';
-        (this.structure.upper) && (upper = this.structure.upper);
-        return upper;
     }
 
     /******************************* geometric logic *******************************/
@@ -380,35 +380,12 @@ export class DoubleCircularSlider extends HaSubComponent {
         return dot1;
     }
 
-    backArc() {
-        let start = this.getMinExtreme();
-        let end = this.getMaxExtreme();
-        (this.getMinValue()) && (start = this.getMinValue());
-        (this.getMaxValue()) && (end = this.getMaxValue());
-        return this.arc(start, end, rgba(OFF, .25));
-    }
-
-    tempDot() {
-        let color = rgba(OFF, 1);
-        (this.getValue() < this.getMinValue()) && (color = rgbp(this.getMinColor(), .5));
-        (this.getValue() > this.getMaxValue()) && (color = rgbp(this.getMaxColor(), .5));
-        return this.dot(this.getValue(), this.getTempDotSize(), color);
-    }
-
-    static styles = [sharedStyles, styles];
-
-    getBackground() {
-        let background = ``;
+    getBGStyles() {
+        let styles = {};
         const color = this.getColorMode();
         if (color) {
-            background = `radial-gradient(circle at center, ${rgba(color, .2)} 0, ${rgba(color, 0)} 60%)`
+            styles['background'] = `radial-gradient(circle at center, ${rgba(color, .2)} 0, ${rgba(color, 0)} 60%)`;
         }
-        return background;
-    }
-
-    getStyles() {
-        let styles = {};
-        styles['background'] = this.getBackground();
         return styles;
     }
 
@@ -420,10 +397,19 @@ export class DoubleCircularSlider extends HaSubComponent {
         return styles;
     }
 
+    getTempColor() {
+        let color = rgba(OFF, 1);
+        (this.getValue() < this.getMinValue()) && (color = rgbp(this.getMinColor(), .5));
+        (this.getValue() > this.getMaxValue()) && (color = rgbp(this.getMaxColor(), .5));
+        return color;
+    }
+
+    static styles = [sharedStyles, styles];
+
     render() {
         if (this.isInitialized()) {
             return html`
-                <div class="info" style=${styleMap(this.getStyles())}>
+                <div class="info" style=${styleMap(this.getBGStyles())}>
                     ${this.getUpperText()}
                     <div class="center">${this.getRange()}</div>
                     ${this.getLowerText()}
@@ -434,7 +420,7 @@ export class DoubleCircularSlider extends HaSubComponent {
                     @pointerup=${this.up}
                     @pointermove=${this.move}
                 >
-                    ${this.backArc()}
+                    ${this.arc(this.getMaxMin(), this.getMinMax(), rgba(OFF, .25))}
                     ${this.arc(this.getMinExtreme(), this.getMinValue(), rgba(this.getMinColor(), .5))}
                     ${this.arc(this.getValue(), this.getMinValue(), rgba(this.getMinColor(), 1))}
                     ${this.dot(this.getMinValue(), this.getThickness(), rgba(this.getMinColor(), 1))}
@@ -443,7 +429,7 @@ export class DoubleCircularSlider extends HaSubComponent {
                     ${this.arc(this.getMaxValue(), this.getValue(), rgba(this.getMaxColor(), 1))}
                     ${this.dot(this.getMaxValue(), this.getThickness(), rgba(this.getMaxColor(), 1))}
                     ${this.dot(this.getMaxValue(), this.getIris() * this.getThickness(), "white")}
-                    ${this.tempDot()}
+                    ${this.dot(this.getValue(), this.getTempDotSize(), this.getTempColor())}
                 </svg>
             `
         }
