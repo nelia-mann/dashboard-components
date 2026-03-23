@@ -44,8 +44,8 @@ export default css`
         --thermostat-height: 350px;
         --thermostat-width: 100%;
 
-        --circular-slider-height: 92%;
-        --circular-slider-top-margin: 15px;
+        --circular-slider-height: 93%;
+        --circular-slider-top-margin: 10px;
 
         --adjust-button-row-width: 85%;
 

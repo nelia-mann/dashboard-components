@@ -72,7 +72,7 @@ export class ClimatePanel extends HaSubComponent {
         structure.icon = thermometer;
         structure.minColor = HOT;
         structure.maxColor = COOL;
-        structure.background = this.getBackground();
+        structure.colorMode = this.getColorMode();
         structure.separation = this.getSeparation();
         if (['heat', 'heat-cool'].includes(this.getState("mode"))) {
             structure.minValue = Number(this.getState("min"));
@@ -81,6 +81,13 @@ export class ClimatePanel extends HaSubComponent {
             structure.maxValue = Number(this.getState("max"));
         }
         return structure;
+    }
+
+    getColorMode() {
+        let colorMode;
+        (this.getAction() === 'Heating') && (colorMode = 'min');
+        (this.getAction() === 'Cooling') && (colorMode = 'max');
+        return colorMode;
     }
 
     /******************************** interactive logic ************************************/
@@ -126,17 +133,6 @@ export class ClimatePanel extends HaSubComponent {
     }
 
     /*********************************** html/css logic *********************************************/
-
-    getBackground() {
-        const action = this.getAction();
-        let background = ``;
-        if (['Heating', 'Cooling'].includes(action)) {
-            let color = HOT;
-            (action === 'Cooling') && (color = COOL);
-            background = `radial-gradient(circle at center, ${rgba(color, .2)} 0, ${rgba(color, 0)} 60%)`
-        }
-        return background;
-    }
 
     getButtonStyles() {
         let styles = { 'justify-content': 'center' };
