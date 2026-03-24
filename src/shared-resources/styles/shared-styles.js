@@ -66,13 +66,13 @@ export default css`
         }
 
         .outlined {
-            outline: .5px solid rgba(255, 255, 255, .1);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 .5px 2px rgba(255, 255, 255, 0.1) inset;
+            outline: .5px solid rgba(255, 255, 255, .2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 .5px 2px rgba(255, 255, 255, 0.2) inset;
         }
 
         .inner-slider {
-            border-top: solid 2px rgba(255, 255, 255, .1);
-            border-bottom: solid 2px rgba(255, 255, 255, .1);
+            border-top: solid 2px rgba(255, 255, 255, .2);
+            border-bottom: solid 2px rgba(255, 255, 255, .2);
         }
 
         .shown-level {

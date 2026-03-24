@@ -317,7 +317,7 @@ export class DoubleCircularSlider extends HaSubComponent {
     getIcon() {
         let icon = html``;
         if (this.structure.icon) {
-            icon = html`<ha-svg-icon .path="${this.structure.icon}"></ha-svg-icon>`
+            icon = html`<ha-svg-icon .path="${this.structure.icon}" style=${styleMap(this.getTextStyles())}></ha-svg-icon>`
         }
         return icon;
     }
