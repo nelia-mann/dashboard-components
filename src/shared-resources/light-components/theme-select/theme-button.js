@@ -62,7 +62,6 @@ export class ThemeButton extends LitElement {
         let styles = {};
         if (this.isSelected()) {
             styles['outline'] = `solid ${getThemeOutline(this.getOption())}`;
-            styles['outline-offset'] = '-3px;'
         }
         styles['background'] = getThemeGradient(this.getOption())
         return styles;

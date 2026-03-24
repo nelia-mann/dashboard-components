@@ -18,6 +18,8 @@ export default css`
         align-items: center;
         width: var(--mode-control-button-width, 60px);
         height: var(--mode-control-button-height, 100%);
+        outline-offset: var(--button-outline-offset, -3px);
+        outline: none;
     }
 
     .center{

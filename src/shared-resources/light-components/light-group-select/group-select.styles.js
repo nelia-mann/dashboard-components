@@ -18,6 +18,8 @@ export default css`
         flex-flow: row nowrap;
         justify-content: flex-start;
         align-items: center;
+        outline-offset: var(--button-outline-offset, -3px);
+        outline: none;
     }
 
     .icon {

@@ -1,32 +1,13 @@
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit-html/directives/repeat.js';
-import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
-import { getModeStyles, getMode } from '../util/climate-util.js';
+import { HaClimateComponent } from '../../base-classes/ha-climate-component.js';
+import { getModeStyles } from '../util/climate-util.js';
 import { snowflake, fire, power, slash, exclamation } from '../../util/mdi-util.js';
 import styles from './mode.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 
-export class ModeControls extends HaSubComponent {
-
-    getModeId() {
-        return this.getStructure().mode;
-    }
-
-    isDominant() {
-        const rankId = this.getStructure().rank;
-        const rank = Number(this.getStates()[rankId].state);
-        return rank === 1;
-    }
-
-    getModes() {
-        const options = this.getStates()[this.getModeId()].attributes.options;
-        return options;
-    }
-
-    getMode() {
-        return getMode(this.getStructure(), this.getStates());
-    }
+export class ModeControls extends HaClimateComponent {
 
     /*********************************** interactive logic ***********************************/
 
@@ -40,7 +21,7 @@ export class ModeControls extends HaSubComponent {
     }
 
     setDominant() {
-        const entityId = this.getStructure().script
+        const entityId = this.getScriptId();
         const data = {
             entity_id: entityId,
             variables: {
@@ -54,11 +35,11 @@ export class ModeControls extends HaSubComponent {
 
     getModeStyles(mode) {
         const isMode = (mode === this.getMode())
-        return getModeStyles(this.getStructure(), this.getStates(), mode, isMode)
+        return getModeStyles(mode, this.getAction(), isMode)
     }
 
     getDomStyles() {
-        return getModeStyles(this.getStructure(), this.getStates(), this.getMode(), this.isDominant())
+        return getModeStyles(this.getMode(), this.getAction(), this.isDominant())
     }
 
     modeButton(mode) {
@@ -89,14 +70,13 @@ export class ModeControls extends HaSubComponent {
     }
 
     modeButtons() {
-
         return html`
             ${repeat(this.getModes().sort().reverse(), (mode) => mode, mode => this.modeButton(mode))}
         `
     }
 
     dominateButton() {
-        if (this.getStructure().rank) {
+        if (this.getRank()) {
             return html`
                 <div class="button outlined"
                     style=${styleMap(this.getDomStyles())}

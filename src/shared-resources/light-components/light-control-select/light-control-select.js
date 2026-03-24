@@ -132,7 +132,6 @@ export class LightControlSelect extends HaSubComponent {
                 break;
         }
         if (this.isSelected(option)) {
-            styles['outline-offset'] = '-2px';
             styles['outline'] = 'solid ' + outline;
         }
         return styles;

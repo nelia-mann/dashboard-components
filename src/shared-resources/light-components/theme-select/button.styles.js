@@ -14,6 +14,8 @@ export default css`
         align-items: center;
         padding-top: var(--theme-button-padding-top, 1px);
         padding-bottom: var(--theme-button-padding-bottom, 1px);
+        outline-offset: var(--button-outline-offset, -3px);
+        outline: none;
     }
 
 `;

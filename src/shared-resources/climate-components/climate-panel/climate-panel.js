@@ -1,8 +1,7 @@
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
-import { getAction } from '../util/climate-util.js';
-import { COOL, HOT, rgba } from './../../util/color-util.js';
+import { HaClimateComponent } from '../../base-classes/ha-climate-component.js';
+import { COOL, HOT } from './../../util/color-util.js';
 import { thermometer } from './../../util/mdi-util.js';
 import styles from './climate.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
@@ -10,77 +9,32 @@ import './../mode-controls/mode-controls.js';
 import '../../general-components/double-circle-slider/double-circular-slider.js';
 import '../../general-components/adjust-buttons/adjust-buttons.js';
 
-export class ClimatePanel extends HaSubComponent {
+export class ClimatePanel extends HaClimateComponent {
 
     static styles = [sharedStyles, styles];
 
     getControlEIs() {
         let entityIds = new Set();
-        entityIds.add(this.getStructure().mode);
-        entityIds.add(this.getStructure().heatpump);
-        if (this.getStructure().rank) {
-            entityIds.add(this.getStructure().rank);
+        entityIds.add(this.getModeId());
+        entityIds.add(this.getHPId());
+        if (this.getRankId()) {
+            entityIds.add(this.getRankId());
         }
         return entityIds;
     }
 
     getSliderEIs() {
         let entityIds = new Set();
-        entityIds.add(this.getStructure().temp);
-        entityIds.add(this.getStructure().mode);
-        entityIds.add(this.getStructure().heatpump);
-        const mode = this.getState("mode");
-        if (['heat', 'heat-cool'].includes(mode)) {
-            entityIds.add(this.getStructure().min);
+        entityIds.add(this.getTempId());
+        entityIds.add(this.getModeId());
+        entityIds.add(this.getHPId());
+        if (['heat', 'heat-cool'].includes(this.getMode())) {
+            entityIds.add(this.getMinId());
         }
-        if (['cool', 'heat-cool'].includes(mode)) {
-            entityIds.add(this.getStructure().max);
+        if (['cool', 'heat-cool'].includes(this.getMode())) {
+            entityIds.add(this.getMaxId());
         }
         return entityIds;
-    }
-
-    getAction() {
-        return getAction(this.getStructure(), this.getStates());
-    }
-
-    getState(key) {
-        const entityId = this.getStructure()[key];
-        const state = this.getStates()[entityId];
-        return state.state;
-    }
-
-    getAttribute(key, attribute) {
-        const entityId = this.getStructure()[key];
-        const state = this.getStates()[entityId];
-        return state.attributes[attribute]
-    }
-
-    getSeparation() {
-        const stepMin = Number(this.getAttribute('min', 'step'));
-        const stepMax = Number(this.getAttribute('max', 'step'));
-        return stepMin + stepMax;
-    }
-
-
-    getSliderStructure() {
-        let structure = {};
-        structure.value = Number(this.getState("temp"));
-        structure.minExtreme = Number(this.getAttribute("min", "min"));
-        structure.maxExtreme = Number(this.getAttribute("max", "max"));
-        structure.units = this.getAttribute('temp', 'unit_of_measurement');
-        structure.upper = this.getAction();
-        structure.icon = thermometer;
-        structure.minColor = HOT;
-        structure.maxColor = COOL;
-        structure.colorMode = this.getColorMode();
-        structure.separation = this.getSeparation();
-        if (['heat', 'heat-cool'].includes(this.getState("mode"))) {
-            structure.minValue = Number(this.getState("min"));
-        }
-        if (['cool', 'heat-cool'].includes(this.getState("mode"))) {
-            structure.maxValue = Number(this.getState("max"));
-        }
-        return structure;
     }
 
     getColorMode() {
@@ -88,6 +42,27 @@ export class ClimatePanel extends HaSubComponent {
         (this.getAction() === 'Heating') && (colorMode = 'min');
         (this.getAction() === 'Cooling') && (colorMode = 'max');
         return colorMode;
+    }
+
+    getSliderStructure() {
+        let structure = {};
+        structure.value = this.getTemp();
+        structure.minExtreme = this.getMinExtreme();
+        structure.maxExtreme = this.getMaxExtreme();
+        structure.units = this.getUnits();
+        structure.upper = this.getAction();
+        structure.icon = thermometer;
+        structure.minColor = HOT;
+        structure.maxColor = COOL;
+        structure.colorMode = this.getColorMode();
+        structure.separation = this.getSeparation();
+        if (['heat', 'heat-cool'].includes(this.getMode())) {
+            structure.minValue = this.getMin();
+        }
+        if (['cool', 'heat-cool'].includes(this.getMode())) {
+            structure.maxValue = this.getMax();
+        }
+        return structure;
     }
 
     /******************************** interactive logic ************************************/
@@ -105,19 +80,14 @@ export class ClimatePanel extends HaSubComponent {
     }
 
     canChange(target, change) {
-        const mode = this.getState('mode');
-        const step = Number(this.getAttribute(target, 'step'))
-        let minExtreme = Number(this.getAttribute("min", "min"));
-        let maxExtreme = Number(this.getAttribute("max", "max"));
-        if (mode === 'heat-cool') {
-            if (target === 'min') {
-                maxExtreme = Number(this.getState("max")) - this.getSeparation();
-            }
-            if (target === 'max') {
-                minExtreme = Number(this.getState("min")) + this.getSeparation();
-            }
+        let minExtreme = this.getMinExtreme();
+        let maxExtreme = this.getMaxExtreme();;
+        if (this.getMode() === 'heat-cool') {
+            (target === 'min') && (maxExtreme = this.getMax() - this.getSeparation());
+            (target === 'max') && (minExtreme = this.getMin() + this.getSeparation());
         }
         const current = Number(this.getState(target));
+        const step = Number(this.getAttribute(target, 'step'))
         if (change === 'increment') {
             return (current + step <= maxExtreme);
         } else {
@@ -136,8 +106,7 @@ export class ClimatePanel extends HaSubComponent {
 
     getButtonStyles() {
         let styles = { 'justify-content': 'center' };
-        const mode = this.getState('mode');
-        if (mode === "heat-cool") {
+        if (this.getMode() === "heat-cool") {
             styles['justify-content'] = 'space-between';
         }
         return styles;
@@ -145,8 +114,7 @@ export class ClimatePanel extends HaSubComponent {
 
     adjustMin() {
         let result = html``;
-        const mode = this.getState("mode");
-        if (['heat', 'heat-cool'].includes(mode)) {
+        if (['heat', 'heat-cool'].includes(this.getMode())) {
             result = html`<adjust-buttons @change=${(e) => this.change(e, 'min')}></adjust-buttons>`
         }
         return result;
@@ -154,8 +122,7 @@ export class ClimatePanel extends HaSubComponent {
 
     adjustMax() {
         let result = html``;
-        const mode = this.getState("mode");
-        if (['cool', 'heat-cool'].includes(mode)) {
+        if (['cool', 'heat-cool'].includes(this.getMode())) {
             result = html`<adjust-buttons @change=${(e) => this.change(e, 'max')}></adjust-buttons>`
         }
         return result;
@@ -169,7 +136,6 @@ export class ClimatePanel extends HaSubComponent {
             </div>
         `
     }
-
 
     render() {
         if (this.isInitialized()) {

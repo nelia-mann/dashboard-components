@@ -349,7 +349,7 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     getUpperText() {
         let upper = this.getUpper();
-        (upper === 'off') && (upper = html`&thinsp;`);
+        (upper === 'Off') && (upper = html`&thinsp;`);
         return html`<div class="upper" style=${styleMap(this.getTextStyles())}>${upper}</div>`;
     }
 

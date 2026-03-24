@@ -21,6 +21,8 @@ export default css`
         justify-content: center;
         align-items: center;
         margin: var(--control-select-icon-window-margin, 10px);
+        outline-offset: var(--control-select-outline-offset, -2px);
+        outline: none;
     }
 
     .icon {

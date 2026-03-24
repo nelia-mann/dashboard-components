@@ -1,11 +1,11 @@
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
-import { getAction, getTemp, getMode, getModeStyles } from '../util/climate-util.js';
+import { HaClimateComponent } from '../../base-classes/ha-climate-component.js';
+import { getModeStyles } from '../util/climate-util.js';
 import styles from './button.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 
-export class ClimateButton extends HaSubComponent {
+export class ClimateButton extends HaClimateComponent {
 
     static properties = {
         ...super.properties,
@@ -45,16 +45,11 @@ export class ClimateButton extends HaSubComponent {
     static styles = [sharedStyles, styles];
 
     getStyles() {
-        const structure = this.getStructure();
-        const states = this.getStates();
-        const mode = getMode(structure, states)
-        return getModeStyles(structure, states, mode, this.selected())
+        return getModeStyles(this.getMode(), this.getAction(), this.selected())
     }
 
     render() {
         if (this.isInitialized()) {
-            const temp = getTemp(this.getStructure(), this.getStates());
-            const action = getAction(this.getStructure(), this.getStates());
             return html`
                 <div
                     class="button outlined"
@@ -62,7 +57,7 @@ export class ClimateButton extends HaSubComponent {
                     style=${styleMap(this.getStyles())}
                 >
                     <div class="small-heading"> ${this.getTitle()} </div>
-                    <div class="sub-info"> ${temp + " \u00B7 " + action} </div >
+                    <div class="sub-info"> ${this.getTempDisplay() + " \u00B7 " + this.getAction()} </div >
                 </div>`
         }
     }

@@ -56,7 +56,6 @@ export class LightGroupSelect extends HaSubComponent {
             let styles = {};
             if (this.isSelected(lightId)) {
                 styles['outline'] = 'solid ' + getColor(this.getState(lightId));
-                styles['outline-offset'] = '-4px'
             }
             return styles;
         }

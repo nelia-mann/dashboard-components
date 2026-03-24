@@ -67,6 +67,7 @@ export default css`
         --control-select-icon-window-width: 30px;
         --control-select-icon-window-margin: 10px;
         --control-select-icon-size: 20px;
+        --control-select-outline-offset: -2px;
 
         --light-control-padding: 20px;
         --light-control-margin-left: 20px;

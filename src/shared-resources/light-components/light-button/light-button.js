@@ -82,7 +82,6 @@ export class LightingButton extends HaSubComponent {
         }
         if (this.selected()) {
             styles['outline'] = `solid ${this.getRGB(1)}`;
-            styles['outline-offset'] = '-4px';
         }
         return styles;
     }

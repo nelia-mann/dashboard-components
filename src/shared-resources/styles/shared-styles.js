@@ -13,6 +13,7 @@ export default css`
         --huge-font: 300%;
         --Huge-font: 350%;
         --HUGE-font: 400%;
+        --button-outline-offset: -3px;
     }
 
     .small-heading {
