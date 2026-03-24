@@ -3,6 +3,7 @@ import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcompon
 import styles from './area.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import './../../shared-resources/climate-components/climate-panel/climate-panel.js';
+import '../main-thermostat-panel/main-thermostat-panel.js';
 
 export class AreaClimatePanel extends HaSubComponent {
 
@@ -23,6 +24,38 @@ export class AreaClimatePanel extends HaSubComponent {
         return this.title;
     }
 
+    getMain() {
+        return this.getStructure().general;
+    }
+
+    getMainEIs() {
+        return this.getMain().entityIds;
+    }
+
+    getMainStructure() {
+        return this.getMain().structure;
+    }
+
+    mainPanel() {
+        if (this.getMain()) {
+            return html`
+                <main-thermostat-panel class="outlined"
+                    .changedEntityIds = ${this.getCEIs()}
+                    .states = ${this.getStates()}
+                    .entityIds = ${this.getMainEIs()}
+                    .structure = ${this.getMainStructure()}
+                    .callService = ${this.callService}
+                ></main-thermostat-panel>
+            `
+        } else {
+            return html`
+                <div class="aux">
+                    Auxiliary Placeholder
+                </div>
+            `
+        }
+    }
+
     static styles = [sharedStyles, styles];
 
     render() {
@@ -36,9 +69,7 @@ export class AreaClimatePanel extends HaSubComponent {
                     .title = ${this.getAreaName()}
                     .callService = ${this.callService}
                 ></climate-panel>
-                <div class="aux">
-                    Auxiliary Placeholder
-                </div>
+                ${this.mainPanel()}
             `
         }
     }
