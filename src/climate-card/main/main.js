@@ -25,10 +25,12 @@ export class ClimateCard extends HaMainComponent {
         "temp",
         "mode",
         "heatpump",
-        "thermostat",
+        "action",
         "tie_main",
         "rank",
         "script"];
+    _AUX = "aux";
+    _AUXKEYS = ["fireplace"];
     _CLIMATEKEYS = ["temp", "mode", "heatpump"];
     _SCRIPTKEY = "script"
 
@@ -54,7 +56,7 @@ export class ClimateCard extends HaMainComponent {
         this.setEntityIds();
         this.setStates();
         this.setAreaStructure();
-        this.setClimateStructure();
+        this.setClimateStructure()
         this.initializeArea();
     }
 
@@ -72,25 +74,54 @@ export class ClimateCard extends HaMainComponent {
 
     setAreaStructure() {
         addAreaStructure(this.getHass(), this.getStructure(), this.getEntityIds());
+        this.modifyGeneralAreaStructure();
+    }
+
+    modifyGeneralAreaStructure() {
+        let generalIds = this.getStructure()[this._GENERALID].entityIds;
+        let scriptId = filterEntityIdsForLabel(this.getHass(), generalIds, this._SCRIPTKEY);
+        delete this.getStructure()[this._GENERALID];
+        Object.entries(this.getStructure()).forEach(([areaId, dictionary]) => {
+            if (this._INCLUDEINIDS.includes(areaId)) {
+                dictionary.entityIds = dictionary.entityIds.union(generalIds);
+            } else {
+                dictionary.entityIds = dictionary.entityIds.union(scriptId);
+            }
+        })
     }
 
     setClimateStructure() {
-        let generalIds = this.getStructure()[this._GENERALID].entityIds;
-        const filteredIds = [...filterEntityIdsForLabel(this.getHass(), generalIds, this._SCRIPTKEY)];
-        const scriptId = filteredIds[0];
-        generalIds.delete(scriptId);
-        delete this.getStructure()[this._GENERALID];
-        Object.entries(this.getStructure()).forEach(([areaId, dictionary]) => {
-            dictionary.entityIds.add(scriptId);
-            dictionary.structure.climate = { structure: {}, entityIds: dictionary.entityIds };
-            this.addKeyStructure(dictionary.structure.climate);
+        Object.values(this.getStructure()).forEach((dictionary) => {
+            this.setClimateVsAuxStructure(dictionary);
             this.addClimateIds(dictionary.structure.climate);
-            if (this._INCLUDEINIDS.includes(areaId)) {
-                dictionary.entityIds = dictionary.entityIds.union(generalIds);
-                dictionary.structure.general = { structure: {}, entityIds: generalIds }
-                this.addKeyStructure(dictionary.structure.general);
+            this.addKeyStructure(dictionary.structure.climate);
+            this.setAuxInnerStructure(dictionary.structure.aux);
+        })
+    }
+
+    setClimateVsAuxStructure(dictionary) {
+        const auxIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, this._AUX);
+        let notAuxIds = new Set([...dictionary.entityIds]);
+        auxIds.forEach((auxId) => notAuxIds.delete(auxId));
+        dictionary.structure.climate = { structure: {}, entityIds: notAuxIds };
+        this.addClimateIds(dictionary.structure.climate);
+        dictionary.structure.aux = { structure: {}, entityIds: auxIds };
+    }
+
+    setAuxInnerStructure(dictionary) {
+        let genIds = new Set([...dictionary.entityIds]);
+        this._AUXKEYS.forEach((label) => {
+            const auxIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, label);
+            auxIds.forEach((auxId) => genIds.delete(auxId));
+            if (auxIds.size > 0) {
+                dictionary.structure[label] = { structure: {}, entityIds: auxIds };
+                this.addKeyStructure(dictionary.structure[label]);
             }
         })
+        if (genIds.size > 0) {
+            dictionary.structure.general = { structure: {}, entityIds: genIds };
+            this.addKeyStructure(dictionary.structure.general);
+        }
     }
 
     addKeyStructure(dictionary) {
@@ -202,8 +233,7 @@ export class ClimateCard extends HaMainComponent {
                 .states = ${this.getStates()}
                 .entityIds = ${this.getAreaEIs()}
                 .structure = ${this.getAreaStructure()}
-                .title = ${this.getThisAreaName()}
-                .callService = ${this._hass.callService}
+                .callService = ${this.getHass().callService}
             ></area-climate-panel>
         `);
     }

@@ -288,5 +288,6 @@ export {
     hasLightChanges,
     getEntityIdsWithLabel,
     filterEntityIdsForLabel,
+    filterEntityIdsForArea,
     hasClimateChanges
 }

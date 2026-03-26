@@ -114,7 +114,6 @@ export class MainThermostatPanel extends HaSubComponent {
                 entity_id: entityId,
                 temperature: newTemp
             }
-            console.log(data);
             this.callService('climate', 'set_temperature', data);
         }
     }
@@ -137,17 +136,10 @@ export class MainThermostatPanel extends HaSubComponent {
 
     render() {
         if (this.isInitialized()) {
+            console.log(this.getStructure())
             return html`
                 <div class="thermostat">
-                    <double-circular-slider
-                        .changedEntityIds = ${this.getCEIs()}
-                        .states = ${this.getStates()}
-                        .entityIds = ${this.getSliderEIs()}
-                        .structure=${this.getSliderStructure()}
-                        @change=${this.handleCallService}
-                    >
-                    </double-circular-slider>
-                    ${this.adjustButtons()}
+                    Placeholder
                 </div>
                 `
         }

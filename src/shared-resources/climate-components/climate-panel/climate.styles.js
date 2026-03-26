@@ -11,16 +11,6 @@ export default css`
         align-items: var(--climate-panel-align-items, center);
     }
 
-    .thermostat {
-        width: var(--thermostat-width, 80%);
-        height: var(--thermostat-height, 350px);
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: flex-start;
-        align-items: center;
-        position: relative;
-    }
-
     .button-row {
         display: flex;
         flex-flow: row nowrap;

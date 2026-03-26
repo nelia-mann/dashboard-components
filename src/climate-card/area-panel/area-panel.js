@@ -20,12 +20,21 @@ export class AreaClimatePanel extends HaSubComponent {
         return this.getClimate().structure;
     }
 
-    getAreaName() {
-        return this.title;
+    getAux() {
+        return this.getStructure().aux;
     }
 
+    getAuxEIs() {
+        return this.getAux().entityIds;
+    }
+
+    getAuxStructure() {
+        return this.getAux().structure;
+    }
+
+
     getMain() {
-        return this.getStructure().general;
+        return this.getAuxStructure().general;
     }
 
     getMainEIs() {
@@ -36,7 +45,7 @@ export class AreaClimatePanel extends HaSubComponent {
         return this.getMain().structure;
     }
 
-    mainPanel() {
+    auxPanel() {
         if (this.getMain()) {
             return html`
                 <main-thermostat-panel class="outlined"
@@ -66,10 +75,9 @@ export class AreaClimatePanel extends HaSubComponent {
                     .states = ${this.getStates()}
                     .entityIds = ${this.getClimateEIs()}
                     .structure = ${this.getClimateStructure()}
-                    .title = ${this.getAreaName()}
                     .callService = ${this.callService}
                 ></climate-panel>
-                ${this.mainPanel()}
+                ${this.auxPanel()}
             `
         }
     }
