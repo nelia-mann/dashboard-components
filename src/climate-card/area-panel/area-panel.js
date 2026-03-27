@@ -44,6 +44,21 @@ export class AreaClimatePanel extends HaSubComponent {
         return this.getMain().structure;
     }
 
+    getFireplace() {
+        return this.getAuxStructure().fireplace;
+    }
+
+    getFireplaceEIs() {
+        let entityIds = new Set([...this.getFireplace().entityIds]);
+        entityIds.add(this.getAreaHpId());
+        entityIds.add(this.getAreaModeId());
+        return entityIds;
+    }
+
+    getFireplaceStructure() {
+        return this.getFireplace().structure;
+    }
+
     getAreaName() {
         return this.areaName;
     }
@@ -100,11 +115,18 @@ export class AreaClimatePanel extends HaSubComponent {
                     .callService = ${this.callService}
                 ></main-thermostat-panel>
             `
-        } else {
+        } else if (this.getFireplace()) {
             return html`
-                <div class="aux">
-                    Auxiliary Placeholder
-                </div>
+                <main-thermostat-panel class="outlined"
+                    .changedEntityIds = ${this.getCEIs()}
+                    .states = ${this.getStates()}
+                    .entityIds = ${this.getFireplaceEIs()}
+                    .structure = ${this.getFireplaceStructure()}
+                    .areaName = ${this.getAreaName()}
+                    .areaMode = ${this.getAreaMode()}
+                    .areaAction = ${this.getAreaAction()}
+                    .callService = ${this.callService}
+                ></main-thermostat-panel>
             `
         }
     }

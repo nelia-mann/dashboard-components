@@ -14,7 +14,7 @@ export class AuxModeControls extends HaClimateComponent {
     }
 
     isTied() {
-        return this.getTie() === this.getAreaName();
+        return [this.getAreaName(), 'on'].includes(this.getTie());
     }
 
     getAreaMode() {
@@ -25,26 +25,34 @@ export class AuxModeControls extends HaClimateComponent {
         return this.areaAction;
     }
 
+    isFixed() {
+        return this.fixed;
+    }
+
     /*********************************** interactive logic ***********************************/
 
     selectMode(mode) {
-        const entityId = this.getModeId();
-        const data = {
-            entity_id: entityId,
-            option: mode
+        if (!this.isFixed()) {
+            const entityId = this.getModeId();
+            const data = {
+                entity_id: entityId,
+                option: mode
+            }
+            this.callService('input_select', 'select_option', data)
         }
-        this.callService('input_select', 'select_option', data)
     }
 
     selectTie() {
-        let newOption = this.getAreaName();
-        (this.isTied()) && (newOption = 'Off');
         const entityId = this.getTieId();
-        const data = {
-            entity_id: entityId,
-            option: newOption
+        let data = { entity_id: entityId };
+        if (this.getTieOptions()) {
+            let newOption = this.getAreaName();
+            (this.isTied()) && (newOption = 'Off');
+            data['option'] = newOption;
+            this.callService('input_select', 'select_option', data);
+        } else {
+            this.callService('input_boolean', 'toggle', data);
         }
-        this.callService('input_select', 'select_option', data);
     }
 
     /************************************** html/style logic *********************************/

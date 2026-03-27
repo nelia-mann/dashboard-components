@@ -31,7 +31,7 @@ export class MainThermostatPanel extends HaClimateComponent {
     }
 
     isTied() {
-        return this.getTie() !== 'Off';
+        return !['Off', 'off'].includes(this.getTie())
     }
 
     /********************************* html/css logic ******************************************/
@@ -40,7 +40,6 @@ export class MainThermostatPanel extends HaClimateComponent {
 
     render() {
         if (this.isInitialized()) {
-            console.log(this.getTie());
             return html`
                 <thermostat-panel
                     .changedEntityIds = ${this.getCEIs()}
@@ -58,6 +57,7 @@ export class MainThermostatPanel extends HaClimateComponent {
                     .areaName = ${this.getAreaName()}
                     .areaMode = ${this.getAreaMode()}
                     .areaAction = ${this.getAreaAction()}
+                    .fixed=${this.isTied()}
                     .callService = ${this.callService}
                 ></aux-mode-controls>
                 `

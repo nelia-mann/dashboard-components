@@ -30,6 +30,7 @@ export class ClimateCard extends HaMainComponent {
         "rank",
         "script"];
     _AUX = "aux";
+    _PRIMARY = "primary"
     _AUXKEYS = ["fireplace"];
     _CLIMATEKEYS = ["temp", "mode", "heatpump"];
     _SCRIPTKEY = "script"
@@ -101,8 +102,7 @@ export class ClimateCard extends HaMainComponent {
 
     setClimateVsAuxStructure(dictionary) {
         const auxIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, this._AUX);
-        let notAuxIds = new Set([...dictionary.entityIds]);
-        auxIds.forEach((auxId) => notAuxIds.delete(auxId));
+        const notAuxIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, this._PRIMARY);
         dictionary.structure.climate = { structure: {}, entityIds: notAuxIds };
         this.addClimateIds(dictionary.structure.climate);
         dictionary.structure.aux = { structure: {}, entityIds: auxIds };
