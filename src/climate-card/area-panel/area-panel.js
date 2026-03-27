@@ -3,7 +3,7 @@ import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcompon
 import styles from './area.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import './../../shared-resources/climate-components/climate-panel/climate-panel.js';
-import '../main-thermostat-panel/main-thermostat-panel.js';
+import '../aux-panel/aux-panel.js';
 
 export class AreaClimatePanel extends HaSubComponent {
 
@@ -112,6 +112,7 @@ export class AreaClimatePanel extends HaSubComponent {
                     .areaName = ${this.getAreaName()}
                     .areaMode = ${this.getAreaMode()}
                     .areaAction = ${this.getAreaAction()}
+                    .title = ${'Main Thermostat'}
                     .callService = ${this.callService}
                 ></main-thermostat-panel>
             `
@@ -125,6 +126,7 @@ export class AreaClimatePanel extends HaSubComponent {
                     .areaName = ${this.getAreaName()}
                     .areaMode = ${this.getAreaMode()}
                     .areaAction = ${this.getAreaAction()}
+                    .title = ${'Fireplace'}
                     .callService = ${this.callService}
                 ></main-thermostat-panel>
             `

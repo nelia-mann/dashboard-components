@@ -1158,7 +1158,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
     :host {
 
         --ha-card-padding: 15px;
-        --ha-card-height: 500px;
+        --ha-card-height: 530px;
         --ha-card-width: 800px;
 
         --button-row-height: 50px;
@@ -1172,7 +1172,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --climate-button-sub-info-margin-top: 1px;
 
         --area-panel-width: 100%;
-        --area-panel-height, 400px;
+        --area-panel-height: 420px;
         --area-panel-flex-flow: row nowrap;
         --area-panel-justify-content: space-around;
         --area-panel-align-items: center;
@@ -1194,8 +1194,11 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --mode-control-button-margin-correction-l: -10px;
         --mode-control-button-margin-correction-r: -14px;
 
-        --thermostat-height: 350px;
-        --thermostat-width: 100%;
+        --tie-button-width: 140px;
+
+        --thermostat-height: 280px;
+        --thermostat-width: 90%;
+        --thermostat-bottom-padding: 15px;
 
         --circular-slider-height: 93%;
         --circular-slider-top-margin: 10px;
@@ -1269,13 +1272,6 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         justify-content: var(--area-panel-justify-content, flex-start);
         align-items: var(--area-panel-align-items, flex-start);
     }
-
-    .aux {
-        width: 350px;
-        height: 100%;
-        outline: solid;
-    }
-
 
 `,e3=n`
 
@@ -1485,14 +1481,15 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
     :host {
         width: var(--thermostat-width, 80%);
         height: var(--thermostat-height, 350px);
+        padding-bottom: var(--thermostat-bottom-padding, 20px);
         display: flex;
         flex-flow: column nowrap;
-        justify-content: flex-start;
+        justify-content: var(--climate-panel-justify-content, space-between);
         align-items: center;
         position: relative;
     }
 
-`;class it extends eQ{static properties={...super.properties,fixed:{state:!0}};constructor(){super(),this.fixed=!1}getTriggers(){return["fixed"]}static styles=[tB,e7];getColorMode(){let t;return"Heating"===this.getAction()&&(t="min"),"Cooling"===this.getAction()&&(t="max"),t}getSliderStructure(){let t={};return t.value=this.getTemp(),t.minExtreme=this.getMinExtreme(),t.maxExtreme=this.getMaxExtreme(),t.units=this.getUnits(),t.upper=this.getAction(),t.icon="M15 13V5A3 3 0 0 0 9 5V13A5 5 0 1 0 15 13M12 4A1 1 0 0 1 13 5V8H11V5A1 1 0 0 1 12 4Z",t.minColor=tq,t.maxColor=tY,t.colorMode=this.getColorMode(),t.separation=this.getSeparation(),["heat","heat-cool","safe"].includes(this.getMode())&&(t.minValue=this.getMin()),["cool","heat-cool"].includes(this.getMode())&&(t.maxValue=this.getMax()),t}isFixed(){return this.fixed}handleCallService(t){let e=t.detail,i=e[0],s=this.getStructure()[i],r=e[1];this.callService("input_number","set_value",{entity_id:s,value:r})}canChange(t,e){let i=this.getMinExtreme(),s=this.getMaxExtreme();"heat-cool"===this.getMode()&&("min"===t&&(s=this.getMax()-this.getSeparation()),"max"===t&&(i=this.getMin()+this.getSeparation()));let r=this.getNumberState(t),n=this.getNumberAttribute(t,"step");return"increment"===e?r+n<=s:r-n>=i}change(t,e){let i=t.detail,s=this.getStructure()[e];this.canChange(e,i)&&this.callService("input_number",i,{entity_id:s})}getButtonStyles(){let t={"justify-content":"center"};return"heat-cool"===this.getMode()&&(t["justify-content"]="space-between"),t}adjustMin(){let t=F``;return["heat","heat-cool"].includes(this.getMode())&&(t=F`<adjust-buttons @change=${t=>this.change(t,"min")}></adjust-buttons>`),t}adjustMax(){let t=F``;return["cool","heat-cool"].includes(this.getMode())&&(t=F`<adjust-buttons @change=${t=>this.change(t,"max")}></adjust-buttons>`),t}adjustButtons(){return this.isFixed()?null:F`
+`;class it extends eQ{static properties={...super.properties,fixed:{state:!0}};constructor(){super(),this.fixed=!1}getTriggers(){return["fixed"]}getTitle(){return this.title}static styles=[tB,e7];getColorMode(){let t;return"Heating"===this.getAction()&&(t="min"),"Cooling"===this.getAction()&&(t="max"),t}getSliderStructure(){let t={};return t.value=this.getTemp(),t.minExtreme=this.getMinExtreme(),t.maxExtreme=this.getMaxExtreme(),t.units=this.getUnits(),t.upper=this.getAction(),t.icon="M15 13V5A3 3 0 0 0 9 5V13A5 5 0 1 0 15 13M12 4A1 1 0 0 1 13 5V8H11V5A1 1 0 0 1 12 4Z",t.minColor=tq,t.maxColor=tY,t.colorMode=this.getColorMode(),t.separation=this.getSeparation(),["heat","heat-cool","safe"].includes(this.getMode())&&(t.minValue=this.getMin()),["cool","heat-cool"].includes(this.getMode())&&(t.maxValue=this.getMax()),t}isFixed(){return this.fixed}handleCallService(t){let e=t.detail,i=e[0],s=this.getStructure()[i],r=e[1];this.callService("input_number","set_value",{entity_id:s,value:r})}canChange(t,e){let i=this.getMinExtreme(),s=this.getMaxExtreme();"heat-cool"===this.getMode()&&("min"===t&&(s=this.getMax()-this.getSeparation()),"max"===t&&(i=this.getMin()+this.getSeparation()));let r=this.getNumberState(t),n=this.getNumberAttribute(t,"step");return"increment"===e?r+n<=s:r-n>=i}change(t,e){let i=t.detail,s=this.getStructure()[e];this.canChange(e,i)&&this.callService("input_number",i,{entity_id:s})}getButtonStyles(){let t={"justify-content":"center"};return"heat-cool"===this.getMode()&&(t["justify-content"]="space-between"),t}adjustMin(){let t=F``;return["heat","heat-cool"].includes(this.getMode())&&(t=F`<adjust-buttons @change=${t=>this.change(t,"min")}></adjust-buttons>`),t}adjustMax(){let t=F``;return["cool","heat-cool"].includes(this.getMode())&&(t=F`<adjust-buttons @change=${t=>this.change(t,"max")}></adjust-buttons>`),t}adjustButtons(){return this.isFixed()?null:F`
             <div class="button-row" style=${eg(this.getButtonStyles())}>
                 ${this.adjustMin()}
                 ${this.adjustMax()}
@@ -1509,7 +1506,9 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                 </double-circular-slider>
                 ${this.adjustButtons()}
             `}}customElements.define("thermostat-panel",it),customElements.define("climate-panel",class extends eQ{static styles=[tB,e3];getControlEIs(){let t=new Set;return t.add(this.getModeId()),t.add(this.getHPId()),this.getRankId()&&t.add(this.getRankId()),t}getThermostatEIs(){let t=new Set;return t.add(this.getTempId()),t.add(this.getModeId()),t.add(this.getHPId()),["heat","heat-cool"].includes(this.getMode())&&t.add(this.getMinId()),["cool","heat-cool"].includes(this.getMode())&&t.add(this.getMaxId()),t}render(){if(this.isInitialized())return F`
+                <div class="large-heading"> ${"Heat Pump"} </div>
                 <thermostat-panel
+                    class="outlined"
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
                     .entityIds = ${this.getThermostatEIs()}
@@ -1527,22 +1526,12 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
             `}});var ie=n`
 
     :host {
-        width: 350px;
-        height: 100%;
+        width: var(--climate-panel-width, 350px);
+        height: var(--climate-panel-height, 100%);
         display: flex;
         flex-flow: column nowrap;
         justify-content: space-between;
         align-items: center;
-    }
-
-    .thermostat {
-        width: var(--thermostat-width, 80%);
-        height: var(--thermostat-height, 350px);
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: flex-start;
-        align-items: center;
-        position: relative;
     }
 
     .button-row {
@@ -1581,7 +1570,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         flex-flow: row nowrap;
         justify-content: center;
         align-items: center;
-        width: 140px;
+        width: var(--tie-button-width, 140px);
         height: var(--mode-control-button-height, 100%);
         outline-offset: var(--button-outline-offset, -3px);
         outline: none;
@@ -1610,13 +1599,16 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         </div>`}static styles=[tB,ii];render(){if(this.isInitialized())return F`
                 ${this.modeButtons()}
                 ${this.TieButton()}
-            `}}),customElements.define("main-thermostat-panel",class extends eQ{getThermostatEIs(){let t=new Set;return t.add(this.getTempId()),t.add(this.getModeId()),"heat"===this.getMode()&&(t.add(this.getMinId()),t.add(this.getActionId())),t}getAreaName(){return this.areaName}getAreaMode(){return this.areaMode}getAreaAction(){return this.areaAction}isTied(){return!["Off","off"].includes(this.getTie())}static styles=[tB,ie];render(){if(this.isInitialized())return F`
+            `}}),customElements.define("main-thermostat-panel",class extends eQ{getThermostatEIs(){let t=new Set;return t.add(this.getTempId()),t.add(this.getModeId()),"heat"===this.getMode()&&(t.add(this.getMinId()),t.add(this.getActionId())),t}getAreaName(){return this.areaName}getAreaMode(){return this.areaMode}getAreaAction(){return this.areaAction}isTied(){return!["Off","off"].includes(this.getTie())}getTitle(){return this.title}static styles=[tB,ie];render(){if(this.isInitialized())return F`
+                <div class="large-heading"> ${this.getTitle()} </div>
                 <thermostat-panel
+                    class = "outlined"
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
                     .entityIds = ${this.getThermostatEIs()}
                     .structure=${this.getStructure()}
                     .fixed=${this.isTied()}
+                    .title=${this.getTitle()}
                     .callService = ${this.callService}
                 ></thermostat-panel>
                 <aux-mode-controls
@@ -1639,6 +1631,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                     .areaName = ${this.getAreaName()}
                     .areaMode = ${this.getAreaMode()}
                     .areaAction = ${this.getAreaAction()}
+                    .title = ${"Main Thermostat"}
                     .callService = ${this.callService}
                 ></main-thermostat-panel>
             `:this.getFireplace()?F`
@@ -1650,6 +1643,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                     .areaName = ${this.getAreaName()}
                     .areaMode = ${this.getAreaMode()}
                     .areaAction = ${this.getAreaAction()}
+                    .title = ${"Fireplace"}
                     .callService = ${this.callService}
                 ></main-thermostat-panel>
             `:void 0}static styles=[tB,e2];render(){if(this.isInitialized())return F`
@@ -1687,7 +1681,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                         ${this.areaButtons()}
                     </div>
                 </ha-card>
-            `}getCardSize(){return 9}getGridOptions(){return{rows:8,columns:30,min_rows:8,max_rows:8}}}var ir=n`
+            `}getCardSize(){return 10}getGridOptions(){return{rows:10,columns:30,min_rows:10,max_rows:10}}}var ir=n`
     ha-card {
         font-family: "Roboto", "Noto", sans-serif;
         font-weight: 400;

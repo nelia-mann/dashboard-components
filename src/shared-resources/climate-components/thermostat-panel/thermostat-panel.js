@@ -25,6 +25,10 @@ export class ThermostatPanel extends HaClimateComponent {
         return ['fixed'];
     }
 
+    getTitle() {
+        return this.title;
+    }
+
     static styles = [sharedStyles, styles];
 
     getColorMode() {

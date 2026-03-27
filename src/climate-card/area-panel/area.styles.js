@@ -11,11 +11,4 @@ export default css`
         align-items: var(--area-panel-align-items, flex-start);
     }
 
-    .aux {
-        width: 350px;
-        height: 100%;
-        outline: solid;
-    }
-
-
 `;

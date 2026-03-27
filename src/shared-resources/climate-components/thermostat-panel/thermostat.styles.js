@@ -5,9 +5,10 @@ export default css`
     :host {
         width: var(--thermostat-width, 80%);
         height: var(--thermostat-height, 350px);
+        padding-bottom: var(--thermostat-bottom-padding, 20px);
         display: flex;
         flex-flow: column nowrap;
-        justify-content: flex-start;
+        justify-content: var(--climate-panel-justify-content, space-between);
         align-items: center;
         position: relative;
     }

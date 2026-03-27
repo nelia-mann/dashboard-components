@@ -258,15 +258,15 @@ export class ClimateCard extends HaMainComponent {
 
     // set card size parameters for ha
     getCardSize() {
-        return 9
+        return 10
     }
 
     getGridOptions() {
         return {
-            rows: 8,
+            rows: 10,
             columns: 30,
-            min_rows: 8,
-            max_rows: 8
+            min_rows: 10,
+            max_rows: 10
         }
     }
 

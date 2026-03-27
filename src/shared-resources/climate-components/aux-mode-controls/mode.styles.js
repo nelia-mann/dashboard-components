@@ -27,7 +27,7 @@ export default css`
         flex-flow: row nowrap;
         justify-content: center;
         align-items: center;
-        width: 140px;
+        width: var(--tie-button-width, 140px);
         height: var(--mode-control-button-height, 100%);
         outline-offset: var(--button-outline-offset, -3px);
         outline: none;

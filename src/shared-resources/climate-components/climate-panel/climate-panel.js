@@ -38,7 +38,9 @@ export class ClimatePanel extends HaClimateComponent {
     render() {
         if (this.isInitialized()) {
             return html`
+                <div class="large-heading"> ${'Heat Pump'} </div>
                 <thermostat-panel
+                    class="outlined"
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
                     .entityIds = ${this.getThermostatEIs()}

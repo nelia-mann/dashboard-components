@@ -5,7 +5,7 @@ export default css`
     :host {
 
         --ha-card-padding: 15px;
-        --ha-card-height: 500px;
+        --ha-card-height: 530px;
         --ha-card-width: 800px;
 
         --button-row-height: 50px;
@@ -19,7 +19,7 @@ export default css`
         --climate-button-sub-info-margin-top: 1px;
 
         --area-panel-width: 100%;
-        --area-panel-height, 400px;
+        --area-panel-height: 420px;
         --area-panel-flex-flow: row nowrap;
         --area-panel-justify-content: space-around;
         --area-panel-align-items: center;
@@ -41,8 +41,11 @@ export default css`
         --mode-control-button-margin-correction-l: -10px;
         --mode-control-button-margin-correction-r: -14px;
 
-        --thermostat-height: 350px;
-        --thermostat-width: 100%;
+        --tie-button-width: 140px;
+
+        --thermostat-height: 280px;
+        --thermostat-width: 90%;
+        --thermostat-bottom-padding: 15px;
 
         --circular-slider-height: 93%;
         --circular-slider-top-margin: 10px;
