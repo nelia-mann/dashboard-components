@@ -3,7 +3,7 @@ import { css } from 'lit';
 export default css`
 
     :host {
-        width: 400px;
+        width: 350px;
         height: 100%;
         display: flex;
         flex-flow: column nowrap;

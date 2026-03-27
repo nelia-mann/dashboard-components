@@ -43,6 +43,7 @@ export class ClimatePanel extends HaClimateComponent {
                     .states = ${this.getStates()}
                     .entityIds = ${this.getThermostatEIs()}
                     .structure=${this.getStructure()}
+                    .fixed=${false}
                     .callService = ${this.callService}
                 ></thermostat-panel>
                 <mode-controls

@@ -194,7 +194,7 @@ action: the current action of the climate entity
     }
 
 
-    /******************************** rank items ********************************/
+    /******************************** rank and tie items ********************************/
 
     getRank() {
         return Number(this.getState('rank'));
@@ -210,6 +210,18 @@ action: the current action of the climate entity
 
     getScriptId() {
         return this.getStructure()['script'];
+    }
+
+    getTie() {
+        return this.getState('tie_main');
+    }
+
+    getTieId() {
+        return this.getEntityId('tie_main');
+    }
+
+    getTieOptions() {
+        return this.getAttribute('tie_main', 'options');
     }
 
 }

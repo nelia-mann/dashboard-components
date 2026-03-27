@@ -19,6 +19,10 @@ function getModeStyles(mode, action, outline) {
             styles['background-color'] = rgba(HOT, 0.5);
             (outline) && (styles['outline'] = `solid ${rgba(HOT, 1.0)}`);
             break;
+        case 'safe':
+            styles['background-color'] = rgba(HOT, 0.5);
+            (outline) && (styles['outline'] = `solid ${rgba(HOT, 1.0)}`);
+            break;
         case 'cool':
             styles['background-color'] = rgba(COOL, 0.5);
             (outline) && (styles['outline'] = `solid ${rgba(COOL, 1.0)}`)

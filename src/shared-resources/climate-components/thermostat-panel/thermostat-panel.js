@@ -11,6 +11,20 @@ import '../../general-components/adjust-buttons/adjust-buttons.js';
 
 export class ThermostatPanel extends HaClimateComponent {
 
+    static properties = {
+        ...super.properties,
+        fixed: { state: true }
+    }
+
+    constructor() {
+        super();
+        this.fixed = false;
+    }
+
+    getTriggers() {
+        return ['fixed'];
+    }
+
     static styles = [sharedStyles, styles];
 
     getColorMode() {
@@ -32,13 +46,17 @@ export class ThermostatPanel extends HaClimateComponent {
         structure.maxColor = COOL;
         structure.colorMode = this.getColorMode();
         structure.separation = this.getSeparation();
-        if (['heat', 'heat-cool'].includes(this.getMode())) {
+        if (['heat', 'heat-cool', 'safe'].includes(this.getMode())) {
             structure.minValue = this.getMin();
         }
         if (['cool', 'heat-cool'].includes(this.getMode())) {
             structure.maxValue = this.getMax();
         }
         return structure;
+    }
+
+    isFixed() {
+        return this.fixed;
     }
 
     /******************************** interactive logic ************************************/
@@ -105,6 +123,7 @@ export class ThermostatPanel extends HaClimateComponent {
     }
 
     adjustButtons() {
+        if (this.isFixed()) return null;
         return html`
             <div class="button-row" style=${styleMap(this.getButtonStyles())}>
                 ${this.adjustMin()}
@@ -121,6 +140,7 @@ export class ThermostatPanel extends HaClimateComponent {
                     .states = ${this.getStates()}
                     .entityIds = ${this.getEntityIds()}
                     .structure=${this.getSliderStructure()}
+                    .fixed=${this.isFixed()}
                     @change=${this.handleCallService}
                 >
                 </double-circular-slider>

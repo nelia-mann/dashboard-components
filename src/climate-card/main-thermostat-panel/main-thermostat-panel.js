@@ -3,10 +3,9 @@ import { HaClimateComponent } from '../../shared-resources/base-classes/ha-clima
 import styles from './thermostat.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import '../../shared-resources/climate-components/thermostat-panel/thermostat-panel.js';
+import '../../shared-resources/climate-components/aux-mode-controls/aux-mode-controls.js';
 
 export class MainThermostatPanel extends HaClimateComponent {
-
-
 
     getThermostatEIs() {
         let entityIds = new Set();
@@ -16,11 +15,24 @@ export class MainThermostatPanel extends HaClimateComponent {
             entityIds.add(this.getMinId());
             entityIds.add(this.getActionId());
         }
-        (this.getMode() === 'heat') && (entityIds.add(this.getMinId()));
         return entityIds;
     }
 
+    getAreaName() {
+        return this.areaName;
+    }
 
+    getAreaMode() {
+        return this.areaMode;
+    }
+
+    getAreaAction() {
+        return this.areaAction;
+    }
+
+    isTied() {
+        return this.getTie() !== 'Off';
+    }
 
     /********************************* html/css logic ******************************************/
 
@@ -28,14 +40,26 @@ export class MainThermostatPanel extends HaClimateComponent {
 
     render() {
         if (this.isInitialized()) {
+            console.log(this.getTie());
             return html`
                 <thermostat-panel
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
                     .entityIds = ${this.getThermostatEIs()}
                     .structure=${this.getStructure()}
+                    .fixed=${this.isTied()}
                     .callService = ${this.callService}
                 ></thermostat-panel>
+                <aux-mode-controls
+                    .changedEntityIds = ${this.getCEIs()}
+                    .states = ${this.getStates()}
+                    .entityIds = ${this.getEntityIds()}
+                    .structure = ${this.getStructure()}
+                    .areaName = ${this.getAreaName()}
+                    .areaMode = ${this.getAreaMode()}
+                    .areaAction = ${this.getAreaAction()}
+                    .callService = ${this.callService}
+                ></aux-mode-controls>
                 `
         }
     }

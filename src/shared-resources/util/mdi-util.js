@@ -14,6 +14,7 @@ export {
     mdiMinus as minus,
     mdiPlus as plus,
     mdiThermometer as thermometer,
+    mdiArrowDownThin as minimum,
 
 
 } from '@mdi/js';

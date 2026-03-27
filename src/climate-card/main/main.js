@@ -233,6 +233,7 @@ export class ClimateCard extends HaMainComponent {
                 .states = ${this.getStates()}
                 .entityIds = ${this.getAreaEIs()}
                 .structure = ${this.getAreaStructure()}
+                .areaName = ${this.getThisAreaName()}
                 .callService = ${this.getHass().callService}
             ></area-climate-panel>
         `);
@@ -257,13 +258,13 @@ export class ClimateCard extends HaMainComponent {
 
     // set card size parameters for ha
     getCardSize() {
-        return 8;
+        return 9
     }
 
     getGridOptions() {
         return {
             rows: 8,
-            columns: 27,
+            columns: 30,
             min_rows: 8,
             max_rows: 8
         }

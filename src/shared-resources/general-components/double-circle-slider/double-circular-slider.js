@@ -15,7 +15,8 @@ export class DoubleCircularSlider extends HaSubComponent {
     static properties = {
         ...super.properties,
         _minValue: { state: true },
-        _maxValue: { state: true }
+        _maxValue: { state: true },
+        fixed: { state: true }
     }
 
     constructor() {
@@ -25,6 +26,7 @@ export class DoubleCircularSlider extends HaSubComponent {
         this._minValue = 0;
         this._maxValue = 100;
         this._flag = false;
+        this.fixed = true;
     }
 
     /************************** lifecycle *****************************/
@@ -35,7 +37,7 @@ export class DoubleCircularSlider extends HaSubComponent {
     }
 
     getTriggers() {
-        return ["_minValue", "_maxValue"];
+        return ["_minValue", "_maxValue", "fixed"];
     }
 
     updated() {
@@ -163,28 +165,32 @@ export class DoubleCircularSlider extends HaSubComponent {
         }
     }
 
-    getMinValue() {
+    getMin() {
         if (this.getMinStateValue()) return this._minValue;
     }
 
-    getMaxValue() {
+    getMax() {
         if (this.getMaxStateValue()) return this._maxValue;
     }
 
     getMinMax() {
-        if (this.getMaxValue()) {
-            return this.getMaxValue() - this.getSeparation();
+        if (this.getMax()) {
+            return this.getMax() - this.getSeparation();
         } else {
             return this.getMaxExtreme();
         }
     }
 
     getMaxMin() {
-        if (this.getMinValue()) {
-            return this.getMinValue() + this.getSeparation();
+        if (this.getMin()) {
+            return this.getMin() + this.getSeparation();
         } else {
             return this.getMinExtreme();
         }
+    }
+
+    isFixed() {
+        return this.fixed;
     }
 
     /******************************* geometric logic *******************************/
@@ -230,13 +236,13 @@ export class DoubleCircularSlider extends HaSubComponent {
     }
 
     isNearMin(e) {
-        if (!this.getMinValue()) return false;
-        return (this.getDistance(e, this.getMinValue()) < this.getTolerance())
+        if (!this.getMin()) return false;
+        return (this.getDistance(e, this.getMin()) < this.getTolerance())
     }
 
     isNearMax(e) {
-        if (!this.getMaxValue()) return false;
-        return (this.getDistance(e, this.getMaxValue()) < this.getTolerance())
+        if (!this.getMax()) return false;
+        return (this.getDistance(e, this.getMax()) < this.getTolerance())
     }
 
     getMouseCoords(e) {
@@ -251,8 +257,8 @@ export class DoubleCircularSlider extends HaSubComponent {
     setWhichValue(e) {
         let minDistance = 5;
         let maxDistance = 5;
-        (this.isNearMin(e)) && (minDistance = this.getDistance(e, this.getMinValue()));
-        (this.isNearMax(e)) && (maxDistance = this.getDistance(e, this.getMaxValue()));
+        (this.isNearMin(e)) && (minDistance = this.getDistance(e, this.getMin()));
+        (this.isNearMax(e)) && (maxDistance = this.getDistance(e, this.getMax()));
         if (minDistance < maxDistance) {
             this._whichValue = 'min';
         } else if (minDistance > maxDistance) {
@@ -267,15 +273,17 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     down(e) {
         this.setWhichValue(e);
-        if (this.getWhichValue() !== 'none') {
+        if (this.getWhichValue() !== 'none' && !this.isFixed()) {
             this.raiseChangeFlag();
             this.move(e);
         }
     }
 
     up(e) {
-        this.handleMessage();
-        this.clearWhichValue();
+        if (!this.isFixed()) {
+            this.handleMessage();
+            this.clearWhichValue();
+        }
     }
 
     shouldUp(newValue) {
@@ -289,7 +297,7 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     move(e) {
         const which = this.getWhichValue();
-        if (which !== 'none') {
+        if (which !== 'none' && !this.isFixed()) {
             const mouseCoords = this.getMouseCoords(e);
             const xFromCenter = mouseCoords[0] - 1;
             const yFromCenter = mouseCoords[1] - 1;
@@ -304,10 +312,10 @@ export class DoubleCircularSlider extends HaSubComponent {
     handleMessage() {
         if (this.getWhichValue() == 'none') return;
         let which = 'min';
-        let value = this.getMinValue();
+        let value = this.getMin();
         if (this.getWhichValue() == 'max') {
             which = 'max';
-            value = this.getMaxValue();
+            value = this.getMax();
         }
         this.dispatchEvent(new CustomEvent('change', { detail: [which, value] }));
     }
@@ -324,8 +332,8 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     getRange() {
         let result = html``;
-        let min = this.getMinValue();
-        let max = this.getMaxValue();
+        let min = this.getMin();
+        let max = this.getMax();
         (min) && (min = min.toFixed(1));
         (max) && (max = max.toFixed(1));
         const units = this.getUnits();
@@ -368,8 +376,8 @@ export class DoubleCircularSlider extends HaSubComponent {
         return path;
     }
 
-    dot(value, r, fill) {
-        if (!value) return null;
+    dot(skip, value, r, fill) {
+        if (!value || skip) return null;
         const ns = "http://www.w3.org/2000/svg";
         const dot1 = document.createElementNS(ns, "circle");
         const coords = this.getCoords(value);
@@ -399,8 +407,8 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     getTempColor() {
         let color = rgba(OFF, 1);
-        (this.getValue() < this.getMinValue()) && (color = rgbp(this.getMinColor(), .5));
-        (this.getValue() > this.getMaxValue()) && (color = rgbp(this.getMaxColor(), .5));
+        (this.getValue() < this.getMin()) && (color = rgbp(this.getMinColor(), .5));
+        (this.getValue() > this.getMax()) && (color = rgbp(this.getMaxColor(), .5));
         return color;
     }
 
@@ -421,15 +429,15 @@ export class DoubleCircularSlider extends HaSubComponent {
                     @pointermove=${this.move}
                 >
                     ${this.arc(this.getMaxMin(), this.getMinMax(), rgba(OFF, .25))}
-                    ${this.arc(this.getMinExtreme(), this.getMinValue(), rgba(this.getMinColor(), .5))}
-                    ${this.arc(this.getValue(), this.getMinValue(), rgba(this.getMinColor(), 1))}
-                    ${this.dot(this.getMinValue(), this.getThickness(), rgba(this.getMinColor(), 1))}
-                    ${this.dot(this.getMinValue(), this.getIris() * this.getThickness(), "white")}
-                    ${this.arc(this.getMaxValue(), this.getMaxExtreme(), rgba(this.getMaxColor(), .5))}
-                    ${this.arc(this.getMaxValue(), this.getValue(), rgba(this.getMaxColor(), 1))}
-                    ${this.dot(this.getMaxValue(), this.getThickness(), rgba(this.getMaxColor(), 1))}
-                    ${this.dot(this.getMaxValue(), this.getIris() * this.getThickness(), "white")}
-                    ${this.dot(this.getValue(), this.getTempDotSize(), this.getTempColor())}
+                    ${this.arc(this.getMinExtreme(), this.getMin(), rgba(this.getMinColor(), .5))}
+                    ${this.arc(this.getValue(), this.getMin(), rgba(this.getMinColor(), 1))}
+                    ${this.dot(false, this.getMin(), this.getThickness(), rgba(this.getMinColor(), 1))}
+                    ${this.dot(this.isFixed(), this.getMin(), this.getIris() * this.getThickness(), "white")}
+                    ${this.arc(this.getMax(), this.getMaxExtreme(), rgba(this.getMaxColor(), .5))}
+                    ${this.arc(this.getMax(), this.getValue(), rgba(this.getMaxColor(), 1))}
+                    ${this.dot(false, this.getMax(), this.getThickness(), rgba(this.getMaxColor(), 1))}
+                    ${this.dot(this.isFixed(), this.getMax(), this.getIris() * this.getThickness(), "white")}
+                    ${this.dot(false, this.getValue(), this.getTempDotSize(), this.getTempColor())}
                 </svg>
             `
         }

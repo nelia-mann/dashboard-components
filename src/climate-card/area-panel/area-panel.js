@@ -24,14 +24,13 @@ export class AreaClimatePanel extends HaSubComponent {
         return this.getStructure().aux;
     }
 
-    getAuxEIs() {
-        return this.getAux().entityIds;
-    }
-
     getAuxStructure() {
         return this.getAux().structure;
     }
 
+    getAuxEIs() {
+        return this.getAux().entityIds;
+    }
 
     getMain() {
         return this.getAuxStructure().general;
@@ -45,6 +44,48 @@ export class AreaClimatePanel extends HaSubComponent {
         return this.getMain().structure;
     }
 
+    getAreaName() {
+        return this.areaName;
+    }
+
+    getAreaMode() {
+        return this.getStates()[this.getAreaModeId()].state;
+    }
+
+    getAreaModeId() {
+        return this.getClimateStructure()['mode'];
+    }
+
+    getAreaHpId() {
+        return this.getClimateStructure()['heatpump'];
+    }
+
+    getMainEIs() {
+        let entityIds = new Set([...this.getMain().entityIds]);
+        entityIds.add(this.getAreaHpId());
+        entityIds.add(this.getAreaModeId());
+        return entityIds;
+    }
+
+    getAreaAction() {
+        const HpState = this.getStates()[this.getAreaHpId()].state;
+        let action = "off";
+        switch (HpState) {
+            case 'heat':
+                action = "Heating";
+                break;
+            case 'cool':
+                action = "Cooling";
+                break;
+            case 'off':
+                if (this.getAreaMode() !== "off") {
+                    action = "Idle";
+                } else { action = "Off" };
+                break;
+        }
+        return action;
+    }
+
     auxPanel() {
         if (this.getMain()) {
             return html`
@@ -53,6 +94,9 @@ export class AreaClimatePanel extends HaSubComponent {
                     .states = ${this.getStates()}
                     .entityIds = ${this.getMainEIs()}
                     .structure = ${this.getMainStructure()}
+                    .areaName = ${this.getAreaName()}
+                    .areaMode = ${this.getAreaMode()}
+                    .areaAction = ${this.getAreaAction()}
                     .callService = ${this.callService}
                 ></main-thermostat-panel>
             `
