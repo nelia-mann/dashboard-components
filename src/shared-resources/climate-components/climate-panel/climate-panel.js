@@ -1,8 +1,5 @@
 import { html } from 'lit';
-import { styleMap } from 'lit/directives/style-map.js';
 import { HaClimateComponent } from '../../base-classes/ha-climate-component.js';
-import { COOL, HOT } from './../../util/color-util.js';
-import { thermometer } from './../../util/mdi-util.js';
 import styles from './climate.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import './../mode-controls/mode-controls.js';
@@ -46,7 +43,7 @@ export class ClimatePanel extends HaClimateComponent {
                     .states = ${this.getStates()}
                     .entityIds = ${this.getThermostatEIs()}
                     .structure=${this.getStructure()}
-                    @change=${this.handleCallService}
+                    .callService = ${this.callService}
                 ></thermostat-panel>
                 <mode-controls
                     .changedEntityIds = ${this.getCEIs()}

@@ -62,8 +62,8 @@ export class ThermostatPanel extends HaClimateComponent {
             (target === 'min') && (maxExtreme = this.getMax() - this.getSeparation());
             (target === 'max') && (minExtreme = this.getMin() + this.getSeparation());
         }
-        const current = Number(this.getState(target));
-        const step = Number(this.getAttribute(target, 'step'))
+        const current = this.getNumberState(target);
+        const step = this.getNumberAttribute(target, 'step');
         if (change === 'increment') {
             return (current + step <= maxExtreme);
         } else {

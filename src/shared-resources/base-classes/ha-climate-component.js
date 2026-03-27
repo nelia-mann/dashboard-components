@@ -3,7 +3,7 @@ import { HaSubComponent } from './ha-subcomponent.js';
 export class HaClimateComponent extends HaSubComponent {
 
 /* assumes a "states" object, and a "structure" object.  The "structure" object is a dictionary whose values are
-entity ids, and whose keys are:
+entity ids, and whose keys are in the set:
 
 min: minimum temp setting.  (input_number, includes attributes step, min, and max)
 
@@ -19,62 +19,111 @@ rank: current ranking for climate priority.  (input_number, an integer from 1 to
 
 script: the script to reset heatpump ranking.  (takes as a variable the heatpump we want to be first.)
 
+action: the current action of the climate entity
+
 */
 
+
+    /********************* basics (protection for lack of key existence) *************/
+
+    getEntityId(key) {
+        return this.getStructure()[key];
+    }
+
     getState(key) {
-        const entityId = this.getStructure()[key];
-        const state = this.getStates()[entityId];
-        return state.state;
+        if (this.getEntityId(key)) {
+            const state = this.getStates()[this.getEntityId(key)];
+            return state.state;
+        }
+    }
+
+    getNumberState(key) {
+        if (this.getEntityId(key)) {
+            const state = this.getStates()[this.getEntityId(key)];
+            return Number(state.state);
+        }
     }
 
     getAttribute(key, attribute) {
-        const entityId = this.getStructure()[key];
-        const state = this.getStates()[entityId];
-        return state.attributes[attribute];
+        if (this.getEntityId(key)) {
+            const state = this.getStates()[this.getEntityId(key)];
+            return state.attributes[attribute];
+        }
+    }
+
+    getNumberAttribute(key, attribute) {
+        if (this.getEntityId(key)) {
+            const state = this.getStates()[this.getEntityId(key)];
+            return Number(state.attributes[attribute]);
+        }
+    }
+
+    /*********************** min/max items ********************************/
+
+    getMinId() {
+        return this.getEntityId('min');
     }
 
     getMin() {
-        return Number(this.getState('min'));
-    }
-
-    getMinExtreme() {
-        return Number(this.getAttribute('min', 'min'));
-    }
-
-    getMinId() {
-        return this.getStructure()['min'];
+        return this.getNumberState('min');
     }
 
     getMinStep() {
-        return Number(this.getAttribute('min', 'step'));
-    }
-
-    getMax() {
-        return Number(this.getState('max'));
-    }
-
-    getMaxExtreme() {
-        return Number(this.getAttribute('max', 'max'));
+        return this.getNumberAttribute('min', 'step');
     }
 
     getMaxId() {
-        return this.getStructure()['max'];
+        return this.getEntityId('max');
+    }
+
+    getMax() {
+        return this.getNumberState('max');
     }
 
     getMaxStep() {
-        return Number(this.getAttribute('max', 'step'));
+        return this.getNumberAttribute('max', 'step');
+    }
+
+    getMinExtreme() {
+        const minmin = this.getNumberAttribute('min', 'min');
+        const maxmin = this.getNumberAttribute('max', 'min');
+        if (minmin && maxmin) {
+            return Math.min(minmin, maxmin);
+        } else if (minmin) {
+            return minmin;
+        } else if (maxmin) {
+            return maxmin;
+        }
+    }
+
+    getMaxExtreme() {
+        const minmax = this.getNumberAttribute('min', 'max');
+        const maxmax = this.getNumberAttribute('max', 'max');
+        if (minmax && maxmax) {
+            return Math.max(minmax, maxmax);
+        } else if (minmax) {
+            return minmax;
+        } else if (maxmax) {
+            return maxmax;
+        }
     }
 
     getSeparation() {
-        return this.getMinStep() + this.getMaxStep();
+        let minStep = this.getMinStep();
+        let maxStep = this.getMaxStep();
+        if (minStep && maxStep) {
+            return this.getMinStep() + this.getMaxStep();
+        } else return 0;
     }
 
+    /******************* temp items *******************************/
+
     getTemp() {
-        return Number(this.getState('temp'));
+        return this.getNumberState('temp');
     }
 
     getTempId() {
-        return this.getStructure()['temp'];
+        return this.getEntityId('temp');
     }
 
     getUnits() {
@@ -86,6 +135,8 @@ script: the script to reset heatpump ranking.  (takes as a variable the heatpump
         const units = this.getUnits();
         return temp + ' ' + units;
     }
+
+    /************************ mode and action items ************************/
 
     getMode() {
         return this.getState('mode');
@@ -107,23 +158,7 @@ script: the script to reset heatpump ranking.  (takes as a variable the heatpump
         return this.getStructure()['heatpump'];
     }
 
-    getRank() {
-        return Number(this.getState('rank'));
-    }
-
-    isDominant() {
-        return this.getRank() === 1;
-    }
-
-    getRankId() {
-        return this.getStructure()['rank'];
-    }
-
-    getScriptId() {
-        return this.getStructure()['script'];
-    }
-
-    getAction() {
+    getActionFromHP() {
         let action = "off";
         switch (this.getHPstate()) {
             case 'heat':
@@ -139,6 +174,42 @@ script: the script to reset heatpump ranking.  (takes as a variable the heatpump
                 break;
         }
         return action;
+    }
+
+    getActionDirect() {
+        let result = this.getState('action');
+        if (result) {
+            return result.charAt(0).toUpperCase() + result.slice(1);
+        }
+    }
+
+    getActionId() {
+        return this.getEntityId('action');
+    }
+
+    getAction() {
+        if (this.getActionDirect()) {
+            return this.getActionDirect();
+        } else return this.getActionFromHP();
+    }
+
+
+    /******************************** rank items ********************************/
+
+    getRank() {
+        return Number(this.getState('rank'));
+    }
+
+    isDominant() {
+        return this.getRank() === 1;
+    }
+
+    getRankId() {
+        return this.getStructure()['rank'];
+    }
+
+    getScriptId() {
+        return this.getStructure()['script'];
     }
 
 }
