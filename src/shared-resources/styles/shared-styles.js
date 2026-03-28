@@ -30,6 +30,13 @@ export default css`
         padding: 0px;
     }
 
+    .heading {
+        font-weight: 550;
+        font-size: var(--large-font);
+        margin: 0px;
+        padding: 0px;
+    }
+
     .sub-info {
         padding: 0px;
         margin: 0px;
@@ -40,6 +47,10 @@ export default css`
     .outlined {
         outline-offset: 0px;
         border-radius: 8px;
+    }
+
+    .inactive {
+        background-color: rgba(0, 0, 0, 0.1);
     }
 
     dialog::backdrop {

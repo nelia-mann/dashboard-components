@@ -38,6 +38,21 @@ export class MainThermostatPanel extends HaClimateComponent {
         return this.title;
     }
 
+    isSafe() {
+        return this.getMode() === 'safe';
+    }
+
+    isFixed() {
+        return (this.isTied() || this.isSafe());
+    }
+
+    isInactive() {
+        if (this.isFixed() || this.getMode() === 'off') {
+            return 'inactive';
+        } else return '';
+    }
+
+
     /********************************* html/css logic ******************************************/
 
     static styles = [sharedStyles, styles];
@@ -45,14 +60,14 @@ export class MainThermostatPanel extends HaClimateComponent {
     render() {
         if (this.isInitialized()) {
             return html`
-                <div class="large-heading"> ${this.getTitle()} </div>
+                <div class="heading"> ${this.getTitle()} </div>
                 <thermostat-panel
-                    class = "outlined"
+                    class = "outlined ${this.isInactive()}"
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
                     .entityIds = ${this.getThermostatEIs()}
                     .structure=${this.getStructure()}
-                    .fixed=${this.isTied()}
+                    .fixed=${this.isFixed()}
                     .title=${this.getTitle()}
                     .callService = ${this.callService}
                 ></thermostat-panel>
@@ -64,7 +79,6 @@ export class MainThermostatPanel extends HaClimateComponent {
                     .areaName = ${this.getAreaName()}
                     .areaMode = ${this.getAreaMode()}
                     .areaAction = ${this.getAreaAction()}
-                    .fixed=${this.isTied()}
                     .callService = ${this.callService}
                 ></aux-mode-controls>
                 `

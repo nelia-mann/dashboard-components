@@ -25,21 +25,16 @@ export class AuxModeControls extends HaClimateComponent {
         return this.areaAction;
     }
 
-    isFixed() {
-        return this.fixed;
-    }
-
     /*********************************** interactive logic ***********************************/
 
     selectMode(mode) {
-        if (!this.isFixed()) {
-            const entityId = this.getModeId();
-            const data = {
-                entity_id: entityId,
-                option: mode
-            }
-            this.callService('input_select', 'select_option', data)
+        (this.isTied()) && (this.selectTie());
+        const entityId = this.getModeId();
+        const data = {
+            entity_id: entityId,
+            option: mode
         }
+        this.callService('input_select', 'select_option', data)
     }
 
     selectTie() {
@@ -96,7 +91,7 @@ export class AuxModeControls extends HaClimateComponent {
     }
 
     TieButton() {
-        return html`<div class="bigbutton outlined"
+        return html`<div class="bigbutton outlined small-heading"
             style=${styleMap(this.getTieStyles())}
             @click=${this.selectTie}
         >

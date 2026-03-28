@@ -264,7 +264,7 @@ export class ClimateCard extends HaMainComponent {
     getGridOptions() {
         return {
             rows: 10,
-            columns: 30,
+            columns: 36,
             min_rows: 10,
             max_rows: 10
         }
