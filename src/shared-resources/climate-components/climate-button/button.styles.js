@@ -24,11 +24,15 @@ export default css`
     .small-heading {
         margin-top: var(--climate-button-heading-margin-top, 7px);
         margin-bottom: var(--climate-button-heading-margin-bottom, -7px);
+        font-weight: var(--climate-button-heading-font-weight, 700);
+        font-size: var(--climate-button-heading-font-size, 100%);
     }
 
     .sub-info {
         margin-bottom: var(--climate-button-sub-info-margin-bottom, 10px);
         margin-top: var(--climate-button-sub-info-margin-top, 1px);
+        font-weight: var(--climate-button-sub-info-font-weight, 700);
+        font-size: var(--climate-button-sub-info-font-size, 100%);
     }
 
 `;

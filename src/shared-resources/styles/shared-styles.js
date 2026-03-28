@@ -14,6 +14,9 @@ export default css`
         --Huge-font: 350%;
         --HUGE-font: 400%;
         --button-outline-offset: -3px;
+
+        --ipad-max-height: 900px;
+        --ipad-max-width: 1050px;
     }
 
     .small-heading {
@@ -26,13 +29,6 @@ export default css`
     .large-heading {
         font-weight: 600;
         font-size: var(--Large-font);
-        margin: 0px;
-        padding: 0px;
-    }
-
-    .heading {
-        font-weight: 550;
-        font-size: var(--large-font);
         margin: 0px;
         padding: 0px;
     }

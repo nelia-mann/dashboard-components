@@ -4,19 +4,28 @@ export default css`
 
     :host {
 
-        --ha-card-padding: 15px;
-        --ha-card-height: 900px;
-        --ha-card-width: 1050px;
+        --small-heading-font-size: var(--large-font);
+        --small-heading-font-weight:  700;
+        --sub-info-font-size: var(--normal-font);
+        --sub-info-font-weight: 400;
 
-        --button-row-height: 50px;
+        --ha-card-padding: 15px;
+        --ha-card-height: var(--ipad-max-height);
+        --ha-card-width: var(--ipad-max-width);
+
+        --button-row-height: 60px;
         --button-row-width: 100%;
 
-        --climate-button-width: 160px;
+        --climate-button-width: 200px;
         --climate-button-padding: 5px;
         --climate-button-heading-margin-top: 7px;
         --climate-button-heading-margin-bottom: -7px;
         --climate-button-sub-info-margin-bottom: 10px;
         --climate-button-sub-info-margin-top: 1px;
+        --climate-button-heading-font-weight: var(--small-heading-font-weight);
+        --climate-button-heading-font-size: var(--small-heading-font-size);
+        --climate-button-sub-info-font-weight: var(--sub-info-font-weight);
+        --climate-button-sub-info-font-size: var(--sub-info-font-size);
 
         --area-panel-width: 100%;
         --area-panel-height: 470px;
@@ -29,18 +38,39 @@ export default css`
         --climate-panel-flex-flow: column nowrap;
         --climate-panel-justify-content: space-between;
         --climate-panel-align-items: center;
+        --climate-panel-heading-font-size: var(--large-font);
+        --climate-panel-heading-font-weight: 550;
+
+        --aux-panel-width: var(--climate-panel-width);
+        --aux-panel-height: var(--climate-panel-height);
+        --aux-panel-flex-flow: var(--climate-panel-flex-flow);
+        --aux-panel-justify-content: var(--climate-panel-justify-content);
+        --aux-panel-align-items: var(--climate-panel-align-items);
+        --aux-panel-heading-font-size: var(--climate-panel-heading-font-size);
+        --aux-panel-heading-font-weight: var(--climate-panel-heading-font-weight);
 
         --mode-control-width: 95%;
         --mode-control-height: 50px;
         --mode-control-flex-flow: row nowrap;
         --mode-control-justify-content: space-around;
         --mode-control-align-items: flex-start;
-
         --mode-control-button-width: 55px;
         --mode-control-button-height: 40px;
         --mode-control-button-margin-correction-l: -10px;
         --mode-control-button-margin-correction-r: -14px;
+        --mode-control-button-outline-offset: var(--button-outline-offset);
 
+        --aux-mode-control-width: var(--mode-control-width);
+        --aux-mode-control-height: var(--mode-control-height);
+        --aux-mode-control-flex-flow: var(--mode-control-flex-flow);
+        --aux-mode-control-justify-content: var(--mode-control-justify-content);
+        --aux-mode-control-align-items: var(--mode-control-align-items);
+        --aux-mode-control-button-width: var(--mode-control-button-width);
+        --aux-mode-control-button-height: var(--mode-control-button-height);
+        --aux-mode-control-button-margin-correction-r: -6px;
+        --aux-mode-control-button-outline-offset: var(--button-outline-offset);
+        --aux-mode-control-font-size: var(--sub-info-font-size);
+        --aux-mode-control-font-weight: var(--small-heading-font-weight);
         --tie-button-width: 140px;
 
         --thermostat-height: 350px;

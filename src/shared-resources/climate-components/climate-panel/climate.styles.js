@@ -18,4 +18,9 @@ export default css`
         width: var(--adjust-button-row-width, 66%);
     }
 
+    .heading {
+        font-size: var(--climate-panel-heading-font-size, var(--large-font));
+        font-weight: var(--climate-panel-heading-font-weight, 550);
+    }
+
 `;

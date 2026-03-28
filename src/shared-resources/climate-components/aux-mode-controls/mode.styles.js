@@ -3,12 +3,12 @@ import { css } from 'lit';
 export default css`
 
     :host {
-        width: var(--mode-control-width, 100%);
-        height: var(--mode-control-height, 50px);
+        width: var(--aux-mode-control-width, 100%);
+        height: var(--aux-mode-control-height, 50px);
         display: flex;
-        flex-flow: var(--mode-control-flex-flow, row nowrap);
-        justify-content: var(--mode-control-justify-content, space-around);
-        align-items: var(--mode-control-align-items, center);
+        flex-flow: var(--aux-mode-control-flex-flow, row nowrap);
+        justify-content: var(--aux-mode-control-justify-content, space-around);
+        align-items: var(--aux-mode-control-align-items, center);
     }
 
     .button {
@@ -16,9 +16,9 @@ export default css`
         flex-flow: row nowrap;
         justify-content: center;
         align-items: center;
-        width: var(--mode-control-button-width, 60px);
-        height: var(--mode-control-button-height, 100%);
-        outline-offset: var(--button-outline-offset, -3px);
+        width: var(--aux-mode-control-button-width, 60px);
+        height: var(--aux-mode-control-button-height, 100%);
+        outline-offset: var(--aux-mode-control-button-outline-offset, -3px);
         outline: none;
     }
 
@@ -28,14 +28,16 @@ export default css`
         justify-content: center;
         align-items: center;
         width: var(--tie-button-width, 140px);
-        height: var(--mode-control-button-height, 100%);
+        height: var(--aux-mode-control-button-height, 100%);
         outline-offset: var(--button-outline-offset, -3px);
         outline: none;
+        font-size: var(--aux-mode-control-font-size, var(--normal-font));
+        font-weight: var(--aux-mode-control-font-weight, 500);
     }
 
-    .center{
-        margin-left: var(--mode-control-button-margin-correction-l, -10px);
-        margin-right: var(--mode-control-button-margin-correction-r, -10px);
+    .exclamation {
+        margin-right: var(--aux-mode-control-button-margin-correction-r, -2px);
     }
+
 
 `;

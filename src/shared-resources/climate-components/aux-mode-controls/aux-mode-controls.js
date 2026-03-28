@@ -3,7 +3,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { HaClimateComponent } from '../../base-classes/ha-climate-component.js';
 import { getModeStyles } from '../util/climate-util.js';
-import { fire, power, minimum } from '../../util/mdi-util.js';
+import { fire, power, minimum, exclamation } from '../../util/mdi-util.js';
 import styles from './mode.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 
@@ -91,11 +91,12 @@ export class AuxModeControls extends HaClimateComponent {
     }
 
     TieButton() {
-        return html`<div class="bigbutton outlined small-heading"
+        return html`<div class="bigbutton outlined"
             style=${styleMap(this.getTieStyles())}
             @click=${this.selectTie}
         >
-            Tie to ${this.getAreaName()}
+            <ha-svg-icon .path=${exclamation}} class="exclamation"></ha-svg-icon>
+            ${this.getAreaName()}
         </div>`
     }
 
