@@ -1169,8 +1169,8 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
     :host {
 
         --ha-card-padding: 15px;
-        --ha-card-height: 800px;
-        --ha-card-width: 1100px;
+        --ha-card-height: 900px;
+        --ha-card-width: 1050px;
 
         --button-row-height: 50px;
         --button-row-width: 100%;
@@ -1700,7 +1700,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                         ${this.areaButtons()}
                     </div>
                 </ha-card>
-            `}getCardSize(){return 12}getGridOptions(){return{rows:12,columns:36,min_rows:12,max_rows:12}}}var ir=n`
+            `}getCardSize(){return 14}getGridOptions(){return{rows:14,columns:36,min_rows:14,max_rows:14}}}var ir=n`
     ha-card {
         font-family: "Roboto", "Noto", sans-serif;
         font-weight: 400;
