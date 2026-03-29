@@ -16,6 +16,8 @@ export default css`
 
     .large-heading {
         height: var(--led-large-heading-height, 40px);
+        font-size: var(--led-large-heading-font-size, 100%);
+        font-weight: var(--led-large-heading-font-weight, 700);
     }
 
 `;

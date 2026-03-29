@@ -19,27 +19,6 @@ export default css`
         --ipad-max-width: 1050px;
     }
 
-    .small-heading {
-        font-weight: 700;
-        font-size: var(--normal-font);
-        margin: 0px;
-        padding: 0px;
-    }
-
-    .large-heading {
-        font-weight: 600;
-        font-size: var(--Large-font);
-        margin: 0px;
-        padding: 0px;
-    }
-
-    .sub-info {
-        padding: 0px;
-        margin: 0px;
-        font-weight: 400;
-        font-size: var(--small-font);
-    }
-
     .outlined {
         outline-offset: 0px;
         border-radius: 8px;

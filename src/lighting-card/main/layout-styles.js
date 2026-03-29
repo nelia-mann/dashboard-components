@@ -49,6 +49,8 @@ export default css`
         --modal-header-margin-top: -10px;
         --modal-header-margin: 20px;
         --close-modal-icon-size: 40px;
+        --popout-heading-font-size: var(--Large-font);
+        --popout-heading-font-weight: var(--small-heading-font-weight);
 
         --simple-light-icons-margin-right: 10px;
         --simple-light-icons-margin-left: 0px;

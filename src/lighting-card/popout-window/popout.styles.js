@@ -40,4 +40,9 @@ export default css`
         align-items: center;
     }
 
+    .large-heading {
+        font-size: var(--popout-heading-font-size, 100%);
+        font-weight: var(--popout-heading-font-weight, 700);
+    }
+
 `;

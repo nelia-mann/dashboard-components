@@ -39,6 +39,8 @@ export default css`
         --led-height: var(--lighting-height);
         --led-width: 640px;
         --led-large-heading-height: 40px;
+        --led-large-heading-font-size: var(--Large-font);
+        --led-large-heading-font-weight: 700;
 
         --floor-panel-width: 260px;
         --floor-panel-height: 100%;

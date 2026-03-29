@@ -97,6 +97,7 @@ export class PopoutWindow extends HaSubComponent {
 
     render() {
         if (this.isInitialized()) {
+            console.log("ping");
             return html`
                 <dialog class="outlined" @close="${this.handleClose}">
                     ${this.contents()}

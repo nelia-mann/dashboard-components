@@ -152,7 +152,7 @@ export class LightGroupControl extends HaSubComponent {
                 .themeState = ${this.selectedThemeState()}
                 .option = ${this.getOption()}
                 @select = ${this.onSelectControl}
-            > ping </light-control-select>
+            ></light-control-select>
         `
     }
 
