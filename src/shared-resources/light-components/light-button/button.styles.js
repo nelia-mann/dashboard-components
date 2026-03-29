@@ -24,11 +24,15 @@ export default css`
     .small-heading {
         margin-top: var(--light-button-heading-margin-top, 7px);
         margin-bottom: var(--light-button-heading-margin-bottom, -7px);
+        font-weight: var(--light-button-heading-font-weight, 700);
+        font-size: var(--light-button-heading-font-size, 100%);
     }
 
     .sub-info {
         margin-bottom: var(--light-button-sub-info-margin-bottom, 10px);
         margin-top: var(--light-button-sub-info-margin-top, 1px);
+        font-weight: var(--light-button-sub-info-font-weight, 700);
+        font-size: var(--light-button-sub-info-font-size, 100%);
     }
 
 `;

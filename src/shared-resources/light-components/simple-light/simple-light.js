@@ -66,7 +66,7 @@ export class SimpleLight extends HaSubComponent {
     render() {
         if (this.isInitialized()) {
             return html`
-                <div class="light-element sub-info" @click=${this.onClick}>
+                <div class="light-element" @click=${this.onClick}>
                     <div class="icons">
                         ${this.icons()}
                     </div>

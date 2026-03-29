@@ -72,7 +72,7 @@ export class ThemeButton extends LitElement {
     render() {
         if (this.isInitialized()) {
             return html`<div
-                    class="option outlined sub-info"
+                    class="option outlined"
                     style=${styleMap(this.getStyles())}
                     @click=${this.onClick}
                 >

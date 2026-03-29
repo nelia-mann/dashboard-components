@@ -8,4 +8,9 @@ export default css`
         margin-top: var(--area-panel-margin-top, 20px);
     }
 
+    .heading {
+        font-size: var(--area-heading-font-size, 100%);
+        font-weight: var(--area-heading-font-weight, 700);
+    }
+
 `;

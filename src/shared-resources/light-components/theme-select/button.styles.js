@@ -5,6 +5,7 @@ export default css`
     :host {
         margin: var(--theme-button-margin, 5px);
         width: var(--theme-button-width, 90px);
+        height: var(--theme-button-height, 20px);
     }
 
     .option {
@@ -16,6 +17,8 @@ export default css`
         padding-bottom: var(--theme-button-padding-bottom, 1px);
         outline-offset: var(--button-outline-offset, -3px);
         outline: none;
+        font-size: var(--theme-button-font-size, 100%);
+        font-weight: var(--theme-button-font-weight, 400);
     }
 
 `;

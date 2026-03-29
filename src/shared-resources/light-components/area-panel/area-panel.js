@@ -49,7 +49,7 @@ export class AreaPanel extends HaSubComponent {
         if (this.isInitialized()) {
             const lightIds = Object.keys(this.getStructure());
             return html`
-                <div class="small-heading">${this.getAreaName()}</div>
+                <div class="heading">${this.getAreaName()}</div>
                 ${repeat(lightIds, (lightId) => lightId, lightId => this.getLightDisplay(lightId))}
             `
         }

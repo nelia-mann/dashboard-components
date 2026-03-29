@@ -181,15 +181,15 @@ export class LightingCard extends HaMainComponent {
 
     // set card size parameters for ha
     getCardSize() {
-        return 8;
+        return 14
     }
 
     getGridOptions() {
         return {
-            rows: 8,
-            columns: 24,
-            min_rows: 8,
-            max_rows: 8
+            rows: 14,
+            columns: 36,
+            min_rows: 14,
+            max_rows: 14
         }
     }
 

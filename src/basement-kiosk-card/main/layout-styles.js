@@ -4,6 +4,11 @@ export default css`
 
     :host {
 
+        --small-heading-font-size: var(--normal-font);
+        --small-heading-font-weight: 700;
+        --sub-info-font-size: var(--small-font);
+        --sub-info-font-weight: 400;
+
         --ha-card-padding: 0px;
         --ha-card-padding-top: 0px;
         --ha-card-height: 575px;
@@ -19,6 +24,10 @@ export default css`
         --light-button-heading-margin-bottom: -7px;
         --light-button-sub-info-margin-top: 1px;
         --light-button-sub-info-margin-bottom: 10px;
+        --light-button-heading-font-size: var(--small-heading-font-size);
+        --light-button-heading-font-weight: var(--small-heading-font-weight);
+        --light-button-sub-info-font-size: var(--sub-info-font-size);
+        --light-button-sub-info-font-weight: var(--sub-info-font-weight);
 
         --lighting-button-spacing: 15px;
         --lighting-height: calc(var(--ha-card-height) - var(--button-row-height) - var(--lighting-button-spacing));
@@ -49,6 +58,10 @@ export default css`
         --simple-light-icons-margin-right: 10px;
         --simple-light-icons-margin-left: 0px;
         --simple-light-icon-size: 20px;
+        --simple-light-font-size: var(--sub-info-font-size);
+        --simple-light-font-weight: var(--sub-info-font-weight);
+        --simple-light-align-items: center;
+        --simple-light-justify-content: flex-start;
 
         --light-group-flex-flow: column wrap;
         --light-group-justify-content: center;
@@ -67,6 +80,10 @@ export default css`
         --light-select-icon-margin-right: 10px;
         --light-select-icon-margin-left: 10px;
         --light-select-icon-size: 20px;
+        --light-inner-heading-font-size: var(--sub-info-font-size);
+        --light-inner-heading-font-weight: var(--small-heading-font-weight);
+        --light-inner-font-size: var(--sub-info-font-size);
+        --light-inner-font-weight: var(--sub-info-font-size);
 
         --control-select-flex-flow: row wrap;
         --control-select-justify-content: space-around;
@@ -112,5 +129,7 @@ export default css`
         --theme-button-padding-bottom: 3px;
         --theme-button-margin: 7px;
         --theme-button-width: 90px;
+        --theme-button-font-size: var(--sub-info-font-size);
+        --theme-button-font-weight: var(--sub-info-font-weight);
     }
     `

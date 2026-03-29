@@ -22,6 +22,16 @@ export default css`
         outline: none;
     }
 
+    .small-heading {
+        font-size: var(--light-inner-heading-font-size, 100%);
+        font-weight: var(--light-inner-heading-font-weight, 700);
+    }
+
+    .sub-info {
+        font-size: var(--light-inner-font-size, 100%);
+        font-weight: var(--light-inner-font-weight, 400);
+    }
+
     .icon {
         margin: 0px;
         padding: 0px;

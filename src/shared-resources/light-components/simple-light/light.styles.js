@@ -10,6 +10,10 @@ export default css`
         height: 100%;
         display: flex;
         flex-flow: row nowrap;
+        align-items: var(--simple-light-align-items, center);
+        justify-content: var(--simple-light-justify-content, flex-start);
+        font-size: var(--simple-light-font-size, 100%);
+        font-weight: var(--simple-light-font-weight, 400);
     }
 
     .icons {
