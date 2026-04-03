@@ -6,7 +6,6 @@ import {
     getState,
     hasClimateChanges,
     getEntityIdsWithLabel,
-    addAreaStructure,
     filterEntityIdsForLabel
 } from '../../shared-resources/util/hass-util.js';
 import styles from './main.styles.js';
@@ -18,26 +17,24 @@ import "../area-panel/area-panel.js";
 export class ClimateCard extends HaMainComponent {
 
     _LABEL = "climate";
-    _GENERALID = "general";
-    _INCLUDEINIDS = ["living_room", "small_guest_room", "bedroom"];
+    _REGIONS = ["living_room", "guest_room", "bedroom", "office"];
+    _DIVISIONS = ["primary", "secondary", "aux"];
+    _AUXELEMENTS = ["fireplace", "fan"];
     _KEYS = ["min",
         "max",
-        "temp",
+        "sensor",
         "mode",
         "heatpump",
         "action",
         "tie_main",
         "rank",
-        "script"];
-    _AUX = "aux";
-    _PRIMARY = "primary"
-    _AUXKEYS = ["fireplace"];
-    _CLIMATEKEYS = ["temp", "mode", "heatpump"];
-    _SCRIPTKEY = "script"
+        "script",
+        "switch"];
+    _BUTTONKEYS = ["sensor", "mode", "heatpump"];
 
     static properties = {
         ...super.properties,
-        _areaId: { state: true }
+        _region: { state: true }
     }
 
     /*************************** lifecycle **************************************/
@@ -48,7 +45,7 @@ export class ClimateCard extends HaMainComponent {
     }
 
     getTriggers() {
-        return ['_areaId']
+        return ['_region']
     }
 
 /************************************* Setting Structures ****************************/
@@ -56,9 +53,8 @@ export class ClimateCard extends HaMainComponent {
     setStructures() {
         this.setEntityIds();
         this.setStates();
-        this.setAreaStructure();
-        this.setClimateStructure()
-        this.initializeArea();
+        this.setStructure();
+        this.initializeRegion();
     }
 
     setEntityIds() {
@@ -73,167 +69,201 @@ export class ClimateCard extends HaMainComponent {
         this.states = states;
     }
 
-    setAreaStructure() {
-        addAreaStructure(this.getHass(), this.getStructure(), this.getEntityIds());
-        this.modifyGeneralAreaStructure();
+    setStructure() {
+        this.getRegions().forEach((region) => {
+            const entityIds = filterEntityIdsForLabel(this.getHass(), this.getEntityIds(), region);
+            this.getStructure()[region] = { structure: {}, entityIds: entityIds };
+            this.setDivisionStructure(this.getStructure()[region]);
+            this.setButtonStructure(this.getStructure()[region]);
+        })
     }
 
-    modifyGeneralAreaStructure() {
-        let generalIds = this.getStructure()[this._GENERALID].entityIds;
-        let scriptId = filterEntityIdsForLabel(this.getHass(), generalIds, this._SCRIPTKEY);
-        delete this.getStructure()[this._GENERALID];
-        Object.entries(this.getStructure()).forEach(([areaId, dictionary]) => {
-            if (this._INCLUDEINIDS.includes(areaId)) {
-                dictionary.entityIds = dictionary.entityIds.union(generalIds);
-            } else {
-                dictionary.entityIds = dictionary.entityIds.union(scriptId);
+    setDivisionStructure(dictionary) {
+        this.getDivisions().forEach((division) => {
+            const entityIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, division);
+            if (entityIds.size > 0) {
+                dictionary.structure[division] = { structure: {}, entityIds: entityIds };
+                if (division !== 'primary') {
+                    this.setAuxStructure(dictionary.structure[division]);
+                    this.setTieStructure(dictionary.structure[division]);
+                }
+                this.setKeyStructure(dictionary.structure[division]);
             }
         })
     }
 
-    setClimateStructure() {
-        Object.values(this.getStructure()).forEach((dictionary) => {
-            this.setClimateVsAuxStructure(dictionary);
-            this.addClimateIds(dictionary.structure.climate);
-            this.addKeyStructure(dictionary.structure.climate);
-            this.setAuxInnerStructure(dictionary.structure.aux);
-        })
-    }
-
-    setClimateVsAuxStructure(dictionary) {
-        const auxIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, this._AUX);
-        const notAuxIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, this._PRIMARY);
-        dictionary.structure.climate = { structure: {}, entityIds: notAuxIds };
-        this.addClimateIds(dictionary.structure.climate);
-        dictionary.structure.aux = { structure: {}, entityIds: auxIds };
-    }
-
-    setAuxInnerStructure(dictionary) {
-        let genIds = new Set([...dictionary.entityIds]);
-        this._AUXKEYS.forEach((label) => {
-            const auxIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, label);
-            auxIds.forEach((auxId) => genIds.delete(auxId));
-            if (auxIds.size > 0) {
-                dictionary.structure[label] = { structure: {}, entityIds: auxIds };
-                this.addKeyStructure(dictionary.structure[label]);
+    setAuxStructure(dictionary) {
+        this.getAuxElements().forEach((element) => {
+            const entityIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, element);
+            if (entityIds.size > 0) {
+                dictionary.structure[element] = { structure: {}, entityIds: entityIds };
+                this.setTieStructure(dictionary.structure[element]);
+                this.setKeyStructure(dictionary.structure[element]);
             }
         })
-        if (genIds.size > 0) {
-            dictionary.structure.general = { structure: {}, entityIds: genIds };
-            this.addKeyStructure(dictionary.structure.general);
+    }
+
+    setTieStructure(dictionary) {
+        if (Object.keys(dictionary.structure).length === 0) {
+            const entityIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, "tied");
+            if (entityIds.size > 0) {
+                dictionary.structure.tied = { structure: {}, entityIds: entityIds };
+                this.setKeyStructure(dictionary.structure.tied);
+                const tieIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, "tie");
+                dictionary.structure.tie = { structure: {}, entityIds: tieIds };
+                this.setKeyStructure(dictionary.structure.tie);
+            }
         }
     }
 
-    addKeyStructure(dictionary) {
-        this._KEYS.forEach((key) => {
-            const filteredIds = [... filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, key)];
-            if (filteredIds.length > 0) {
-                if (filteredIds.length === 1) {
-                    dictionary.structure[key] = filteredIds[0];
-                } else {
-                    dictionary.structure[key] = filteredIds;
+    setKeyStructure(dictionary) {
+        if (Object.keys(dictionary.structure).length === 0) {
+            this.getKeys().forEach((key) => {
+                const entityIds = [...filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, key)];
+                if (entityIds.length === 1) {
+                    dictionary.structure[key] = entityIds[0];
                 }
+            })
+        }
+    }
+
+    setButtonStructure(dictionary) {
+        const primaryIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, "primary");
+        let buttonIds = new Set();
+        this.getButtonKeys().forEach((key) => {
+            const newButtonIds = filterEntityIdsForLabel(this.getHass(), primaryIds, key);
+            buttonIds = buttonIds.union(newButtonIds);
+        })
+        dictionary.button = { structure: {}, entityIds: buttonIds };
+        this.setKeyStructure(dictionary.button);
+    }
+
+    initializeRegion() {
+        const regions = Object.keys(this.getStructure());
+        let first = regions[0];
+        regions.forEach((region) => {
+            if (region === first) return;
+            const firstPrimaryStructure = this.getStructure()[first].structure.primary.structure;
+            const firstModeId = firstPrimaryStructure.mode;
+            const firstRankId = firstPrimaryStructure.rank;
+            const firstMode = this.getStates()[firstModeId].state;
+            const firstRank = Number(this.getStates()[firstRankId].state);
+            const primaryStructure = this.getStructure()[region].structure.primary.structure;
+            const modeId = primaryStructure.mode;
+            const rankId = primaryStructure.rank;
+            const mode = this.getStates()[modeId].state;
+            const rank = Number(this.getStates()[rankId].state);
+            if (mode !== 'off' && (rank < firstRank) || firstMode == 'off') {
+                first = region;
             }
         })
-    }
-
-    addClimateIds(dictionary) {
-        let climateIds = new Set();
-        this._CLIMATEKEYS.forEach((key) => {
-            const filteredIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, key)
-            climateIds = climateIds.union(filteredIds);
-        })
-        dictionary.climateIds = climateIds;
-    }
-
-    initializeArea() {
-        const areaIds = Object.keys(this.getStructure());
-        this.setAreaId(areaIds[0]);
+        this.setRegion(first);
     }
 
     /************************* Floor Selection Structure ***********************************************/
-
-    setAreaId(areaId) {
-        this._areaId = areaId;
-    }
-
-    getAreaId() {
-        return this._areaId;
-    }
 
     getLabel() {
         return this._LABEL;
     }
 
-    isArea(areaId) {
-        return areaId === this.getAreaId();
+    getRegions() {
+        return this._REGIONS;
     }
 
-    getAreaName(areaId) {
-        return this.getStructure()[areaId].name;
+    getDivisions() {
+        return this._DIVISIONS;
     }
 
-    getAreaClimate(areaId) {
-        return this.getStructure()[areaId].structure.climate;
+    getAuxElements() {
+        return this._AUXELEMENTS;
     }
 
-    getAreaClimateEIs(areaId) {
-        return this.getAreaClimate(areaId).climateIds;
+    getKeys() {
+        return this._KEYS;
     }
 
-    getAreaClimateStructure(areaId) {
-        return this.getAreaClimate(areaId).structure;
+    getButtonKeys() {
+        return this._BUTTONKEYS;
     }
 
-    getAreaStructure() {
-        return this.getStructure()[this.getAreaId()].structure;
+    setRegion(region) {
+        this._region = region;
     }
 
-    getAreaEIs() {
-        return this.getStructure()[this.getAreaId()].entityIds;
+    getRegion() {
+        return this._region;
     }
 
-    getThisAreaName() {
-        return this.getStructure()[this.getAreaId()].name;
+    isRegion(region) {
+        return region=== this.getRegion();
+    }
+
+    makePretty(region) {
+        const prettyArray = region.split('_');
+        let pretty = '';
+        prettyArray.forEach((piece) => {
+            pretty = pretty + piece.charAt(0).toUpperCase() + piece.slice(1) + ' ';
+        })
+        return pretty.slice(0, -1);
+    }
+
+    getButton(region) {
+        return this.getStructure()[region].button;
+    }
+
+    getButtonIds(region) {
+        return this.getButton(region).entityIds;
+    }
+
+    getButtonStructure(region) {
+        return this.getButton(region).structure;
+    }
+
+    getRegionStructure() {
+        return this.getStructure()[this.getRegion()].structure;
+    }
+
+    getRegionEIs() {
+        return this.getStructure()[this.getRegion()].entityIds;
     }
 
     /********************************* interactive logic **********************************/
 
-    onClick(areaId) {
-        this.setAreaId(areaId);
+    onClick(region) {
+        this.setRegion(region);
     }
 
     /************************* style and html ***********************************/
 
-    areaButton(areaId) {
+    regionButton(region) {
         return html`
             <climate-button
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
-                .isSelected = ${this.isArea(areaId)}
-                .entityIds = ${this.getAreaClimateEIs(areaId)}
-                .structure = ${this.getAreaClimateStructure(areaId)}
-                .title = ${this.getAreaName(areaId)}
-                @select = ${() => this.onClick(areaId)}
+                .isSelected = ${this.isRegion(region)}
+                .entityIds = ${this.getButtonIds(region)}
+                .structure = ${this.getButtonStructure(region)}
+                .title = ${this.makePretty(region)}
+                @select = ${() => this.onClick(region)}
             ></climate-button>
         `
     }
 
     // generates the list of floor buttons.
-    areaButtons() {
-        const areaIds = Object.keys(this.getStructure());
-        return repeat(areaIds, (areaId) => areaId, areaId => this.areaButton(areaId));
+    regionButtons() {
+        const regions = Object.keys(this.getStructure()).sort();
+        return repeat(regions, (region) => region, region => this.regionButton(region));
     }
 
     // generates panel content, based on currently selected floor.
     content() {
-        return keyed(this.getAreaId(), html`
+        return keyed(this.getRegion(), html`
             <area-climate-panel
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
-                .entityIds = ${this.getAreaEIs()}
-                .structure = ${this.getAreaStructure()}
-                .areaName = ${this.getThisAreaName()}
+                .entityIds = ${this.getRegionEIs()}
+                .structure = ${this.getRegionStructure()}
+                .regionName = ${this.makePretty(this.getRegion())}
                 .callService = ${this.getHass().callService}
             ></area-climate-panel>
         `);
@@ -249,7 +279,7 @@ export class ClimateCard extends HaMainComponent {
                 <ha-card>
                     ${this.content()}
                     <div class="button-row">
-                        ${this.areaButtons()}
+                        ${this.regionButtons()}
                     </div>
                 </ha-card>
             `;
@@ -258,15 +288,15 @@ export class ClimateCard extends HaMainComponent {
 
     // set card size parameters for ha
     getCardSize() {
-        return 14
+        return 15
     }
 
     getGridOptions() {
         return {
-            rows: 14,
+            rows: 15,
             columns: 36,
-            min_rows: 14,
-            max_rows: 14
+            min_rows: 15,
+            max_rows: 15
         }
     }
 

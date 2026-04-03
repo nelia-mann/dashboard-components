@@ -1,13 +1,13 @@
 import { html } from 'lit';
 import { HaClimateComponent } from '../../base-classes/ha-climate-component.js';
-import styles from './climate.styles.js';
+import styles from './heatpump.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
-import './../mode-controls/mode-controls.js';
+import '../mode-controls/mode-controls.js';
 import '../../general-components/double-circle-slider/double-circular-slider.js';
 import '../../general-components/adjust-buttons/adjust-buttons.js';
 import '../thermostat-panel/thermostat-panel.js';
 
-export class ClimatePanel extends HaClimateComponent {
+export class HeatpumpPanel extends HaClimateComponent {
 
     static styles = [sharedStyles, styles];
 
@@ -60,4 +60,4 @@ export class ClimatePanel extends HaClimateComponent {
     }
 }
 
-customElements.define("climate-panel", ClimatePanel);
+customElements.define("heatpump-panel", HeatpumpPanel);

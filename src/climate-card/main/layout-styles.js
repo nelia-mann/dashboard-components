@@ -28,17 +28,17 @@ export default css`
         --climate-button-sub-info-font-size: var(--sub-info-font-size);
 
         --area-panel-width: 100%;
-        --area-panel-height: 470px;
+        --area-panel-height: 790px;
         --area-panel-flex-flow: row nowrap;
-        --area-panel-justify-content: space-around;
-        --area-panel-align-items: center;
+        --area-panel-justify-content: space-between;
+        --area-panel-align-items: flex-start;
 
         --climate-panel-width: 380px;
-        --climate-panel-height: 100%;
+        --climate-panel-height: 470px;
         --climate-panel-flex-flow: column nowrap;
         --climate-panel-justify-content: space-between;
         --climate-panel-align-items: center;
-        --climate-panel-heading-font-size: var(--large-font);
+        --climate-panel-heading-font-size: var(--Large-font);
         --climate-panel-heading-font-weight: 550;
 
         --aux-panel-width: var(--climate-panel-width);
@@ -48,6 +48,11 @@ export default css`
         --aux-panel-align-items: var(--climate-panel-align-items);
         --aux-panel-heading-font-size: var(--climate-panel-heading-font-size);
         --aux-panel-heading-font-weight: var(--climate-panel-heading-font-weight);
+
+        --aux-basement-panel-width: 620px;
+        --aux-basement-panel-height: 750px;
+        --aux-basement-panel-heading-font-size: var(--climate-panel-heading-font-size);
+        --aux-basement-panel-heading-font-weight: var(--climate-panel-heading-font-weight);
 
         --mode-control-width: 95%;
         --mode-control-height: 50px;
@@ -68,6 +73,7 @@ export default css`
         --aux-mode-control-button-width: var(--mode-control-button-width);
         --aux-mode-control-button-height: var(--mode-control-button-height);
         --aux-mode-control-button-margin-correction-r: -6px;
+        --aux-mode-control-button-margin-correction-arrow-l: -10px;
         --aux-mode-control-button-outline-offset: var(--button-outline-offset);
         --aux-mode-control-font-size: var(--sub-info-font-size);
         --aux-mode-control-font-weight: var(--small-heading-font-weight);

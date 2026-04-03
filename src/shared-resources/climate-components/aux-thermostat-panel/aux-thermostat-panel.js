@@ -1,11 +1,17 @@
 import { html } from 'lit';
-import { HaClimateComponent } from '../../shared-resources/base-classes/ha-climate-component.js';
-import styles from './aux.styles.js';
-import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import '../../shared-resources/climate-components/thermostat-panel/thermostat-panel.js';
-import '../../shared-resources/climate-components/aux-mode-controls/aux-mode-controls.js';
+import { HaClimateComponent } from '../../base-classes/ha-climate-component.js';
+import styles from './aux-therm.styles.js';
+import sharedStyles from '../../styles/shared-styles.js';
+import '../thermostat-panel/thermostat-panel.js';
+import '../aux-mode-controls/aux-mode-controls.js';
 
-export class MainThermostatPanel extends HaClimateComponent {
+export class AuxThermostatPanel extends HaClimateComponent {
+
+    getMainStructure() {
+        if (this.getStructure().tied) {
+            return this.getStructure().tied.structure;
+        } else return this.getStructure();
+    }
 
     getThermostatEIs() {
         let entityIds = new Set();
@@ -18,16 +24,18 @@ export class MainThermostatPanel extends HaClimateComponent {
         return entityIds;
     }
 
-    getAreaName() {
-        return this.areaName;
+    getControlEIs() {
+        let entityIds = new Set();
+        entityIds.add(this.getModeId());
+        entityIds.add(this.getTieId());
+        if (this.getStructure().tie) {
+            entityIds = entityIds.union(this.getStructure().tie.entityIds);
+        }
+        return entityIds;
     }
 
-    getAreaMode() {
-        return this.areaMode;
-    }
-
-    getAreaAction() {
-        return this.areaAction;
+    getRegionName() {
+        return this.regionName;
     }
 
     isTied() {
@@ -74,11 +82,11 @@ export class MainThermostatPanel extends HaClimateComponent {
                 <aux-mode-controls
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
-                    .entityIds = ${this.getEntityIds()}
-                    .structure = ${this.getStructure()}
-                    .areaName = ${this.getAreaName()}
-                    .areaMode = ${this.getAreaMode()}
-                    .areaAction = ${this.getAreaAction()}
+                    .entityIds = ${this.getControlEIs()}
+                    .structure = ${this.getMainStructure()}
+                    .areaName = ${this.getRegionName()}
+                    .areaMode = ${this.getTieMode()}
+                    .areaAction = ${this.getTieAction()}
                     .callService = ${this.callService}
                 ></aux-mode-controls>
                 `
@@ -87,4 +95,4 @@ export class MainThermostatPanel extends HaClimateComponent {
 
 }
 
-customElements.define("main-thermostat-panel", MainThermostatPanel);
+customElements.define("aux-thermostat-panel", AuxThermostatPanel);

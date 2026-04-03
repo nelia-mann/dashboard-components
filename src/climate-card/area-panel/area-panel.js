@@ -2,22 +2,38 @@ import { html } from 'lit';
 import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
 import styles from './area.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import './../../shared-resources/climate-components/climate-panel/climate-panel.js';
-import '../aux-panel/aux-panel.js';
+import '../../shared-resources/climate-components/heatpump-panel/heatpump-panel.js';
+import '../../shared-resources/climate-components/aux-thermostat-panel/aux-thermostat-panel.js';
+import '../../shared-resources/climate-components/aux-basement-panel/aux-basement-panel.js';
 
 export class AreaClimatePanel extends HaSubComponent {
 
-
-    getClimate() {
-        return this.getStructure().climate;
+    getRegionName() {
+        return this.regionName;
     }
 
-    getClimateEIs() {
-        return this.getClimate().entityIds;
+    getPrimary() {
+        return this.getStructure().primary;
     }
 
-    getClimateStructure() {
-        return this.getClimate().structure;
+    getPrimaryEIs() {
+        return this.getPrimary().entityIds;
+    }
+
+    getPrimaryStructure() {
+        return this.getPrimary().structure;
+    }
+
+    getSecondary() {
+        return this.getStructure().secondary;
+    }
+
+    getSecondaryEIs() {
+        return this.getSecondary().entityIds;
+    }
+
+    getSecondaryStructure() {
+        return this.getSecondary().structure;
     }
 
     getAux() {
@@ -32,103 +48,46 @@ export class AreaClimatePanel extends HaSubComponent {
         return this.getAux().entityIds;
     }
 
-    getMain() {
-        return this.getAuxStructure().general;
-    }
-
-    getMainEIs() {
-        return this.getMain().entityIds;
-    }
-
-    getMainStructure() {
-        return this.getMain().structure;
-    }
-
-    getFireplace() {
-        return this.getAuxStructure().fireplace;
-    }
-
-    getFireplaceEIs() {
-        let entityIds = new Set([...this.getFireplace().entityIds]);
-        entityIds.add(this.getAreaHpId());
-        entityIds.add(this.getAreaModeId());
-        return entityIds;
-    }
-
-    getFireplaceStructure() {
-        return this.getFireplace().structure;
-    }
-
-    getAreaName() {
-        return this.areaName;
-    }
-
-    getAreaMode() {
-        return this.getStates()[this.getAreaModeId()].state;
-    }
-
-    getAreaModeId() {
-        return this.getClimateStructure()['mode'];
-    }
-
-    getAreaHpId() {
-        return this.getClimateStructure()['heatpump'];
-    }
-
-    getMainEIs() {
-        let entityIds = new Set([...this.getMain().entityIds]);
-        entityIds.add(this.getAreaHpId());
-        entityIds.add(this.getAreaModeId());
-        return entityIds;
-    }
-
-    getAreaAction() {
-        const HpState = this.getStates()[this.getAreaHpId()].state;
-        let action = "off";
-        switch (HpState) {
-            case 'heat':
-                action = "Heating";
-                break;
-            case 'cool':
-                action = "Cooling";
-                break;
-            case 'off':
-                if (this.getAreaMode() !== "off") {
-                    action = "Idle";
-                } else { action = "Off" };
-                break;
+    primaryPanel() {
+        if (this.getPrimary()) {
+            return html`
+                <heatpump-panel class="outlined"
+                    .changedEntityIds = ${this.getCEIs()}
+                    .states = ${this.getStates()}
+                    .entityIds = ${this.getPrimaryEIs()}
+                    .structure = ${this.getPrimaryStructure()}
+                    .callService = ${this.callService}
+                ></heatpump-panel>`
         }
-        return action;
+    }
+
+    secondaryPanel() {
+        if (this.getSecondary()) {
+            return html`
+                <aux-thermostat-panel class="outlined"
+                    .changedEntityIds = ${this.getCEIs()}
+                    .states = ${this.getStates()}
+                    .entityIds = ${this.getSecondaryEIs()}
+                    .structure = ${this.getSecondaryStructure()}
+                    .regionName = ${this.getRegionName()}
+                    .title = ${'Main Thermostat'}
+                    .callService = ${this.callService}
+                ></aux-thermostat-panel>
+            `
+        }
     }
 
     auxPanel() {
-        if (this.getMain()) {
+        if (this.getAux()) {
             return html`
-                <main-thermostat-panel class="outlined"
+                <aux-basement-panel class="outlined"
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
-                    .entityIds = ${this.getMainEIs()}
-                    .structure = ${this.getMainStructure()}
-                    .areaName = ${this.getAreaName()}
-                    .areaMode = ${this.getAreaMode()}
-                    .areaAction = ${this.getAreaAction()}
-                    .title = ${'Main Thermostat'}
+                    .entityIds = ${this.getAuxEIs()}
+                    .structure = ${this.getAuxStructure()}
+                    .areaName = ${this.getRegionName()}
                     .callService = ${this.callService}
-                ></main-thermostat-panel>
-            `
-        } else if (this.getFireplace()) {
-            return html`
-                <main-thermostat-panel class="outlined"
-                    .changedEntityIds = ${this.getCEIs()}
-                    .states = ${this.getStates()}
-                    .entityIds = ${this.getFireplaceEIs()}
-                    .structure = ${this.getFireplaceStructure()}
-                    .areaName = ${this.getAreaName()}
-                    .areaMode = ${this.getAreaMode()}
-                    .areaAction = ${this.getAreaAction()}
-                    .title = ${'Fireplace'}
-                    .callService = ${this.callService}
-                ></main-thermostat-panel>
+                ></aux-basement-panel>
             `
         }
     }
@@ -138,13 +97,8 @@ export class AreaClimatePanel extends HaSubComponent {
     render() {
         if (this.isInitialized()) {
             return html`
-                <climate-panel class="outlined"
-                    .changedEntityIds = ${this.getCEIs()}
-                    .states = ${this.getStates()}
-                    .entityIds = ${this.getClimateEIs()}
-                    .structure = ${this.getClimateStructure()}
-                    .callService = ${this.callService}
-                ></climate-panel>
+                ${this.primaryPanel()}
+                ${this.secondaryPanel()}
                 ${this.auxPanel()}
             `
         }

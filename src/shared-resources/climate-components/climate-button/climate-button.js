@@ -57,7 +57,7 @@ export class ClimateButton extends HaClimateComponent {
                     style=${styleMap(this.getStyles())}
                 >
                     <div class="small-heading"> ${this.getTitle()} </div>
-                    <div class="sub-info"> ${this.getTempDisplay() + " \u00B7 " + this.getAction()} </div >
+                    <div class="sub-info"> ${this.getSensorDisplay() + " \u00B7 " + this.getAction()} </div >
                 </div>`
         }
     }

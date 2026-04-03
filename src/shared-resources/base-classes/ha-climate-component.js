@@ -27,7 +27,11 @@ action: the current action of the climate entity
     /********************* basics (protection for lack of key existence) *************/
 
     getEntityId(key) {
-        return this.getStructure()[key];
+        if (this.getStructure().tied) {
+            return this.getStructure().tied.structure[key];
+        } else {
+            return this.getStructure()[key];
+        }
     }
 
     getState(key) {
@@ -55,6 +59,19 @@ action: the current action of the climate entity
         if (this.getEntityId(key)) {
             const state = this.getStates()[this.getEntityId(key)];
             return Number(state.attributes[attribute]);
+        }
+    }
+
+    getTieEntityId(key) {
+        if (this.getStructure().tie) {
+            return this.getStructure().tie.structure[key];
+        }
+    }
+
+    getTieState(key) {
+        if (this.getTieEntityId(key)) {
+            const state = this.getStates()[this.getTieEntityId(key)];
+            return state.state;
         }
     }
 
@@ -116,18 +133,38 @@ action: the current action of the climate entity
         } else return 0;
     }
 
+    /******************** sensor items *************************************/
+
+    getSensor() {
+        return this.getNumberState('sensor');
+    }
+
+    getSensorId() {
+        return this.getEntityId('sensor');
+    }
+
+    getSensorUnits() {
+        return this.getAttribute('sensor', 'unit_of_measurement');
+    }
+
+    getSensorDisplay() {
+        const value = this.getSensor().toFixed(1).toString();
+        const units = this.getSensorUnits();
+        return value + ' ' + units;
+    }
+
     /******************* temp items *******************************/
 
     getTemp() {
-        return this.getNumberState('temp');
+        return this.getNumberState('sensor');
     }
 
     getTempId() {
-        return this.getEntityId('temp');
+        return this.getEntityId('sensor');
     }
 
     getUnits() {
-        return this.getAttribute('temp', 'unit_of_measurement');
+        return this.getAttribute('sensor', 'unit_of_measurement');
     }
 
     getTempDisplay() {
@@ -143,7 +180,7 @@ action: the current action of the climate entity
     }
 
     getModeId() {
-        return this.getStructure()['mode'];
+        return this.getEntityId('mode');
     }
 
     getModes() {
@@ -155,12 +192,12 @@ action: the current action of the climate entity
     }
 
     getHPId() {
-        return this.getStructure()['heatpump'];
+        return this.getEntityId('heatpump');
     }
 
-    getActionFromHP() {
+    getActionFromHP(hpState, mode) {
         let action = "off";
-        switch (this.getHPstate()) {
+        switch (hpState) {
             case 'heat':
                 action = "Heating";
                 break;
@@ -168,7 +205,7 @@ action: the current action of the climate entity
                 action = "Cooling";
                 break;
             case 'off':
-                if (this.getMode() !== "off") {
+                if (mode !== "off") {
                     action = "Idle";
                 } else { action = "Off" };
                 break;
@@ -190,9 +227,16 @@ action: the current action of the climate entity
     getAction() {
         if (this.getActionDirect()) {
             return this.getActionDirect();
-        } else return this.getActionFromHP();
+        } else return this.getActionFromHP(this.getHPstate(), this.getMode());
     }
 
+    getTieMode() {
+        return this.getTieState('mode');
+    }
+
+    getTieAction() {
+        return this.getActionFromHP(this.getTieState('heatpump'), this.getTieMode());
+    }
 
     /******************************** rank and tie items ********************************/
 
@@ -205,11 +249,11 @@ action: the current action of the climate entity
     }
 
     getRankId() {
-        return this.getStructure()['rank'];
+        return this.getEntityId('rank');
     }
 
     getScriptId() {
-        return this.getStructure()['script'];
+        return this.getEntityId('script');
     }
 
     getTie() {

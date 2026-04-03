@@ -11,4 +11,9 @@ export default css`
         align-items: var(--area-panel-align-items, flex-start);
     }
 
+    .placeholder {
+        width: 350px;
+        height: 470px;
+    }
+
 `;

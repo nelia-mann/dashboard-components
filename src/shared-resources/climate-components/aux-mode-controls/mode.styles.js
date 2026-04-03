@@ -39,5 +39,8 @@ export default css`
         margin-right: var(--aux-mode-control-button-margin-correction-r, -2px);
     }
 
+    .center {
+        margin-left: var(--aux-mode-control-button-margin-correction-arrow-l, -6px);
+    }
 
 `;
