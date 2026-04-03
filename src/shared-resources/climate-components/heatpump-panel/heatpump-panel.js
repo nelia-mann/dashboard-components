@@ -23,7 +23,7 @@ export class HeatpumpPanel extends HaClimateComponent {
 
     getThermostatEIs() {
         let entityIds = new Set();
-        entityIds.add(this.getTempId());
+        entityIds.add(this.getSensorId());
         entityIds.add(this.getModeId());
         entityIds.add(this.getHPId());
         if (['heat', 'heat-cool'].includes(this.getMode())) {

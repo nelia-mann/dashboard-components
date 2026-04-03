@@ -40,10 +40,10 @@ export class ThermostatPanel extends HaClimateComponent {
 
     getSliderStructure() {
         let structure = {};
-        structure.value = this.getTemp();
+        structure.value = this.getSensor();
         structure.minExtreme = this.getMinExtreme();
         structure.maxExtreme = this.getMaxExtreme();
-        structure.units = this.getUnits();
+        structure.units = this.getSensorUnits();
         structure.upper = this.getAction();
         structure.icon = thermometer;
         structure.minColor = HOT;

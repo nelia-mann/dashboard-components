@@ -153,26 +153,6 @@ action: the current action of the climate entity
         return value + ' ' + units;
     }
 
-    /******************* temp items *******************************/
-
-    getTemp() {
-        return this.getNumberState('sensor');
-    }
-
-    getTempId() {
-        return this.getEntityId('sensor');
-    }
-
-    getUnits() {
-        return this.getAttribute('sensor', 'unit_of_measurement');
-    }
-
-    getTempDisplay() {
-        const temp = this.getTemp().toFixed(1).toString();
-        const units = this.getUnits();
-        return temp + ' ' + units;
-    }
-
     /************************ mode and action items ************************/
 
     getMode() {
