@@ -42,7 +42,7 @@ export class AuxModeControls extends HaClimateComponent {
         let data = { entity_id: entityId };
         if (this.getTieOptions()) {
             let newOption = this.getRegionName();
-            (this.isTied()) && (newOption = 'Off');
+            (this.isTied()) && (newOption = 'off');
             data['option'] = newOption;
             this.callService('input_select', 'select_option', data);
         } else {
