@@ -166,11 +166,11 @@ export class DoubleCircularSlider extends HaSubComponent {
     }
 
     getMin() {
-        if (this.getMinStateValue()) return this._minValue;
+        if (typeof this.getMinStateValue() === 'number') return this._minValue;
     }
 
     getMax() {
-        if (this.getMaxStateValue()) return this._maxValue;
+        if (typeof this.getMaxStateValue() === 'number') return this._maxValue;
     }
 
     getMinMax() {
@@ -236,12 +236,12 @@ export class DoubleCircularSlider extends HaSubComponent {
     }
 
     isNearMin(e) {
-        if (!this.getMin()) return false;
+        if (typeof this.getMin() != 'number') return false;
         return (this.getDistance(e, this.getMin()) < this.getTolerance())
     }
 
     isNearMax(e) {
-        if (!this.getMax()) return false;
+        if (typeof this.getMax() != 'number') return false;
         return (this.getDistance(e, this.getMax()) < this.getTolerance())
     }
 
@@ -287,10 +287,10 @@ export class DoubleCircularSlider extends HaSubComponent {
     }
 
     shouldUp(newValue) {
-        if (this.getWhichValue() == 'min') {
+        if (this.getWhichValue() === 'min') {
             return (this.getMinMax() < newValue || newValue < this.getMinExtreme())
         }
-        if (this.getWhichValue() == 'max') {
+        if (this.getWhichValue() === 'max') {
             return (newValue < this.getMaxMin() || this.getMaxExtreme() < newValue);
         }
     }
@@ -334,14 +334,14 @@ export class DoubleCircularSlider extends HaSubComponent {
         let result = html``;
         let min = this.getMin();
         let max = this.getMax();
-        (min) && (min = min.toFixed(1));
-        (max) && (max = max.toFixed(1));
+        (typeof min === 'number') && (min = min.toFixed(1));
+        (typeof max === 'number') && (max = max.toFixed(1));
         const units = this.getUnits();
-        if (min && max) {
+        if ((typeof min === 'string') && (typeof max === 'string')) {
             result = html`<var>${min}</var><sup>${units}</sup><var>&thinsp;-&thinsp;${max}</var><sup>${units}</sup>`
-        } else if (min) {
+        } else if (typeof min === 'string') {
             result = html`<var class="one">${min}</var><sup class="one">${units}</sup>`
-        } else if (max) {
+        } else if (typeof max === 'string') {
             result = html`<var class="one">${max}</var><sup class="one">${units}</sup>`
         } else {
             result = html`<var class="one"> OFF </var>`
@@ -364,7 +364,7 @@ export class DoubleCircularSlider extends HaSubComponent {
     /**************************** style/html logic ***************************/
 
     arc(startValue, stopValue, stroke) {
-        if (!startValue || !stopValue || stopValue < startValue) return null;
+        if (typeof startValue != 'number' || typeof stopValue != 'number' || stopValue < startValue) return null;
         const startAngle = this.getAngle(startValue);
         const stopAngle = this.getAngle(stopValue);
         const ns = "http://www.w3.org/2000/svg";
@@ -377,7 +377,7 @@ export class DoubleCircularSlider extends HaSubComponent {
     }
 
     dot(skip, value, r, fill) {
-        if (!value || skip) return null;
+        if (typeof value != 'number' || skip) return null;
         const ns = "http://www.w3.org/2000/svg";
         const dot1 = document.createElementNS(ns, "circle");
         const coords = this.getCoords(value);

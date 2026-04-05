@@ -29,7 +29,11 @@ export class ClimateCard extends HaMainComponent {
         "tie_main",
         "rank",
         "script",
-        "switch"];
+        "switch",
+        "name",
+        "safe_max",
+        "safe_min"
+        ];
     _BUTTONKEYS = ["sensor", "mode", "heatpump"];
 
     static properties = {
@@ -198,15 +202,6 @@ export class ClimateCard extends HaMainComponent {
         return region=== this.getRegion();
     }
 
-    makePretty(region) {
-        const prettyArray = region.split('_');
-        let pretty = '';
-        prettyArray.forEach((piece) => {
-            pretty = pretty + piece.charAt(0).toUpperCase() + piece.slice(1) + ' ';
-        })
-        return pretty.slice(0, -1);
-    }
-
     getButton(region) {
         return this.getStructure()[region].button;
     }
@@ -263,7 +258,7 @@ export class ClimateCard extends HaMainComponent {
                 .states = ${this.getStates()}
                 .entityIds = ${this.getRegionEIs()}
                 .structure = ${this.getRegionStructure()}
-                .regionName = ${this.makePretty(this.getRegion())}
+                .regionName = ${this.getRegion()}
                 .callService = ${this.getHass().callService}
             ></area-climate-panel>
         `);

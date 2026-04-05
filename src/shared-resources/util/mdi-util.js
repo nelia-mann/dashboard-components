@@ -15,6 +15,7 @@ export {
     mdiPlus as plus,
     mdiThermometer as thermometer,
     mdiArrowDownThin as minimum,
-
+    mdiFan as fan,
+    mdiArrowUpThin as maximum
 
 } from '@mdi/js';

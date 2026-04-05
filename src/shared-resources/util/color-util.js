@@ -6,6 +6,7 @@ const INDIGO = [41, 0, 255]; // blue color
 const COOL = [33, 150, 243];
 const HOT = [255, 111, 34];
 const WHITE = [255, 255, 255];
+const FAN = [0, 188, 212]; // green color
 
 const ONLIGHTHS = [45, 100];
 
@@ -52,5 +53,6 @@ export {
     ONLIGHTHS,
     COOL,
     HOT,
-    WHITE
+    WHITE,
+    FAN
 }

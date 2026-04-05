@@ -2,103 +2,79 @@ import { html } from 'lit';
 import { HaClimateComponent } from '../../base-classes/ha-climate-component.js';
 import styles from './aux-basement.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
-import '../thermostat-panel/thermostat-panel.js';
 import '../aux-mode-controls/aux-mode-controls.js';
+import '../iso-hydrostat-panel/iso-hydrostat-panel.js';
 
 export class AuxBasementPanel extends HaClimateComponent {
 
-    getThermostatEIs() {
-        let entityIds = new Set();
-        entityIds.add(this.getTempId());
-        entityIds.add(this.getModeId());
-        if (this.getMode() === 'heat') {
-            entityIds.add(this.getMinId());
-            entityIds.add(this.getActionId());
-        }
-        return entityIds;
+    getFireplace() {
+        return this.getStructure().fireplace;
     }
 
-    getAreaName() {
-        return this.areaName;
+    getFireplaceStructure() {
+        return this.getFireplace().structure;
     }
 
-    getAreaMode() {
-        return this.areaMode;
+    getFireplaceEIs() {
+        return this.getFireplace().entityIds;
     }
 
-    getAreaAction() {
-        return this.areaAction;
+    getFan() {
+        return this.getStructure().fan;
     }
 
-    isTied() {
-        return !['Off', 'off'].includes(this.getTie())
+    getFanStructure() {
+        return this.getFan().structure;
     }
 
-    getTitle() {
-        return this.title;
+    getFanEIs() {
+        return this.getFan().entityIds;
     }
 
-    isSafe() {
-        return this.getMode() === 'safe';
-    }
-
-    isFixed() {
-        return (this.isTied() || this.isSafe());
-    }
-
-    isInactive() {
-        if (this.isFixed() || this.getMode() === 'off') {
-            return 'inactive';
-        } else return '';
+    getRegionName() {
+        return this.regionName;
     }
 
 
     /********************************* html/css logic ******************************************/
 
+    fireplace() {
+        return html`
+            <aux-thermostat-panel class="outlined"
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getFireplaceEIs()}
+                .structure = ${this.getFireplaceStructure()}
+                .regionName = ${this.getRegionName()}
+                .callService = ${this.callService}
+            ></aux-thermostat-panel>
+        `
+    }
+
+    laundryFan() {
+        return html`
+            <iso-hydrostat-panel class="outlined"
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getFanEIs()}
+                .structure = ${this.getFanStructure()}
+                .callService = ${this.callService}
+            ></iso-hydrostat-panel>
+
+        `
+    }
+
     static styles = [sharedStyles, styles];
 
     render() {
         if (this.isInitialized()) {
-            console.log(this.getStructure());
-            return html``;
             return html`
                 <div class="heading"> ${"Auxiliary Elements"} </div>
                 <div class="elements">
-                    <aux-thermostat-panel class="outlined"
-                        .changedEntityIds = ${this.getCEIs()}
-                        .states = ${this.getStates()}
-                        .entityIds = ${this.getEntityIds()}
-                        .structure = ${this.getStructure()}
-                        .areaName = ${this.getAreaName()}
-                        .areaMode = ${this.getAreaMode()}
-                        .areaAction = ${this.getAreaAction()}
-                        .title = ${'Fireplace'}
-                        .callService = ${this.callService}
-                    ></aux-thermostat-panel>
-                    <aux-thermostat-panel class="outlined"
-                        .changedEntityIds = ${this.getCEIs()}
-                        .states = ${this.getStates()}
-                        .entityIds = ${this.getEntityIds()}
-                        .structure = ${this.getStructure()}
-                        .areaName = ${this.getAreaName()}
-                        .areaMode = ${this.getAreaMode()}
-                        .areaAction = ${this.getAreaAction()}
-                        .title = ${'Fireplace'}
-                        .callService = ${this.callService}
-                    ></aux-thermostat-panel>
-                    <aux-thermostat-panel class="outlined"
-                        .changedEntityIds = ${this.getCEIs()}
-                        .states = ${this.getStates()}
-                        .entityIds = ${this.getEntityIds()}
-                        .structure = ${this.getStructure()}
-                        .areaName = ${this.getAreaName()}
-                        .areaMode = ${this.getAreaMode()}
-                        .areaAction = ${this.getAreaAction()}
-                        .title = ${'Fireplace'}
-                        .callService = ${this.callService}
-                    ></aux-thermostat-panel>
+                    ${this.fireplace()}
+                    ${this.laundryFan()}
                 </div>
-                `
+            `;
         }
     }
 

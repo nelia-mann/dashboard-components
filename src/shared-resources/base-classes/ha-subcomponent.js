@@ -77,6 +77,15 @@ export class HaSubComponent extends LitElement {
         return this.structure;
     }
 
+    makePretty(region) {
+        const prettyArray = region.split('_');
+        let pretty = '';
+        prettyArray.forEach((piece) => {
+            pretty = pretty + piece.charAt(0).toUpperCase() + piece.slice(1) + ' ';
+        })
+        return pretty.slice(0, -1);
+    }
+
     /********************************* hooks for subclasses **********************************/
 
     onFirstUpdate() { }

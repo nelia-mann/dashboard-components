@@ -1,4 +1,4 @@
-import { OFF, COOL, HOT, WHITE, rgba } from './../../util/color-util.js';
+import { OFF, COOL, HOT, WHITE, FAN, rgba } from './../../util/color-util.js';
 
 function climateGradient() {
     let output = `linear-gradient(to left, `;
@@ -19,7 +19,7 @@ function getModeStyles(mode, action, outline) {
             styles['background-color'] = rgba(HOT, 0.5);
             (outline) && (styles['outline'] = `solid ${rgba(HOT, 1.0)}`);
             break;
-        case 'safe':
+        case 'safe_min':
             styles['background-color'] = rgba(HOT, 0.5);
             (outline) && (styles['outline'] = `solid ${rgba(HOT, 1.0)}`);
             break;
@@ -32,6 +32,15 @@ function getModeStyles(mode, action, outline) {
             (outline && action === 'Heating') && (styles['outline'] = `solid ${rgba(HOT, 1.0)}`);
             (outline && action === 'Cooling') && (styles['outline'] = `solid ${rgba(COOL, 1.0)}`);
             (outline && ['Off', 'Idle'].includes(action)) && (styles['outline'] = `solid ${rgba(OFF, 1.0)}`);
+            break;
+        case 'fan':
+            styles['background-color'] = rgba(FAN, 0.5);
+            (outline) && (styles['outline'] = `solid ${rgba(FAN, 1.0)}`);
+            break;
+        case 'safe_max':
+            styles['background-color'] = rgba(FAN, 0.5);
+            (outline) && (styles['outline'] = `solid ${rgba(FAN, 1.0)}`);
+            break;
     }
     return styles;
 }

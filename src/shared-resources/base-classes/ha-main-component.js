@@ -129,6 +129,14 @@ export class HaMainComponent extends LitElement {
     getHass() {
         return this._hass;
     }
+    makePretty(region) {
+        const prettyArray = region.split('_');
+        let pretty = '';
+        prettyArray.forEach((piece) => {
+            pretty = pretty + piece.charAt(0).toUpperCase() + piece.slice(1) + ' ';
+        })
+        return pretty.slice(0, -1);
+    }
 
 
 }

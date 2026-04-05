@@ -70,7 +70,6 @@ export class AreaClimatePanel extends HaSubComponent {
                     .entityIds = ${this.getSecondaryEIs()}
                     .structure = ${this.getSecondaryStructure()}
                     .regionName = ${this.getRegionName()}
-                    .title = ${'Main Thermostat'}
                     .callService = ${this.callService}
                 ></aux-thermostat-panel>
             `
@@ -85,7 +84,7 @@ export class AreaClimatePanel extends HaSubComponent {
                     .states = ${this.getStates()}
                     .entityIds = ${this.getAuxEIs()}
                     .structure = ${this.getAuxStructure()}
-                    .areaName = ${this.getRegionName()}
+                    .regionName = ${this.getRegionName()}
                     .callService = ${this.callService}
                 ></aux-basement-panel>
             `

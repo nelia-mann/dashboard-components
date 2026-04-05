@@ -39,15 +39,11 @@ export class AuxThermostatPanel extends HaClimateComponent {
     }
 
     isTied() {
-        return !['Off', 'off'].includes(this.getTie())
-    }
-
-    getTitle() {
-        return this.title;
+        return (this.getTie() != 'off')
     }
 
     isSafe() {
-        return this.getMode() === 'safe';
+        return this.getMode() === 'safe_min';
     }
 
     isFixed() {
@@ -68,7 +64,7 @@ export class AuxThermostatPanel extends HaClimateComponent {
     render() {
         if (this.isInitialized()) {
             return html`
-                <div class="heading"> ${this.getTitle()} </div>
+                <div class="heading"> ${this.getName()} </div>
                 <thermostat-panel
                     class = "outlined ${this.isInactive()}"
                     .changedEntityIds = ${this.getCEIs()}
@@ -76,7 +72,6 @@ export class AuxThermostatPanel extends HaClimateComponent {
                     .entityIds = ${this.getThermostatEIs()}
                     .structure=${this.getStructure()}
                     .fixed=${this.isFixed()}
-                    .title=${this.getTitle()}
                     .callService = ${this.callService}
                 ></thermostat-panel>
                 <aux-mode-controls
@@ -84,7 +79,7 @@ export class AuxThermostatPanel extends HaClimateComponent {
                     .states = ${this.getStates()}
                     .entityIds = ${this.getControlEIs()}
                     .structure = ${this.getMainStructure()}
-                    .areaName = ${this.getRegionName()}
+                    .regionName = ${this.getRegionName()}
                     .areaMode = ${this.getTieMode()}
                     .areaAction = ${this.getTieAction()}
                     .callService = ${this.callService}

@@ -104,11 +104,11 @@ action: the current action of the climate entity
     getMinExtreme() {
         const minmin = this.getNumberAttribute('min', 'min');
         const maxmin = this.getNumberAttribute('max', 'min');
-        if (minmin && maxmin) {
+        if (typeof minmin === 'number' && typeof maxmin === 'number') {
             return Math.min(minmin, maxmin);
-        } else if (minmin) {
+        } else if (typeof minmin === 'number') {
             return minmin;
-        } else if (maxmin) {
+        } else if (typeof maxmin === 'number') {
             return maxmin;
         }
     }
@@ -131,6 +131,14 @@ action: the current action of the climate entity
         if (minStep && maxStep) {
             return this.getMinStep() + this.getMaxStep();
         } else return 0;
+    }
+
+    getSafeMin() {
+        return this.getNumberState('safe_min');
+    }
+
+    getSafeMax() {
+        return this.getNumberState('safe_max');
     }
 
     /******************** sensor items *************************************/
@@ -171,6 +179,10 @@ action: the current action of the climate entity
         return this.getState('heatpump');
     }
 
+    getSwitchState() {
+        return this.getState('switch');
+    }
+
     getHPId() {
         return this.getEntityId('heatpump');
     }
@@ -193,6 +205,22 @@ action: the current action of the climate entity
         return action;
     }
 
+    getActionFromSwitch() {
+        const mode = this.getMode();
+        const switchState = this.getSwitchState();
+        let result;
+        if (this.getSwitchState()) {
+            if (['heat', 'safe_min'].includes(mode)) {
+                (switchState == 'on') ? (result = 'Heating') : (result = 'Idle');
+            }
+            if (['fan', 'safe_max'].includes(mode)) {
+                (switchState == 'on') ? (result = 'Venting') : (result = 'Idle');
+            }
+            (mode == 'off') && (result = 'Off');
+        }
+        return result
+    }
+
     getActionDirect() {
         let result = this.getState('action');
         if (result) {
@@ -207,6 +235,8 @@ action: the current action of the climate entity
     getAction() {
         if (this.getActionDirect()) {
             return this.getActionDirect();
+        } else if (this.getActionFromSwitch()) {
+            return this.getActionFromSwitch();
         } else return this.getActionFromHP(this.getHPstate(), this.getMode());
     }
 
@@ -246,6 +276,12 @@ action: the current action of the climate entity
 
     getTieOptions() {
         return this.getAttribute('tie_main', 'options');
+    }
+
+    /****************************** name *****************************************/
+
+    getName() {
+        return this.getState('name');
     }
 
 }
