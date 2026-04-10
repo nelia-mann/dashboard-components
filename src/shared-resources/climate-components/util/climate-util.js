@@ -8,6 +8,14 @@ function climateGradient() {
     return output;
 }
 
+function climateGradientUp() {
+    let output = `linear-gradient(to top, `;
+    output = output + rgba(COOL, .5) + `0%, `;
+    output = output + rgba(WHITE, .5) + `50%, `;
+    output = output + rgba(HOT, .5) + `100%)`;
+    return output;
+}
+
 function getModeStyles(mode, action, outline) {
     let styles = {};
     switch (mode) {
@@ -45,4 +53,4 @@ function getModeStyles(mode, action, outline) {
     return styles;
 }
 
-export { getModeStyles }
+export { getModeStyles, climateGradientUp }

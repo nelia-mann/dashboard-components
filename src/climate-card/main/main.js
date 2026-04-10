@@ -32,7 +32,8 @@ export class ClimateCard extends HaMainComponent {
         "switch",
         "name",
         "safe_max",
-        "safe_min"
+        "safe_min",
+        "offset",
         ];
     _BUTTONKEYS = ["sensor", "mode", "heatpump"];
 

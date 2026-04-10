@@ -5,6 +5,7 @@ export default css`
     :host {
         width: var(--aux-mode-control-width, 100%);
         height: var(--aux-mode-control-height, 50px);
+        margin-bottom: var(--aux-mode-control-margin-bottom, 0px);
         display: flex;
         flex-flow: var(--aux-mode-control-flex-flow, row nowrap);
         justify-content: var(--aux-mode-control-justify-content, space-around);

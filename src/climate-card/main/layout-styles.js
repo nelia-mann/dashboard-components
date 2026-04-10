@@ -41,11 +41,11 @@ export default css`
         --climate-panel-heading-font-size: var(--Large-font);
         --climate-panel-heading-font-weight: 550;
 
-        --aux-panel-width: var(--climate-panel-width);
+        --aux-panel-width: 450px;
         --aux-panel-height: var(--climate-panel-height);
-        --aux-panel-flex-flow: var(--climate-panel-flex-flow);
-        --aux-panel-justify-content: var(--climate-panel-justify-content);
-        --aux-panel-align-items: var(--climate-panel-align-items);
+        --aux-panel-flex-flow: column nowrap;
+        --aux-panel-justify-content: space-between;
+        --aux-panel-align-items: center;
         --aux-panel-heading-font-size: var(--climate-panel-heading-font-size);
         --aux-panel-heading-font-weight: var(--climate-panel-heading-font-weight);
 
@@ -65,8 +65,9 @@ export default css`
         --mode-control-button-margin-correction-r: -14px;
         --mode-control-button-outline-offset: var(--button-outline-offset);
 
-        --aux-mode-control-width: var(--mode-control-width);
+        --aux-mode-control-width: 100%;
         --aux-mode-control-height: var(--mode-control-height);
+        --aux-mode-control-margin-bottom: 0px;
         --aux-mode-control-flex-flow: var(--mode-control-flex-flow);
         --aux-mode-control-justify-content: var(--mode-control-justify-content);
         --aux-mode-control-align-items: var(--mode-control-align-items);
@@ -77,10 +78,10 @@ export default css`
         --aux-mode-control-button-outline-offset: var(--button-outline-offset);
         --aux-mode-control-font-size: var(--sub-info-font-size);
         --aux-mode-control-font-weight: var(--small-heading-font-weight);
-        --tie-button-width: 140px;
+        --tie-button-width: 120px;
 
         --thermostat-height: 350px;
-        --thermostat-width: 92%;
+        --thermostat-width: calc(0.95 * var(--thermostat-height));
         --thermostat-bottom-padding: 15px;
         --thermostat-margin-top: -15px;
 
@@ -105,6 +106,17 @@ export default css`
         --lower-weight: 400;
         --center-weight: 400;
         --sup-factor: 2.5;
+
+        --offset-slider-width: 55px;
+        --offset-slider-padding: 10px;
+        --offset-slider-padding-top: 0px;
+        --offset-slider-padding-left: 10px;
+        --offset-slider-height: calc(100% - 20px);
+        --offset-slider-margin-bottom: 10px;
+
+        --slider-margin: 5%;
+        --slider-width: 100%;
+
 
     }
     `;

@@ -1,10 +1,11 @@
-import { html } from 'lit';
+import { html, mathml } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { rgba } from '../../util/color-util.js';
 import { getEntityId } from '../../util/state-util.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
+import { mdiTheater } from '@mdi/js';
 
 export class SliderBar extends HaSubComponent {
 
@@ -84,7 +85,7 @@ export class SliderBar extends HaSubComponent {
     }
 
     addUnits(value) {
-        let newValue = String(Math.round(value));
+        let newValue = Number(value).toFixed(this.getRound());
         newValue = newValue + this.units;
         return newValue;
     }
@@ -117,21 +118,46 @@ export class SliderBar extends HaSubComponent {
         this._flag = false;
     }
 
+    getRound() {
+        if (this.step) {
+            return -1 * Math.log10(this.step)
+        } else return 0
+    }
+
+    getStep() {
+        if (this.step) return this.step;
+        return 1;
+    }
+
+    showScale() {
+        return !this.skipScale
+    }
+
+    isFixed() {
+        if (this.fixed) return this.fixed;
+        return false;
+    }
+
     /****************************** interactive logic *******************************/
 
     // depends on type
     handleOnChange(e) {
-        this.setIsDown(false);
-        let value = e.target.value;
-        this.dispatchEvent(new CustomEvent('change', { detail: value }));
+        if (!this.isFixed()) {
+            this.setIsDown(false);
+            let value = e.target.value;
+            this.dispatchEvent(new CustomEvent('change', { detail: value }));
+        }
     }
 
 
     handleOnInput(e) {
-        this.raiseChangeFlag();
-        this.setIsDown(true);
-        const value = e.target.value;
-        this.setValue(value);
+        if (!this.isFixed()) {
+            this.raiseChangeFlag();
+            this.setIsDown(true);
+            const value = e.target.value;
+            this.setValue(value);
+            this.dispatchEvent(new CustomEvent('slide', { detail: value }));
+        }
     }
 
     /**************************** style/html logic ***************************/
@@ -162,10 +188,8 @@ export class SliderBar extends HaSubComponent {
         return styles;
     }
 
-    static styles = [sharedStyles, styles];
-
-    render() {
-        if (this.isInitialized()) {
+    scales() {
+        if (this.showScale()) {
             return html`
                 <div class="values">
                     <div class="pad-top"></div>
@@ -175,6 +199,32 @@ export class SliderBar extends HaSubComponent {
                     </div>
                     <div class="pad-bottom"></div>
                 </div>
+            `
+        }
+    }
+
+    value() {
+        if (this.showScale()) {
+            return html`
+                <div class="values">
+                    <div class="pad-top"></div>
+                    <div class="inner-values">
+                        <div class="current-value" style="${styleMap(this.getStyleLevel())}">
+                            ${this.addUnits(this.getValue())}
+                        </div>
+                    </div>
+                    <div class="pad-bottom"></div>
+                </div>
+            `
+        }
+    }
+
+    static styles = [sharedStyles, styles];
+
+    render() {
+        if (this.isInitialized()) {
+            return html`
+                ${this.scales()}
                 <div class="slider outlined">
                     <div class="pad"></div>
                     <div class="inner-slider">
@@ -192,19 +242,12 @@ export class SliderBar extends HaSubComponent {
                             value="${this.getValue()}"
                             @input="${this.handleOnInput}"
                             @change="${this.handleOnChange}"
+                            step="${this.getStep()}"
                         ></input>
                     </div>
                     <div class="pad"></div>
                 </div>
-                <div class="values">
-                    <div class="pad-top"></div>
-                    <div class="inner-values">
-                        <div class="current-value" style="${styleMap(this.getStyleLevel())}">
-                            ${this.addUnits(this.getValue())}
-                        </div>
-                    </div>
-                    <div class="pad-bottom"></div>
-                </div>
+                ${this.value()}
             `
         }
     }

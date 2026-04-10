@@ -7,7 +7,7 @@ export default css`
         height: 100%;
         display: flex;
         flex-flow: row nowrap;
-        justify-content: center;
+        justify-content: var(--slider-justify-content, center);
         align-items: center;
     }
 
@@ -17,6 +17,8 @@ export default css`
         flex-flow: column nowrap;
         align-items: center;
         justify-content: center;
+        pointer-events: none;
+        margin-top: var(--slider-value-margin-top, 0px);
     }
 
     .slider {
@@ -28,12 +30,12 @@ export default css`
         flex-flow: column nowrap;
         align-items: center;
         justify-content: center;
-        touch-action: none;
     }
 
     .pad {
         width: 100%;
         height: var(--slider-margin, 5%);
+        pointer-events: none;
     }
 
     .inner-slider {
@@ -45,17 +47,20 @@ export default css`
     .pad-top {
         width: 100%;
         height: calc(var(--slider-text-offset, 5%) + var(--slider-margin, 5%));
+        pointer-events: none;
     }
 
     .inner-values {
         position: relative;
         height: calc(100% - 2 * var(--slider-margin, 5%));
         width: 100%;
+        pointer-events: none;
     }
 
     .pad-bottom {
         width: 100%;
         height: calc(-1 * var(--slider-text-offset, 5%) + var(--slider-margin, 5%));
+        pointer-events: none;
     }
 
     .actual-slider {
@@ -75,6 +80,7 @@ export default css`
         left: 0%;
         width: 100%;
         height: 100%;
+        pointer-events: none;
     }
 
     .shown-level {
@@ -82,22 +88,27 @@ export default css`
         left: calc(-1 * var(--slider-level-offset, 10%));
         width: calc(100% + 2 * var(--slider-level-offset, 10%));
         height: var(--slider-level-height, 2%);
+        pointer-events: none;
 }
 
     .bottom-value {
         position: absolute;
         bottom: 0%;
         right: 0%;
+        pointer-events: none;
     }
 
     .top-value {
         position: absolute;
         bottom: 100%;
         right: 0%;
+        pointer-events: none;
     }
 
     .current-value {
         position: absolute;
+        right: var(--slider-value-right);
+        pointer-events: none;
     }
 
 `;

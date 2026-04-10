@@ -278,6 +278,24 @@ action: the current action of the climate entity
         return this.getAttribute('tie_main', 'options');
     }
 
+    getOffsetId() {
+        return this.getEntityId('offset');
+    }
+
+    /***************************** offset ****************************************/
+
+    getOffset() {
+        return this.getNumberState('offset');
+    }
+
+    getMinOffset() {
+        return this.getNumberAttribute('offset', 'min');
+    }
+
+    getMaxOffset() {
+        return this.getNumberAttribute('offset', 'max');
+    }
+
     /****************************** name *****************************************/
 
     getName() {
