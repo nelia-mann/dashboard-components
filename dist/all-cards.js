@@ -208,6 +208,10 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
             color: #ffffff;
         }
 
+        .inactive {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
         .outlined {
             outline: .5px solid rgba(255, 255, 255, .2);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 .5px 2px rgba(255, 255, 255, 0.2) inset;
