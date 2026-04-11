@@ -70,9 +70,14 @@ export class AuxBasementPanel extends HaClimateComponent {
         if (this.isInitialized()) {
             return html`
                 <div class="heading"> ${"Auxiliary Elements"} </div>
-                <div class="elements">
-                    ${this.fireplace()}
-                    ${this.laundryFan()}
+                <div class="main">
+                    <div class="elements top">
+                        ${this.fireplace()}
+                    </div>
+                    <div class="elements bottom">
+                        ${this.fireplace()}
+                        ${this.laundryFan()}
+                    </div>
                 </div>
             `;
         }

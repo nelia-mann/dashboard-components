@@ -38,6 +38,7 @@ export default css`
 
     .exclamation {
         margin-right: var(--aux-mode-control-button-margin-correction-r, -2px);
+        margin-left: var(--aux-mode-control-button-margin-correction-l, 0px);
     }
 
     .center {

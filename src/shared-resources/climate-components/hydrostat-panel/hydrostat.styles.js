@@ -3,15 +3,16 @@ import { css } from 'lit';
 export default css`
 
     :host {
-        width: var(--thermostat-width, 80%);
-        height: var(--thermostat-height, 350px);
-        padding-bottom: var(--thermostat-bottom-padding, 20px);
+        width: var(--hydrostat-width, 200px);
+        height: var(--hydrostat-height, 200px);
+        padding-bottom: var(--hydrostat-bottom-padding, 0px);
         display: flex;
         flex-flow: column nowrap;
-        justify-content: var(--climate-panel-justify-content, space-between);
+        justify-content: center;
         align-items: center;
         position: relative;
-        margin-top: var(--thermostat-margin-top, -10px);
+        margin-top: var(--hydrostat-margin-top, 0px);
+        margin-bottom: var(--hydrostat-margin-botton, 0px);
     }
 
     .button-row {
@@ -19,7 +20,7 @@ export default css`
         flex-flow: row nowrap;
         align-items: center;
         justify-content: center;
-        width: var(--adjust-button-row-width, 85%);
+        width: var(--hydrostat-adjust-button-row-width, 85%);
     }
 
 `;

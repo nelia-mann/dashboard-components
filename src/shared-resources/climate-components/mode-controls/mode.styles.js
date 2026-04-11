@@ -9,6 +9,7 @@ export default css`
         flex-flow: var(--mode-control-flex-flow, row nowrap);
         justify-content: var(--mode-control-justify-content, space-around);
         align-items: var(--mode-control-align-items, center);
+        margin-top: var(--mode-control-margin-top, 0px);
     }
 
     .button {

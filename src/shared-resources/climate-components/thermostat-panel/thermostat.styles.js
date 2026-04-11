@@ -5,13 +5,14 @@ export default css`
     :host {
         width: var(--thermostat-width, 80%);
         height: var(--thermostat-height, 350px);
-        padding-bottom: var(--thermostat-bottom-padding, 20px);
+        padding-bottom: var(--thermostat-bottom-padding, 0px);
         display: flex;
         flex-flow: column nowrap;
-        justify-content: var(--climate-panel-justify-content, space-between);
+        justify-content: center;
         align-items: center;
         position: relative;
-        margin-top: var(--thermostat-margin-top, -10px);
+        margin-top: var(--thermostat-margin-top, 0px);
+        margin-bottom: var(--thermostat-margin-bottom, 0px);
     }
 
     .button-row {
