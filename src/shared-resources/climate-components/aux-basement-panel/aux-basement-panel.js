@@ -35,6 +35,18 @@ export class AuxBasementPanel extends HaClimateComponent {
         return this.regionName;
     }
 
+    getLaundryHeat() {
+        return this.getStructure().laundry_heater;
+    }
+
+    getLaundryHeatStructure() {
+        return this.getLaundryHeat().structure;
+    }
+
+    getLaundryHeatEIs() {
+        return this.getLaundryHeat().entityIds;
+    }
+
 
     /********************************* html/css logic ******************************************/
 
@@ -64,10 +76,24 @@ export class AuxBasementPanel extends HaClimateComponent {
         `
     }
 
+    laundryThermostat() {
+        return html`
+            <aux-thermostat-panel class="outlined"
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getLaundryHeatEIs()}
+                .structure = ${this.getLaundryHeatStructure()}
+                .regionName = ${this.getRegionName()}
+                .callService = ${this.callService}
+            ></aux-thermostat-panel>
+        `
+    }
+
     static styles = [sharedStyles, styles];
 
     render() {
         if (this.isInitialized()) {
+            console.log(this.getStructure());
             return html`
                 <div class="heading"> ${"Auxiliary Elements"} </div>
                 <div class="main">
@@ -75,7 +101,7 @@ export class AuxBasementPanel extends HaClimateComponent {
                         ${this.fireplace()}
                     </div>
                     <div class="elements bottom">
-                        ${this.fireplace()}
+                        ${this.laundryThermostat()}
                         ${this.laundryFan()}
                     </div>
                 </div>
