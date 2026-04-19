@@ -19,7 +19,7 @@ export class ClimateCard extends HaMainComponent {
     _LABEL = "climate";
     _REGIONS = ["living_room", "guest_room", "bedroom", "office"];
     _DIVISIONS = ["primary", "secondary", "aux"];
-    _AUXELEMENTS = ["fireplace", "fan", "laundry_heater"];
+    _AUXELEMENTS = ["fan", "laundry_heater"];
     _KEYS = ["min",
         "max",
         "sensor",

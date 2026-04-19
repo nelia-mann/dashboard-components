@@ -51,7 +51,8 @@ export class AuxBasementPanel extends HaClimateComponent {
     /********************************* html/css logic ******************************************/
 
     fireplace() {
-        return html`
+        if (this.getFireplace()) {
+            return html`
             <aux-thermostat-panel class="outlined"
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
@@ -61,10 +62,12 @@ export class AuxBasementPanel extends HaClimateComponent {
                 .callService = ${this.callService}
             ></aux-thermostat-panel>
         `
+        }
     }
 
     laundryFan() {
-        return html`
+        if (this.getFan()) {
+            return html`
             <iso-hydrostat-panel class="outlined"
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
@@ -74,10 +77,12 @@ export class AuxBasementPanel extends HaClimateComponent {
             ></iso-hydrostat-panel>
 
         `
+        }
     }
 
     laundryThermostat() {
-        return html`
+        if (this.getLaundryHeat()) {
+            return html`
             <aux-thermostat-panel class="outlined"
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
@@ -87,6 +92,7 @@ export class AuxBasementPanel extends HaClimateComponent {
                 .callService = ${this.callService}
             ></aux-thermostat-panel>
         `
+        }
     }
 
     static styles = [sharedStyles, styles];
@@ -97,12 +103,12 @@ export class AuxBasementPanel extends HaClimateComponent {
             return html`
                 <div class="heading"> ${"Auxiliary Elements"} </div>
                 <div class="main">
-                    <div class="elements top">
-                        ${this.fireplace()}
-                    </div>
                     <div class="elements bottom">
                         ${this.laundryThermostat()}
                         ${this.laundryFan()}
+                    </div>
+                    <div class="elements top">
+                        ${this.fireplace()}
                     </div>
                 </div>
             `;
