@@ -37,7 +37,7 @@ export default css`
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    .inner-slider {
+    .shown-slider {
         border-top: solid 2px rgba(0, 0, 0, .1);
         border-bottom: solid 2px rgba(0, 0, 0, .1);
     }
@@ -60,7 +60,7 @@ export default css`
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 .5px 2px rgba(255, 255, 255, 0.2) inset;
         }
 
-        .inner-slider {
+        .shown-slider {
             border-top: solid 2px rgba(255, 255, 255, .2);
             border-bottom: solid 2px rgba(255, 255, 255, .2);
         }

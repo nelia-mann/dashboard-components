@@ -45,10 +45,6 @@ export class LightControl extends HaSubComponent {
         return this.option;
     }
 
-    isSelected(option) {
-        return (this.getOption() === option);
-    }
-
     getEntityIds() {
         let entityIds = [getEntityId(this.getLightState())];
         const themeState = this.getThemeState();

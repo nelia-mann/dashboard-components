@@ -9,7 +9,7 @@ export default css`
         align-items: var(--control-select-align-items, center);
         margin-left: var(--control-select-margin-left, 10px);
         margin-top: var(--control-select-margin-top, 0px);
-        width: var(--control-select-width, 100%);
+        width: var(--control-select-width);
         height: var(--control-select-height, 100%);
     }
 

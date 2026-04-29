@@ -18,6 +18,7 @@ export class LightGroupControl extends HaSubComponent {
         super();
         this.lightId = '';
         this.themeId = '';
+        this.option = '';
     }
 
     /******************************* lifecycle **********************************/

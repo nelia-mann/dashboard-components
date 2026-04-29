@@ -138,5 +138,105 @@ export class HaMainComponent extends LitElement {
         return pretty.slice(0, -1);
     }
 
+    /************************************ sorting and filtering logic ***************************/
+
+    getHassEntities() {
+        return this.getHass().entities;
+    }
+
+    getHassStates() {
+        return this.getHass().states;
+    }
+
+    getEntity(entityId) {
+        return this.getHassEntities()[entityId];
+    }
+
+    getState(entityId) {
+        return this.getHassStates()[entityId];
+    }
+
+    getLabels(entityId) {
+        return this.getEntity(entityId).labels;
+    }
+
+    hasLabel(entityId, label) {
+        const labels = this.getLabels(entityId);
+        return labels.includes(label);
+    }
+
+    getEntityIdsWithLabel(label) {
+    const entities = this.getHassEntities();
+    const entityIds = Object.keys(entities).filter((entityId) => {
+        return this.hasLabel(entityId, label);
+    })
+    return new Set(entityIds);
+    }
+
+    filterEntityIdsForLabel(entityIds, label) {
+        const array = [...entityIds];
+        const entityIdArray = array.filter((entityId) => {
+            return this.hasLabel(entityId, label);
+        })
+        return new Set(entityIdArray);
+    }
+
+    getHassFloors() {
+        return this.getHass().floors;
+    }
+
+    getHassFloorName(floorId) {
+        return this.getHassFloors()[floorId].name;
+    }
+
+    getHassAreas() {
+        return this.getHass().areas;
+    }
+
+    getArea(areaId) {
+        return this.getHassAreas()[areaId];
+    }
+
+    getHassAreaName(areaId) {
+        return this.getArea(areaId).name;
+    }
+
+    getAreaFloor(areaId) {
+        return this.getArea(areaId).floor_id;
+    }
+
+    getEntityAreaId(entityId) {
+        return this.getEntity(entityId).area_id;
+    }
+
+    getEntityFloorId(entityId) {
+        const areaId = this.getEntityAreaId(entityId);
+        return this.getAreaFloor(areaId);
+    }
+
+    isOnFloor(entityId, floorId) {
+        return this.getEntityFloorId(entityId) === floorId;
+    }
+
+    filterEntityIdsForFloor(entityIds, floorId) {
+        const theseIds = [...entityIds];
+        const filteredIds = theseIds.filter((entityId) => this.isOnFloor(entityId, floorId));
+        return new Set(filteredIds);
+    }
+
+    isInArea(entityId, areaId) {
+        return this.getEntityAreaId(entityId) === areaId;
+    }
+
+    getUniqueAreaIds(entityIds) {
+        const areaIds = [...entityIds].map((entityId) => this.getEntityAreaId(entityId));
+        return new Set(areaIds);
+    }
+
+    filterEntityIdsForArea(entityIds, areaId) {
+        const arrayIds = [...entityIds];
+        const filteredIds = arrayIds.filter((entityId) => this.isInArea(entityId, areaId));
+        return new Set(filteredIds);
+    }
 
 }

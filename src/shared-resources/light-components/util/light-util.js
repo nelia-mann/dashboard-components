@@ -145,7 +145,7 @@ function tempGradientGeneral(minTemp, maxTemp, mode, alpha) {
 }
 
 function tempGradient(minTemp, maxTemp) {
-    return tempGradientGeneral(minTemp, maxTemp, 'to top', 1);
+    return tempGradientGeneral(minTemp, maxTemp, 'to right', 1);
 }
 
 function tempGradientFull() {

@@ -39,18 +39,10 @@ export default css`
         --area-heading-font-size: var(--large-font);
         --area-heading-font-weight: 700;
 
-        --light-component-width: 250px;
+        --light-component-width: 210px;
         --light-component-height: 35px;
         --light-component-padding: 10px;
         --light-component-margin: 15px;
-
-        --dialog-padding: 20px;
-        --modal-header-height: 40px;
-        --modal-header-margin-top: -10px;
-        --modal-header-margin: 20px;
-        --close-modal-icon-size: 40px;
-        --popout-heading-font-size: var(--Large-font);
-        --popout-heading-font-weight: var(--small-heading-font-weight);
 
         --simple-light-icons-margin-right: 10px;
         --simple-light-icons-margin-left: 0px;
@@ -60,13 +52,20 @@ export default css`
         --simple-light-align-items: center;
         --simple-light-justify-content: flex-start;
 
-        --light-group-flex-flow: row nowrap;
+        --light-group-flex-flow: column nowrap;
         --light-group-justify-content: space-around;
         --light-group-align-items: center;
+        --light-group-width: 700px;
+        --light-group-margin-top: 30px;
 
         --light-select-flex-flow: column nowrap;
-        --light-select-align-items: flex-start;
+        --light-select-align-items: center;
         --light-select-justify-content: center;
+        --light-select-members-flex-flow: row wrap;
+        --light-select-members-justify-content: space-around;
+        --light-select-members-align-items: center;
+        --light-select-members-width: 100%;
+        --light-select-member-width: 180px;
         --light-select-innerlight-width: 250px;
         --light-select-innerlight-height: 30px;
         --light-select-innerlight-padding: 8px;
@@ -83,44 +82,46 @@ export default css`
         --wheel-width: 270px;
         --dot-width: 20px;
 
-        --control-select-flex-flow: column nowrap;
+        --control-select-flex-flow: row nowrap;
         --control-select-justify-content: space-around;
         --control-select-align-items: center;
         --control-select-margin-left: 10px;
+        --control-select-margin-top: 10px;
         --control-select-icon-window-width: 42px;
         --control-select-icon-window-margin: 10px;
         --control-select-icon-size: 20px;
         --control-select-outline-offset: -2px;
 
-        --light-control-padding: 20px;
+        --light-control-padding: 15px;
         --light-control-margin-left: 20px;
-        --light-control-margin-right: 10px;
+        --light-control-margin-right: 20px;
+        --light-control-margin: 15px;
 
-        --brightness-slider-width: var(--wheel-width);
-        --brightness-slider-height: var(--wheel-width);
+        --brightness-slider-width: 400px;
+        --brightness-slider-height: 100px;
 
-        --colortemp-slider-width: var(--wheel-width);
-        --colortemp-slider-height: var(--wheel-width);
+        --colortemp-slider-width: 400px;
+        --colortemp-slider-height: 100px;
 
+        --slider-orientation: column nowrap;
         --slider-margin: 5%;
-        --slider-width: 40px;
+        --slider-width: 15px;
         --slider-text-padding: 10px;
         --slider-text-offset: 6%;
+        --slider-text-width: 20px;
         --slider-level-offset: 10%;
         --slider-level-height: 2%;
 
         --theme-select-flex-flow: column wrap;
         --theme-select-align-items: center;
         --theme-select-justify-content: flex-start;
-        --theme-select-padding: 20px;
-        --theme-select-margin-left: 20px;
-        --theme-select-margin-right: 10px;
-        --theme-select-height: 500px;
+        --theme-select-padding: 10px;
+        --theme-select-height: 440px;
         --theme-select-width: 600px;
 
-        --theme-button-padding-top: 4px;
-        --theme-button-padding-bottom: 4px;
-        --theme-button-margin: 7px;
+        --theme-button-padding-top: 3px;
+        --theme-button-padding-bottom: 3px;
+        --theme-button-margin: 5px;
         --theme-button-width: 120px;
         --theme-button-height: 30px;
         --theme-button-font-size: var(--sub-info-font-size);

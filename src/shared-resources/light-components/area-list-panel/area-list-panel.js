@@ -1,11 +1,11 @@
 import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
-import styles from './floor.styles.js';
+import styles from './area-list.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../area-panel/area-panel.js';
 
-export class FloorPanel extends HaSubComponent {
+export class AreaListPanel extends HaSubComponent {
 
     getAreaName(areaId) {
         return this.getStructure()[areaId].name;
@@ -47,4 +47,4 @@ export class FloorPanel extends HaSubComponent {
 
 }
 
-customElements.define("floor-panel", FloorPanel);
+customElements.define("area-list-panel", AreaListPanel);

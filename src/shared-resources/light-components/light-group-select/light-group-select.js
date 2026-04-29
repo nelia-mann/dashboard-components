@@ -97,7 +97,9 @@ export class LightGroupSelect extends HaSubComponent {
             if (this.isInitialized()) {
                 return html`
                     ${this.innerLight(this.getMainId())}
-                    ${this.lights()}
+                    <div class="members">
+                        ${this.lights()}
+                    </div>
                 `
             }
         }

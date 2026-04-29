@@ -9,6 +9,7 @@ export default css`
         flex-flow: var(--light-group-flex-flow, row nowrap);
         justify-content: var(--light-group-justify-content, space-around);
         align-items: var(--light-group-align-items, center);
+        margin-top: var(--light-group-margin-top, 40px);
     }
 
 `;

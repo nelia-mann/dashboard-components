@@ -3,22 +3,20 @@ import { HaMainComponent } from '../../shared-resources/base-classes/ha-main-com
 import { keyed } from 'lit/directives/keyed.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import {
-    getState,
-    addFloorStructure,
     addLightStructure,
     hasLightChanges,
-    getEntityIdsWithLabel,
-    addAreaStructure,
+    isSoloLight
 } from '../../shared-resources/util/hass-util.js';
 import styles from './main.styles.js';
 import layoutStyles from './layout-styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import "../../shared-resources/light-components/floor-panel/floor-panel.js";
+import "../floor-panel/floor-panel.js";
 import "../../shared-resources/light-components/light-button/light-button.js";
 
 export class LightingCard extends HaMainComponent {
 
     _LABEL = "lighting";
+    _CATEGORIES = ["basic_lighting", "special_lights"];
 
     static properties = {
         ...super.properties,
@@ -41,41 +39,73 @@ export class LightingCard extends HaMainComponent {
     setStructures() {
         this.setEntityIds();
         this.setStates();
-        this.setFloorStructure();
-        this.setAreaStructure();
-        this.setLightStructure();
+        this.setStructure();
         this.initializeFloor();
     }
 
     setEntityIds() {
-        this.entityIds = getEntityIdsWithLabel(this.getHass(), this.getLabel());
+        this.entityIds = this.getEntityIdsWithLabel(this.getLabel());
     }
 
     setStates() {
         let states = {};
         this.getEntityIds().forEach((entityId) => {
-            states[entityId] = getState(this.getHass(), entityId);
+            states[entityId] = this.getState(entityId);
         })
         this.states = states;
     }
 
-    setFloorStructure() {
-        addFloorStructure(this.getHass(), this.getStructure(), this.getEntityIds());
+    setStructure() {
+        const floors = this.getHassFloors();
+        Object.keys(floors).forEach((floorId) => {
+            const filteredIds = this.filterEntityIdsForFloor(this.getEntityIds(), floorId);
+            const soloLightIds = [...filteredIds].filter((entityId) => isSoloLight(this.getHass(), entityId));
+            if (filteredIds.size > 0) {
+                const floorDictionary = {
+                    name: this.getHassFloorName(floorId),
+                    structure: {},
+                    entityIds: filteredIds,
+                    soloLightIds: new Set(soloLightIds)
+                }
+                this.setSpecialStructure(floorDictionary);
+                this.getStructure()[floorId] = floorDictionary;
+            }
+        })
+
     }
 
-    setAreaStructure() {
-        Object.values(this.structure).forEach((floorDictionary) => {
-            addAreaStructure(this.getHass(), floorDictionary.structure, floorDictionary.entityIds);
+    setSpecialStructure(floorDictionary) {
+        this.getCategories().forEach((categoryLabel) => {
+            const ids = this.filterEntityIdsForLabel(floorDictionary.entityIds, categoryLabel);
+            const categoryDictionary = {
+                structure: {},
+                entityIds: ids
+            }
+            if (categoryLabel === 'basic_lighting') {
+                this.setAreaStructure(categoryDictionary);
+            } else {
+                this.setLightStructure(categoryDictionary);
+            }
+            floorDictionary.structure[categoryLabel] = categoryDictionary;
         })
     }
 
-    setLightStructure() {
-        Object.values(this.structure).forEach((floorDict) => {
-            let floorStructure = floorDict.structure;
-            Object.values(floorStructure).forEach((areaDict) => {
-                addLightStructure(this.getHass(), areaDict);
-            })
+    setAreaStructure(categoryDictionary) {
+        const areaIds = this.getUniqueAreaIds(categoryDictionary.entityIds);
+        areaIds.forEach((areaId) => {
+            const ids = this.filterEntityIdsForArea(categoryDictionary.entityIds, areaId);
+            const areaDictionary = {
+                name: this.getHassAreaName(areaId),
+                structure: {},
+                entityIds: ids
+            };
+            this.setLightStructure(areaDictionary);
+            categoryDictionary.structure[areaId] = areaDictionary;
         })
+    }
+
+    setLightStructure(areaDict) {
+        addLightStructure(this.getHass(), areaDict);
     }
 
     initializeFloor() {
@@ -92,6 +122,10 @@ export class LightingCard extends HaMainComponent {
 
     getLabel() {
         return this._LABEL;
+    }
+
+    getCategories() {
+        return this._CATEGORIES;
     }
 
     getFloorStructure(floorId) {

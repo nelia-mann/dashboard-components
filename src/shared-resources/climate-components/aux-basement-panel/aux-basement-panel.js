@@ -99,7 +99,6 @@ export class AuxBasementPanel extends HaClimateComponent {
 
     render() {
         if (this.isInitialized()) {
-            console.log(this.getStructure());
             return html`
                 <div class="heading"> ${"Auxiliary Elements"} </div>
                 <div class="main">

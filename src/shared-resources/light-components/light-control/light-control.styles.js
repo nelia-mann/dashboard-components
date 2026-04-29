@@ -11,6 +11,7 @@ export default css`
         padding: var(--light-control-padding, 20px);
         margin-left: var(--light-control-margin-left, 20px);
         margin-right: var(--light-control-margin-right, 10px);
+        margin: var(--light-control-margin);
         min-height: var(--light-control-minsize);
         min-width: var(--light-control-minsize);
     }

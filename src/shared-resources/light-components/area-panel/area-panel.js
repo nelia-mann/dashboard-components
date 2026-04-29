@@ -24,10 +24,6 @@ export class AreaPanel extends HaSubComponent {
         return this.getStructure()[lightId].entityIds;
     }
 
-    getThemeId(lightId) {
-        return this.getStructure()[lightId].theme;
-    }
-
     getLightDisplay(lightId) {
         return html`
             <light-component
@@ -35,7 +31,6 @@ export class AreaPanel extends HaSubComponent {
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
                 .lightId = ${lightId}
-                .themeId = ${this.getThemeId(lightId)}
                 .structure = ${this.getSubStructure(lightId)}
                 .entityIds = ${this.getSubEIs(lightId)}
                 .callService=${this.callService}

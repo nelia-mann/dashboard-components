@@ -9,6 +9,15 @@ export default css`
         justify-content: var(--light-select-justify-content, center);
     }
 
+    .members {
+        display: flex;
+        flex-flow: var(--light-select-members-flex-flow);
+        justify-content: var(--light-select-members-justify-content);
+        align-items: var(--light-select-members-align-items);
+        width: var(--light-select-members-width);
+        --light-select-innerlight-width: var(--light-select-member-width);
+    }
+
     .light-inner {
         width: var(--light-select-innerlight-width, 180px);
         height: var(--light-select-innerlight-height, 25px);

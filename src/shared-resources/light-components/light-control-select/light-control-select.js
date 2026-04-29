@@ -39,6 +39,10 @@ export class LightControlSelect extends HaSubComponent {
 
     onFirstUpdate() {
         this.buildOptions();
+        if (this.getOptions().includes('brightness')) {
+            this.setOption('brightness');
+            this.onSelect('brightness');
+        }
     }
 
     /*********************** getter and setter logic ***********************/

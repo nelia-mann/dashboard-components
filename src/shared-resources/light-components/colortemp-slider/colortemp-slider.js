@@ -52,6 +52,7 @@ export class ColorTempSlider extends HaSubComponent {
                 .startValue=${getColorTemp(this.getLightState())}
                 .units=${'K'}
                 .background=${tempGrad}
+                .mode=${'horizontal'}
                 @change=${this.handleCallService}
             ></slider-bar>`
     }

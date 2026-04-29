@@ -5,7 +5,6 @@ import { getEntityId } from '../../util/state-util.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
-import { mdiTheater } from '@mdi/js';
 
 export class SliderBar extends HaSubComponent {
 
@@ -138,6 +137,10 @@ export class SliderBar extends HaSubComponent {
         return false;
     }
 
+    getMode() {
+        return this.mode;
+    }
+
     /****************************** interactive logic *******************************/
 
     // depends on type
@@ -169,7 +172,10 @@ export class SliderBar extends HaSubComponent {
 
     getStyleLevel() {
         let styles = {};
-        styles['bottom'] = `${this.getHeight()}%`;
+        let limit = 'bottom';
+        (this.getMode() === 'horizontal') && (limit = 'left');
+        styles[limit] = `${this.getHeight()}%`;
+
         return styles;
     }
 
@@ -182,6 +188,7 @@ export class SliderBar extends HaSubComponent {
             let dark = rgba(this.getColorCode(), 1);
             let pale = rgba(this.getColorCode(), 0.2);
             let stem = 'linear-gradient(to top, ';
+            (this.getMode() === 'horizontal') && (stem = 'linear-gradient(to right, ');
             stem = stem + dark + height + ', ' + pale + height + ')';
             styles['background'] = stem;
         }
@@ -191,13 +198,9 @@ export class SliderBar extends HaSubComponent {
     scales() {
         if (this.showScale()) {
             return html`
-                <div class="values">
-                    <div class="pad-top"></div>
-                    <div class="inner-values">
-                        <div class="top-value"> ${this.addUnits(this.getMax())} </div>
-                        <div class="bottom-value"> ${this.addUnits(this.getMin())} </div>
-                    </div>
-                    <div class="pad-bottom"></div>
+                <div class="values ${this.getMode()}">
+                    <div class="top value ${this.getMode()}"> ${this.addUnits(this.getMax())} </div>
+                    <div class="bottom value ${this.getMode()}"> ${this.addUnits(this.getMin())} </div>
                 </div>
             `
         }
@@ -206,14 +209,10 @@ export class SliderBar extends HaSubComponent {
     value() {
         if (this.showScale()) {
             return html`
-                <div class="values">
-                    <div class="pad-top"></div>
-                    <div class="inner-values">
-                        <div class="current-value" style="${styleMap(this.getStyleLevel())}">
-                            ${this.addUnits(this.getValue())}
-                        </div>
+                <div class="values ${this.getMode()}">
+                    <div class="current value ${this.getMode()}" style="${styleMap(this.getStyleLevel())}">
+                        ${this.addUnits(this.getValue())}
                     </div>
-                    <div class="pad-bottom"></div>
                 </div>
             `
         }
@@ -224,30 +223,26 @@ export class SliderBar extends HaSubComponent {
     render() {
         if (this.isInitialized()) {
             return html`
-                ${this.scales()}
-                <div class="slider outlined">
-                    <div class="pad"></div>
-                    <div class="inner-slider">
-                        <div
-                            class="shown-slider"
-                            style="${styleMap(this.getStyleBG())}"
-                        >
-                            <div class="shown-level" style="${styleMap(this.getStyleLevel())}"></div>
-                        </div>
-                        <input
-                            class="actual-slider"
-                            type="range"
-                            max=${this.getMax()}
-                            min=${this.getMin()}
-                            value="${this.getValue()}"
-                            @input="${this.handleOnInput}"
-                            @change="${this.handleOnChange}"
-                            step="${this.getStep()}"
-                        ></input>
+                ${(this.getMode() === 'horizontal') ? this.value() : this.scales()}
+                <div class="slider outlined ${this.getMode()}">
+                    <div
+                        class="inner-slider shown ${this.getMode()}"
+                        style="${styleMap(this.getStyleBG())}"
+                    >
+                        <div class="shown-level ${this.getMode()}" style="${styleMap(this.getStyleLevel())}"></div>
                     </div>
-                    <div class="pad"></div>
+                    <input
+                        class="inner-slider actual ${this.getMode()}"
+                        type="range"
+                        max=${this.getMax()}
+                        min=${this.getMin()}
+                        value="${this.getValue()}"
+                        @input="${this.handleOnInput}"
+                        @change="${this.handleOnChange}"
+                        step="${this.getStep()}"
+                    ></input>
                 </div>
-                ${this.value()}
+                ${(this.getMode() === 'horizontal') ? this.scales() : this.value()}
             `
         }
     }

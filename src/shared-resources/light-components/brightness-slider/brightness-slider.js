@@ -50,6 +50,7 @@ export class BrightnessSlider extends HaSubComponent {
                 .units=${'%'}
                 .startValue=${getBrightnessPct(this.getLightState())}
                 .colorCode=${ONLIGHT}
+                .mode=${'horizontal'}
                 @change=${this.handleCallService}
             ></slider-bar>`
     }
