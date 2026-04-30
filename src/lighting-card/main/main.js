@@ -39,8 +39,7 @@ export class LightingCard extends HaMainComponent {
     setStructures() {
         this.setEntityIds();
         this.setStates();
-        console.log(this.getEntityIds());
-        // this.setStructure();
+        this.setStructure();
         // this.initializeFloor();
     }
 
@@ -58,7 +57,8 @@ export class LightingCard extends HaMainComponent {
 
     setStructure() {
         const floors = this.getHassFloors();
-        Object.keys(floors).forEach((floorId) => {
+        console.log(this.getHassAreas());
+/*         Object.keys(floors).forEach((floorId) => {
             const filteredIds = this.filterEntityIdsForFloor(this.getEntityIds(), floorId);
             const soloLightIds = [...filteredIds].filter((entityId) => isSoloLight(this.getHass(), entityId));
             if (filteredIds.size > 0) {
@@ -71,7 +71,7 @@ export class LightingCard extends HaMainComponent {
                 this.setSpecialStructure(floorDictionary);
                 this.getStructure()[floorId] = floorDictionary;
             }
-        })
+        }) */
 
     }
 
