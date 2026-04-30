@@ -194,6 +194,7 @@ export class HaMainComponent extends LitElement {
     }
 
     getArea(areaId) {
+        console.log(this.getHassAreas());
         return this.getHassAreas()[areaId];
     }
 
