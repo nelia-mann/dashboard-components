@@ -223,7 +223,6 @@ export class HaMainComponent extends LitElement {
     filterEntityIdsForFloor(entityIds, floorId) {
         const theseIds = [...entityIds];
         const filteredIds = theseIds.filter((entityId) => this.isOnFloor(entityId, floorId));
-        console.log(filteredIds);
         return new Set(filteredIds);
     }
 
