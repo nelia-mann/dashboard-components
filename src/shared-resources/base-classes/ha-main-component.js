@@ -190,6 +190,7 @@ export class HaMainComponent extends LitElement {
     }
 
     getHassAreas() {
+        console.log(this.getHass().areas);
         return this.getHass().areas;
     }
 

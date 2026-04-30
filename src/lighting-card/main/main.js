@@ -4,8 +4,7 @@ import { keyed } from 'lit/directives/keyed.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import {
     addLightStructure,
-    hasLightChanges,
-    isSoloLight
+    hasLightChanges
 } from '../../shared-resources/util/hass-util.js';
 import styles from './main.styles.js';
 import layoutStyles from './layout-styles.js';
@@ -58,6 +57,7 @@ export class LightingCard extends HaMainComponent {
     setStructure() {
         const floors = this.getHassFloors();
         console.log(this.getHass().areas);
+        this.getHassAreas();
 /*         Object.keys(floors).forEach((floorId) => {
             const filteredIds = this.filterEntityIdsForFloor(this.getEntityIds(), floorId);
             const soloLightIds = [...filteredIds].filter((entityId) => isSoloLight(this.getHass(), entityId));
