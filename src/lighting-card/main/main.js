@@ -57,7 +57,7 @@ export class LightingCard extends HaMainComponent {
 
     setStructure() {
         const floors = this.getHassFloors();
-        console.log(this.getHass());
+        console.log(this.getHass().areas);
 /*         Object.keys(floors).forEach((floorId) => {
             const filteredIds = this.filterEntityIdsForFloor(this.getEntityIds(), floorId);
             const soloLightIds = [...filteredIds].filter((entityId) => isSoloLight(this.getHass(), entityId));
