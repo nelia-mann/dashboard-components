@@ -38,10 +38,10 @@ export class LightingCard extends HaMainComponent {
 
     setStructures() {
         console.log(this.getHass());
-        this.setEntityIds();
-        this.setStates();
-        this.setStructure();
-        this.initializeFloor();
+        // this.setEntityIds();
+        // this.setStates();
+        // this.setStructure();
+        // this.initializeFloor();
     }
 
     setEntityIds() {
@@ -205,9 +205,7 @@ export class LightingCard extends HaMainComponent {
         if (this.isInitialized()) {
             return html`
                 <ha-card>
-                    ${this.content()}
                     <div class="button-row">
-                        ${this.floorButtons()}
                     </div>
                 </ha-card>
             `;
