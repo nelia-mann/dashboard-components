@@ -211,8 +211,9 @@ export class HaMainComponent extends LitElement {
 
     getEntityFloorId(entityId) {
         const areaId = this.getEntityAreaId(entityId);
-        console.log(entityId, areaId);
-        return this.getAreaFloor(areaId);
+        if (areaId) {
+            return this.getAreaFloor(areaId);
+        } else return '';
     }
 
     isOnFloor(entityId, floorId) {
@@ -221,12 +222,9 @@ export class HaMainComponent extends LitElement {
 
     filterEntityIdsForFloor(entityIds, floorId) {
         const theseIds = [...entityIds];
-        theseIds.forEach((entityId) => {
-            console.log(entityId);
-            console.log(this.getEntityAreaId(entityId));
-        })
-/*         const filteredIds = theseIds.filter((entityId) => this.isOnFloor(entityId, floorId));
-        return new Set(filteredIds); */
+        const filteredIds = theseIds.filter((entityId) => this.isOnFloor(entityId, floorId));
+        console.log(filteredIds);
+        return new Set(filteredIds);
     }
 
     isInArea(entityId, areaId) {
