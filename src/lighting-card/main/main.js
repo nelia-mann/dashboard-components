@@ -4,7 +4,8 @@ import { keyed } from 'lit/directives/keyed.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import {
     addLightStructure,
-    hasLightChanges
+    hasLightChanges,
+    isSoloLight
 } from '../../shared-resources/util/hass-util.js';
 import styles from './main.styles.js';
 import layoutStyles from './layout-styles.js';
@@ -39,7 +40,7 @@ export class LightingCard extends HaMainComponent {
         this.setEntityIds();
         this.setStates();
         this.setStructure();
-        // this.initializeFloor();
+        this.initializeFloor();
     }
 
     setEntityIds() {
@@ -202,7 +203,9 @@ export class LightingCard extends HaMainComponent {
         if (this.isInitialized()) {
             return html`
                 <ha-card>
+                    ${this.content()}
                     <div class="button-row">
+                        ${this.floorButtons()}
                     </div>
                 </ha-card>
             `;
