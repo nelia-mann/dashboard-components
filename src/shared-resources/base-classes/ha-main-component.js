@@ -215,16 +215,15 @@ export class HaMainComponent extends LitElement {
     }
 
     isOnFloor(entityId, floorId) {
-        return this.getEntityFloorId(entityId) === floorId;
+        if (this.getArea(entityId)) {
+            return this.getEntityFloorId(entityId) === floorId;
+        } else return false;
     }
 
     filterEntityIdsForFloor(entityIds, floorId) {
         const theseIds = [...entityIds];
-        theseIds.forEach((entityId) => {
-            console.log(entityId, this.getEntityFloorId(entityId), this.isOnFloor(entityId, floorId));
-        })
-        // const filteredIds = theseIds.filter((entityId) => this.isOnFloor(entityId, floorId));
-        // return new Set(filteredIds);
+        const filteredIds = theseIds.filter((entityId) => this.isOnFloor(entityId, floorId));
+        return new Set(filteredIds);
     }
 
     isInArea(entityId, areaId) {

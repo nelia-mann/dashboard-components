@@ -58,7 +58,7 @@ export class LightingCard extends HaMainComponent {
         const floors = this.getHassFloors();
         Object.keys(floors).forEach((floorId) => {
             const filteredIds = this.filterEntityIdsForFloor(this.getEntityIds(), floorId);
-/*            const soloLightIds = [...filteredIds].filter((entityId) => isSoloLight(this.getHass(), entityId));
+           const soloLightIds = [...filteredIds].filter((entityId) => isSoloLight(this.getHass(), entityId));
             if (filteredIds.size > 0) {
                 const floorDictionary = {
                     name: this.getHassFloorName(floorId),
@@ -68,7 +68,7 @@ export class LightingCard extends HaMainComponent {
                 }
                 this.setSpecialStructure(floorDictionary);
                 this.getStructure()[floorId] = floorDictionary;
-            } */
+            }
         })
 
     }
