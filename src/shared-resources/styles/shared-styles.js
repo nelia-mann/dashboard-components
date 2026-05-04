@@ -18,8 +18,8 @@ export default css`
         --ipad-max-height: 900px;
         --ipad-max-width: 1050px;
 
-        --smallfire-max-width: 920px;
-        --smallfire-max-height: 575px;
+        --smallfire-max-width: 500px;
+        --smallfire-max-height: 920px;
     }
 
     .outlined {

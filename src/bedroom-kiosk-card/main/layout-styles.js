@@ -10,8 +10,8 @@ export default css`
         --sub-info-font-weight: 400;
 
         --ha-card-padding: 15px;
-        --ha-card-height: var(--smallfire-max-width);
-        --ha-card-width: var(--smallfire-max-height);
+        --ha-card-height: var(--smallfire-max-height);
+        --ha-card-width: var(--smallfire-max-width);
 
         --button-row-height: 60px;
         --button-row-width: 100%;

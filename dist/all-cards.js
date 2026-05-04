@@ -175,8 +175,8 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --ipad-max-height: 900px;
         --ipad-max-width: 1050px;
 
-        --smallfire-max-width: 920px;
-        --smallfire-max-height: 575px;
+        --smallfire-max-width: 500px;
+        --smallfire-max-height: 920px;
     }
 
     .outlined {
@@ -2713,8 +2713,8 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --sub-info-font-weight: 400;
 
         --ha-card-padding: 15px;
-        --ha-card-height: var(--smallfire-max-width);
-        --ha-card-width: var(--smallfire-max-height);
+        --ha-card-height: var(--smallfire-max-height);
+        --ha-card-width: var(--smallfire-max-width);
 
         --button-row-height: 60px;
         --button-row-width: 100%;
