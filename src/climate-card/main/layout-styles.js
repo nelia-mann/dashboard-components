@@ -125,6 +125,7 @@ export default css`
 
         --slider-margin: 10px;
         --slider-width: 100%;
+        --slider-width-for-offset: 40px;
 
         --aux-basement-panel-width: calc(var(--ha-card-width) - var(--hp-panel-width) - 2 * var(--hp-panel-padding) - 2 * var(--ha-card-padding));
         --aux-basement-panel-height: calc(var(--aux-basement-panel-main-height) + var(--aux-basement-panel-heading-height) + var(--hp-panel-padding));

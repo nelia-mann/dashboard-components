@@ -11,6 +11,8 @@ import layoutStyles from './layout-styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import "../../shared-resources/light-components/light-button/light-button.js";
 import "../../shared-resources/climate-components/climate-button/climate-button.js";
+import "../lighting/lighting.js";
+import "../climate/climate.js";
 
 
 export class BedroomKioskCard extends HaMainComponent {
@@ -164,13 +166,31 @@ export class BedroomKioskCard extends HaMainComponent {
                 structure: {},
                 entityIds: ids
             }
-            this.setLightStructure(categoryDictionary);
+            if (categoryLabel === 'basic_lighting') {
+                this.setAreaStructure(categoryDictionary);
+            } else {
+                this.setLightStructure(categoryDictionary);
+            }
             lightDictionary.structure[categoryLabel] = categoryDictionary;
         })
     }
 
     setLightStructure(lightDict) {
         addLightStructure(this.getHass(), lightDict);
+    }
+
+    setAreaStructure(categoryDictionary) {
+        const areaIds = this.getUniqueAreaIds(categoryDictionary.entityIds);
+        areaIds.forEach((areaId) => {
+            const ids = this.filterEntityIdsForArea(categoryDictionary.entityIds, areaId);
+            const areaDictionary = {
+                name: this.getHassAreaName(areaId),
+                structure: {},
+                entityIds: ids
+            };
+            this.setLightStructure(areaDictionary);
+            categoryDictionary.structure[areaId] = areaDictionary;
+        })
     }
 
     initializeType() {
@@ -199,12 +219,20 @@ export class BedroomKioskCard extends HaMainComponent {
         return this.getType() === type;
     }
 
-    getLightStructure() {
+    getLightDictionary() {
         return this.getStructure()['lighting'];
     }
 
     getSoloLightIds() {
-        return this.getLightStructure()['buttonInfo'];
+        return this.getLightDictionary()['buttonInfo'];
+    }
+
+    getLightIds() {
+        return this.getLightDictionary()['entityIds'];
+    }
+
+    getLightStructure() {
+        return this.getLightDictionary()['structure'];
     }
 
     getClimateButtonKeys() {
@@ -215,12 +243,12 @@ export class BedroomKioskCard extends HaMainComponent {
         return this._CLIMATEKEYS;
     }
 
-    getClimateStructure() {
+    getClimateDictionary() {
         return this.getStructure()['climate'];
     }
 
     getClimateButtonDictionary() {
-        return this.getClimateStructure()['buttonInfo'];
+        return this.getClimateDictionary()['buttonInfo'];
     }
 
     getClimateButtonIds() {
@@ -229,6 +257,14 @@ export class BedroomKioskCard extends HaMainComponent {
 
     getClimateButtonStructure() {
         return this.getClimateButtonDictionary()['structure'];
+    }
+
+    getClimateIds() {
+        return this.getClimateDictionary()['entityIds'];
+    }
+
+    getClimateStructure() {
+        return this.getClimateDictionary()['structure'];
     }
 
     getClimateDivisions() {
@@ -278,8 +314,37 @@ export class BedroomKioskCard extends HaMainComponent {
         return [this.lightingButton(), this.climateButton()];
     }
 
-    // generates panel content, based on currently selected floor.
+    lightingPanel() {
+        return html`
+            <lighting-bedroom-panel
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getLightIds()}
+                .structure = ${this.getLightStructure()}
+                .callService = ${this._hass.callService}
+            ></lighting-bedroom-panel>
+            `
+    }
+
+    climatePanel() {
+        return html`
+            <climate-bedroom-panel
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getClimateIds()}
+                .structure = ${this.getClimateStructure()}
+                .callService = ${this._hass.callService}
+            ></climate-bedroom-panel>
+            `
+    }
+
     content() {
+        switch (this.getType()) {
+            case 'lighting':
+                return this.lightingPanel();
+            case 'climate':
+                return this.climatePanel();
+        }
         return html``;
     }
 
@@ -289,7 +354,6 @@ export class BedroomKioskCard extends HaMainComponent {
     // return html
     render() {
         if (this.isInitialized()) {
-            console.log(this.getStructure());
             return html`
                 <ha-card>
                 ${this.content()}

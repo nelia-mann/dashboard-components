@@ -38,5 +38,180 @@ export default css`
         --climate-button-sub-info-font-weight: var(--sub-info-font-weight);
         --climate-button-sub-info-font-size: var(--sub-info-font-size);
 
+        --panel-height: 810px;
+        --panel-width: 100%;
+
+        --lighting-height: var(--panel-height);
+        --lighting-width: var(--panel-width);
+
+        --area-panel-basic-width: calc(100% - 2 * var(--area-panel-basic-padding));
+        --area-panel-basic-height: 100px;
+        --area-panel-basic-padding: 15px;
+        --area-panel-basic-justify-content: space-around;
+        --area-panel-basic-align-items: center;
+        --area-heading-font-size: var(--large-font);
+        --area-heading-font-weight: 700;
+
+        --light-component-width: 210px;
+        --light-component-height: 35px;
+        --light-component-padding: 10px;
+        --light-component-margin: 15px;
+
+        --simple-light-icons-margin-right: 10px;
+        --simple-light-icons-margin-left: 0px;
+        --simple-light-icon-size: 25px;
+        --simple-light-font-size: var(--sub-info-font-size);
+        --simple-light-font-weight: var(--sub-info-font-weight);
+        --simple-light-align-items: center;
+        --simple-light-justify-content: flex-start;
+
+        --light-group-flex-flow: column nowrap;
+        --light-group-justify-content: space-around;
+        --light-group-align-items: center;
+        --light-group-width: 100%;
+        --light-group-margin-top: 15px;
+
+        --light-select-flex-flow: column nowrap;
+        --light-select-align-items: center;
+        --light-select-justify-content: center;
+        --light-select-members-flex-flow: row wrap;
+        --light-select-members-justify-content: space-around;
+        --light-select-members-align-items: center;
+        --light-select-members-width: 100%;
+        --light-select-member-width: 180px;
+        --light-select-innerlight-width: 250px;
+        --light-select-innerlight-height: 30px;
+        --light-select-innerlight-padding: 8px;
+        --light-select-innerlight-margin: 10px;
+        --light-select-innerlight-flex-flow: row nowrap;
+        --light-select-icon-margin-right: 10px;
+        --light-select-icon-margin-left: 10px;
+        --light-select-icon-size: 20px;
+        --light-inner-heading-font-size: var(--small-heading-font-size);
+        --light-inner-heading-font-weight: var(--small-heading-font-weight);
+        --light-inner-font-size: var(--sub-info-font-size);
+        --light-inner-font-weight: var(--sub-info-font-size);
+
+        --control-select-flex-flow: row nowrap;
+        --control-select-justify-content: space-around;
+        --control-select-align-items: center;
+        --control-select-margin-left: 10px;
+        --control-select-margin-top: 10px;
+        --control-select-icon-window-width: 42px;
+        --control-select-icon-window-margin: 10px;
+        --control-select-icon-size: 20px;
+        --control-select-outline-offset: -2px;
+
+        --light-control-padding: 15px;
+        --light-control-margin-left: 20px;
+        --light-control-margin-right: 20px;
+        --light-control-margin: 15px;
+
+        --brightness-slider-width: 400px;
+        --brightness-slider-height: 100px;
+
+        --slider-orientation: column nowrap;
+        --slider-margin: 5%;
+        --slider-width: 15px;
+        --slider-text-padding: 10px;
+        --slider-text-offset: 6%;
+        --slider-text-width: 20px;
+        --slider-level-offset: 10%;
+        --slider-level-height: 2%;
+
+        --climate-height: var(--panel-height);
+        --climate-width: var(--panel-width);
+
+        --hp-panel-width: 300px;
+        --hp-panel-height: calc(var(--thermostat-height) + var(--mode-control-height) + var(--hp-panel-heading-height) + var(--hp-panel-padding));
+        --hp-panel-flex-flow: column nowrap;
+        --hp-panel-justify-content: flex-start;
+        --hp-panel-align-items: center;
+        --hp-panel-heading-font-size: var(--Large-font);
+        --hp-panel-heading-font-weight: 550;
+        --hp-panel-heading-height: 40px;
+        --hp-panel-padding: 15px;
+        --hp-panel-padding-top: 0px;
+
+        --mode-control-width: 100%;
+        --mode-control-height: 40px;
+        --mode-control-margin-top: var(--hp-panel-padding);
+        --mode-control-flex-flow: row nowrap;
+        --mode-control-justify-content: space-between;
+        --mode-control-align-items: center;
+        --mode-control-button-width: 55px;
+        --mode-control-button-height: 100%;
+        --mode-control-button-margin-correction-l: -10px;
+        --mode-control-button-margin-correction-r: -14px;
+        --mode-control-button-outline-offset: var(--button-outline-offset);
+
+        --thermostat-width: 280px;
+        --thermostat-height: 280px;
+        --thermostat-bottom-padding: 0px;
+        --thermostat-margin-top: 0px;
+        --thermostat-margin-bottom: 0px;
+
+        --circular-slider-height: calc(100% - 2 * var(--hp-panel-padding));
+        --circular-slider-top-margin: 0px;
+
+        --adjust-button-row-width: 85%;
+
+        --adjust-pair-width: 90px;
+        --adjust-pair-margin-top: -40px;
+        --plus-minus-circle-size: 35px;
+        --plus-minus-sizes: 50%;
+
+        --range-font-size: var(--LARGE-font);
+        --solo-font-size: var(--HUGE-font);
+        --upper-font-size: var(--large-font);
+        --lower-font-size: var(--large-font);
+        --superscript-offset: -0.5em;
+        --center-text-height: 80px;
+        --upper-weight: 500;
+        --lower-weight: 400;
+        --center-weight: 400;
+        --sup-factor: 2.5;
+
+        --aux-panel-width: calc(var(--hp-panel-width) + var(--offset-slider-width) + var(--hp-panel-padding) + 2 * var(--slider-padding));
+        --aux-panel-height: var(--hp-panel-height);
+        --aux-panel-flex-flow: column nowrap;
+        --aux-panel-justify-content: space-between;
+        --aux-panel-align-items: center;
+        --aux-panel-padding: var(--hp-panel-padding);
+        --aux-panel-padding-top: 0px;
+        --aux-panel-heading-font-size: var(--hp-panel-heading-font-size);
+        --aux-panel-heading-font-weight: var(--hp-panel-heading-font-weight);
+        --aux-panel-heading-height: var(--hp-panel-heading-height);
+        --aux-panel-main-height: calc(var(--aux-panel-height) - var(--aux-panel-heading-height));
+        --aux-panel-main-width: 100%;
+
+        --aux-mode-control-width: 100%;
+        --aux-mode-control-height: var(--mode-control-height);
+        --aux-mode-control-margin-bottom: 0px;
+        --aux-mode-control-flex-flow: var(--mode-control-flex-flow);
+        --aux-mode-control-justify-content: var(--mode-control-justify-content);
+        --aux-mode-control-align-items: var(--mode-control-align-items);
+        --aux-mode-control-button-width: var(--mode-control-button-width);
+        --aux-mode-control-button-height: var(--mode-control-button-height);
+        --aux-mode-control-button-margin-correction-r: -6px;
+        --aux-mode-control-button-margin-correction-arrow-l: -10px;
+        --aux-mode-control-button-outline-offset: var(--button-outline-offset);
+        --aux-mode-control-font-size: var(--sub-info-font-size);
+        --aux-mode-control-font-weight: var(--small-heading-font-weight);
+        --tie-button-width: 100px;
+
+        --slider-width-for-offset: 40px;
+        --offset-slider-width: calc(75px - 2 * var(--slider-padding));
+        --slider-padding: 0px;
+        --offset-slider-padding-left: var(--slider-padding);
+        --offset-slider-padding-right: var(--slider-padding);
+        --offset-slider-padding-bottom: var(--slider-padding);
+        --offset-slider-height: calc(100% - var(--slider-padding));
+
+        --offset-slider-value-height: 55px;
+        --offset-slider-value-font-size: var(--normal-font);
+        --offset-slider-value-font-weight: 700;
+        --offset-slider-bar-height: calc(100% - var(--offset-slider-value-height));
+
     }
     `;

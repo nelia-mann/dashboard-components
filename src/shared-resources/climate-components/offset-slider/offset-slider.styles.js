@@ -13,6 +13,9 @@ export default css`
         flex-flow: column nowrap;
         justify-content: space-between;
 
+        --slider-orientation: column nowrap;
+        --slider-width: var(--slider-width-for-offset, 15px);
+
     }
 
     .value {
