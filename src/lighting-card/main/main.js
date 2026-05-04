@@ -47,14 +47,6 @@ export class LightingCard extends HaMainComponent {
         this.entityIds = this.getEntityIdsWithLabel(this.getLabel());
     }
 
-    setStates() {
-        let states = {};
-        this.getEntityIds().forEach((entityId) => {
-            states[entityId] = this.getState(entityId);
-        })
-        this.states = states;
-    }
-
     setStructure() {
         const floors = this.getHassFloors();
         Object.keys(floors).forEach((floorId) => {

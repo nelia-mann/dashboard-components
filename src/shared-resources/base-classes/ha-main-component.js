@@ -138,6 +138,14 @@ export class HaMainComponent extends LitElement {
         return pretty.slice(0, -1);
     }
 
+    setStates() {
+        let states = {};
+        this.getEntityIds().forEach((entityId) => {
+            states[entityId] = this.getState(entityId);
+        })
+        this.states = states;
+    }
+
     /************************************ sorting and filtering logic ***************************/
 
     getHassEntities() {

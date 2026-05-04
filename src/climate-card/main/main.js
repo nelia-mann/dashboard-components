@@ -3,10 +3,7 @@ import { HaMainComponent } from '../../shared-resources/base-classes/ha-main-com
 import { keyed } from 'lit/directives/keyed.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import {
-    getState,
     hasClimateChanges,
-    getEntityIdsWithLabel,
-    filterEntityIdsForLabel
 } from '../../shared-resources/util/hass-util.js';
 import styles from './main.styles.js';
 import layoutStyles from './layout-styles.js';
@@ -63,20 +60,12 @@ export class ClimateCard extends HaMainComponent {
     }
 
     setEntityIds() {
-        this.entityIds = getEntityIdsWithLabel(this.getHass(), this.getLabel());
-    }
-
-    setStates() {
-        let states = {};
-        this.getEntityIds().forEach((entityId) => {
-            states[entityId] = getState(this.getHass(), entityId);
-        })
-        this.states = states;
+        this.entityIds = this.getEntityIdsWithLabel(this.getLabel());
     }
 
     setStructure() {
         this.getRegions().forEach((region) => {
-            const entityIds = filterEntityIdsForLabel(this.getHass(), this.getEntityIds(), region);
+            const entityIds = this.filterEntityIdsForLabel(this.getEntityIds(), region);
             this.getStructure()[region] = { structure: {}, entityIds: entityIds };
             this.setDivisionStructure(this.getStructure()[region]);
             this.setButtonStructure(this.getStructure()[region]);
@@ -85,7 +74,7 @@ export class ClimateCard extends HaMainComponent {
 
     setDivisionStructure(dictionary) {
         this.getDivisions().forEach((division) => {
-            const entityIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, division);
+            const entityIds = this.filterEntityIdsForLabel(dictionary.entityIds, division);
             if (entityIds.size > 0) {
                 dictionary.structure[division] = { structure: {}, entityIds: entityIds };
                 if (division !== 'primary') {
@@ -99,7 +88,7 @@ export class ClimateCard extends HaMainComponent {
 
     setAuxStructure(dictionary) {
         this.getAuxElements().forEach((element) => {
-            const entityIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, element);
+            const entityIds = this.filterEntityIdsForLabel(dictionary.entityIds, element);
             if (entityIds.size > 0) {
                 dictionary.structure[element] = { structure: {}, entityIds: entityIds };
                 this.setTieStructure(dictionary.structure[element]);
@@ -110,11 +99,11 @@ export class ClimateCard extends HaMainComponent {
 
     setTieStructure(dictionary) {
         if (Object.keys(dictionary.structure).length === 0) {
-            const entityIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, "tied");
+            const entityIds = this.filterEntityIdsForLabel(dictionary.entityIds, "tied");
             if (entityIds.size > 0) {
                 dictionary.structure.tied = { structure: {}, entityIds: entityIds };
                 this.setKeyStructure(dictionary.structure.tied);
-                const tieIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, "tie");
+                const tieIds = this.filterEntityIdsForLabel(dictionary.entityIds, "tie");
                 dictionary.structure.tie = { structure: {}, entityIds: tieIds };
                 this.setKeyStructure(dictionary.structure.tie);
             }
@@ -124,7 +113,7 @@ export class ClimateCard extends HaMainComponent {
     setKeyStructure(dictionary) {
         if (Object.keys(dictionary.structure).length === 0) {
             this.getKeys().forEach((key) => {
-                const entityIds = [...filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, key)];
+                const entityIds = [...this.filterEntityIdsForLabel(dictionary.entityIds, key)];
                 if (entityIds.length === 1) {
                     dictionary.structure[key] = entityIds[0];
                 }
@@ -133,10 +122,10 @@ export class ClimateCard extends HaMainComponent {
     }
 
     setButtonStructure(dictionary) {
-        const primaryIds = filterEntityIdsForLabel(this.getHass(), dictionary.entityIds, "primary");
+        const primaryIds = this.filterEntityIdsForLabel(dictionary.entityIds, "primary");
         let buttonIds = new Set();
         this.getButtonKeys().forEach((key) => {
-            const newButtonIds = filterEntityIdsForLabel(this.getHass(), primaryIds, key);
+            const newButtonIds = this.filterEntityIdsForLabel(primaryIds, key);
             buttonIds = buttonIds.union(newButtonIds);
         })
         dictionary.button = { structure: {}, entityIds: buttonIds };
