@@ -193,7 +193,6 @@ export class LightingCard extends HaMainComponent {
     // return html
     render() {
         if (this.isInitialized()) {
-            console.log(this.getStructure());
             return html`
                 <ha-card>
                     ${this.content()}
