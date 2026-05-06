@@ -29,6 +29,7 @@ export class LightGroupControl extends HaLightingComponent {
 
     onFirstUpdate() {
         this.setSelectedId(this.getMainId());
+        this.setDefaultOption();
     }
 
     /************************ getter and setter logic *************************/
@@ -57,6 +58,14 @@ export class LightGroupControl extends HaLightingComponent {
         this.selectedId = lightId;
     }
 
+    setDefaultOption() {
+        if (this.hasBrightness(this.getSelectedId())) {
+            this.setOption('brightness');
+        } else {
+            this.setOption(null);
+        }
+    }
+
     /************************ interactive logic *******************************/
 
     onSelectLight(e) {
@@ -72,10 +81,10 @@ export class LightGroupControl extends HaLightingComponent {
             const type = idStructure[0];
             const data = { entity_id: entityId };
             this.callService(type, 'toggle', data)
-            this.setOption(null);
+            this.setDefaultOption();
         } else {
             if (option === this.getOption()) {
-                this.setOption(null);
+                this.setDefaultOption();
             } else {
                 this.setOption(option);
             }
