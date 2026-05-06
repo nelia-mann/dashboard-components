@@ -30,7 +30,6 @@ export class AreaPanel extends HaSubComponent {
                 class="outlined"
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
-                .lightId = ${lightId}
                 .structure = ${this.getSubStructure(lightId)}
                 .entityIds = ${this.getSubEIs(lightId)}
                 .callService=${this.callService}

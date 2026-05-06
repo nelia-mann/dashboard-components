@@ -77,8 +77,12 @@ export class HaSubComponent extends LitElement {
         return this.structure;
     }
 
-    makePretty(region) {
-        const prettyArray = region.split('_');
+    getState(entityId) {
+        return this.getStates()[entityId];
+    }
+
+    makePretty(id) {
+        const prettyArray = id.split('_');
         let pretty = '';
         prettyArray.forEach((piece) => {
             pretty = pretty + piece.charAt(0).toUpperCase() + piece.slice(1) + ' ';
@@ -93,5 +97,7 @@ export class HaSubComponent extends LitElement {
     getTriggers() {
         return [];
     }
+
+
 
 }

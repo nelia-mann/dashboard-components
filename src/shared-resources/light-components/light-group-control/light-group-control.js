@@ -1,12 +1,13 @@
 import { html } from 'lit';
-import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
+import { keyed } from 'lit/directives/keyed.js';
+import { HaLightingComponent } from '../../base-classes/ha-lighting-component.js';
 import styles from './group.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../light-control/light-control.js';
 import '../light-group-select/light-group-select.js';
 import '../light-control-select/light-control-select.js';
 
-export class LightGroupControl extends HaSubComponent {
+export class LightGroupControl extends HaLightingComponent {
 
     static properties = {
         ...super.properties,
@@ -16,9 +17,8 @@ export class LightGroupControl extends HaSubComponent {
 
     constructor() {
         super();
-        this.lightId = '';
-        this.themeId = '';
         this.option = '';
+        this.selectedId = '';
     }
 
     /******************************* lifecycle **********************************/
@@ -33,42 +33,6 @@ export class LightGroupControl extends HaSubComponent {
 
     /************************ getter and setter logic *************************/
 
-    isSelected(lightId) {
-        return (this.selectedId === lightId);
-    }
-
-    getState(entityId) {
-        return this.states[entityId];
-    }
-
-    getSelectedId() {
-        return this.selectedId;
-    }
-
-    setSelectedId(lightId) {
-        this.selectedId = lightId;
-    }
-
-    getMainId() {
-        return this.lightId;
-    }
-
-    selectedLightState() {
-        return this.getState(this.getSelectedId());
-    }
-
-    selectedThemeState() {
-        let themeId;
-        if (this.isSelected(this.getMainId())) {
-            themeId = this.themeId;
-        } else {
-            themeId = this.getStructure()[this.getSelectedId()].theme;
-        }
-        if (themeId) {
-            return this.getState(themeId);
-        }
-    }
-
     getOption() {
         return this.option;
     }
@@ -79,6 +43,18 @@ export class LightGroupControl extends HaSubComponent {
 
     isOption(option) {
         return (this.option === option);
+    }
+
+    isSelected(lightId) {
+        return (this.selectedId === lightId);
+    }
+
+    getSelectedId() {
+        return this.selectedId;
+    }
+
+    setSelectedId(lightId) {
+        this.selectedId = lightId;
     }
 
     /************************ interactive logic *******************************/
@@ -117,25 +93,11 @@ export class LightGroupControl extends HaSubComponent {
         } else return "";
     }
 
-    lightControl() {
-        return html`
-            <light-control
-                class = ${this.getClass()}
-                .changedEntityIds = ${this.getCEIs()}
-                .lightState = ${this.selectedLightState()}
-                .themeState = ${this.selectedThemeState()}
-                .option = ${this.getOption()}
-                .callService=${this.callService}
-            ></light-control>
-        `
-    }
-
     lightGroupSelect() {
         return html`
             <light-group-select
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
-                .lightId = ${this.getMainId()}
                 .structure = ${this.getStructure()}
                 .entityIds = ${this.getEntityIds()}
                 .selectedId = ${this.getSelectedId()}
@@ -145,16 +107,31 @@ export class LightGroupControl extends HaSubComponent {
     }
 
     lightControlSelect() {
-        return html`
+        return keyed(this.getSelectedId(), html`
             <light-control-select
                 class = "outlined"
                 .changedEntityIds = ${this.getCEIs()}
-                .lightState = ${this.selectedLightState()}
-                .themeState = ${this.selectedThemeState()}
+                .states = ${this.getStates()}
+                .structure = ${this.getThisStructure(this.getSelectedId())}
+                .entityIds = ${new Set([this.getSelectedId()])}
                 .option = ${this.getOption()}
                 @select = ${this.onSelectControl}
             ></light-control-select>
-        `
+        `)
+    }
+
+    lightControl() {
+        return keyed(this.getSelectedId(), html`
+            <light-control
+                class = ${this.getClass()}
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getTheseEntityIds(this.getSelectedId())}
+                .structure = ${this.getThisStructure(this.getSelectedId())}
+                .option = ${this.getOption()}
+                .callService=${this.callService}
+            ></light-control>
+        `)
     }
 
     static styles = [sharedStyles, styles];

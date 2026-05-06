@@ -1,39 +1,17 @@
 import { html } from 'lit';
-import { getBrightnessPct } from '../util/light-util.js';
 import { ONLIGHT } from '../../util/color-util.js';
-import { getEntityId } from '../../util/state-util.js';
-import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
+import { HaLightingComponent } from '../../base-classes/ha-lighting-component.js';
 import styles from './brightness-slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../../general-components/slider/slider.js';
 
-export class BrightnessSlider extends HaSubComponent {
-
-    static properties = {
-        ...super.properties,
-        lightState: { state: true }
-    }
-
-    constructor() {
-        super();
-        this.lightState = {};
-    }
-
-    /************************ getter and setter logic *************************/
-
-    getLightState() {
-        return this.lightState;
-    }
-
-    getEntityIds() {
-        return new Set([getEntityId(this.getLightState())])
-    }
+export class BrightnessSlider extends HaLightingComponent {
 
     /************************ interactive logic *******************************/
 
     handleCallService(e) {
         const value = e.detail;
-        const entityId = getEntityId(this.getLightState());
+        const entityId = this.getMainId();
         let data = { entity_id: entityId, brightness_pct: value }
         this.callService('light', 'turn_on', data)
     }
@@ -48,7 +26,7 @@ export class BrightnessSlider extends HaSubComponent {
                 .max=${100}
                 .min=${0}
                 .units=${'%'}
-                .startValue=${getBrightnessPct(this.getLightState())}
+                .startValue=${this.getBrightnessPct()}
                 .colorCode=${ONLIGHT}
                 .mode=${'horizontal'}
                 @change=${this.handleCallService}

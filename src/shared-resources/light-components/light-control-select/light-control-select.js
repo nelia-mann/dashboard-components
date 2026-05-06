@@ -3,9 +3,7 @@ import { repeat } from 'lit-html/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { brightness6, creationOutline } from '../../util/mdi-util.js';
 import { rgba, ONLIGHT, INDIGO } from '../../util/color-util.js';
-import { getColorModes, getBrightness, tempGradientFull, tempBorder, hsGradient } from '../util/light-util.js';
-import { getEntityId } from '../../util/state-util.js';
-import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
+import { HaLightingComponent } from '../../base-classes/ha-lighting-component.js';
 import styles from './control-select.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../light-icon/light-icon.js';
@@ -14,19 +12,15 @@ import '../colortemp-slider/colortemp-slider.js';
 import '../color-wheel/color-wheel.js';
 import '../theme-select/theme-select.js';
 
-export class LightControlSelect extends HaSubComponent {
+export class LightControlSelect extends HaLightingComponent {
 
     static properties = {
         ...super.properties,
-        lightState: { state: true },
-        themeState: { state: true },
         option: { state: true }
     }
 
     constructor() {
         super();
-        this.lightState = {};
-        this.themeState = {};
         this.option = '';
         this._options = [];
     }
@@ -34,26 +28,14 @@ export class LightControlSelect extends HaSubComponent {
     /******************************* lifecycle *******************************/
 
     getTriggers() {
-        return ["lightState", "option"];
+        return ["option"];
     }
 
     onFirstUpdate() {
         this.buildOptions();
-        if (this.getOptions().includes('brightness')) {
-            this.setOption('brightness');
-            this.onSelect('brightness');
-        }
     }
 
     /*********************** getter and setter logic ***********************/
-
-    getLightState() {
-        return this.lightState;
-    }
-
-    getThemeState() {
-        return this.themeState;
-    }
 
     getOption() {
         return this.option;
@@ -71,38 +53,14 @@ export class LightControlSelect extends HaSubComponent {
         return this._options;
     }
 
-    getEntityIds() {
-        let entityIds = [getEntityId(this.getLightState())];
-        const themeState = this.getThemeState();
-        (themeState) && (entityIds.push(getEntityId(themeState)));
-        return new Set(entityIds);
-    }
-
     /************************* build options structure logic ***************/
-
-
-    isBrightness() {
-        return (getBrightness(this.getLightState()) !== undefined);
-    }
-
-    isHSColor() {
-        return (getColorModes(this.getLightState()).includes('hs'));
-    }
-
-    isCTColor() {
-        return (getColorModes(this.getLightState()).includes('color_temp'));
-    }
-
-    isTheme() {
-        return (this.getThemeState() && Object.keys(this.getThemeState()).length > 0);
-    }
 
     buildOptions() {
         let options = ['onOff'];
-        (this.isBrightness()) && (options.push('brightness'));
-        (this.isCTColor()) && (options.push('color_temp_kelvin'));
-        (this.isHSColor()) && (options.push('hs_color'));
-        (this.isTheme()) && (options.push('theme'));
+        this.hasBrightness() && options.push('brightness');
+        this.hasCTColor() && options.push('color_temp_kelvin');
+        this.hasHSColor() && options.push('hs_color');
+        this.hasTheme() && options.push('theme');
         this._options = options;
     }
 
@@ -123,11 +81,11 @@ export class LightControlSelect extends HaSubComponent {
                 outline = rgba(ONLIGHT, 1);
                 break;
             case 'color_temp_kelvin':
-                styles['background'] = tempGradientFull();
-                outline = tempBorder();
+                styles['background'] = this.tempGradientFull();
+                outline = this.tempBorder();
                 break;
             case 'hs_color':
-                styles['background'] = hsGradient();
+                styles['background'] = this.hsGradient();
                 outline = rgba(INDIGO, 1)
                 break;
             case 'theme':
@@ -146,9 +104,10 @@ export class LightControlSelect extends HaSubComponent {
         switch (option) {
             case 'onOff':
                 content = html`<light-icon
-                        .changedEntityIds = ${this.getCEIs()}
-                        .lightState=${this.getLightState()}
-                    ></light-icon>`;
+                            .changedEntityIds=${this.getCEIs()}
+                            .states=${this.getStates()}
+                            .structure=${this.getStructure()}
+                        ></light-icon>`;
                 break;
             case 'brightness':
                 content = html`<ha-svg-icon .path=${brightness6}></ha-svg-icon>`;
@@ -169,7 +128,7 @@ export class LightControlSelect extends HaSubComponent {
                     @click=${() => this.onSelect(option)}
                 >
                     <div class="icon">
-                    ${this.iconContent(option)}
+                        ${this.iconContent(option)}
                     </div>
                 </div>
             `

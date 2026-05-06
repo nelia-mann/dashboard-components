@@ -1,6 +1,5 @@
 import { html } from 'lit';
-import { getEntityId } from '../../util/state-util.js';
-import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
+import { HaLightingComponent } from '../../base-classes/ha-lighting-component.js';
 import styles from './light-control.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import '../light-icon/light-icon.js';
@@ -9,47 +8,28 @@ import '../colortemp-slider/colortemp-slider.js';
 import '../color-wheel/color-wheel.js';
 import '../theme-select/theme-select.js';
 
-export class LightControl extends HaSubComponent {
+export class LightControl extends HaLightingComponent {
 
     static properties = {
         ...super.properties,
-        lightState: { state: true },
-        themeState: { state: true },
         option: { state: true }
     }
 
     constructor() {
         super();
-        this.lightState = {};
-        this.themeState = {};
         this.option = '';
     }
 
     /******************************* lifecycle *******************************/
 
     getTriggers() {
-        return ["lightState", "option"];
+        return ["option"];
     }
 
     /*********************** getter and setter logic ***********************/
 
-    getLightState() {
-        return this.lightState;
-    }
-
-    getThemeState() {
-        return this.themeState;
-    }
-
     getOption() {
         return this.option;
-    }
-
-    getEntityIds() {
-        let entityIds = [getEntityId(this.getLightState())];
-        const themeState = this.getThemeState();
-        (themeState) && (entityIds.push(getEntityId(themeState)));
-        return new Set(entityIds);
     }
 
     /************************** html/style logic ***************************/
@@ -58,7 +38,9 @@ export class LightControl extends HaSubComponent {
         return html`
             <brightness-slider
                 .changedEntityIds=${this.getCEIs()}
-                .lightState=${this.getLightState()}
+                .states = ${this.getStates()}
+                .structure=${this.getStructure()}
+                .entityIds = ${new Set([this.getMainId()])}
                 .callService=${this.callService}
             ></brightness-slider>`
     }
@@ -67,12 +49,15 @@ export class LightControl extends HaSubComponent {
         return html`
             <colortemp-slider
                 .changedEntityIds=${this.getCEIs()}
-                .lightState=${this.getLightState()}
+                .states = ${this.getStates()}
+                .structure=${this.getStructure()}
+                .entityIds = ${new Set([this.getMainId()])}
                 .callService=${this.callService}
             ></colortemp-slider>`
     }
 
     colorWheel() {
+        return html``;
         return html`<color-wheel
             .changedEntityIds = ${this.getCEIs()}
             .lightState = ${this.getLightState()}
@@ -81,6 +66,7 @@ export class LightControl extends HaSubComponent {
     }
 
     themeSelect() {
+        return html``;
         return html`<theme-select
             .changedEntityIds = ${this.getCEIs()}
             .themeState = ${this.getThemeState()}

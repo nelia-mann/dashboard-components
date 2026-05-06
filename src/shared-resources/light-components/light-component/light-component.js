@@ -1,35 +1,9 @@
 import { html } from 'lit';
-import { getBrightness, getColorModes } from '../util/light-util.js';
-import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
+import { HaLightingComponent } from '../../base-classes/ha-lighting-component.js';
 import styles from './light.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
-import '../simple-light/simple-light.js';
 
-export class LightComponent extends HaSubComponent {
-
-    constructor() {
-        super();
-        this.lightId = '';
-    }
-
-
-    /********************** getter and setter logic ********************************************/
-
-    getLightState(lightId) {
-        return this.getStates()[lightId];
-    }
-
-    getMainId() {
-        return this.lightId;
-    }
-
-    getMainState() {
-        return this.getLightState(this.getMainId());
-    }
-
-    getLightIds() {
-        return Object.keys(this.getStructure());
-    }
+export class LightComponent extends HaLightingComponent {
 
     /********************************* interactive logic **********************************/
 
@@ -43,26 +17,22 @@ export class LightComponent extends HaSubComponent {
 
     /************************************ style/html logic **********************************/
 
-    simpleLight() {
-        return html`
-            <simple-light
-                .changedEntityIds=${this.getCEIs()}
-                .states=${this.getStates()}
-                .lightId=${this.getMainId()}
-                .structure=${this.getStructure()}
-                .entityIds=${this.getEntityIds()}
-                @click=${this.onClick}
-            >
-        `
-    }
-
     static styles = [sharedStyles, styles];
 
     render() {
         if (this.isInitialized()) {
             return html`
-                ${this.simpleLight()}
-            `
+                <div class="light-element" @click=${this.onClick}>
+                    <div class="icon">
+                        <light-icon
+                            .changedEntityIds=${this.getCEIs()}
+                            .states=${this.getStates()}
+                            .structure=${this.getStructure()}
+                        ></light-icon>
+                    </div>
+                    ${this.getName()}
+                </div>
+            `;
         }
     }
 

@@ -47,8 +47,6 @@ export class FloorPanel extends HaSubComponent {
                 class="outlined"
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
-                .lightId = ${specialId}
-                .themeId = ${this.getSpecialLights()[specialId].theme}
                 .structure = ${this.getSpecialLights()[specialId].structure}
                 .entityIds = ${this.getSpecialLights()[specialId].entityIds}
                 .callService = ${this.callService}
