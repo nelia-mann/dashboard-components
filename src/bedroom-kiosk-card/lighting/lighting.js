@@ -56,7 +56,6 @@ export class LightingPanel extends HaSubComponent {
                 class="outlined"
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
-                .lightId = ${specialId}
                 .structure = ${this.getSpecialStructure()[specialId].structure}
                 .entityIds = ${this.getSpecialStructure()[specialId].entityIds}
                 .callService = ${this.callService}

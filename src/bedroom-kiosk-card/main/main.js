@@ -67,10 +67,10 @@ export class BedroomKioskCard extends HaMainComponent {
 /************************************* Setting Structures ****************************/
 
     setStructures() {
-/*         this.setEntityIds();
+        this.setEntityIds();
         this.setStates();
         this.setStructure();
-        this.initializeType(); */
+        this.initializeType();
     }
 
     setEntityIds() {
@@ -354,7 +354,6 @@ export class BedroomKioskCard extends HaMainComponent {
     // return html
     render() {
         if (this.isInitialized()) {
-            return html``;
             return html`
                 <ha-card>
                 ${this.content()}
