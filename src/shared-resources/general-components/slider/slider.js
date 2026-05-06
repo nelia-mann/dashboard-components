@@ -1,7 +1,6 @@
-import { html, mathml } from 'lit';
+import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { rgba } from '../../util/color-util.js';
-import { getEntityId } from '../../util/state-util.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
 import styles from './slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
@@ -47,7 +46,7 @@ export class SliderBar extends HaSubComponent {
     }
 
     hasRelevantChanges() {
-        const isStateChanged = this.getCEIs().has(getEntityId(this.getState()));
+        const isStateChanged = this.getCEIs().has(this.getStateEI(this.getState()));
         const isUp = !this.isDown();
         const isNew = (this.getValue() != this.getStateValue());
         return (isStateChanged && isUp && isNew);

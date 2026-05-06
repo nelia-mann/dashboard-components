@@ -1,12 +1,11 @@
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { interpolateRGB, OFF, ONLIGHT, rgba } from './../../util/color-util.js';
-import { isOn } from './../../util/state-util.js';
-import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
+import { HaLightingComponent } from '../../base-classes/ha-lighting-component.js';
 import styles from './button.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 
-export class LightingButton extends HaSubComponent {
+export class LightingButton extends HaLightingComponent {
 
     static properties = {
         ...super.properties,
@@ -37,7 +36,7 @@ export class LightingButton extends HaSubComponent {
     }
 
     isLightOn(lightId) {
-        return isOn(this.states[lightId]);
+        return this.isOn(lightId);
     }
 
     getTitle() {

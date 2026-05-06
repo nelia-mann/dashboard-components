@@ -6,6 +6,7 @@ import {
     ONLIGHT,
     HALFLIGHT,
     STEPS,
+    ONLIGHTHS
 } from '../util/color-util.js';
 
 /* Assumes a "states" object and a "structure" object.  The structure object is a dictionary with keys:
@@ -63,6 +64,10 @@ export class HaLightingComponent extends HaSubComponent {
         return this.getState(this.getThemeId(this.getMainId()))
     }
 
+    getThemeStateState(lightId) {
+        return this.getThemeState(lightId).state;
+    }
+
     getAttributes(lightId) {
         return this.getLightState(lightId).attributes;
     }
@@ -76,7 +81,7 @@ export class HaLightingComponent extends HaSubComponent {
     }
 
     getRGB(lightId) {
-        this.getAttributes(lightId).rgb_color;
+        return this.getAttributes(lightId).rgb_color;
     }
 
     getBrightnessPct(lightId) {
@@ -110,6 +115,10 @@ export class HaLightingComponent extends HaSubComponent {
         return Object.keys(this.getThisStructure(lightId)).includes('theme');
     }
 
+    getThemeOptions(lightId) {
+        return this.getAttributes(this.getThemeId(lightId)).options;
+    }
+
     getTheseEntityIds(lightId) {
         let id;
         (lightId) ? (id = lightId) : (id = this.getMainId());
@@ -129,12 +138,19 @@ export class HaLightingComponent extends HaSubComponent {
         let rgb = OFFLIGHT;
         if (this.isOn(lightId)) {
             if (this.getRGB(lightId)) {
-                rgb = interpolateRGB(getHalfRGB(lightId), this.getRGB(lightId), this.getBrightnessPct(lightId) / 100);
+                rgb = interpolateRGB(this.getHalfRGB(lightId), this.getRGB(lightId), this.getBrightnessPct(lightId) / 100);
             } else {
                 rgb = interpolateRGB(HALFLIGHT, ONLIGHT, this.getBrightnessPct(lightId) / 100);
             }
         }
         return rgba(rgb, 1)
+    }
+
+    getHSColor(lightId) {
+        let hsColor = ONLIGHTHS;
+        let hsColorAttr = this.getAttributes(lightId).hs_color;
+        (hsColorAttr) && (hsColor = hsColorAttr);
+        return hsColor;
     }
 
     getMinTemp(lightId) {
@@ -239,6 +255,5 @@ export class HaLightingComponent extends HaSubComponent {
     tempGradientFull() {
         return this.tempGradientGeneral(MINTEMP, MAXTEMP, 'to right', 1);
     }
-
 
 }

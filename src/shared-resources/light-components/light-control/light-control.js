@@ -57,19 +57,21 @@ export class LightControl extends HaLightingComponent {
     }
 
     colorWheel() {
-        return html``;
         return html`<color-wheel
             .changedEntityIds = ${this.getCEIs()}
-            .lightState = ${this.getLightState()}
+            .states = ${this.getStates()}
+            .structure=${this.getStructure()}
+            .entityIds = ${new Set([this.getMainId()])}
             .callService = ${this.callService}
         ></color-wheel>`
     }
 
     themeSelect() {
-        return html``;
         return html`<theme-select
             .changedEntityIds = ${this.getCEIs()}
-            .themeState = ${this.getThemeState()}
+            .states = ${this.getStates()}
+            .structure=${this.getStructure()}
+            .entityIds = ${new Set([this.getThemeId()])}
             .callService = ${this.callService}
         ></theme-select>
         `

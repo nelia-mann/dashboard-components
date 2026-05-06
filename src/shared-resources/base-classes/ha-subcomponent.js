@@ -81,6 +81,14 @@ export class HaSubComponent extends LitElement {
         return this.getStates()[entityId];
     }
 
+    getStateEI(state) {
+        return state.entity_id;
+    }
+
+    getStateState(entityId) {
+        return this.getState(entityId).state;
+    }
+
     makePretty(id) {
         const prettyArray = id.split('_');
         let pretty = '';

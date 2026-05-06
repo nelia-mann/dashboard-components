@@ -1,24 +1,21 @@
 import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { getThemeGradient, getThemeOutline } from './theme-util.js';
-import { getEntityId, getState, getAttributes } from '../../util/state-util.js';
-import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
+import { HaLightingComponent } from '../../base-classes/ha-lighting-component.js';
 import styles from './theme.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 import './theme-button.js';
 
 
-export class ThemeSelect extends HaSubComponent {
+export class ThemeSelect extends HaLightingComponent {
 
     static properties = {
         ...super.properties,
-        themeState: { state: true },
         _option: { state: true }
     }
 
     constructor() {
         super();
-        this.themeState = {};
         this._flag = false;
     }
 
@@ -38,8 +35,8 @@ export class ThemeSelect extends HaSubComponent {
     }
 
     hasRelevantChanges() {
-        const isStateChanged = this.getCEIs().has(getEntityId(this.getThemeState()));
-        const isNewOption = (this.getOption() != getState(this.getThemeState()));
+        const isStateChanged = this.getCEIs().has(this.getThemeId());
+        const isNewOption = (this.getOption() != this.getThemeStateState());
         const isFlag = this.getChangeFlag();
         return (!isFlag && isStateChanged && isNewOption);
     }
@@ -49,19 +46,10 @@ export class ThemeSelect extends HaSubComponent {
     }
 
     setInitialValue() {
-        this.setOption(getState(this.getThemeState()));
+        this.setOption(this.getThemeStateState());
     }
 
     /************************ getter and setter logic **************************/
-
-    getThemeState() {
-        return this.themeState;
-    }
-
-    getOptions() {
-        const optionList = getAttributes(this.getThemeState()).options;
-        return optionList;
-    }
 
     getOption() {
         return this._option;
@@ -96,14 +84,12 @@ export class ThemeSelect extends HaSubComponent {
     }
 
     handleCallService(option) {
-        const entityId = getEntityId(this.getThemeState());
+        const entityId = this.getThemeId();
         const data = { entity_id: entityId, option: option };
         this.callService('select', 'select_option', data);
     }
 
     /**************************** style/html logic ***************************/
-
-
 
     getStyles(option) {
         let styles = {};
@@ -116,7 +102,7 @@ export class ThemeSelect extends HaSubComponent {
     }
 
     listOptions() {
-        const optionList = this.getOptions();
+        const optionList = this.getThemeOptions();
         return repeat(optionList, (option) => option, option => {
             return html`<theme-button
                 .option=${option}

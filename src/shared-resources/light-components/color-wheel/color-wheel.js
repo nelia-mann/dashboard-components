@@ -1,25 +1,21 @@
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { hsGradient, getHSColor } from '../util/light-util.js';
-import { getEntityId } from '../../util/state-util.js';
-import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
+import { HaLightingComponent } from '../../base-classes/ha-lighting-component.js';
 import styles from './wheel.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 
-export class ColorWheel extends HaSubComponent {
+export class ColorWheel extends HaLightingComponent {
 
     _box;
 
     static properties = {
         ...super.properties,
-        lightState: { state: true },
         _hue: { state: true },
         _saturation: { state: true }
     }
 
     constructor() {
         super();
-        this.lightState = {};
         this._isDown = false;
         this._flag = false;
     }
@@ -45,15 +41,15 @@ export class ColorWheel extends HaSubComponent {
     }
 
     hasRelevantChanges() {
-        const isStateChanged = this.getCEIs().has(getEntityId(this.getLightState()));
-        const lightHSColor = getHSColor(this.getLightState());
+        const isStateChanged = this.getCEIs().has(this.getMainId());
+        const lightHSColor = this.getHSColor();
         const isUp = !this.isDown();
         const hasNewValues = (lightHSColor[0] !== this.getHue()) || (lightHSColor[1] !== this.getSat())
         return isStateChanged && isUp && hasNewValues;
     }
 
     setInitialValues() {
-        const hs_values = getHSColor(this.getLightState());
+        const hs_values = this.getHSColor();
         if (hs_values) {
             this.setHue(hs_values[0]);
             this.setSat(hs_values[1]);
@@ -96,10 +92,6 @@ export class ColorWheel extends HaSubComponent {
 
     setBox(box) {
         this._box = box;
-    }
-
-    getLightState() {
-        return this.lightState;
     }
 
     getChangeFlag() {
@@ -146,7 +138,7 @@ export class ColorWheel extends HaSubComponent {
     }
 
     handleCallService() {
-        const entityId = getEntityId(this.getLightState());
+        const entityId = this.getMainId();
         const data = {
             entity_id: entityId,
             'hs_color': [this.getHue(), this.getSat()]
@@ -165,13 +157,13 @@ export class ColorWheel extends HaSubComponent {
         return [X, Y]
     }
 
-    getColor() {
+    getThisColor() {
         return `hsl(${this.getHue()}, 100%, ${100 - this.getSat() / 2}%)`
     }
 
     getBGStyle() {
         let styles = {};
-        styles['background'] = hsGradient();
+        styles['background'] = this.hsGradient();
         return styles;
     }
 
@@ -180,7 +172,7 @@ export class ColorWheel extends HaSubComponent {
         const XY = this.getXY();
         styles['top'] = `${XY[1]}%`;
         styles['left'] = `${XY[0]}%`;
-        styles['background'] = this.getColor();
+        styles['background'] = this.getThisColor();
         return styles;
     }
 
