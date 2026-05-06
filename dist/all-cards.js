@@ -1170,7 +1170,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                 .entityIds = ${this.getThisFloorEntityIds()}
                 .callService=${this._hass.callService}
             ></floor-panel>
-        `)}static styles=[t$,eC,eE];render(){if(this.isInitialized())return P`
+        `)}static styles=[t$,eC,eE];render(){if(this.isInitialized())return console.log(this.getStructure()),P`
                 <ha-card>
                     ${this.content()}
                     <div class="button-row">
