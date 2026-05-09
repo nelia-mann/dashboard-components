@@ -1,9 +1,9 @@
 import { LitElement } from 'lit';
+import { getEntityIdsWithLabel, filterEntityIdsForLabel } from '../util/hass-util.js';
 
 export class HaMainComponent extends LitElement {
 
-    _LABEL = "lighting";
-
+    _LABEL = '';
     _hass;
     structure = {};
     entityIds = new Set();
@@ -29,7 +29,10 @@ export class HaMainComponent extends LitElement {
     set hass(hass) {
         if (!this.isInitialized()) {
             this.setHass(hass);
-            this.setStructures();
+            this.setEntityIds();
+            this.setStates();
+            this.setStructure();
+            this.initializeChoice();
             this.initialize();
         } else {
             const oldHass = this.getHass();
@@ -91,6 +94,18 @@ export class HaMainComponent extends LitElement {
         this._hass = hass;
     }
 
+    setEntityIds() {
+        this.entityIds = getEntityIdsWithLabel(this.getHass(), this.getMainLabel());
+    }
+
+    setStates() {
+        let states = {};
+        this.getEntityIds().forEach((entityId) => {
+            states[entityId] = this.getState(entityId);
+        })
+        this.states = states;
+    }
+
     /********************************** hooks **************************************/
 
     hasChanges(oldHass, newHass, entityId) {
@@ -101,7 +116,14 @@ export class HaMainComponent extends LitElement {
         return [];
     }
 
-    setStructures() {
+    setStructure() {
+    }
+
+    getMainLabel() {
+        return this._LABEL;
+    }
+
+    initializeChoice() {
     }
 
     /****************************** basic getter and setter logic *********************/
@@ -138,13 +160,7 @@ export class HaMainComponent extends LitElement {
         return pretty.slice(0, -1);
     }
 
-    setStates() {
-        let states = {};
-        this.getEntityIds().forEach((entityId) => {
-            states[entityId] = this.getState(entityId);
-        })
-        this.states = states;
-    }
+
 
     /************************************ sorting and filtering logic ***************************/
 
@@ -173,80 +189,8 @@ export class HaMainComponent extends LitElement {
         return labels.includes(label);
     }
 
-    getEntityIdsWithLabel(label) {
-    const entities = this.getHassEntities();
-    const entityIds = Object.keys(entities).filter((entityId) => {
-        return this.hasLabel(entityId, label);
-    })
-    return new Set(entityIds);
-    }
-
     filterEntityIdsForLabel(entityIds, label) {
-        const array = [...entityIds];
-        const entityIdArray = array.filter((entityId) => {
-            return this.hasLabel(entityId, label);
-        })
-        return new Set(entityIdArray);
-    }
-
-    getHassFloors() {
-        return this.getHass().floors;
-    }
-
-    getHassFloorName(floorId) {
-        return this.getHassFloors()[floorId].name;
-    }
-
-    getHassAreas() {
-        return this.getHass().areas;
-    }
-
-    getArea(areaId) {
-        return this.getHassAreas()[areaId];
-    }
-
-    getHassAreaName(areaId) {
-        return this.getArea(areaId).name;
-    }
-
-    getAreaFloor(areaId) {
-        return this.getArea(areaId).floor_id;
-    }
-
-    getEntityAreaId(entityId) {
-        return this.getEntity(entityId).area_id;
-    }
-
-    getEntityFloorId(entityId) {
-        const areaId = this.getEntityAreaId(entityId);
-        if (areaId) {
-            return this.getAreaFloor(areaId);
-        } else return '';
-    }
-
-    isOnFloor(entityId, floorId) {
-        return this.getEntityFloorId(entityId) === floorId;
-    }
-
-    filterEntityIdsForFloor(entityIds, floorId) {
-        const theseIds = [...entityIds];
-        const filteredIds = theseIds.filter((entityId) => this.isOnFloor(entityId, floorId));
-        return new Set(filteredIds);
-    }
-
-    isInArea(entityId, areaId) {
-        return this.getEntityAreaId(entityId) === areaId;
-    }
-
-    getUniqueAreaIds(entityIds) {
-        const areaIds = [...entityIds].map((entityId) => this.getEntityAreaId(entityId));
-        return new Set(areaIds);
-    }
-
-    filterEntityIdsForArea(entityIds, areaId) {
-        const arrayIds = [...entityIds];
-        const filteredIds = arrayIds.filter((entityId) => this.isInArea(entityId, areaId));
-        return new Set(filteredIds);
+        return filterEntityIdsForLabel(this.getHass(), entityIds, label);
     }
 
 }

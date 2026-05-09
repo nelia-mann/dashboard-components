@@ -1,11 +1,15 @@
 import { html } from 'lit';
 import { HaMainComponent } from '../../shared-resources/base-classes/ha-main-component.js';
 import {
-    isSoloLight,
+    addClimateDivisionStructure,
+    addClimateButtonStructure,
+    hasClimateChanges
+} from '../../shared-resources/util/hass-climate-util.js';
+import {
     hasLightChanges,
-    hasClimateChanges,
-    addLightStructure
-} from '../../shared-resources/util/hass-util.js';
+    addSpecialLightStructure,
+    addLightButtonStructure
+} from '../../shared-resources/util/hass-lighting-util.js';
 import styles from './main.styles.js';
 import layoutStyles from './layout-styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
@@ -20,28 +24,6 @@ export class BedroomKioskCard extends HaMainComponent {
     _LABEL = "bedroom_kiosk"
 
     _TYPELABELS = ["climate", "lighting"];
-
-    _CLIMATEBUTTONKEYS = ["sensor", "mode", "heatpump"];
-
-    _CLIMATEKEYS = ["min",
-        "max",
-        "sensor",
-        "mode",
-        "heatpump",
-        "action",
-        "tie_main",
-        "rank",
-        "script",
-        "switch",
-        "name",
-        "safe_max",
-        "safe_min",
-        "offset",
-    ];
-
-    _CLIMATEDIVISIONS = ["primary", "secondary"];
-
-    _LIGHTCATEGORIES = ["basic_lighting", "special_lights"];
 
     static properties = {
         ...super.properties,
@@ -66,17 +48,6 @@ export class BedroomKioskCard extends HaMainComponent {
 
 /************************************* Setting Structures ****************************/
 
-    setStructures() {
-        this.setEntityIds();
-        this.setStates();
-        this.setStructure();
-        this.initializeType();
-    }
-
-    setEntityIds() {
-        this.entityIds = this.getEntityIdsWithLabel(this.getLabel());
-    }
-
     setStructure() {
         this.getTypes().forEach((typeLabel) => {
             const theseIds = this.filterEntityIdsForLabel(this.getEntityIds(), typeLabel);
@@ -94,19 +65,10 @@ export class BedroomKioskCard extends HaMainComponent {
     addButtonInfo(typeDictionary) {
         switch (typeDictionary.name) {
             case 'lighting':
-                const ids = typeDictionary.entityIds;
-                const soloLightIds = [...ids].filter((entityId) => isSoloLight(this.getHass(), entityId));
-                typeDictionary.buttonInfo = new Set(soloLightIds);
+                addLightButtonStructure(this.getHass(), typeDictionary)
                 break;
             case 'climate':
-                const primaryIds = this.filterEntityIdsForLabel(typeDictionary.entityIds, "primary");
-                let buttonIds = new Set();
-                this.getClimateButtonKeys().forEach((key) => {
-                    const newButtonIds = this.filterEntityIdsForLabel(primaryIds, key);
-                    buttonIds = buttonIds.union(newButtonIds);
-                })
-                typeDictionary.buttonInfo = { structure: {}, entityIds: buttonIds };
-                this.setClimateKeyStructure(typeDictionary.buttonInfo);
+                addClimateButtonStructure(this.getHass(), typeDictionary)
                 break;
         }
     }
@@ -114,94 +76,20 @@ export class BedroomKioskCard extends HaMainComponent {
     setTypeStructure(typeDictionary) {
         switch (typeDictionary.name) {
             case 'climate':
-                this.setClimateDivisionStructure(typeDictionary);
+                addClimateDivisionStructure(this.getHass(), typeDictionary);
                 break;
             case 'lighting':
-                this.setSpecialLightStructure(typeDictionary);
+                addSpecialLightStructure(this.getHass(), typeDictionary);
                 break;
         }
     }
 
-    setClimateDivisionStructure(dictionary) {
-        this.getClimateDivisions().forEach((division) => {
-            const entityIds = this.filterEntityIdsForLabel(dictionary.entityIds, division);
-            if (entityIds.size > 0) {
-                dictionary.structure[division] = { structure: {}, entityIds: entityIds };
-                if (division !== 'primary') {
-                this.setClimateTieStructure(dictionary.structure[division]);
-                }
-                this.setClimateKeyStructure(dictionary.structure[division]);
-            }
-        })
-    }
-
-    setClimateTieStructure(dictionary) {
-        if (Object.keys(dictionary.structure).length === 0) {
-            const entityIds = this.filterEntityIdsForLabel(dictionary.entityIds, "tied");
-            if (entityIds.size > 0) {
-                dictionary.structure.tied = { structure: {}, entityIds: entityIds };
-                this.setClimateKeyStructure(dictionary.structure.tied);
-                const tieIds = this.filterEntityIdsForLabel(dictionary.entityIds, "tie");
-                dictionary.structure.tie = { structure: {}, entityIds: tieIds };
-                this.setClimateKeyStructure(dictionary.structure.tie);
-            }
-        }
-    }
-
-    setClimateKeyStructure(dictionary) {
-        if (Object.keys(dictionary.structure).length === 0) {
-            this.getClimateKeys().forEach((key) => {
-                const entityIds = [...this.filterEntityIdsForLabel(dictionary.entityIds, key)];
-                if (entityIds.length === 1) {
-                    dictionary.structure[key] = entityIds[0];
-                }
-            })
-        }
-    }
-
-    setSpecialLightStructure(lightDictionary) {
-        this.getLightCategories().forEach((categoryLabel) => {
-            const ids = this.filterEntityIdsForLabel(lightDictionary.entityIds, categoryLabel);
-            const categoryDictionary = {
-                structure: {},
-                entityIds: ids
-            }
-            if (categoryLabel === 'basic_lighting') {
-                this.setAreaStructure(categoryDictionary);
-            } else {
-                this.setLightStructure(categoryDictionary);
-            }
-            lightDictionary.structure[categoryLabel] = categoryDictionary;
-        })
-    }
-
-    setLightStructure(lightDict) {
-        addLightStructure(this.getHass(), lightDict);
-    }
-
-    setAreaStructure(categoryDictionary) {
-        const areaIds = this.getUniqueAreaIds(categoryDictionary.entityIds);
-        areaIds.forEach((areaId) => {
-            const ids = this.filterEntityIdsForArea(categoryDictionary.entityIds, areaId);
-            const areaDictionary = {
-                name: this.getHassAreaName(areaId),
-                structure: {},
-                entityIds: ids
-            };
-            this.setLightStructure(areaDictionary);
-            categoryDictionary.structure[areaId] = areaDictionary;
-        })
-    }
-
-    initializeType() {
+    initializeChoice() {
         this.setType('lighting');
     }
 
     /************************* Type Selection Structure ***********************************************/
 
-    getLabel() {
-        return this._LABEL;
-    }
 
     getTypes() {
         return this._TYPELABELS;
@@ -235,14 +123,6 @@ export class BedroomKioskCard extends HaMainComponent {
         return this.getLightDictionary()['structure'];
     }
 
-    getClimateButtonKeys() {
-        return this._CLIMATEBUTTONKEYS;
-    }
-
-    getClimateKeys() {
-        return this._CLIMATEKEYS;
-    }
-
     getClimateDictionary() {
         return this.getStructure()['climate'];
     }
@@ -265,14 +145,6 @@ export class BedroomKioskCard extends HaMainComponent {
 
     getClimateStructure() {
         return this.getClimateDictionary()['structure'];
-    }
-
-    getClimateDivisions() {
-        return this._CLIMATEDIVISIONS;
-    }
-
-    getLightCategories() {
-        return this._LIGHTCATEGORIES;
     }
 
     /********************************* interactive logic **********************************/

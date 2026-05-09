@@ -3,8 +3,10 @@ import { HaMainComponent } from '../../shared-resources/base-classes/ha-main-com
 import { keyed } from 'lit/directives/keyed.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import {
-    hasClimateChanges,
-} from '../../shared-resources/util/hass-util.js';
+    addClimateDivisionStructure,
+    addClimateButtonStructure,
+    hasClimateChanges
+} from '../../shared-resources/util/hass-climate-util.js';
 import styles from './main.styles.js';
 import layoutStyles from './layout-styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
@@ -15,24 +17,6 @@ export class ClimateCard extends HaMainComponent {
 
     _LABEL = "climate";
     _REGIONS = ["living_room", "guest_room", "bedroom", "office"];
-    _DIVISIONS = ["primary", "secondary", "aux"];
-    _AUXELEMENTS = ["fan", "laundry_heater"];
-    _KEYS = ["min",
-        "max",
-        "sensor",
-        "mode",
-        "heatpump",
-        "action",
-        "tie_main",
-        "rank",
-        "script",
-        "switch",
-        "name",
-        "safe_max",
-        "safe_min",
-        "offset",
-        ];
-    _BUTTONKEYS = ["sensor", "mode", "heatpump"];
 
     static properties = {
         ...super.properties,
@@ -52,101 +36,34 @@ export class ClimateCard extends HaMainComponent {
 
 /************************************* Setting Structures ****************************/
 
-    setStructures() {
-        this.setEntityIds();
-        this.setStates();
-        this.setStructure();
-        this.initializeRegion();
-    }
-
-    setEntityIds() {
-        this.entityIds = this.getEntityIdsWithLabel(this.getLabel());
-    }
-
     setStructure() {
         this.getRegions().forEach((region) => {
             const entityIds = this.filterEntityIdsForLabel(this.getEntityIds(), region);
             this.getStructure()[region] = { structure: {}, entityIds: entityIds };
-            this.setDivisionStructure(this.getStructure()[region]);
-            this.setButtonStructure(this.getStructure()[region]);
+            addClimateDivisionStructure(this.getHass(), this.getStructure()[region]);
+            addClimateButtonStructure(this.getHass(), this.getStructure()[region]);
         })
     }
 
-    setDivisionStructure(dictionary) {
-        this.getDivisions().forEach((division) => {
-            const entityIds = this.filterEntityIdsForLabel(dictionary.entityIds, division);
-            if (entityIds.size > 0) {
-                dictionary.structure[division] = { structure: {}, entityIds: entityIds };
-                if (division !== 'primary') {
-                    this.setAuxStructure(dictionary.structure[division]);
-                    this.setTieStructure(dictionary.structure[division]);
-                }
-                this.setKeyStructure(dictionary.structure[division]);
-            }
-        })
+    getMode(structure) {
+        return this.getState(structure.mode);
     }
 
-    setAuxStructure(dictionary) {
-        this.getAuxElements().forEach((element) => {
-            const entityIds = this.filterEntityIdsForLabel(dictionary.entityIds, element);
-            if (entityIds.size > 0) {
-                dictionary.structure[element] = { structure: {}, entityIds: entityIds };
-                this.setTieStructure(dictionary.structure[element]);
-                this.setKeyStructure(dictionary.structure[element]);
-            }
-        })
+    getRank(structure) {
+        return Number(this.getState(structure.rank));
     }
 
-    setTieStructure(dictionary) {
-        if (Object.keys(dictionary.structure).length === 0) {
-            const entityIds = this.filterEntityIdsForLabel(dictionary.entityIds, "tied");
-            if (entityIds.size > 0) {
-                dictionary.structure.tied = { structure: {}, entityIds: entityIds };
-                this.setKeyStructure(dictionary.structure.tied);
-                const tieIds = this.filterEntityIdsForLabel(dictionary.entityIds, "tie");
-                dictionary.structure.tie = { structure: {}, entityIds: tieIds };
-                this.setKeyStructure(dictionary.structure.tie);
-            }
-        }
-    }
-
-    setKeyStructure(dictionary) {
-        if (Object.keys(dictionary.structure).length === 0) {
-            this.getKeys().forEach((key) => {
-                const entityIds = [...this.filterEntityIdsForLabel(dictionary.entityIds, key)];
-                if (entityIds.length === 1) {
-                    dictionary.structure[key] = entityIds[0];
-                }
-            })
-        }
-    }
-
-    setButtonStructure(dictionary) {
-        const primaryIds = this.filterEntityIdsForLabel(dictionary.entityIds, "primary");
-        let buttonIds = new Set();
-        this.getButtonKeys().forEach((key) => {
-            const newButtonIds = this.filterEntityIdsForLabel(primaryIds, key);
-            buttonIds = buttonIds.union(newButtonIds);
-        })
-        dictionary.button = { structure: {}, entityIds: buttonIds };
-        this.setKeyStructure(dictionary.button);
-    }
-
-    initializeRegion() {
+    initializeChoice() {
         const regions = Object.keys(this.getStructure());
         let first = regions[0];
         regions.forEach((region) => {
             if (region === first) return;
             const firstPrimaryStructure = this.getStructure()[first].structure.primary.structure;
-            const firstModeId = firstPrimaryStructure.mode;
-            const firstRankId = firstPrimaryStructure.rank;
-            const firstMode = this.getStates()[firstModeId].state;
-            const firstRank = Number(this.getStates()[firstRankId].state);
+            const firstMode = this.getMode(firstPrimaryStructure);
+            const firstRank = this.getRank(firstPrimaryStructure);
             const primaryStructure = this.getStructure()[region].structure.primary.structure;
-            const modeId = primaryStructure.mode;
-            const rankId = primaryStructure.rank;
-            const mode = this.getStates()[modeId].state;
-            const rank = Number(this.getStates()[rankId].state);
+            const mode = this.getMode(primaryStructure);
+            const rank = this.getRank(primaryStructure);
             if (mode !== 'off' && (rank < firstRank) || firstMode == 'off') {
                 first = region;
             }
@@ -156,28 +73,10 @@ export class ClimateCard extends HaMainComponent {
 
     /************************* Floor Selection Structure ***********************************************/
 
-    getLabel() {
-        return this._LABEL;
-    }
+
 
     getRegions() {
         return this._REGIONS;
-    }
-
-    getDivisions() {
-        return this._DIVISIONS;
-    }
-
-    getAuxElements() {
-        return this._AUXELEMENTS;
-    }
-
-    getKeys() {
-        return this._KEYS;
-    }
-
-    getButtonKeys() {
-        return this._BUTTONKEYS;
     }
 
     setRegion(region) {
@@ -193,7 +92,7 @@ export class ClimateCard extends HaMainComponent {
     }
 
     getButton(region) {
-        return this.getStructure()[region].button;
+        return this.getStructure()[region].buttonInfo;
     }
 
     getButtonIds(region) {
