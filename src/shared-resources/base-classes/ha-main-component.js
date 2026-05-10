@@ -151,6 +151,7 @@ export class HaMainComponent extends LitElement {
     getHass() {
         return this._hass;
     }
+
     makePretty(region) {
         const prettyArray = region.split('_');
         let pretty = '';
@@ -159,8 +160,6 @@ export class HaMainComponent extends LitElement {
         })
         return pretty.slice(0, -1);
     }
-
-
 
     /************************************ sorting and filtering logic ***************************/
 

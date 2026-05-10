@@ -73,8 +73,6 @@ export class ClimateCard extends HaMainComponent {
 
     /************************* Floor Selection Structure ***********************************************/
 
-
-
     getRegions() {
         return this._REGIONS;
     }

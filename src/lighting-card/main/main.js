@@ -3,7 +3,9 @@ import { HaMainComponent } from '../../shared-resources/base-classes/ha-main-com
 import { keyed } from 'lit/directives/keyed.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import {
-    getHassFloors, filterEntityIdsForFloor, getHassFloorName
+    getHassFloors,
+    filterEntityIdsForFloor,
+    getHassFloorName
 } from '../../shared-resources/util/hass-area-floor-util.js';
 import {
     hasLightChanges,
