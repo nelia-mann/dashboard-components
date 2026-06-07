@@ -104,11 +104,11 @@ export class HaLightingComponent extends HaSubComponent {
     }
 
     hasCTColor(lightId) {
-        return this.getColorModes(lightId).includes('color_temp');
+        return (Object.keys(this.getAttributes(lightId)).includes('color_temp_kelvin'));
     }
 
     hasHSColor(lightId) {
-        return this.getColorModes(lightId).includes('hs');
+        return (Object.keys(this.getAttributes(lightId)).includes('hs_color'));
     }
 
     hasTheme(lightId) {
