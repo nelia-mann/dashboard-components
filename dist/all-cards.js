@@ -12639,14 +12639,13 @@ class $47449652e0f27169$export$686541059e7b9ad extends (0, $f0d92478ce7b526e$exp
         "name",
         "safe_max",
         "safe_min",
-        "offset"
+        "offset",
+        "hp"
     ];
 }
 function $30a9fb206526cbc1$var$getClimateButtonKeys() {
     return [
-        "sensor",
-        "mode",
-        "heatpump"
+        "hp"
     ];
 }
 function $30a9fb206526cbc1$var$getClimateAuxKeys() {
@@ -13022,10 +13021,37 @@ action: the current action of the climate entity
             return state.state;
         }
     }
+    /************************* hp items ***********************************/ getHPMode() {
+        return this.getState('hp');
+    }
+    getHPAction() {
+        let str = this.getAttribute('hp', 'hvac_action');
+        str === 'fan' && (str = 'venting');
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+    getHPSensor() {
+        return this.getAttribute('hp', 'current_temperature');
+    }
+    getHPSensorDisplay() {
+        const value = this.getHPSensor().toFixed(1).toString();
+        const units = '\u00B0';
+        return value + ' ' + units;
+    }
+    getHPModes() {
+        const modes = this.getAttribute('hp', 'hvac_modes');
+        let index = modes.indexOf('heat/cool');
+        if (index > -1) modes.splice(index, 1);
+        index = modes.indexOf('dry');
+        if (index > -1) modes.splice(index, 1);
+        index = modes.indexOf('fan_only');
+        if (index > -1) modes.splice(index, 1);
+        return modes;
+    }
     /*********************** min/max items ********************************/ getMinId() {
         return this.getEntityId('min');
     }
     getMin() {
+        if (this.getAttribute('hp', 'temperature')) return this.getAttribute('hp', 'temperature');
         return this.getNumberState('min');
     }
     getMinStep() {
@@ -13035,12 +13061,17 @@ action: the current action of the climate entity
         return this.getEntityId('max');
     }
     getMax() {
+        if (this.getAttribute('hp', 'temperature')) return this.getAttribute('hp', 'temperature');
         return this.getNumberState('max');
+    }
+    getTarget() {
+        return this.getAttribute('hp', 'temperature');
     }
     getMaxStep() {
         return this.getNumberAttribute('max', 'step');
     }
     getMinExtreme() {
+        if (this.getAttribute('hp', 'min_temp')) return this.getAttribute('hp', 'min_temp');
         const minmin = this.getNumberAttribute('min', 'min');
         const maxmin = this.getNumberAttribute('max', 'min');
         if (typeof minmin === 'number' && typeof maxmin === 'number') return Math.min(minmin, maxmin);
@@ -13048,6 +13079,7 @@ action: the current action of the climate entity
         else if (typeof maxmin === 'number') return maxmin;
     }
     getMaxExtreme() {
+        if (this.getAttribute('hp', 'max_temp')) return this.getAttribute('hp', 'max_temp');
         const minmax = this.getNumberAttribute('min', 'max');
         const maxmax = this.getNumberAttribute('max', 'max');
         if (minmax && maxmax) return Math.max(minmax, maxmax);
@@ -13055,6 +13087,7 @@ action: the current action of the climate entity
         else if (maxmax) return maxmax;
     }
     getSeparation() {
+        if (this.getAttribute('hp', 'target_temp_step')) return this.getAttribute('hp', 'target_temp_step');
         let minStep = this.getMinStep();
         let maxStep = this.getMaxStep();
         if (minStep && maxStep) return this.getMinStep() + this.getMaxStep();
@@ -13067,13 +13100,15 @@ action: the current action of the climate entity
         return this.getNumberState('safe_max');
     }
     /******************** sensor items *************************************/ getSensor() {
-        return this.getNumberState('sensor');
+        if (this.getHPSensor()) return this.getHPSensor();
+        else return this.getNumberState('sensor');
     }
     getSensorId() {
         return this.getEntityId('sensor');
     }
     getSensorUnits() {
-        return this.getAttribute('sensor', 'unit_of_measurement');
+        if (this.getEntityId('hp')) return '\u00B0';
+        else return this.getAttribute('sensor', 'unit_of_measurement');
     }
     getSensorDisplay() {
         const value = this.getSensor().toFixed(1).toString();
@@ -13081,6 +13116,7 @@ action: the current action of the climate entity
         return value + ' ' + units;
     }
     /************************ mode and action items ************************/ getMode() {
+        if (this.getHPMode()) return this.getHPMode();
         return this.getState('mode');
     }
     getModeId() {
@@ -13141,7 +13177,7 @@ action: the current action of the climate entity
     getAction() {
         if (this.getActionDirect()) return this.getActionDirect();
         else if (this.getActionFromSwitch()) return this.getActionFromSwitch();
-        else return this.getActionFromHP(this.getHPstate(), this.getMode());
+        else return this.getHPAction();
     }
     getTieMode() {
         return this.getTieState('mode');
@@ -13231,7 +13267,20 @@ function $49e374e19fd1fb7e$export$45dc983186bea36a(mode, action, outline) {
                 'Idle'
             ].includes(action) && (styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$173de64b5ad0d5b4), 1.0)}`);
             break;
+        case 'auto':
+            styles['background'] = $49e374e19fd1fb7e$var$climateGradient();
+            outline && action === 'Heating' && (styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$e55f544a3c07b086), 1.0)}`);
+            outline && action === 'Cooling' && (styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$ce739723b0c5da78), 1.0)}`);
+            outline && [
+                'Off',
+                'Idle'
+            ].includes(action) && (styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$173de64b5ad0d5b4), 1.0)}`);
+            break;
         case 'fan':
+            styles['background-color'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$9bcf01295ad3bd47), 0.5);
+            outline && (styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$9bcf01295ad3bd47), 1.0)}`);
+            break;
+        case 'fan_only':
             styles['background-color'] = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$9bcf01295ad3bd47), 0.5);
             outline && (styles['outline'] = `solid ${(0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$9bcf01295ad3bd47), 1.0)}`);
             break;
@@ -13315,7 +13364,7 @@ class $98a3bb72c97f06e9$export$80929655775f1a8a extends (0, $9c58ce553e601fd5$ex
         (0, $34c84ffa4e379bea$export$2e2bcd8739ae039)
     ];
     getStyles() {
-        return (0, $49e374e19fd1fb7e$export$45dc983186bea36a)(this.getMode(), this.getAction(), this.selected());
+        return (0, $49e374e19fd1fb7e$export$45dc983186bea36a)(this.getHPMode(), this.getHPAction(), this.selected());
     }
     render() {
         if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
@@ -13325,7 +13374,7 @@ class $98a3bb72c97f06e9$export$80929655775f1a8a extends (0, $9c58ce553e601fd5$ex
                     style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles())}
                 >
                     <div class="small-heading"> ${this.getTitle()} </div>
-                    <div class="sub-info"> ${this.getSensorDisplay() + " \u00B7 " + this.getAction()} </div >
+                    <div class="sub-info"> ${this.getHPSensorDisplay() + " \u00B7 " + this.getHPAction()} </div >
                 </div>`;
     }
 }
@@ -13422,29 +13471,29 @@ var $20be8ad0f51f5739$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 class $2964133bd969709f$export$5d11a2c32d678853 extends (0, $9c58ce553e601fd5$export$3daf3179430fa222) {
     /*********************************** interactive logic ***********************************/ selectMode(mode) {
-        const entityId = this.getModeId();
+        const entityId = this.getEntityId('hp');
         const data = {
             entity_id: entityId,
-            option: mode
+            hvac_mode: mode
         };
-        this.callService('input_select', 'select_option', data);
+        this.callService('climate', 'set_hvac_mode', data);
     }
     setDominant() {
         const entityId = this.getScriptId();
         const data = {
             entity_id: entityId,
             variables: {
-                mode_entity: this.getModeId()
+                heatpump_entity: this.getEntityId('hp')
             }
         };
         this.callService('script', 'turn_on', data);
     }
     /************************************** html/style logic *********************************/ getModeStyles(mode) {
-        const isMode = mode === this.getMode();
-        return (0, $49e374e19fd1fb7e$export$45dc983186bea36a)(mode, this.getAction(), isMode);
+        const isMode = mode === this.getHPMode();
+        return (0, $49e374e19fd1fb7e$export$45dc983186bea36a)(mode, this.getHPAction(), isMode);
     }
     getDomStyles() {
-        return (0, $49e374e19fd1fb7e$export$45dc983186bea36a)(this.getMode(), this.getAction(), this.isDominant());
+        return (0, $49e374e19fd1fb7e$export$45dc983186bea36a)(this.getHPMode(), this.getHPAction(), this.isDominant());
     }
     modeButton(mode) {
         let icon;
@@ -13458,7 +13507,7 @@ class $2964133bd969709f$export$5d11a2c32d678853 extends (0, $9c58ce553e601fd5$ex
             case 'cool':
                 icon = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$f55e0a480cc0b124}}></ha-svg-icon>`;
                 break;
-            case 'heat-cool':
+            case 'auto':
                 icon = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                     <ha-svg-icon .path=${0, $04557c061247a0a6$export$f55e0a480cc0b124}}"></ha-svg-icon>
                     <ha-svg-icon .path=${0, $04557c061247a0a6$export$8b7893f0785ad631}} class="center"></ha-svg-icon>
@@ -13474,7 +13523,7 @@ class $2964133bd969709f$export$5d11a2c32d678853 extends (0, $9c58ce553e601fd5$ex
     }
     modeButtons() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            ${(0, $6db6ff6394e885e6$export$76d90c956114f2c2)(this.getModes().sort().reverse(), (mode)=>mode, (mode)=>this.modeButton(mode))}
+            ${(0, $6db6ff6394e885e6$export$76d90c956114f2c2)(this.getHPModes().sort().reverse(), (mode)=>mode, (mode)=>this.modeButton(mode))}
         `;
     }
     dominateButton() {
@@ -13597,10 +13646,7 @@ class $afcce0c0ef9d2703$export$40b18a948d89eea6 extends (0, $c0664485052839c4$ex
     _TEMPDOT = 0.025;
     static properties = {
         ...super.properties,
-        _minValue: {
-            state: true
-        },
-        _maxValue: {
+        _targetValue: {
             state: true
         },
         fixed: {
@@ -13611,19 +13657,17 @@ class $afcce0c0ef9d2703$export$40b18a948d89eea6 extends (0, $c0664485052839c4$ex
         super();
         this.structure = {};
         this._whichValue = 'none';
-        this._minValue = 0;
-        this._maxValue = 100;
+        this._targetValue = 50;
         this._flag = false;
         this.fixed = true;
     }
     /************************** lifecycle *****************************/ update(changedProps) {
-        !this.getChangeFlag() && this.setInitialValues();
+        !this.getChangeFlag() && this.setInitialValue();
         super.update(changedProps);
     }
     getTriggers() {
         return [
-            "_minValue",
-            "_maxValue",
+            "_targetValue",
             "fixed"
         ];
     }
@@ -13631,11 +13675,12 @@ class $afcce0c0ef9d2703$export$40b18a948d89eea6 extends (0, $c0664485052839c4$ex
         this.getWhichValue() == 'none' && this.lowerChangeFlag();
     }
     onFirstUpdate() {
-        this.setInitialValues();
+        this.setInitialValue();
     }
-    setInitialValues() {
-        this.setMinValue(this.getMinStateValue());
-        this.setMaxValue(this.getMaxStateValue());
+    setInitialValue() {
+        if (this.getMinStateValue()) this.setTargetValue(this.getMinStateValue());
+        else if (this.getMaxStateValue()) this.setTargetValue(this.getMaxStateValue());
+        else this.setTargetValue(this.getTargetStateValue());
     }
     /****************************** getter and setter logic *************************/ getTempDotSize() {
         return this._TEMPDOT;
@@ -13679,6 +13724,9 @@ class $afcce0c0ef9d2703$export$40b18a948d89eea6 extends (0, $c0664485052839c4$ex
     getMaxStateValue() {
         return this.structure.maxValue;
     }
+    getTargetStateValue() {
+        return this.structure.targetValue;
+    }
     getMinColor() {
         return this.structure.minColor;
     }
@@ -13706,32 +13754,34 @@ class $afcce0c0ef9d2703$export$40b18a948d89eea6 extends (0, $c0664485052839c4$ex
         this.structure.upper && (upper = this.structure.upper);
         return upper;
     }
-    setMinValue(value) {
-        if (value < this.getMinExtreme()) this._minValue = this.getMinExtreme();
-        else if (this.getMinMax() < value) this._minValue = this.getMinMax();
-        else this._minValue = value;
+    setTargetValue(value) {
+        if (value < this.getMinExtreme()) this._targetValue = this.getMinExtreme();
+        else if (this.getMaxExtreme() < value) this._targetValue = this.getMaxExtreme();
+        else this._targetValue = value;
     }
-    setMaxValue(value) {
-        if (value < this.getMaxMin()) this._maxValue = this.getMaxMin();
-        else if (this.getMaxExtreme() < value) this._maxValue = this.getMaxExtreme();
-        else this._maxValue = value;
-    }
-    getMin() {
-        if (typeof this.getMinStateValue() === 'number') return this._minValue;
-    }
-    getMax() {
-        if (typeof this.getMaxStateValue() === 'number') return this._maxValue;
-    }
-    getMinMax() {
-        if (this.getMax()) return this.getMax() - this.getSeparation();
-        else return this.getMaxExtreme();
-    }
-    getMaxMin() {
-        if (this.getMin()) return this.getMin() + this.getSeparation();
-        else return this.getMinExtreme();
+    getPointer() {
+        return this._targetValue;
     }
     isFixed() {
         return this.fixed;
+    }
+    getMinOff() {
+        if (this.getTargetStateValue()) return null;
+        else if (this.getMinStateValue()) return this.getPointer();
+        else return this.getMinExtreme();
+    }
+    getMaxOff() {
+        if (this.getTargetStateValue()) return null;
+        else if (this.getMaxStateValue()) return this.getPointer();
+        else return this.getMaxExtreme();
+    }
+    getHeatTarget() {
+        if (this.getMaxStateValue()) return null;
+        else return this.getPointer();
+    }
+    getCoolTarget() {
+        if (this.getMinStateValue()) return null;
+        else return this.getPointer();
     }
     /******************************* geometric logic *******************************/ getAngle(value) {
         const range = this.getMaxExtreme() - this.getMinExtreme();
@@ -13771,13 +13821,8 @@ class $afcce0c0ef9d2703$export$40b18a948d89eea6 extends (0, $c0664485052839c4$ex
         const coords = this.getCoords(value);
         return Math.sqrt((coords[0] - mouseCoords[0]) ** 2 + (coords[1] - mouseCoords[1]) ** 2);
     }
-    isNearMin(e) {
-        if (typeof this.getMin() != 'number') return false;
-        return this.getDistance(e, this.getMin()) < this.getTolerance();
-    }
-    isNearMax(e) {
-        if (typeof this.getMax() != 'number') return false;
-        return this.getDistance(e, this.getMax()) < this.getTolerance();
+    isNearPointer(e) {
+        return this.getDistance(e, this.getPointer() < this.getTolerance());
     }
     getMouseCoords(e) {
         const svg = this.renderRoot.querySelector('svg');
@@ -13791,13 +13836,10 @@ class $afcce0c0ef9d2703$export$40b18a948d89eea6 extends (0, $c0664485052839c4$ex
         ];
     }
     setWhichValue(e) {
-        let minDistance = 5;
-        let maxDistance = 5;
-        this.isNearMin(e) && (minDistance = this.getDistance(e, this.getMin()));
-        this.isNearMax(e) && (maxDistance = this.getDistance(e, this.getMax()));
-        if (minDistance < maxDistance) this._whichValue = 'min';
-        else if (minDistance > maxDistance) this._whichValue = 'max';
-        else this._whichValue = 'none';
+        if (!this.isNearPointer(e)) this._whichValue = 'none';
+        else if (this.getMinStateValue()) this._whichValue = 'min';
+        else if (this.getMaxStateValue()) this._whichValue = 'max';
+        else this._whichValue = 'target';
     }
     /****************************** interactive logic *******************************/ down(e) {
         this.setWhichValue(e);
@@ -13813,8 +13855,7 @@ class $afcce0c0ef9d2703$export$40b18a948d89eea6 extends (0, $c0664485052839c4$ex
         }
     }
     shouldUp(newValue) {
-        if (this.getWhichValue() === 'min') return this.getMinMax() < newValue || newValue < this.getMinExtreme();
-        if (this.getWhichValue() === 'max') return newValue < this.getMaxMin() || this.getMaxExtreme() < newValue;
+        return newValue < this.getMinExtreme() || this.getMaxExtreme() < newValue;
     }
     move(e) {
         const which = this.getWhichValue();
@@ -13825,22 +13866,16 @@ class $afcce0c0ef9d2703$export$40b18a948d89eea6 extends (0, $c0664485052839c4$ex
             let angle = Math.atan2(-xFromCenter, yFromCenter) % (2 * Math.PI);
             angle < 0 && (angle = angle + 2 * Math.PI);
             const newValue = this.getNewValue(angle);
-            which === 'min' ? this.setMinValue(newValue) : this.setMaxValue(newValue);
+            this.setTargetValue(newValue);
             this.shouldUp(newValue) && this.up(e);
         }
     }
     handleMessage() {
         if (this.getWhichValue() == 'none') return;
-        let which = 'min';
-        let value = this.getMin();
-        if (this.getWhichValue() == 'max') {
-            which = 'max';
-            value = this.getMax();
-        }
         this.dispatchEvent(new CustomEvent('change', {
             detail: [
-                which,
-                value
+                this.getWhichValue(),
+                this.getPointer()
             ]
         }));
     }
@@ -13851,14 +13886,10 @@ class $afcce0c0ef9d2703$export$40b18a948d89eea6 extends (0, $c0664485052839c4$ex
     }
     getRange() {
         let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
-        let min = this.getMin();
-        let max = this.getMax();
-        typeof min === 'number' && (min = min.toFixed(1));
-        typeof max === 'number' && (max = max.toFixed(1));
+        let target = this.getPointer();
+        typeof target === 'number' && (target = target.toFixed(0));
         const units = this.getUnits();
-        if (typeof min === 'string' && typeof max === 'string') result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<var>${min}</var><sup>${units}</sup><var>&thinsp;-&thinsp;${max}</var><sup>${units}</sup>`;
-        else if (typeof min === 'string') result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<var class="one">${min}</var><sup class="one">${units}</sup>`;
-        else if (typeof max === 'string') result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<var class="one">${max}</var><sup class="one">${units}</sup>`;
+        if (typeof target === 'string') result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<var class="one">${target}</var><sup class="one">${units}</sup>`;
         else result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<var class="one"> OFF </var>`;
         return result;
     }
@@ -13908,8 +13939,8 @@ class $afcce0c0ef9d2703$export$40b18a948d89eea6 extends (0, $c0664485052839c4$ex
     }
     getTempColor() {
         let color = (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$173de64b5ad0d5b4), 1);
-        this.getValue() < this.getMin() && (color = (0, $884a87e59af13a5c$export$2967170b9e25bc83)(this.getMinColor(), .5));
-        this.getValue() > this.getMax() && (color = (0, $884a87e59af13a5c$export$2967170b9e25bc83)(this.getMaxColor(), .5));
+        this.getValue() < this.getPointer() && !this.getMaxStateValue() && (color = (0, $884a87e59af13a5c$export$2967170b9e25bc83)(this.getMinColor(), .5));
+        this.getValue() > this.getPointer() && !this.getMinStateValue() && (color = (0, $884a87e59af13a5c$export$2967170b9e25bc83)(this.getMaxColor(), .5));
         return color;
     }
     static styles = [
@@ -13929,15 +13960,14 @@ class $afcce0c0ef9d2703$export$40b18a948d89eea6 extends (0, $c0664485052839c4$ex
                     @pointerup=${this.up}
                     @pointermove=${this.move}
                 >
-                    ${this.arc(this.getMaxMin(), this.getMinMax(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$173de64b5ad0d5b4), .25))}
-                    ${this.arc(this.getMinExtreme(), this.getMin(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getMinColor(), .5))}
-                    ${this.arc(this.getValue(), this.getMin(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getMinColor(), 1))}
-                    ${this.dot(false, this.getMin(), this.getThickness(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getMinColor(), 1))}
-                    ${this.dot(this.isFixed(), this.getMin(), this.getIris() * this.getThickness(), "white")}
-                    ${this.arc(this.getMax(), this.getMaxExtreme(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getMaxColor(), .5))}
-                    ${this.arc(this.getMax(), this.getValue(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getMaxColor(), 1))}
-                    ${this.dot(false, this.getMax(), this.getThickness(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getMaxColor(), 1))}
-                    ${this.dot(this.isFixed(), this.getMax(), this.getIris() * this.getThickness(), "white")}
+                    ${this.arc(this.getMinOff(), this.getMaxOff(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)((0, $884a87e59af13a5c$export$173de64b5ad0d5b4), .25))}
+                    ${this.arc(this.getMinExtreme(), this.getHeatTarget(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getMinColor(), .5))}
+                    ${this.arc(this.getValue(), this.getHeatTarget(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getMinColor(), 1))}
+                    ${this.dot(false, this.getHeatTarget(), this.getThickness(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getMinColor(), 1))}
+                    ${this.arc(this.getCoolTarget(), this.getMaxExtreme(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getMaxColor(), .5))}
+                    ${this.arc(this.getCoolTarget(), this.getValue(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getMaxColor(), 1))}
+                    ${this.dot(false, this.getCoolTarget(), this.getThickness(), (0, $884a87e59af13a5c$export$4e46ac54fc82cf3b)(this.getMaxColor(), 1))}
+                    ${this.dot(this.isFixed(), this.getPointer(), this.getIris() * this.getThickness(), "white")}
                     ${this.dot(false, this.getValue(), this.getTempDotSize(), this.getTempColor())}
                 </svg>
             `;
@@ -14084,13 +14114,14 @@ class $1d767a0212de846c$export$deb006383366655 extends (0, $9c58ce553e601fd5$exp
         structure.separation = this.getSeparation();
         if ([
             'heat',
-            'heat-cool',
             'safe'
         ].includes(this.getMode())) structure.minValue = this.getMin();
         if ([
-            'cool',
-            'heat-cool'
+            'cool'
         ].includes(this.getMode())) structure.maxValue = this.getMax();
+        if ([
+            'auto'
+        ].includes(this.getMode())) structure.targetValue = this.getTarget();
         this.getMode() === 'safe_min' && (structure.minValue = this.getSafeMin());
         return structure;
     }
@@ -14102,31 +14133,49 @@ class $1d767a0212de846c$export$deb006383366655 extends (0, $9c58ce553e601fd5$exp
         const key = details[0];
         const entityId = this.getEntityId(key);
         const value = details[1];
-        const data = {
-            entity_id: entityId,
-            value: value
-        };
-        this.callService('input_number', 'set_value', data);
+        if (this.getEntityId('hp')) {
+            const data = {
+                entity_id: this.getEntityId('hp'),
+                temperature: value
+            };
+            this.callService('climate', 'set_temperature', data);
+        } else {
+            const data = {
+                entity_id: entityId,
+                value: value
+            };
+            this.callService('input_number', 'set_value', data);
+        }
     }
     canChange(target, change) {
         let minExtreme = this.getMinExtreme();
         let maxExtreme = this.getMaxExtreme();
-        if (this.getMode() === 'heat-cool') {
-            target === 'min' && (maxExtreme = this.getMax() - this.getSeparation());
-            target === 'max' && (minExtreme = this.getMin() + this.getSeparation());
-        }
         const current = this.getNumberState(target);
-        const step = this.getNumberAttribute(target, 'step');
+        const step = this.getSeparation();
         if (change === 'increment') return current + step <= maxExtreme;
         else return current - step >= minExtreme;
     }
     change(e, target) {
         const change = e.detail;
         const entityId = this.getEntityId(target);
-        const data = {
-            entity_id: entityId
-        };
-        this.canChange(target, change) && this.callService('input_number', change, data);
+        let data;
+        if (this.getEntityId('hp')) {
+            let value = this.getTarget();
+            if (change === 'increment') value = value + this.getSeparation();
+            else value = value - this.getSeparation();
+            if (this.getMinExtreme() < value && value < this.getMaxExtreme()) {
+                data = {
+                    entity_id: this.getEntityId('hp'),
+                    temperature: value
+                };
+                this.callService('climate', 'set_temperature', data);
+            }
+        } else if (this.canChange(target, change)) {
+            data = {
+                entity_id: entityId
+            };
+            this.callService('input_number', change, data);
+        }
     }
     /*********************************** html/css logic *********************************************/ getButtonStyles() {
         let styles = {
@@ -14138,17 +14187,22 @@ class $1d767a0212de846c$export$deb006383366655 extends (0, $9c58ce553e601fd5$exp
     adjustMin() {
         let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
         if ([
-            'heat',
-            'heat-cool'
+            'heat'
         ].includes(this.getMode())) result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<adjust-buttons @change=${(e)=>this.change(e, 'min')}></adjust-buttons>`;
         return result;
     }
     adjustMax() {
         let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
         if ([
-            'cool',
-            'heat-cool'
+            'cool'
         ].includes(this.getMode())) result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<adjust-buttons @change=${(e)=>this.change(e, 'max')}></adjust-buttons>`;
+        return result;
+    }
+    adjustTarget() {
+        let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
+        if ([
+            'auto'
+        ].includes(this.getMode())) result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<adjust-buttons @change=${(e)=>this.change(e, 'target')}></adjust-buttons>`;
         return result;
     }
     adjustButtons() {
@@ -14157,6 +14211,7 @@ class $1d767a0212de846c$export$deb006383366655 extends (0, $9c58ce553e601fd5$exp
             <div class="button-row" style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getButtonStyles())}>
                 ${this.adjustMin()}
                 ${this.adjustMax()}
+                ${this.adjustTarget()}
             </div>
         `;
     }
@@ -14185,8 +14240,7 @@ class $2c21df75046a4787$export$65d4bf2ef91d49c6 extends (0, $9c58ce553e601fd5$ex
     ];
     getControlEIs() {
         let entityIds = new Set();
-        entityIds.add(this.getModeId());
-        entityIds.add(this.getHPId());
+        entityIds.add(this.getEntityId('hp'));
         if (this.getRankId()) entityIds.add(this.getRankId());
         return entityIds;
     }
@@ -14195,6 +14249,7 @@ class $2c21df75046a4787$export$65d4bf2ef91d49c6 extends (0, $9c58ce553e601fd5$ex
         entityIds.add(this.getSensorId());
         entityIds.add(this.getModeId());
         entityIds.add(this.getHPId());
+        entityIds.add(this.getEntityId('hp'));
         if ([
             'heat',
             'heat-cool'
@@ -14213,8 +14268,8 @@ class $2c21df75046a4787$export$65d4bf2ef91d49c6 extends (0, $9c58ce553e601fd5$ex
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
                     .entityIds = ${this.getThermostatEIs()}
-                    .structure=${this.getStructure()}
-                    .fixed=${false}
+                    .structure= ${this.getStructure()}
+                    .fixed= ${false}
                     .callService = ${this.callService}
                 ></thermostat-panel>
                 <mode-controls
@@ -15349,9 +15404,7 @@ class $0a32000f7e370bc6$export$2343139461bba071 extends (0, $f0d92478ce7b526e$ex
     ];
     // return html
     render() {
-        if (this.isInitialized()) {
-            console.log(this.getStructure());
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        if (this.isInitialized()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <ha-card>
                     ${this.content()}
                     <div class="button-row">
@@ -15359,7 +15412,6 @@ class $0a32000f7e370bc6$export$2343139461bba071 extends (0, $f0d92478ce7b526e$ex
                     </div>
                 </ha-card>
             `;
-        }
     }
     // set card size parameters for ha
     getCardSize() {

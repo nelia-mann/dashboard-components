@@ -75,6 +75,45 @@ action: the current action of the climate entity
         }
     }
 
+    /************************* hp items ***********************************/
+
+    getHPMode() {
+        return this.getState('hp');
+    }
+
+    getHPAction() {
+        let str = this.getAttribute('hp', 'hvac_action');
+        (str === 'fan') && (str = 'venting');
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    getHPSensor() {
+        return this.getAttribute('hp', 'current_temperature');
+    }
+
+    getHPSensorDisplay() {
+        const value = this.getHPSensor().toFixed(1).toString();
+        const units = '\u00B0'
+        return value + ' ' + units;
+    }
+
+    getHPModes() {
+        const modes = this.getAttribute('hp', 'hvac_modes');
+        let index = modes.indexOf('heat/cool');
+        if (index > -1) {
+            modes.splice(index, 1)
+        }
+        index = modes.indexOf('dry');
+        if (index > -1) {
+            modes.splice(index, 1)
+        }
+        index = modes.indexOf('fan_only');
+        if (index > -1) {
+            modes.splice(index, 1)
+        }
+        return modes;
+    }
+
     /*********************** min/max items ********************************/
 
     getMinId() {
@@ -82,6 +121,7 @@ action: the current action of the climate entity
     }
 
     getMin() {
+        if (this.getAttribute('hp', 'temperature')) return this.getAttribute('hp', 'temperature');
         return this.getNumberState('min');
     }
 
@@ -94,7 +134,12 @@ action: the current action of the climate entity
     }
 
     getMax() {
+        if (this.getAttribute('hp', 'temperature')) return this.getAttribute('hp', 'temperature');
         return this.getNumberState('max');
+    }
+
+    getTarget() {
+        return this.getAttribute('hp', 'temperature');
     }
 
     getMaxStep() {
@@ -102,6 +147,9 @@ action: the current action of the climate entity
     }
 
     getMinExtreme() {
+        if (this.getAttribute('hp', 'min_temp')) {
+            return this.getAttribute('hp', 'min_temp');
+        }
         const minmin = this.getNumberAttribute('min', 'min');
         const maxmin = this.getNumberAttribute('max', 'min');
         if (typeof minmin === 'number' && typeof maxmin === 'number') {
@@ -114,6 +162,9 @@ action: the current action of the climate entity
     }
 
     getMaxExtreme() {
+        if (this.getAttribute('hp', 'max_temp')) {
+            return this.getAttribute('hp', 'max_temp');
+        }
         const minmax = this.getNumberAttribute('min', 'max');
         const maxmax = this.getNumberAttribute('max', 'max');
         if (minmax && maxmax) {
@@ -126,6 +177,9 @@ action: the current action of the climate entity
     }
 
     getSeparation() {
+        if (this.getAttribute('hp', 'target_temp_step')) {
+            return this.getAttribute('hp', 'target_temp_step');
+        }
         let minStep = this.getMinStep();
         let maxStep = this.getMaxStep();
         if (minStep && maxStep) {
@@ -144,7 +198,10 @@ action: the current action of the climate entity
     /******************** sensor items *************************************/
 
     getSensor() {
-        return this.getNumberState('sensor');
+        if (this.getHPSensor()) {
+            return this.getHPSensor();
+        } 
+        else return this.getNumberState('sensor');
     }
 
     getSensorId() {
@@ -152,7 +209,9 @@ action: the current action of the climate entity
     }
 
     getSensorUnits() {
-        return this.getAttribute('sensor', 'unit_of_measurement');
+        if (this.getEntityId('hp')) {
+            return '\u00B0';
+        } else return this.getAttribute('sensor', 'unit_of_measurement');
     }
 
     getSensorDisplay() {
@@ -164,6 +223,7 @@ action: the current action of the climate entity
     /************************ mode and action items ************************/
 
     getMode() {
+        if (this.getHPMode()) return this.getHPMode();
         return this.getState('mode');
     }
 
@@ -237,7 +297,7 @@ action: the current action of the climate entity
             return this.getActionDirect();
         } else if (this.getActionFromSwitch()) {
             return this.getActionFromSwitch();
-        } else return this.getActionFromHP(this.getHPstate(), this.getMode());
+        } else return this.getHPAction();
     }
 
     getTieMode() {

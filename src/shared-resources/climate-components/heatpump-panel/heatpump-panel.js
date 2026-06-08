@@ -13,8 +13,7 @@ export class HeatpumpPanel extends HaClimateComponent {
 
     getControlEIs() {
         let entityIds = new Set();
-        entityIds.add(this.getModeId());
-        entityIds.add(this.getHPId());
+        entityIds.add(this.getEntityId('hp'));
         if (this.getRankId()) {
             entityIds.add(this.getRankId());
         }
@@ -26,6 +25,7 @@ export class HeatpumpPanel extends HaClimateComponent {
         entityIds.add(this.getSensorId());
         entityIds.add(this.getModeId());
         entityIds.add(this.getHPId());
+        entityIds.add(this.getEntityId('hp'));
         if (['heat', 'heat-cool'].includes(this.getMode())) {
             entityIds.add(this.getMinId());
         }
@@ -44,8 +44,8 @@ export class HeatpumpPanel extends HaClimateComponent {
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
                     .entityIds = ${this.getThermostatEIs()}
-                    .structure=${this.getStructure()}
-                    .fixed=${false}
+                    .structure= ${this.getStructure()}
+                    .fixed= ${false}
                     .callService = ${this.callService}
                 ></thermostat-panel>
                 <mode-controls

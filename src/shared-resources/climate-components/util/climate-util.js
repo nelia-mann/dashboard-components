@@ -41,7 +41,17 @@ function getModeStyles(mode, action, outline) {
             (outline && action === 'Cooling') && (styles['outline'] = `solid ${rgba(COOL, 1.0)}`);
             (outline && ['Off', 'Idle'].includes(action)) && (styles['outline'] = `solid ${rgba(OFF, 1.0)}`);
             break;
+        case 'auto':
+            styles['background'] = climateGradient();
+            (outline && action === 'Heating') && (styles['outline'] = `solid ${rgba(HOT, 1.0)}`);
+            (outline && action === 'Cooling') && (styles['outline'] = `solid ${rgba(COOL, 1.0)}`);
+            (outline && ['Off', 'Idle'].includes(action)) && (styles['outline'] = `solid ${rgba(OFF, 1.0)}`);
+            break;            
         case 'fan':
+            styles['background-color'] = rgba(FAN, 0.5);
+            (outline) && (styles['outline'] = `solid ${rgba(FAN, 1.0)}`);
+            break;
+        case 'fan_only':
             styles['background-color'] = rgba(FAN, 0.5);
             (outline) && (styles['outline'] = `solid ${rgba(FAN, 1.0)}`);
             break;

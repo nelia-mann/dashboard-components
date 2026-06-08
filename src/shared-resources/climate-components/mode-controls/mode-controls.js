@@ -12,12 +12,12 @@ export class ModeControls extends HaClimateComponent {
     /*********************************** interactive logic ***********************************/
 
     selectMode(mode) {
-        const entityId = this.getModeId();
+        const entityId = this.getEntityId('hp');
         const data = {
             entity_id: entityId,
-            option: mode
+            hvac_mode: mode
         }
-        this.callService('input_select', 'select_option', data)
+        this.callService('climate', 'set_hvac_mode', data)
     }
 
     setDominant() {
@@ -25,7 +25,7 @@ export class ModeControls extends HaClimateComponent {
         const data = {
             entity_id: entityId,
             variables: {
-                mode_entity: this.getModeId()
+                heatpump_entity: this.getEntityId('hp')
             }
         }
         this.callService('script', 'turn_on', data)
@@ -34,12 +34,12 @@ export class ModeControls extends HaClimateComponent {
     /************************************** html/style logic *********************************/
 
     getModeStyles(mode) {
-        const isMode = (mode === this.getMode())
-        return getModeStyles(mode, this.getAction(), isMode)
+        const isMode = (mode === this.getHPMode())
+        return getModeStyles(mode, this.getHPAction(), isMode)
     }
 
     getDomStyles() {
-        return getModeStyles(this.getMode(), this.getAction(), this.isDominant())
+        return getModeStyles(this.getHPMode(), this.getHPAction(), this.isDominant())
     }
 
     modeButton(mode) {
@@ -54,7 +54,7 @@ export class ModeControls extends HaClimateComponent {
             case 'cool':
                 icon = html`<ha-svg-icon .path=${snowflake}}></ha-svg-icon>`;
                 break;
-            case 'heat-cool':
+            case 'auto':
                 icon = html`
                     <ha-svg-icon .path=${snowflake}}"></ha-svg-icon>
                     <ha-svg-icon .path=${slash}} class="center"></ha-svg-icon>
@@ -71,7 +71,7 @@ export class ModeControls extends HaClimateComponent {
 
     modeButtons() {
         return html`
-            ${repeat(this.getModes().sort().reverse(), (mode) => mode, mode => this.modeButton(mode))}
+            ${repeat(this.getHPModes().sort().reverse(), (mode) => mode, mode => this.modeButton(mode))}
         `
     }
 

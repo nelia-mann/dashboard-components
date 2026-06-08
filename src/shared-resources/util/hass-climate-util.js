@@ -16,11 +16,12 @@ function getClimateKeys() {
         "name",
         "safe_max",
         "safe_min",
-        "offset"];
+        "offset",
+        "hp"];
 }
 
 function getClimateButtonKeys() {
-    return ["sensor", "mode", "heatpump"];
+    return ["hp"];
 }
 
 function getClimateAuxKeys() {

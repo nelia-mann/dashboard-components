@@ -45,11 +45,14 @@ export class ThermostatPanel extends HaClimateComponent {
         structure.maxColor = COOL;
         structure.colorMode = this.getColorMode();
         structure.separation = this.getSeparation();
-        if (['heat', 'heat-cool', 'safe'].includes(this.getMode())) {
+        if (['heat','safe'].includes(this.getMode())) {
             structure.minValue = this.getMin();
         }
-        if (['cool', 'heat-cool'].includes(this.getMode())) {
+        if (['cool'].includes(this.getMode())) {
             structure.maxValue = this.getMax();
+        }
+        if  (['auto'].includes(this.getMode())) {
+            structure.targetValue = this.getTarget();
         }
         (this.getMode() === 'safe_min') && (structure.minValue = this.getSafeMin());
         return structure;
@@ -66,22 +69,26 @@ export class ThermostatPanel extends HaClimateComponent {
         const key = details[0];
         const entityId = this.getEntityId(key);
         const value = details[1];
-        const data = {
-            entity_id: entityId,
-            value: value
+        if (this.getEntityId('hp')) {
+            const data = {
+                entity_id: this.getEntityId('hp'),
+                temperature: value 
+            }
+            this.callService('climate', 'set_temperature', data);
+        } else {
+            const data = {
+                entity_id: entityId,
+                value: value
+            }
+            this.callService('input_number', 'set_value', data);
         }
-        this.callService('input_number', 'set_value', data);
     }
 
     canChange(target, change) {
         let minExtreme = this.getMinExtreme();
         let maxExtreme = this.getMaxExtreme();;
-        if (this.getMode() === 'heat-cool') {
-            (target === 'min') && (maxExtreme = this.getMax() - this.getSeparation());
-            (target === 'max') && (minExtreme = this.getMin() + this.getSeparation());
-        }
         const current = this.getNumberState(target);
-        const step = this.getNumberAttribute(target, 'step');
+        const step = this.getSeparation();
         if (change === 'increment') {
             return (current + step <= maxExtreme);
         } else {
@@ -92,8 +99,25 @@ export class ThermostatPanel extends HaClimateComponent {
     change(e, target) {
         const change = e.detail;
         const entityId = this.getEntityId(target);
-        const data = { entity_id: entityId };
-        (this.canChange(target, change)) && (this.callService('input_number', change, data));
+        let data;
+        if (this.getEntityId('hp')) {
+            let value = this.getTarget();
+            if (change === 'increment') {
+                value = value + this.getSeparation();
+            } else {
+                value = value - this.getSeparation();
+            }
+            if ((this.getMinExtreme() < value) && (value < this.getMaxExtreme())) {
+                data = {
+                    entity_id: this.getEntityId('hp'),
+                    temperature: value
+                }
+                this.callService('climate', 'set_temperature', data);
+            }
+        } else if (this.canChange(target, change)) {
+            data = { entity_id: entityId };
+            this.callService('input_number', change, data);
+        }
     }
 
     /*********************************** html/css logic *********************************************/
@@ -108,7 +132,7 @@ export class ThermostatPanel extends HaClimateComponent {
 
     adjustMin() {
         let result = html``;
-        if (['heat', 'heat-cool'].includes(this.getMode())) {
+        if (['heat'].includes(this.getMode())) {
             result = html`<adjust-buttons @change=${(e) => this.change(e, 'min')}></adjust-buttons>`
         }
         return result;
@@ -116,8 +140,16 @@ export class ThermostatPanel extends HaClimateComponent {
 
     adjustMax() {
         let result = html``;
-        if (['cool', 'heat-cool'].includes(this.getMode())) {
+        if (['cool'].includes(this.getMode())) {
             result = html`<adjust-buttons @change=${(e) => this.change(e, 'max')}></adjust-buttons>`
+        }
+        return result;
+    }
+
+    adjustTarget() {
+        let result = html``;
+        if (['auto'].includes(this.getMode())) {
+            result = html`<adjust-buttons @change=${(e) => this.change(e, 'target')}></adjust-buttons>`            
         }
         return result;
     }
@@ -128,6 +160,7 @@ export class ThermostatPanel extends HaClimateComponent {
             <div class="button-row" style=${styleMap(this.getButtonStyles())}>
                 ${this.adjustMin()}
                 ${this.adjustMax()}
+                ${this.adjustTarget()}
             </div>
         `
     }
