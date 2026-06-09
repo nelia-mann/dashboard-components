@@ -239,7 +239,7 @@ export class DoubleCircularSlider extends HaSubComponent {
     }
 
     isNearPointer(e) {
-        return (this.getDistance(e, this.getPointer() < this.getTolerance()))
+        return (this.getDistance(e, this.getPointer()) < this.getTolerance())
     }
 
     getMouseCoords(e) {

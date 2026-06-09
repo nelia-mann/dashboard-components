@@ -34,12 +34,12 @@ export class ModeControls extends HaClimateComponent {
     /************************************** html/style logic *********************************/
 
     getModeStyles(mode) {
-        const isMode = (mode === this.getHPMode())
-        return getModeStyles(mode, this.getHPAction(), isMode)
+        const isMode = (mode === this.getMode())
+        return getModeStyles(mode, this.getAction(), isMode)
     }
 
     getDomStyles() {
-        return getModeStyles(this.getHPMode(), this.getHPAction(), this.isDominant())
+        return getModeStyles(this.getMode(), this.getAction(), this.isDominant())
     }
 
     modeButton(mode) {

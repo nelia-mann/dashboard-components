@@ -9,11 +9,11 @@ export class AdjustButtons extends HaSubComponent {
     static styles = [sharedStyles, styles];
 
     onAdd() {
-        this.dispatchEvent(new CustomEvent('change', { detail: 'increment'}))
+        this.dispatchEvent(new CustomEvent('change', { detail: 1}))
     }
 
     onSubtract() {
-        this.dispatchEvent(new CustomEvent('change', { detail: 'decrement'}))
+        this.dispatchEvent(new CustomEvent('change', { detail: -1}))
     }
 
     render() {

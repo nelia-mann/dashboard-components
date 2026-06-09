@@ -27,9 +27,8 @@ export class IsoHydrostatPanel extends HaClimateComponent {
 
     getHydrostatEIs() {
         let entityIds = new Set();
-        entityIds.add(this.getSensorId());
+        entityIds.add(this.getEntityId('hygrostat'));
         entityIds.add(this.getModeId());
-        (this.getMode() === 'fan') && (entityIds.add(this.getMaxId()));
         return entityIds;
     }
 

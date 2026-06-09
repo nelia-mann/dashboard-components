@@ -17,7 +17,9 @@ function getClimateKeys() {
         "safe_max",
         "safe_min",
         "offset",
-        "hp"];
+        "hp",
+        "thermostat",
+        "hygrostat"];
 }
 
 function getClimateButtonKeys() {
@@ -99,10 +101,18 @@ function isThermostat(entityId) {
     return (type === "climate");
 }
 
+function isHygrostat(entityId) {
+    const type = entityId.split('.')[0];
+    return (type === "humidifier");
+}
+
 function hasClimateChanges(oldHass, newHass, entityId) {
     let attributes = [];
     if (isThermostat(entityId)) {
         attributes = ["current_temperature", "temperature", "hvac_action"];
+    }
+    if (isHygrostat(entityId)) {
+        attributes = ["current_humidity", "humidity", "action"];
     }
     return hasAttributeChanges(oldHass, newHass, entityId, attributes)
 }

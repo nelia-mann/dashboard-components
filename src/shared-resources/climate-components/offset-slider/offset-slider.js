@@ -85,7 +85,7 @@ export class OffsetSlider extends HaClimateComponent {
                 .startValue=${this.getOffset()}
                 .units=${this.getSensorUnits()}
                 .background=${climateGradientUp()}
-                .step=${this.getMinStep()}
+                .step=${this.getSeparation()}
                 .skipScale=${true}
                 .fixed=${this.fixSlider()}
                 @change=${this.handleCallService}

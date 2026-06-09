@@ -16,12 +16,8 @@ export class AuxThermostatPanel extends HaClimateComponent {
 
     getThermostatEIs() {
         let entityIds = new Set();
-        entityIds.add(this.getSensorId());
         entityIds.add(this.getModeId());
-        if (this.getMode() === 'heat') {
-            entityIds.add(this.getMinId());
-            entityIds.add(this.getActionId());
-        }
+        entityIds.add(this.getEntityId('thermostat'));
         return entityIds;
     }
 

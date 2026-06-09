@@ -19,6 +19,7 @@ export default css`
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
+        justify-content: center;
         width: var(--adjust-button-row-width, 85%);
     }
 

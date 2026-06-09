@@ -44,7 +44,7 @@ export class HydrostatPanel extends HaClimateComponent {
         structure.minColor = FAN;
         structure.colorMode = this.getColorMode();
         structure.separation = this.getSeparation();
-        (this.getMode() === 'fan') && (structure.maxValue = this.getMax());
+        (this.getMode() === 'fan') && (structure.maxValue = this.getTarget());
         (this.getMode() === 'safe_max') && (structure.maxValue = this.getSafeMax());
         return structure;
     }
@@ -57,31 +57,24 @@ export class HydrostatPanel extends HaClimateComponent {
 
     handleCallService(e) {
         const details = e.detail;
-        const key = details[0];
-        const entityId = this.getStructure()[key];
+        const entityId = this.getEntityId('hygrostat');
         const value = details[1];
         const data = {
             entity_id: entityId,
-            value: value
+            humidity: value
         }
-        this.callService('input_number', 'set_value', data);
-    }
-
-    canChange(change) {
-        const current = this.getNumberState('max');
-        const step = this.getNumberAttribute('max', 'step');
-        if (change === 'increment') {
-            return (current + step <= this.getMaxExtreme());
-        } else {
-            return (current - step >= this.getMinExtreme());
-        }
+        this.callService('humidifier', 'set_humidity', data);
     }
 
     change(e) {
         const change = e.detail;
-        const entityId = this.getEntityId('max');
-        const data = { entity_id: entityId };
-        (this.canChange(change)) && (this.callService('input_number', change, data));
+        const entityId = this.getEntityId('hygrostat');
+        let value = this.getTarget();
+        value = value + change * this.getSeparation();  
+        if ((this.getMinExtreme() < value) && (value < this.getMaxExtreme())) {
+            const data = { entity_id: entityId,  humidity: value};
+            this.callService('humidifier', 'set_humidity', data);
+        }       
     }
 
     /*********************************** html/css logic *********************************************/

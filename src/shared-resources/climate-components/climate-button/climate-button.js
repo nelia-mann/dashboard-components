@@ -45,7 +45,7 @@ export class ClimateButton extends HaClimateComponent {
     static styles = [sharedStyles, styles];
 
     getStyles() {
-        return getModeStyles(this.getHPMode(), this.getHPAction(), this.selected())
+        return getModeStyles(this.getMode(), this.getAction(), this.selected())
     }
 
     render() {
@@ -57,7 +57,7 @@ export class ClimateButton extends HaClimateComponent {
                     style=${styleMap(this.getStyles())}
                 >
                     <div class="small-heading"> ${this.getTitle()} </div>
-                    <div class="sub-info"> ${this.getHPSensorDisplay() + " \u00B7 " + this.getHPAction()} </div >
+                    <div class="sub-info"> ${this.getSensorDisplay() + " \u00B7 " + this.getAction()} </div >
                 </div>`
         }
     }
