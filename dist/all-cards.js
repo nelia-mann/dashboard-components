@@ -1434,7 +1434,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
             <div class="button-row">
                 <adjust-buttons @change=${t=>this.change(t)}></adjust-buttons>
             </div>
-        `}render(){if(this.isInitialized())return F`
+        `}render(){if(this.isInitialized())return console.log(this.getSliderStructure()),F`
                 <double-circular-slider
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
