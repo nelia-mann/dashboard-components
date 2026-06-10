@@ -11,12 +11,12 @@ export default css`
         justify-content: center;
         align-items: center;
         position: relative;
-        touch-action: none;
     }
 
     svg {
         height: 100%;
         width: 100%;
+        touch-action: none;
     }
 
     .arc {
