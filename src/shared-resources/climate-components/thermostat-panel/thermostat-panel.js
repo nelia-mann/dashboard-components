@@ -107,7 +107,6 @@ export class ThermostatPanel extends HaClimateComponent {
 
     render() {
         if (this.isInitialized()) {
-            console.log(this.getSliderStructure());
             return html`
                 <double-circular-slider
                     .changedEntityIds = ${this.getCEIs()}
