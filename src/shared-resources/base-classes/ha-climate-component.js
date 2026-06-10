@@ -130,9 +130,11 @@ action: the current action of the climate entity
     }
 
     getSeparation() {
-        if (this.getEntityId('hp')) return this.getNumberAttribute('hp', 'target_temp_step');
-        if (this.getEntityId('thermostat')) return this.getNumberAttribute('thermostat', 'target_temp_step');
-        if (this.getEntityId('hygrostat')) return 1;
+        if (this.getEntityId('hp')) (value = this.getNumberAttribute('hp', 'target_temp_step'));
+        if (this.getEntityId('thermostat')) (value = this.getNumberAttribute('thermostat', 'target_temp_step'));
+        if (!value) {
+            return 1;
+        } else return value;
     }
 
     getSafeMin() {
@@ -184,10 +186,11 @@ action: the current action of the climate entity
         if (this.getEntityId('hygrostat')) return ['off', 'on'];
     }
 
-    getAction() {
-        if (this.getEntityId('hp')) return this.getHPAction();
-        if (this.getEntityId('thermostat')) return this.getThermostatAction();
-        return this.getActionFromSwitch();
+    getActionForMatter() {
+        if (this.getMode() === 'off') return 'off';
+        if (this.getTarget() > this.getSensor()) {
+            return 'heating';
+        } else return 'idle';
     }
 
     getAction() {
@@ -196,6 +199,7 @@ action: the current action of the climate entity
         if (this.getEntityId('thermostat')) (str = this.getAttribute('thermostat', 'hvac_action'));
         if (this.getEntityId('hygrostat')) (str = this.getAttribute('hygrostat', 'action'));
         (str === 'fan' || str === 'drying') && (str = 'venting');
+        if (!str) (str = this.getActionForMatter());
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
