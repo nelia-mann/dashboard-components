@@ -51,7 +51,9 @@ export class DoubleCircularSlider extends HaSubComponent {
             this.setTargetValue(this.getMinStateValue());
         } else if (this.getMaxStateValue()) {
             this.setTargetValue(this.getMaxStateValue());
-        } else this.setTargetValue(this.getTargetStateValue());
+        } else if (this.getTargetStateValue) {
+            this.setTargetValue(this.getTargetStateValue());
+        } else this.setTargetValue(null);
     }
 
     /****************************** getter and setter logic *************************/

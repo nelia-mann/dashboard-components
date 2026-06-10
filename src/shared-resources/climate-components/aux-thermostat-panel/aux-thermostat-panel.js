@@ -16,14 +16,15 @@ export class AuxThermostatPanel extends HaClimateComponent {
 
     getThermostatEIs() {
         let entityIds = new Set();
-        entityIds.add(this.getModeId());
+        entityIds.add(this.getEntityId('safe_mode'));
         entityIds.add(this.getEntityId('thermostat'));
         return entityIds;
     }
 
     getControlEIs() {
         let entityIds = new Set();
-        entityIds.add(this.getModeId());
+        entityIds.add(this.getEntityId('safe_mode'));
+        entityIds.add(this.getEntityId('thermostat'));
         entityIds.add(this.getTieId());
         if (this.getStructure().tie) {
             entityIds = entityIds.union(this.getStructure().tie.entityIds);
@@ -37,10 +38,6 @@ export class AuxThermostatPanel extends HaClimateComponent {
 
     isTied() {
         return (this.getTie() != 'off')
-    }
-
-    isSafe() {
-        return this.getMode() === 'safe_min';
     }
 
     isFixed() {

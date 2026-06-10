@@ -12,12 +12,19 @@ export class IsoModeControls extends HaClimateComponent {
     /*********************************** interactive logic ***********************************/
 
     selectMode(mode) {
-        const entityId = this.getModeId();
         const data = {
-            entity_id: entityId,
-            option: mode
+            entity_id: this.getEntityId('hygrostat'),
         }
-        this.callService('input_select', 'select_option', data)
+        if (mode === 'on') {
+            this.callService('humidifier', 'turn_on', data);
+        } else if (mode === 'off') {
+            this.callService('humidifier', 'turn_off', data);
+        }
+    }
+
+    setSafe() {
+        const entityId = this.getEntityId('safe_mode');
+        this.callService('input_boolean', 'toggle', { entity_id: entityId })
     }
 
     /************************************** html/style logic *********************************/
@@ -27,29 +34,18 @@ export class IsoModeControls extends HaClimateComponent {
         return getModeStyles(mode, this.getAction(), isMode)
     }
 
+    getSafeStyles() {
+        return getModeStyles('safe_max', this.getAction(), this.isSafe());
+    }
+
     modeButton(mode) {
         let icon;
         switch (mode) {
             case 'off':
                 icon = html`<ha-svg-icon .path=${power}></ha-svg-icon>`;
                 break;
-            case 'heat':
-                icon = html`<ha-svg-icon .path=${fire}></ha-svg-icon>`;
-                break;
-            case 'fan':
+            case 'on':
                 icon = html`<ha-svg-icon .path=${fan}></ha-svg-icon>`;
-                break;
-            case 'safe_min':
-                icon = html`
-                    <ha-svg-icon .path=${fire} ></ha-svg-icon>
-                    <ha-svg-icon .path=${minimum} class="center"></ha-svg-icon>
-                `
-                break;
-            case 'safe_max':
-                icon = html`
-                    <ha-svg-icon .path=${fan} ></ha-svg-icon>
-                    <ha-svg-icon .path=${maximum} class="center"></ha-svg-icon>
-                `
                 break;
         }
         return html`<div class="button outlined"
@@ -66,12 +62,25 @@ export class IsoModeControls extends HaClimateComponent {
         `
     }
 
+    safeButton() {
+        if (this.getEntityId('safe_mode')) {
+            return html`<div class="button outlined"
+                style=${styleMap(this.getSafeStyles())}
+                @click=${this.setSafe}
+            >
+                <ha-svg-icon .path=${fan} ></ha-svg-icon>
+                <ha-svg-icon .path=${maximum} class="center"></ha-svg-icon>
+            </div>`
+        }
+    }
+
     static styles = [sharedStyles, styles];
 
     render() {
         if (this.isInitialized()) {
             return html`
                 ${this.modeButtons()}
+                ${this.safeButton()}
             `
         }
     }

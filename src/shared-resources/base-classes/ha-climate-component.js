@@ -105,82 +105,33 @@ action: the current action of the climate entity
         return modes;
     }
 
-    /************************ thermostat items ****************************/
-
-    getThermostatMode() {
-        return this.getState('thermostat');
-    }
-
-    getThermostatModes() {
-        const modes = this.getAttribute('thermostat', 'hvac_modes');
-        let index = modes.indexOf('heat/cool');
-        if (index > -1) {
-            modes.splice(index, 1)
-        }
-        index = modes.indexOf('dry');
-        if (index > -1) {
-            modes.splice(index, 1)
-        }
-        index = modes.indexOf('fan_only');
-        if (index > -1) {
-            modes.splice(index, 1)
-        }
-        return modes;
-    }
-
     /*********************** hygrostat items ******************************/
+
 
 
     /*********************** min/max items ********************************/
 
-/*     getMinId() {
-        return this.getEntityId('min');
-    }
-
-    getMin() {
-        if (this.getEntityId('hp')) return this.getAttribute('hp', 'temperature');
-        if (this.getEntityId('thermostat')) return this.getAttribute('thermostat', 'temperature');
-        return this.getNumberState('min');
-    }
-
-    getMinStep() {
-        return this.getNumberAttribute('min', 'step');
-    } */
-
-/*     getMaxId() {
-        return this.getEntityId('max');
-    } */
-
-/*     getMax() {
-        if (this.getAttribute('hp', 'temperature')) return this.getAttribute('hp', 'temperature');
-        return this.getNumberState('max');
-    } */
-
     getTarget() {
-        if (this.getEntityId('hp')) return this.getAttribute('hp', 'temperature');
-        if (this.getEntityId('thermostat')) return this.getAttribute('thermostat', 'temperature');
-        if (this.getEntityId('hygrostat')) return this.getAttribute('hygrostat', 'humidity');
+        if (this.getEntityId('hp')) return this.getNumberAttribute('hp', 'temperature');
+        if (this.getEntityId('thermostat')) return this.getNumberAttribute('thermostat', 'temperature');
+        if (this.getEntityId('hygrostat')) return this.getNumberAttribute('hygrostat', 'humidity');
     }
-
-/*     getMaxStep() {
-        return this.getNumberAttribute('max', 'step');
-    } */
 
     getMinExtreme() {
-        if (this.getEntityId('hp')) return this.getAttribute('hp', 'min_temp');
-        if (this.getEntityId('thermostat')) return this.getAttribute('thermostat', 'min_temp');
-        if (this.getEntityId('hygrostat')) return this.getAttribute('hygrostat', 'min_humidity');
+        if (this.getEntityId('hp')) return this.getNumberAttribute('hp', 'min_temp');
+        if (this.getEntityId('thermostat')) return this.getNumberAttribute('thermostat', 'min_temp');
+        if (this.getEntityId('hygrostat')) return this.getNumberAttribute('hygrostat', 'min_humidity');
     }
 
     getMaxExtreme() {
-        if (this.getEntityId('hp')) return this.getAttribute('hp', 'max_temp');
-        if (this.getEntityId('thermostat')) return this.getAttribute('thermostat', 'max_temp');
-        if (this.getEntityId('hygrostat')) return this.getAttribute('hygrostat', 'max_humidity');
+        if (this.getEntityId('hp')) return this.getNumberAttribute('hp', 'max_temp');
+        if (this.getEntityId('thermostat')) return this.getNumberAttribute('thermostat', 'max_temp');
+        if (this.getEntityId('hygrostat')) return this.getNumberAttribute('hygrostat', 'max_humidity');
     }
 
     getSeparation() {
-        if (this.getEntityId('hp')) return this.getAttribute('hp', 'target_temp_step');
-        if (this.getEntityId('thermostat')) return this.getAttribute('thermostat', 'target_temp_step');
+        if (this.getEntityId('hp')) return this.getNumberAttribute('hp', 'target_temp_step');
+        if (this.getEntityId('thermostat')) return this.getNumberAttribute('thermostat', 'target_temp_step');
         if (this.getEntityId('hygrostat')) return 1;
     }
 
@@ -195,9 +146,9 @@ action: the current action of the climate entity
     /******************** sensor items *************************************/
 
     getSensor() {
-        if (this.getEntityId('hp')) return this.getAttribute('hp', 'current_temperature');
-        if (this.getEntityId('thermostat')) return this.getAttribute('thermostat', 'current_temperature');
-        if (this.getEntityId('hygrostat')) return this.getAttribute('hygrostat', 'current_humidity');
+        if (this.getEntityId('hp')) return this.getNumberAttribute('hp', 'current_temperature');
+        if (this.getEntityId('thermostat')) return this.getNumberAttribute('thermostat', 'current_temperature');
+        if (this.getEntityId('hygrostat')) return this.getNumberAttribute('hygrostat', 'current_humidity');
     }
 
     getSensorUnits() {
@@ -214,8 +165,13 @@ action: the current action of the climate entity
     /************************ mode and action items ************************/
 
     getMode() {
-        if (this.getHPMode()) return this.getHPMode();
-        return this.getState('mode');
+        if (this.getEntityId('hp')) return this.getState('hp');
+        if (this.getEntityId('thermostat')) return this.getState('thermostat');
+        if (this.getEntityId('hygrostat')) return this.getState('hygrostat');
+    }
+
+    isSafe() {
+        return (this.getState('safe_mode') === 'on');
     }
 
     getModeId() {
@@ -223,7 +179,9 @@ action: the current action of the climate entity
     }
 
     getModes() {
-        return this.getAttribute('mode', 'options');
+        if (this.getEntityId('hp')) return this.getHPModes();
+        if (this.getEntityId('thermostat')) return this.getAttribute('thermostat', 'hvac_modes');
+        if (this.getEntityId('hygrostat')) return ['off', 'on'];
     }
 
     getAction() {

@@ -3,23 +3,15 @@ import { filterEntityIdsForLabel, hasAttributeChanges } from './hass-util.js';
 /******************************* climate structure *************************/
 
 function getClimateKeys() {
-    return ["min",
-        "max",
-        "sensor",
-        "mode",
-        "heatpump",
-        "action",
+    return [
         "tie_main",
         "rank",
         "script",
-        "switch",
-        "name",
-        "safe_max",
-        "safe_min",
         "offset",
         "hp",
         "thermostat",
-        "hygrostat"];
+        "hygrostat",
+        "safe_mode"];
 }
 
 function getClimateButtonKeys() {

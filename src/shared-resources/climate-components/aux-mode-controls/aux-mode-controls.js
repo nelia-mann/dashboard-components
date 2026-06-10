@@ -29,12 +29,12 @@ export class AuxModeControls extends HaClimateComponent {
 
     selectMode(mode) {
         (this.isTied()) && (this.selectTie());
-        const entityId = this.getModeId();
+        const entityId = this.getEntityId('thermostat');
         const data = {
             entity_id: entityId,
-            option: mode
+            hvac_mode: mode
         }
-        this.callService('input_select', 'select_option', data)
+        this.callService('climate', 'set_hvac_mode', data)
     }
 
     selectTie() {
@@ -50,6 +50,11 @@ export class AuxModeControls extends HaClimateComponent {
         }
     }
 
+    setSafe() {
+        const entityId = this.getEntityId('safe_mode');
+        this.callService('input_boolean', 'toggle', { entity_id: entityId })
+    }
+
     /************************************** html/style logic *********************************/
 
     getModeStyles(mode) {
@@ -59,6 +64,10 @@ export class AuxModeControls extends HaClimateComponent {
 
     getTieStyles() {
         return getModeStyles(this.getAreaMode(), this.getAreaAction(), this.isTied())
+    }
+
+    getSafeStyles() {
+        return getModeStyles('safe_min', this.getAction(), this.isSafe());
     }
 
     modeButton(mode) {
@@ -90,6 +99,18 @@ export class AuxModeControls extends HaClimateComponent {
         `
     }
 
+    safeButton() {
+        if (this.getEntityId('safe_mode')) {
+            return html`<div class="button outlined"
+                style=${styleMap(this.getSafeStyles())}
+                @click=${this.setSafe}
+            >
+                <ha-svg-icon .path=${fire} ></ha-svg-icon>
+                <ha-svg-icon .path=${minimum} class="center"></ha-svg-icon>
+            </div>`
+        }
+    }
+
     TieButton() {
         return html`<div class="bigbutton outlined"
             style=${styleMap(this.getTieStyles())}
@@ -106,6 +127,7 @@ export class AuxModeControls extends HaClimateComponent {
         if (this.isInitialized()) {
             return html`
                 ${this.modeButtons()}
+                ${this.safeButton()}
                 ${this.TieButton()}
             `
         }

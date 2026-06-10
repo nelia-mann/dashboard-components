@@ -7,31 +7,11 @@ import '../iso-mode-controls/iso-mode-controls.js';
 
 export class IsoHydrostatPanel extends HaClimateComponent {
 
-    getRegionName() {
-        return this.regionName;
-    }
-
-    isFixed() {
-        return (this.getMode() == 'safe_max');
-    }
-
     isInactive() {
-        if (['off', 'safe_max'].includes(this.getMode())) {
+        if ((this.getMode() === 'off') || (this.isSafe())) {
             return 'inactive';
         } else return '';
     }
-
-    getControlEIs() {
-        return new Set([this.getModeId()]);
-    }
-
-    getHydrostatEIs() {
-        let entityIds = new Set();
-        entityIds.add(this.getEntityId('hygrostat'));
-        entityIds.add(this.getModeId());
-        return entityIds;
-    }
-
 
     /********************************* html/css logic ******************************************/
 
@@ -45,15 +25,15 @@ export class IsoHydrostatPanel extends HaClimateComponent {
                     class = "outlined ${this.isInactive()}"
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
-                    .entityIds = ${this.getHydrostatEIs()}
+                    .entityIds = ${this.getEntityIds()}
                     .structure=${this.getStructure()}
-                    .fixed=${this.isFixed()}
+                    .fixed=${this.isSafe()}
                     .callService = ${this.callService}
                 ></hydrostat-panel>
                 <iso-mode-controls
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
-                    .entityIds = ${this.getControlEIs()}
+                    .entityIds = ${this.getEntityIds()}
                     .structure = ${this.getStructure()}
                     .callService = ${this.callService}
                 ></iso-mode-controls>

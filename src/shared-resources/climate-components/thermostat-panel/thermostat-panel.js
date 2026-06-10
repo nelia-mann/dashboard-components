@@ -45,16 +45,15 @@ export class ThermostatPanel extends HaClimateComponent {
         structure.maxColor = COOL;
         structure.colorMode = this.getColorMode();
         structure.separation = this.getSeparation();
-        if (['heat','safe'].includes(this.getMode())) {
+        if (this.getMode() === 'heat') {
             structure.minValue = this.getTarget();
         }
-        if (['cool'].includes(this.getMode())) {
+        if (this.getMode() === 'cool') {
             structure.maxValue = this.getTarget();
         }
-        if  (['auto'].includes(this.getMode())) {
+        if  (this.getMode() === 'auto') {
             structure.targetValue = this.getTarget();
         }
-        (this.getMode() === 'safe_min') && (structure.minValue = this.getSafeMin());
         return structure;
     }
 
@@ -96,19 +95,12 @@ export class ThermostatPanel extends HaClimateComponent {
 
     /*********************************** html/css logic *********************************************/
 
-    adjustTarget() {
-        let result = html``;
-        if (['heat', 'cool', 'auto'].includes(this.getMode())) {
-            result = html`<adjust-buttons @change=${(e) => this.change(e)}></adjust-buttons>`
-        }
-        return result;
-    }
-
     adjustButtons() {
         if (this.isFixed()) return null;
+        if (!['heat', 'cool', 'auto'].includes(this.getMode())) return null;
         return html`
             <div class="button-row">
-                ${this.adjustTarget()}
+                <adjust-buttons @change=${(e) => this.change(e)}></adjust-buttons>
             </div>
         `
     }

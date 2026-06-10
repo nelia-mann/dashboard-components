@@ -10,27 +10,7 @@ import '../../general-components/adjust-buttons/adjust-buttons.js';
 
 export class HydrostatPanel extends HaClimateComponent {
 
-    static properties = {
-        ...super.properties,
-        fixed: { state: true }
-    }
-
-    constructor() {
-        super();
-        this.fixed = false;
-    }
-
-    getTriggers() {
-        return ['fixed'];
-    }
-
     static styles = [sharedStyles, styles];
-
-    getColorMode() {
-        let colorMode;
-        (this.getAction() === 'Venting') && (colorMode = 'max');
-        return colorMode;
-    }
 
     getSliderStructure() {
         let structure = {};
@@ -42,15 +22,10 @@ export class HydrostatPanel extends HaClimateComponent {
         structure.icon = fan;
         structure.maxColor = FAN;
         structure.minColor = FAN;
-        structure.colorMode = this.getColorMode();
+        (this.getAction() === 'Venting') && (structure.colorMode = 'max');
         structure.separation = this.getSeparation();
-        (this.getMode() === 'fan') && (structure.maxValue = this.getTarget());
-        (this.getMode() === 'safe_max') && (structure.maxValue = this.getSafeMax());
+        (this.getMode() === 'on') && (structure.maxValue = this.getTarget());
         return structure;
-    }
-
-    isFixed() {
-        return this.fixed;
     }
 
     /******************************** interactive logic ************************************/
@@ -79,17 +54,12 @@ export class HydrostatPanel extends HaClimateComponent {
 
     /*********************************** html/css logic *********************************************/
 
-    adjustMax() {
-        let result = html``;
-        if (this.getMode() === 'fan') {
-            result = html`<adjust-buttons @change=${(e) => this.change(e)}></adjust-buttons>`
-        }
-        return result;
-    }
-
     adjustButtons() {
-        if (this.isFixed()) return null;
-        return html`<div class="button-row"> ${this.adjustMax()} </div>`
+        if (this.isSafe()) return null;
+        if (this.getMode() !== 'on') return null;
+        return html`<div class="button-row"> 
+                        <adjust-buttons @change=${(e) => this.change(e)}>
+                    </adjust-buttons> </div>`
     }
 
     render() {
@@ -100,7 +70,7 @@ export class HydrostatPanel extends HaClimateComponent {
                     .states = ${this.getStates()}
                     .entityIds = ${this.getEntityIds()}
                     .structure=${this.getSliderStructure()}
-                    .fixed=${this.isFixed()}
+                    .fixed=${this.isSafe()}
                     @change=${this.handleCallService}
                 >
                 </double-circular-slider>
