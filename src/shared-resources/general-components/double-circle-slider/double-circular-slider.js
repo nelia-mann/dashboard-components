@@ -396,6 +396,7 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     render() {
         if (this.isInitialized()) {
+            console.log("ping");
             return html`
                 <div class="info" style=${styleMap(this.getBGStyles())}>
                     ${this.getUpperText()}
