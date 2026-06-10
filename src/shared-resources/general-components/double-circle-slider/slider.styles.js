@@ -11,6 +11,7 @@ export default css`
         justify-content: center;
         align-items: center;
         position: relative;
+        touch-action: none;
     }
 
     svg {
