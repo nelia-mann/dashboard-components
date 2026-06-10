@@ -130,6 +130,7 @@ action: the current action of the climate entity
     }
 
     getSeparation() {
+        let value;
         if (this.getEntityId('hp')) (value = this.getNumberAttribute('hp', 'target_temp_step'));
         if (this.getEntityId('thermostat')) (value = this.getNumberAttribute('thermostat', 'target_temp_step'));
         if (!value) {
