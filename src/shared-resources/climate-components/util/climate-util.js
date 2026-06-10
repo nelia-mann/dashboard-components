@@ -27,15 +27,11 @@ function getModeStyles(mode, action, outline) {
             styles['background-color'] = rgba(HOT, 0.5);
             (outline) && (styles['outline'] = `solid ${rgba(HOT, 1.0)}`);
             break;
-        case 'safe_min':
-            styles['background-color'] = rgba(HOT, 0.5);
-            (outline) && (styles['outline'] = `solid ${rgba(HOT, 1.0)}`);
-            break;
         case 'cool':
             styles['background-color'] = rgba(COOL, 0.5);
             (outline) && (styles['outline'] = `solid ${rgba(COOL, 1.0)}`)
             break;
-        case 'heat-cool':
+        case 'heat_cool':
             styles['background'] = climateGradient();
             (outline && action === 'Heating') && (styles['outline'] = `solid ${rgba(HOT, 1.0)}`);
             (outline && action === 'Cooling') && (styles['outline'] = `solid ${rgba(COOL, 1.0)}`);
@@ -52,10 +48,6 @@ function getModeStyles(mode, action, outline) {
             (outline) && (styles['outline'] = `solid ${rgba(FAN, 1.0)}`);
             break;
         case 'fan_only':
-            styles['background-color'] = rgba(FAN, 0.5);
-            (outline) && (styles['outline'] = `solid ${rgba(FAN, 1.0)}`);
-            break;
-        case 'safe_max':
             styles['background-color'] = rgba(FAN, 0.5);
             (outline) && (styles['outline'] = `solid ${rgba(FAN, 1.0)}`);
             break;
