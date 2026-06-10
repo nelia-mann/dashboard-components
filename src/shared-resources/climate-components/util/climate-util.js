@@ -45,6 +45,14 @@ function getModeStyles(mode, action, outline) {
             styles['background-color'] = rgba(FAN, 0.5);
             (outline) && (styles['outline'] = `solid ${rgba(FAN, 1.0)}`);
             break;
+        case 'safe_min':
+            styles['background-color'] = rgba(HOT, 0.5);
+            (outline) && (styles['outline'] = `solid ${rgba(HOT, 1.0)}`);
+            break;
+        case 'safe_max':
+            styles['background-color'] = rgba(FAN, 0.5);
+            (outline) && (styles['outline'] = `solid ${rgba(FAN, 1.0)}`);
+            break;
     }
     return styles;
 }
