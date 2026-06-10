@@ -54,7 +54,7 @@ export class ModeControls extends HaClimateComponent {
             case 'cool':
                 icon = html`<ha-svg-icon .path=${snowflake}}></ha-svg-icon>`;
                 break;
-            case 'auto':
+            case 'heat_cool':
                 icon = html`
                     <ha-svg-icon .path=${snowflake}}"></ha-svg-icon>
                     <ha-svg-icon .path=${slash}} class="center"></ha-svg-icon>
