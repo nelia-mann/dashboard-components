@@ -13,5 +13,16 @@ export default css`
         --ha-card-height: var(--ipad-max-height);
         --ha-card-width: var(--ipad-max-width);
 
+        --side-player-panel-width: 160px;
+        --main-player-panel-width: calc(100% - var(--side-player-panel-width));
+
+        --idle-panel-width: 160px;
+        --idle-panel-height: 30px;
+        --idle-panel-margin-top: 20px;
+        --idle-panel-font-size: var(--sub-info-font-size);
+        --idle-panel-font-weight: var(--sub-info-font-weight);
+
+        --player-panel-width: 400px;
+        --player-panel-height: 300px;
     }
     `;

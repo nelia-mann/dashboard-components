@@ -1,5 +1,4 @@
 import { html } from 'lit';
-import { repeat } from 'lit-html/directives/repeat.js';
 import { HaMainComponent } from '../../shared-resources/base-classes/ha-main-component.js';
 import {
     getHassFloors,
@@ -9,9 +8,14 @@ import {
     filterEntityIdsForArea,
     getHassAreaName,
 } from '../../shared-resources/util/hass-area-floor-util.js';
+import {
+    hasAudioChanges
+} from '../../shared-resources/util/hass-audio-util.js';
 import styles from './main.styles.js';
 import layoutStyles from './layout-styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
+import '../../shared-resources/audio-components/library-panel/library-panel.js';
+import '../players/players-panel.js';
 
 export class AudioCard extends HaMainComponent {
 
@@ -25,24 +29,23 @@ export class AudioCard extends HaMainComponent {
 
 
     hasChanges(oldHass, newHass, entityId) {
-        return false;
+        return hasAudioChanges(oldHass, newHass, entityId);
     }
 
 /************************************* Setting Structures ****************************/
 
     setStructure() {
         const floors = getHassFloors(this.getHass());
-        Object.keys(floors).forEach((floorId) => {
-            const filteredIds = filterEntityIdsForFloor(this.getHass(), this.getEntityIds(), floorId);
-            if (filteredIds.size > 0) {
-                const floorDictionary = {
-                    name: getHassFloorName(this.getHass(), floorId),
-                    structure: {},
-                    entityIds: filteredIds,
-                }
-                this.addAreaStructure(floorDictionary);
-                this.getStructure()[floorId] = floorDictionary;
-            }
+        const floorIds = Object.keys(floors).sort((key1, key2) => {
+            const level1 = floors[key1].level;
+            const level2 = floors[key2].level;
+            return (level2 - level1)
+        })
+        let sortedList = [];
+        floorIds.forEach((floorId) => {
+            const filteredIds = [...filterEntityIdsForFloor(this.getHass(), this.getEntityIds(), floorId)].sort();
+            sortedList = [...sortedList, ...filteredIds];
+            this.getStructure().sorted = sortedList;
         })
     }
 
@@ -65,7 +68,6 @@ export class AudioCard extends HaMainComponent {
     getTriggers() {
         return [];
     }
-
 
     /********************************* interactive logic **********************************/
 
@@ -92,7 +94,13 @@ export class AudioCard extends HaMainComponent {
         if (this.isInitialized()) {
             return html`
                 <ha-card>
-                    ${this.content()}
+                    <players-panel
+                        .changedEntityIds=${this.getCEIs()}
+                        .entityIds=${this.getEntityIds()}
+                        .states=${this.getStates()}
+                        .structure=${this.getStructure()}
+                        .callService=${this.getHass().callService}
+                    ></players-panel>
                 </ha-card>
             `;
         }

@@ -27,7 +27,7 @@ function hasAttributeChanges(oldHass, newHass, entityId, attributes) {
         return true;
     }
     return attributes.some((attribute) => {
-        return (oldState.attributes[attribute] !== newState.attributes[attribute])
+        return (JSON.stringify(oldState.attributes[attribute]) !== JSON.stringify(newState.attributes[attribute]))
     })
 }
 

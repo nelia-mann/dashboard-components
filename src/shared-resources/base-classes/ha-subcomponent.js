@@ -51,6 +51,26 @@ export class HaSubComponent extends LitElement {
         return false;
     }
 
+    waitForState(entityId, condition, timeout = 5000) {
+        const interval = 100;
+        let elapsed = 0;
+        return new Promise((resolve, reject) => {
+            const check = () => {
+                if (condition.call(this, entityId)) {
+                    resolve()
+                    return;
+                }
+                elapsed += interval; 
+                if (elapsed >= timeout) {
+                    reject(new Error(`Timed out waiting for ${entityId}`));
+                    return;
+                };
+                setTimeout(check, interval);
+            };
+            check();      
+        });
+    }
+
     /********************************* basic getters and setters *****************************/
 
     isInitialized() {
@@ -87,6 +107,10 @@ export class HaSubComponent extends LitElement {
 
     getStateState(entityId) {
         return this.getState(entityId).state;
+    }
+
+    getName(entityId) {
+        return this.getState(entityId).attributes.friendly_name;
     }
 
     makePretty(id) {

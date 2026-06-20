@@ -7,6 +7,7 @@ export class HaMainComponent extends LitElement {
     _hass;
     structure = {};
     entityIds = new Set();
+    MAId = '';
     changedEntityIds = new Set();
 
     static properties = {
@@ -28,18 +29,23 @@ export class HaMainComponent extends LitElement {
 
     set hass(hass) {
         if (!this.isInitialized()) {
-            this.setHass(hass);
-            this.setEntityIds();
-            this.setStates();
-            this.setStructure();
-            this.initializeChoice();
-            this.initialize();
+            this.initialize(hass);
         } else {
             const oldHass = this.getHass();
             this.setHass(hass);
             this.addRelevantChanges(oldHass, this.getHass());
             this.requestUpdate();
         }
+    }
+
+    async initialize(hass) {
+        this.setHass(hass);
+        this.setEntityIds();
+        this.setStates();
+        this.setStructure();
+        this.initializeChoice();
+        await this.setMAId();
+        this._isInitialized = true;
     }
 
     update(changedProps) {
@@ -85,11 +91,6 @@ export class HaMainComponent extends LitElement {
         return false;
     }
 
-
-    initialize() {
-        this._initialized = true;
-    }
-
     setHass(hass) {
         this._hass = hass;
     }
@@ -104,6 +105,10 @@ export class HaMainComponent extends LitElement {
             states[entityId] = this.getState(entityId);
         })
         this.states = states;
+    }
+
+    isInitialized() {
+        return this._isInitialized;
     }
 
     /********************************** hooks **************************************/
@@ -126,6 +131,15 @@ export class HaMainComponent extends LitElement {
     initializeChoice() {
     }
 
+    async setMAId() {
+        const entities = await this.getHass().connection.sendMessagePromise({
+            type: "config_entries/get",
+            domain: "music_assistant"
+        });
+        this.MAId = await entities[0].entry_id;
+        this.requestUpdate();
+    }
+
     /****************************** basic getter and setter logic *********************/
 
     getCEIs() {
@@ -140,16 +154,16 @@ export class HaMainComponent extends LitElement {
         return this.structure;
     }
 
-    isInitialized() {
-        return this._initialized;
-    }
-
     getStates() {
         return this.states;
     }
 
     getHass() {
         return this._hass;
+    }
+
+    getMAId() {
+        return this.MAId;
     }
 
     makePretty(region) {

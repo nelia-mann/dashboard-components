@@ -13,14 +13,4 @@ export default css`
         width: var(--ha-card-width, 900px);
     }
 
-    .floor {
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: space-between;
-        align-items: flex-start;
-        height: 32%;
-        outline: solid;
-        width: 100%;
-    }
-
 `;
