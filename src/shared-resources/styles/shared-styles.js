@@ -1,4 +1,5 @@
-import { css } from 'lit';
+import { css, unsafeCSS } from 'lit';
+import { OUTLINE_STYLES } from './shared-style-tokens.js';
 
 export default css`
 
@@ -20,11 +21,14 @@ export default css`
 
         --smallfire-max-width: 500px;
         --smallfire-max-height: 920px;
+
+        --largegalaxy-max-width: 1200px;
+        --largegalaxy-max-height: 700px;
     }
 
     .outlined {
-        outline-offset: 0px;
-        border-radius: 8px;
+        outline-offset: ${unsafeCSS(OUTLINE_STYLES.general.outlineOffset)};
+        border-radius: ${unsafeCSS(OUTLINE_STYLES.general.borderRadius)};
     }
 
     .inactive {
@@ -36,8 +40,8 @@ export default css`
     }
 
     .outlined {
-        outline: .5px solid rgba(0, 0, 0, .1);
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        outline: ${unsafeCSS(OUTLINE_STYLES.light.outline)};
+        box-shadow: ${unsafeCSS(OUTLINE_STYLES.light.boxShadow)};
     }
 
     .shown-slider {
@@ -59,8 +63,8 @@ export default css`
         }
 
         .outlined {
-            outline: .5px solid rgba(255, 255, 255, .2);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 .5px 2px rgba(255, 255, 255, 0.2) inset;
+            outline: ${unsafeCSS(OUTLINE_STYLES.dark.outline)};
+            box-shadow: ${unsafeCSS(OUTLINE_STYLES.dark.boxShadow)};
         }
 
         .shown-slider {

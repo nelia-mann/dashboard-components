@@ -1,19 +1,9 @@
 import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { HaMainComponent } from '../../shared-resources/base-classes/ha-main-component.js';
-/* import {
-    getState,
-    hasLightChanges,
-    getEntityIdsWithLabel,
-    filterEntityIdsForLabel,
-    addAreaStructure,
-    isSoloLight,
-    addLightStructure
-} from '../../shared-resources/util/hass-util.js'; */
 import styles from './main.styles.js';
 import layoutStyles from './layout-styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import '../lighting/lighting.js';
 
 
 export class BasementKioskCard extends HaMainComponent {
@@ -233,14 +223,12 @@ export class BasementKioskCard extends HaMainComponent {
     static styles = [styles, layoutStyles, sharedStyles];
 
     render() {
-        if (this.isInitialized()) {
-            return html``
+        if (true) {
             return html`
                 <ha-card>
-                    <div class="content">${this.content()}</div>
-                    ${this.buttonRow()}
+                    <div class="content"> Placeholder </div>
                 </ha-card>
-            `;
+            `
         }
     }
 

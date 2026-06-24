@@ -2,6 +2,7 @@ import { LightingCard } from "./lighting-card/main/main.js";
 import { ClimateCard } from "./climate-card/main/main.js";
 import { ClockCard } from "./clock-card/main.js";
 import { BedroomKioskCard } from "./bedroom-kiosk-card/main/main.js";
+import { BasementKioskCard } from "./basement-kiosk-card/main/main.js";
 import { AudioCard } from "./audio-card/main/main.js";
 
 customElements.define("lighting-card", LightingCard);
@@ -9,6 +10,7 @@ customElements.define("clock-card", ClockCard);
 customElements.define("climate-card", ClimateCard);
 customElements.define("bedroom-kiosk-card", BedroomKioskCard);
 customElements.define("audio-card", AudioCard);
+customElements.define("basement-kiosk-card", BasementKioskCard);
 
 window.customCards = window.customCards || [];
 
@@ -36,4 +38,9 @@ window.customCards.push({
     type: "audio-card",
     name: "audio card",
     description: "Audio Card",
+})
+window.customCards.push({
+    type: "basement-kiosk-card",
+    name: "basement kiosk card",
+    description: "Basement Kiosk Card",
 })

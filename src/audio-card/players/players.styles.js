@@ -9,6 +9,7 @@ export default css`
         flex-flow: row nowrap;
         justify-content: space-between;
         align-items: center;
+        touch-action: none;
     }
 
     .main {
@@ -27,6 +28,7 @@ export default css`
         align-items: center;
         height: 100%;
         width: var(--side-player-panel-width, 25%);
+        touch-action: none;
     }
 
     .empty {
@@ -34,8 +36,20 @@ export default css`
         width: var(--player-panel-width, 200px);
         display: flex;
         flex-flow: column nowrap;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
+    }
+
+    .circle {
+        height: calc(var(--player-panel-height) / 2);
+        width: calc(var(--player-panel-height) / 2);
+        border-radius: 50%;
+    }
+
+    .plus {
+        height: 100%;
+        width: 100%;
+        ---mdc-icon-size: 400%;
     }
 
 `;

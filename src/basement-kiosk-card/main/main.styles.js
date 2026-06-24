@@ -13,6 +13,7 @@ export default css`
         width: var(--ha-card-width, 900px);
         border-radius: 0px;
         border-width: var(--ha-card-border-width, 0px);
+        outline: solid;
     }
 
     .button-row {

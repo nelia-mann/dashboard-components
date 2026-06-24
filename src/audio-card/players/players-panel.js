@@ -3,14 +3,15 @@ import { repeat } from 'lit-html/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent';
 import { OFF, rgba } from './../../shared-resources/util/color-util.js';
+import { plus } from '../../shared-resources/util/mdi-util.js';
 import styles from './players.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import '../idle/idle-panel.js';
+import '../speaker/speaker-panel.js';
 import '../player/player-panel.js';
 
 export class PlayersPanel extends HaSubComponent {
 
-    _moveFlag;
+    _ghost;
 
     static properties = {
         ...super.properties,
@@ -20,9 +21,9 @@ export class PlayersPanel extends HaSubComponent {
 
     constructor() {
         super();
-        this.players = {};
+        this.players = [];
         this.idles = [];
-        this._moveFlag = false;
+        this._ghost = null;
     }
 
     /********************************** lifecycle  ************************************/
@@ -35,7 +36,7 @@ export class PlayersPanel extends HaSubComponent {
         this.assignRoles();
     }
 
-    /************************************ *********************************************/
+    /************************************ speaker logic **********************************/
 
     getGroup(speakerId) {
         return this.getState(speakerId).attributes.group_members;
@@ -67,62 +68,53 @@ export class PlayersPanel extends HaSubComponent {
 
     /******************************** player/idle logic ***********************************/
 
-    raiseFlag() {
-        this._moveFlag = true;
-    }
-
-    lowerFlag() {
-        this._moveFlag = false;
-    }
-
     assignRoles() {
         const ids = [...this.getStructure().sorted];
-        let dict = {};
-        let newIdles = [];
+        const newPlayers = [];
+        const newIdles = [];
         ids.forEach((id) => {
             if (this.isInactive(id)) {
                 newIdles.push(id);
             } else {
                 const group = this.getGroup(id);
                 if (group[0] === id) {
-                    dict[id] = group;
+                    newPlayers.push(group);
                 } else if (group.length === 0) {
-                    dict[id] = [id];
+                    newPlayers.push([id]);
                 }
             }   
         })
-        this.players = dict;
+        this.players = newPlayers;
         this.idles = newIdles;
     }
 
     createPlayer(speakerId) {
-        const newPlayers = {...this.players};
-        newPlayers[speakerId] = [speakerId];
+        const newPlayers = [...this.players];
+        newPlayers.push([speakerId]);
         this.players = newPlayers;
         this.removeIdle(speakerId);
     }
 
     getPlayers() {
-        return {...this.players};
+        return [...this.players];
     }
 
-    getPlayer(leaderId) {
-        return [...this.getPlayers()[leaderId]];
+    getPlayer(index) {
+        return [...this.getPlayers()[index]];
     }
 
-    getPlayerLeader(speakerId) {
-        let foundId;
-        Object.keys(this.getPlayers()).forEach(leaderId => {
-            const speakers = this.getPlayer(leaderId);
-            if (speakers.includes(speakerId)) {
-                foundId = leaderId;
+    getPlayerIndex(speakerId) {
+        let foundIndex;
+        this.getPlayers().forEach((player, index) => {
+            if (player.includes(speakerId)) {
+                foundIndex = index;
             }
-        });
-        return foundId;
+        })
+        return foundIndex;
     }
 
-    isPlayerLeader(speakerId) {
-        return this.getPlayerLeader(speakerId) === speakerId;
+    getLeaderFromIndex(index) {
+        return this.getPlayer(index)[0];
     }
 
     getIdles() {
@@ -140,26 +132,22 @@ export class PlayersPanel extends HaSubComponent {
         this.idles = newIdles;
     }
 
-    addToPlayer(speakerId, leaderId) {
-        const playerList = this.getPlayer(leaderId);
+    addToPlayer(speakerId, index) {
+        const playerList = this.getPlayer(index);
         playerList.push(speakerId);
         const newPlayers = this.getPlayers();
-        newPlayers[leaderId] = playerList;
+        newPlayers[index] = playerList;
         this.players = newPlayers;
     }
 
     removeFromPlayer(speakerId) {
-        const leaderId = this.getPlayerLeader(speakerId);
-        const newSpeakers = this.getPlayer(leaderId).filter((id) => (id !== speakerId));
+        const index = this.getPlayerIndex(speakerId);
+        const newSpeakers = this.getPlayer(index).filter((id) => (id !== speakerId));
         const newPlayers = this.getPlayers();
-        if (speakerId === leaderId) {
-            if (newSpeakers.length > 0) {
-                const newLeader = newSpeakers[0];
-                newPlayers[newLeader] = newSpeakers;
-            }
-            delete newPlayers[leaderId];
+        if (newSpeakers.length > 0) {
+            newPlayers[index] = newSpeakers;
         } else {
-            newPlayers[leaderId] = newSpeakers;
+            newPlayers.splice(index, 1);
         }
         this.players = newPlayers;
     } 
@@ -198,6 +186,11 @@ export class PlayersPanel extends HaSubComponent {
         this.callService('media_player', 'join', data);
     }
 
+    stopSpeaker(speakerId) {
+        const data = { entity_id: speakerId }
+        this.callService('media_player', 'media_stop', data);
+    }
+
     removeSpeaker(speakerId) {
         if (this.isLeader(speakerId)) {
             this.unJoinLeader(speakerId);
@@ -207,17 +200,25 @@ export class PlayersPanel extends HaSubComponent {
         this.removeFromPlayer(speakerId);
     }
 
-    addSpeaker(speakerId, targetLeaderId) {
+    clearSpeaker(speakerId) {
+        this.removeSpeaker(speakerId);
+        this.stopSpeaker(speakerId);
+        this.addIdle(speakerId);
+    }
+
+    addSpeaker(speakerId, index) {
+        const targetLeaderId = this.getLeaderFromIndex(index);
         this.joinSpeaker(speakerId, targetLeaderId);
-        this.addToPlayer(speakerId, targetLeaderId);
+        this.addToPlayer(speakerId, index);
         this.removeIdle(speakerId);
     }
 
-    async transferSpeaker(speakerId, targetLeaderId) {
+    async transferSpeaker(speakerId, index) {
+        const targetLeaderId = this.getLeaderFromIndex(index);        
         if (speakerId === targetLeaderId) return;
         this.removeSpeaker(speakerId);
         await this.waitForState(speakerId, this.isUnjoined);
-        this.addSpeaker(speakerId, targetLeaderId);
+        this.addSpeaker(speakerId, index);
     }
 
     async transferToEmpty(speakerId) {
@@ -226,39 +227,81 @@ export class PlayersPanel extends HaSubComponent {
         this.createPlayer(speakerId);
     }
 
-    handleDrop(e, leaderId) {
-        const joinId = e.dataTransfer.getData('join');
-        const transferId = e.dataTransfer.getData('transfer');
-        if (joinId) {
-            if (leaderId) {
-                this.addSpeaker(joinId, leaderId);
+    manipulateSpeaker(speakerId, prevIndex, targetIndex) {
+        if (prevIndex === targetIndex) return;
+        if (targetIndex !== null) {
+            if (targetIndex < this.getPlayers().length) {
+                if (prevIndex !== null) {
+                    this.transferSpeaker(speakerId, targetIndex);
+                } else {
+                    this.addSpeaker(speakerId, targetIndex);
+                }
             } else {
-                this.createPlayer(joinId);
+                if (prevIndex !== null) {
+                    this.transferToEmpty(speakerId);
+                } else {
+                    this.createPlayer(speakerId);
+                }
             }
         } else {
-            if (leaderId) {
-                this.transferSpeaker(transferId, leaderId);
-            } else {
-                this.transferToEmpty(transferId);
-            }
-        } 
-        this.lowerFlag();
-    }
-
-    handleDragStart(e, id) {
-        this.raiseFlag();
-        e.dataTransfer.setData('join', id);
-    }
-
-    handleDragOver(e) {
-        e.preventDefault();
-    }
-
-    handleDragEnd(e, speakerId) {
-        if (this._moveFlag) {
-            this.removeSpeaker(speakerId);
-            this.addIdle(speakerId);
+            this.clearSpeaker(speakerId);
         }
+    }
+
+    handlePointerDown(e, id) {
+        e.currentTarget.setPointerCapture(e.pointerId);
+        this.createGhost(e, id);
+        this.moveGhost(e.clientX, e.clientY)
+    }
+
+    handlePointerMove(e) {
+        this.moveGhost(e.clientX, e.clientY);
+    }
+
+    handlePointerUp(e, id, prevIndex) {
+        this.removeGhost();
+        let elementUnder;
+        if (e.clientX && e.clientY) { 
+            elementUnder = this.renderRoot.elementFromPoint(e.clientX, e.clientY);
+        } else {
+            elementUnder = this.renderRoot.elementFromPoint(e.detail.x, e.detail.y);
+        }
+        const playerBoxes = this.renderRoot.querySelectorAll('[data-group-index');
+        const playerBox = Array.from(playerBoxes).find(box => box.contains(elementUnder));
+        let targetIndex = null;
+        if (playerBox) {
+            targetIndex = parseInt(playerBox.dataset.groupIndex);
+        }
+        this.manipulateSpeaker(id, prevIndex, targetIndex);
+    }
+
+    createGhost(e, id) {
+        const rect = e.currentTarget.getBoundingClientRect();
+        this._ghost = document.createElement('speaker-tile');
+        this._ghost.name = this.getName(id);
+        Object.assign(this._ghost.style, {
+            position: 'fixed',
+            pointerEvents: 'none',
+            opacity: '0.7',
+            zIndex: '1000',
+            width: rect.width + 'px',
+            height: rect.height + 'px',
+        });
+        document.body.appendChild(this._ghost);
+    }
+
+    moveGhost(x, y) {
+        if (!this._ghost) return;
+        Object.assign(this._ghost.style, {
+            left: x + 'px',
+            top: y + 'px',
+            transform: 'translate(-50%, -50%)',
+        })
+    }
+
+    removeGhost() {
+        this._ghost?.remove();
+        this._ghost = null;
     }
 
 
@@ -270,48 +313,51 @@ export class PlayersPanel extends HaSubComponent {
         return styles;
     }
 
+    getPlusStyles() {
+        let styles = {};
+        styles['color'] = rgba(OFF, 0.5);
+        return styles;
+    }
+
     getIdlePanel(id) {
-        return html`<idle-panel 
-                        draggable="true"
-                        class="outlined"
+        return html`<speaker-tile
+                        class = "outlined"
                         style=${styleMap(this.getIdleStyles())}
                         .name = ${this.getName(id)} 
-                        @dragstart = ${(e) => this.handleDragStart(e, id)}
-                        @dragover = ${this.handleDragOver}
+                        @pointerdown = ${(e) => this.handlePointerDown(e, id)}
+                        @pointerup = ${(e) => this.handlePointerUp(e, id, null)}
+                        @pointermove = ${this.handlePointerMove}
                     />`
     }
 
     getEmptyPanel() {
         if (this.getIdles().length > 0) {
-            return html`<div 
-                    class="empty outlined"
-                    @drop = ${(e) => this.handleDrop(e, '')}
-                    @dragover = ${this.handleDragOver}
-                >
-                    Placeholder
+            const index = this.getPlayers().length;
+            return html`<div data-group-index=${index} class="empty outlined">
+                    <div class="circle outlined">
+                        <ha-svg-icon .path=${plus} class = "plus" style = ${styleMap(this.getPlusStyles())}/>
+                    </div>
                 </div>`
         }
     }
 
-    getPlayerPanel(leaderId) {
+    getPlayerPanel(index) {
         return html`<player-panel
+                data-group-index=${index}
                 class="outlined"
                 .changedEntityIds = ${this.getCEIs()}
-                .entityIds=${new Set(this.getPlayer(leaderId))}
-                .speakers = ${this.getPlayer(leaderId)}
+                .entityIds=${new Set(this.getPlayer(index))}
+                .speakers = ${this.getPlayer(index)}
                 .states=${this.getStates()}
-                @start = ${this.raiseFlag}
-                @end = ${(e) => this.handleDragEnd(e, e.detail)}
-                @drop = ${(e) => this.handleDrop(e, leaderId)}
-                @dragover = ${this.handleDragOver}
+                @end = ${(e) => this.handlePointerUp(e, e.detail.speakerId, index)}
             />`
     }
 
     getMainPanel() {
-        const leaderIds = Object.keys(this.getPlayers());
+        const indices = Array.from({ length: this.getPlayers().length }, (_, i) => i)
         return html`
             <div class="main" @dragover = ${this.handleDragOver}>
-                ${repeat(leaderIds, (leaderId) => leaderId, (leaderId) => this.getPlayerPanel(leaderId))}
+                ${repeat(indices, (index) => index, (index) => this.getPlayerPanel(index))}
                 ${this.getEmptyPanel()}
             </div>`
     }
