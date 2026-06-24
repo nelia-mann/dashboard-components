@@ -70,10 +70,10 @@ export class BasementKioskCard extends HaMainComponent {
 
     getGridOptions() {
         return {
-            rows: 10,
-            columns: 27,
-            min_rows: 10,
-            max_rows: 10
+            rows: 14,
+            columns: 30,
+            min_rows: 14,
+            max_rows: 14
         }
     }
 
