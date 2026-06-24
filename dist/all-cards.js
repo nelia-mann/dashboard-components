@@ -170,8 +170,8 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --smallfire-max-width: 500px;
         --smallfire-max-height: 920px;
 
-        --largegalaxy-max-width: 1300px;
-        --largegalaxy-max-height: 900px;
+        --largegalaxy-max-width: 1250px;
+        --largegalaxy-max-height: 800px;
     }
 
     .outlined {
