@@ -15,10 +15,10 @@ export default css`
         --ha-card-width: var(--largegalaxy-max-width);
         --ha-card-border-width: 0px;
 
-        --button-row-height: 50px;
-        --button-row-width: var(--ha-card-width);
+        --button-row-height: 60px;
+        --button-row-width: 100%;
 
-        --light-button-width: 160px;
+        --light-button-width: 200px;
         --light-button-padding: 5px;
         --light-button-heading-margin-top: 7px;
         --light-button-heading-margin-bottom: -7px;
@@ -29,109 +29,17 @@ export default css`
         --light-button-sub-info-font-size: var(--sub-info-font-size);
         --light-button-sub-info-font-weight: var(--sub-info-font-weight);
 
-        --lighting-button-spacing: 15px;
-        --lighting-height: calc(var(--ha-card-height) - var(--button-row-height) - var(--lighting-button-spacing));
-        --lighting-width: var(--ha-card-width);
+        --climate-button-width: 200px;
+        --climate-button-padding: 5px;
+        --climate-button-heading-margin-top: 7px;
+        --climate-button-heading-margin-bottom: -7px;
+        --climate-button-sub-info-margin-bottom: 10px;
+        --climate-button-sub-info-margin-top: 1px;
+        --climate-button-heading-font-weight: var(--small-heading-font-weight);
+        --climate-button-heading-font-size: var(--small-heading-font-size);
+        --climate-button-sub-info-font-weight: var(--sub-info-font-weight);
+        --climate-button-sub-info-font-size: var(--sub-info-font-size);
 
-        --led-margin-top: 0px;
-        --led-margin-right: 00px;
-        --led-padding-left: 10px;
-        --led-height: var(--lighting-height);
-        --led-width: 640px;
-        --led-large-heading-height: 40px;
-        --led-large-heading-font-size: var(--Large-font);
-        --led-large-heading-font-weight: 700;
 
-        --floor-panel-width: 260px;
-        --floor-panel-height: 100%;
-        --floor-panel-flex-flow: column nowrap;
-        --floor-panel-justify-content: flex-start;
-        --floor-panel-align-items: flex-start;
-
-        --area-panel-margin-left: 10px;
-        --area-panel-margin-right: 10px;
-        --area-panel-margin-top: 10px;
-
-        --light-component-width: 180px;
-        --light-component-height: 18px;
-        --light-component-padding: 8px;
-        --light-component-margin: 8px;
-
-        --simple-light-icons-margin-right: 10px;
-        --simple-light-icons-margin-left: 0px;
-        --simple-light-icon-size: 20px;
-        --simple-light-font-size: var(--sub-info-font-size);
-        --simple-light-font-weight: var(--sub-info-font-weight);
-        --simple-light-align-items: center;
-        --simple-light-justify-content: flex-start;
-
-        --light-group-flex-flow: column wrap;
-        --light-group-justify-content: center;
-        --light-group-align-items: flex-start;
-        --light-group-height: calc(var(--led-height) - var(--led-large-heading-height));
-        --light-group-width: 100%;
-
-        --light-select-flex-flow: column nowrap;
-        --light-select-align-items: flex-start;
-        --light-select-justify-content: center;
-        --light-select-innerlight-width: 140px;
-        --light-select-innerlight-height: 20px;
-        --light-select-innerlight-padding: 8px;
-        --light-select-innerlight-margin: 5px;
-        --light-select-innerlight-flex-flow: row nowrap;
-        --light-select-icon-margin-right: 10px;
-        --light-select-icon-margin-left: 10px;
-        --light-select-icon-size: 20px;
-        --light-inner-heading-font-size: var(--sub-info-font-size);
-        --light-inner-heading-font-weight: var(--small-heading-font-weight);
-        --light-inner-font-size: var(--sub-info-font-size);
-        --light-inner-font-weight: var(--sub-info-font-size);
-
-        --control-select-flex-flow: row wrap;
-        --control-select-justify-content: space-around;
-        --control-select-align-items: center;
-        --control-select-width: 150px;
-        --control-select-height: 100px;
-        --control-select-margin-left: 10px;
-        --control-select-margin-top: 40px;
-        --control-select-icon-window-width: 30px;
-        --control-select-icon-window-margin: 10px;
-        --control-select-icon-size: 20px;
-        --control-select-outline-offset: -2px;
-
-        --light-control-padding: 10px;
-        --light-control-margin-left: 20px;
-        --light-control-margin-right: 10px;
-        --light-control-minsize: 300px;
-
-        --wheel-width: 400px;
-        --dot-width: 20px;
-
-        --brightness-slider-width: 210px;
-        --brightness-slider-height: 400px;
-
-        --colortemp-slider-width: 210px;
-        --colortemp-slider-height: 400px;
-
-        --slider-margin: 5%;
-        --slider-width: 60px;
-        --slider-text-padding: 10px;
-        --slider-text-offset: 3%;
-        --slider-level-offset: 10%;
-        --slider-level-height: 2%;
-
-        --theme-select-flex-flow: column wrap;
-        --theme-select-align-items: center;
-        --theme-select-justify-content: flex-start;
-        --theme-select-topbottom-padding: 40px;
-        --theme-select-height: calc(var(--light-group-height) - var(--theme-select-topbottom-padding));
-        --theme-select-width:  420px;
-
-        --theme-button-padding-top: 3px;
-        --theme-button-padding-bottom: 3px;
-        --theme-button-margin: 7px;
-        --theme-button-width: 90px;
-        --theme-button-font-size: var(--sub-info-font-size);
-        --theme-button-font-weight: var(--sub-info-font-weight);
     }
     `
