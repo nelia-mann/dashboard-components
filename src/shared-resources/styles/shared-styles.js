@@ -22,8 +22,8 @@ export default css`
         --smallfire-max-width: 500px;
         --smallfire-max-height: 920px;
 
-        --largegalaxy-max-width: 1250px;
-        --largegalaxy-max-height: 800px;
+        --largegalaxy-max-width: 1225px;
+        --largegalaxy-max-height: 650px;
     }
 
     .outlined {
