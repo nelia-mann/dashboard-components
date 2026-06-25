@@ -58,7 +58,7 @@ export class BasementKioskCard extends HaMainComponent {
         if (true) {
             return html`
                 <ha-card>
-                    <div class="content"> Placeholder3 </div>
+                    <div class="content"> Placeholder </div>
                 </ha-card>
             `
         }
