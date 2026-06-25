@@ -17461,7 +17461,8 @@ class $380e8338b10894eb$export$4890c87e00873e93 extends (0, $f0d92478ce7b526e$ex
 
 function $d6d3f8225ee1fa44$export$fa5ad5b991e74d38(oldHass, newHass, entityId) {
     const attributes = [
-        'group_members'
+        'group_members',
+        'entity_picture'
     ];
     return (0, $d14817f641e94e06$export$6262429fb5a91273)(oldHass, newHass, entityId, attributes);
 }
@@ -17508,7 +17509,10 @@ var $e1dfd9e0988a0d22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         --idle-panel-font-weight: var(--sub-info-font-weight);
 
         --player-panel-width: 400px;
-        --player-panel-height: 300px;
+        --player-panel-height: 400px;
+        --player-art-width: 220px;
+        --player-art-height: var(--player-art-width);
+        --player-panel-padding: 10px;
     }
     `;
 
@@ -17651,12 +17655,22 @@ customElements.define("speaker-tile", $c677366d20ee33b5$export$ecd9d003f3e2410d)
 var $b4abc22e50f4e2c5$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     :host {
-        height: var(--player-panel-height, 300px);
-        width: var(--player-panel-width, 200px);
+        height: var(--player-panel-height, 280px);
+        width: var(--player-panel-width, 180px);
         display: flex;
-        flex-flow: column nowrap;
-        justify-content: flex-start;
-        align-items: center;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: var(--player-panel-padding, 10px);
+    }
+
+    .art {
+        width: var(--player-art-width, 100px);
+        height: var(--player-art-height, 100px);
+        object-fit: cover;
+    }
+
+    .speakerTiles{
     }
 
 `;
@@ -17682,6 +17696,14 @@ class $d12f01acebf1b7ac$export$d8a28575d59b53b4 extends (0, $c0664485052839c4$ex
     }
     /***************************** getter and setter ***********************************************/ getSpeakers() {
         return this.speakers;
+    }
+    getLeadSpeakerId() {
+        return this.getSpeakers()[0];
+    }
+    getImageURL() {
+        const state = this.getState(this.getLeadSpeakerId());
+        const URL = state.attributes.entity_picture;
+        return URL;
     }
     /*********************************** interactive logic *****************************************/ handlePointerDown(e, id) {
         e.currentTarget.setPointerCapture(e.pointerId);
@@ -17739,16 +17761,19 @@ class $d12f01acebf1b7ac$export$d8a28575d59b53b4 extends (0, $c0664485052839c4$ex
                 @pointermove = ${this.handlePointerMove}
             />`;
     }
+    getImage() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<img class = "art" src=${this.getImageURL()} alt="album art" />`;
+    }
     getSpeakerPanel() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${(0, $6db6ff6394e885e6$export$76d90c956114f2c2)(this.getSpeakers(), (speakerId)=>speakerId, (speakerId)=>this.getSpeakerTile(speakerId))}`;
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div class="speakerTiles"> 
+            ${(0, $6db6ff6394e885e6$export$76d90c956114f2c2)(this.getSpeakers(), (speakerId)=>speakerId, (speakerId)=>this.getSpeakerTile(speakerId))}
+            </div> `;
     }
     render() {
-        if (this.isInitialized()) {
-            const sp1 = this.getSpeakers()[0];
-            const state1 = this.getState(sp1);
-            console.log(state1.attributes);
-            return this.getSpeakerPanel();
-        }
+        if (this.isInitialized()) return [
+            this.getImage(),
+            this.getSpeakerPanel()
+        ];
     }
 }
 customElements.define("player-panel", $d12f01acebf1b7ac$export$d8a28575d59b53b4);

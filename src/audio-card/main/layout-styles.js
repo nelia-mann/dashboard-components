@@ -23,6 +23,9 @@ export default css`
         --idle-panel-font-weight: var(--sub-info-font-weight);
 
         --player-panel-width: 400px;
-        --player-panel-height: 300px;
+        --player-panel-height: 400px;
+        --player-art-width: 220px;
+        --player-art-height: var(--player-art-width);
+        --player-panel-padding: 10px;
     }
     `;
