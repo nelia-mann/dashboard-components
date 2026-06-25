@@ -22,7 +22,7 @@ export default css`
         --smallfire-max-width: 500px;
         --smallfire-max-height: 920px;
 
-        --largegalaxy-max-width: 1225px;
+        --largegalaxy-max-width: 1220px;
         --largegalaxy-max-height: 750px;
     }
 

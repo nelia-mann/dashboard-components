@@ -170,7 +170,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --smallfire-max-width: 500px;
         --smallfire-max-height: 920px;
 
-        --largegalaxy-max-width: 1225px;
+        --largegalaxy-max-width: 1220px;
         --largegalaxy-max-height: 750px;
     }
 
