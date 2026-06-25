@@ -2932,7 +2932,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
     }
     `;class iS extends tm{_LABEL="basement_kiosk";_LIGHTLABELS={basic_lighting:"basic lighting",leds:"LED Lighting"};_OPTIONLABELS={lighting:"lighting"};static properties={...super.properties,_option:{state:!0}};constructor(){super(),this._option="lighting"}hasChanges(t,e,i){return!1}getTriggers(){return["_option"]}setOption(t){this._option=t}setStructures(){}static styles=[iy,ib,tX];render(){return U`
                 <ha-card>
-                    <div class="content"> Placeholder </div>
+                    <div class="content"> Placeholder2 </div>
                 </ha-card>
             `}getCardSize(){return 10}getGridOptions(){return{rows:14,columns:30,min_rows:14,max_rows:14}}}var i$=a`
 
