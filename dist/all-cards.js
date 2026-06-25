@@ -170,8 +170,8 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --smallfire-max-width: 500px;
         --smallfire-max-height: 920px;
 
-        --largegalaxy-max-width: 1250px;
-        --largegalaxy-max-height: 800px;
+        --largegalaxy-max-width: 1225px;
+        --largegalaxy-max-height: 650px;
     }
 
     .outlined {
@@ -2932,7 +2932,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
     }
     `;class iS extends tm{_LABEL="basement_kiosk";_LIGHTLABELS={basic_lighting:"basic lighting",leds:"LED Lighting"};_OPTIONLABELS={lighting:"lighting"};static properties={...super.properties,_option:{state:!0}};constructor(){super(),this._option="lighting"}hasChanges(t,e,i){return!1}getTriggers(){return["_option"]}setOption(t){this._option=t}setStructures(){}static styles=[iy,ib,tX];render(){return U`
                 <ha-card>
-                    <div class="content"> Placeholder2 </div>
+                    <div class="content"> Placeholder3 </div>
                 </ha-card>
             `}getCardSize(){return 10}getGridOptions(){return{rows:14,columns:30,min_rows:14,max_rows:14}}}var i$=a`
 
