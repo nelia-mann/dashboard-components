@@ -18,17 +18,19 @@ export class PlayerPanel extends HaSubComponent {
         this.speakers = {};
     }
 
+/********************************* lifecycle ******************************************************/
+
     getTriggers() {
         return ["speakers"]
     }
+
+    /***************************** getter and setter ***********************************************/
 
     getSpeakers() {
         return this.speakers;
     }
 
-    getName(id) {
-        return this.getStates()[id].attributes.friendly_name;
-    }
+    /*********************************** interactive logic *****************************************/
 
     handlePointerDown(e, id) {
         e.currentTarget.setPointerCapture(e.pointerId);
@@ -80,9 +82,11 @@ export class PlayerPanel extends HaSubComponent {
         this._ghost = null;
     }
 
+    /************************************ html and style *********************************************/
+
     static styles = [sharedStyles, styles];
 
-    getSpeaker(id) {
+    getSpeakerTile(id) {
         return html`<speaker-tile
                 .name = ${this.getName(id)}
                 @pointerdown = ${(e) => this.handlePointerDown(e, id)}
@@ -92,11 +96,14 @@ export class PlayerPanel extends HaSubComponent {
     }
 
     getSpeakerPanel() {
-        return html`${repeat(this.getSpeakers(), (speakerId) => speakerId, speakerId => this.getSpeaker(speakerId))}`
+        return html`${repeat(this.getSpeakers(), (speakerId) => speakerId, speakerId => this.getSpeakerTile(speakerId))}`
     }
 
     render() {
         if (this.isInitialized()) {
+            const sp1 = this.getSpeakers()[0];
+            const state1 = this.getState(sp1);
+            console.log(state1.attributes);
             return this.getSpeakerPanel();
         }
     }
