@@ -23,7 +23,7 @@ export default css`
         --smallfire-max-height: 920px;
 
         --largegalaxy-max-width: 1225px;
-        --largegalaxy-max-height: 650px;
+        --largegalaxy-max-height: 750px;
     }
 
     .outlined {
