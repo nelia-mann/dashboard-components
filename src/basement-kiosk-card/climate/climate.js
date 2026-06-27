@@ -5,7 +5,7 @@ import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import '../../shared-resources/climate-components/heatpump-panel/heatpump-panel.js';
 import '../../shared-resources/climate-components/aux-thermostat-panel/aux-thermostat-panel.js';
 
-export class ClimateBedroomPanel extends HaClimateComponent {
+export class ClimateBasementPanel extends HaClimateComponent {
 
 
 
@@ -23,16 +23,16 @@ export class ClimateBedroomPanel extends HaClimateComponent {
         return this.getPrimary().structure;
     }
 
-    getSecondary() {
-        return this.getStructure().secondary;
+    getAux() {
+        return this.getStructure().aux;
     }
 
-    getSecondaryEIs() {
-        return this.getSecondary().entityIds;
+    getAuxStructure() {
+        return this.getAux().structure;
     }
 
-    getSecondaryStructure() {
-        return this.getSecondary().structure;
+    getAuxEIs() {
+        return this.getAux().entityIds;
     }
 
     /****************************** html/style logic *********************************/
@@ -50,17 +50,17 @@ export class ClimateBedroomPanel extends HaClimateComponent {
         }
     }
 
-    secondaryPanel() {
-        if (this.getSecondary()) {
+    auxPanel() {
+        if (this.getAux()) {
             return html`
-                <aux-thermostat-panel class="outlined"
+                <aux-basement-panel class="outlined"
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
-                    .entityIds = ${this.getSecondaryEIs()}
-                    .structure = ${this.getSecondaryStructure()}
-                    .regionName = ${'bedroom'}
+                    .entityIds = ${this.getAuxEIs()}
+                    .structure = ${this.getAuxStructure()}
+                    .regionName = ${"Office"}
                     .callService = ${this.callService}
-                ></aux-thermostat-panel>
+                ></aux-basement-panel>
             `
         }
     }
@@ -71,11 +71,11 @@ export class ClimateBedroomPanel extends HaClimateComponent {
         if (this.isInitialized()) {
             return html`
                 ${this.primaryPanel()}
-                ${this.secondaryPanel()}
+                ${this.auxPanel()}
             `
         }
     }
 
 }
 
-customElements.define("climate-bedroom-panel", ClimateBedroomPanel);
+customElements.define("climate-basement-panel", ClimateBasementPanel);

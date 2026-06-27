@@ -10,6 +10,7 @@ export class SliderBar extends HaSubComponent {
     static properties = {
         ...super.properties,
         state: { state: true },
+        colorCode: { state: true},
         _value: { state: true }
     }
 
@@ -34,7 +35,7 @@ export class SliderBar extends HaSubComponent {
     }
 
     getTriggers() {
-        return ["_value"];
+        return ["_value", "colorCode"];
     }
 
     onFirstUpdate() {

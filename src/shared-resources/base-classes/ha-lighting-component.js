@@ -86,8 +86,13 @@ export class HaLightingComponent extends HaSubComponent {
 
     getBrightnessPct(lightId) {
         let brightnessPct = 100;
-        let brightness = this.getAttributes(lightId).brightness;
-        (brightness) && (brightnessPct = brightness * 100 / 255);
+        const brightness = this.getAttributes(lightId).brightness;
+        const offBrightness = this.getAttributes(lightId).off_brightness;
+        if (brightness) {
+            brightnessPct = brightness * 100 / 255;
+        } else if (offBrightness) {
+            brightnessPct = offBrightness * 100 / 255;
+        }
         return brightnessPct;
     }
 

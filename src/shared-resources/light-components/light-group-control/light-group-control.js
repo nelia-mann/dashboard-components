@@ -94,12 +94,17 @@ export class LightGroupControl extends HaLightingComponent {
     /**************************** style/html logic ******************************/
 
     getClass() {
+        let string = "";
         if (this.isOption('brightness')
             || this.isOption('color_temp_kelvin')
             || this.isOption('theme')
             || this.isOption('hs_color')) {
-            return "outlined"
-        } else return "";
+            string = string + "outlined"
+        };
+        if (this.getLightState().state === "off") {
+            string = string + " inactive";
+        }
+        return string;
     }
 
     lightGroupSelect() {
@@ -110,7 +115,9 @@ export class LightGroupControl extends HaLightingComponent {
                 .structure = ${this.getStructure()}
                 .entityIds = ${this.getEntityIds()}
                 .selectedId = ${this.getSelectedId()}
+                .option = ${this.getOption()}
                 @select = ${this.onSelectLight}
+                @select_control = ${this.onSelectControl}
             ></light-group-select>
         `
     }
@@ -122,7 +129,7 @@ export class LightGroupControl extends HaLightingComponent {
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
                 .structure = ${this.getThisStructure(this.getSelectedId())}
-                .entityIds = ${new Set([this.getSelectedId()])}
+                .entityIds = ${this.getSelectedId()}
                 .option = ${this.getOption()}
                 @select = ${this.onSelectControl}
             ></light-control-select>
@@ -149,7 +156,6 @@ export class LightGroupControl extends HaLightingComponent {
         if (this.isInitialized()) {
             return html`
                 ${this.lightGroupSelect()}
-                ${this.lightControlSelect()}
                 ${this.lightControl()}
             `
         }

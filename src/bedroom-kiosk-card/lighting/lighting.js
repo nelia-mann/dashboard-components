@@ -6,7 +6,7 @@ import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import '../../shared-resources/light-components/area-panel/area-panel.js'
 import '../../shared-resources/light-components/light-group-control/light-group-control.js';
 
-export class LightingPanel extends HaSubComponent {
+export class LightingBedroomPanel extends HaSubComponent {
 
 
 
@@ -84,4 +84,4 @@ export class LightingPanel extends HaSubComponent {
 
 }
 
-customElements.define("lighting-bedroom-panel", LightingPanel);
+customElements.define("lighting-bedroom-panel", LightingBedroomPanel);

@@ -75,12 +75,20 @@ export class ThemeSelect extends HaLightingComponent {
         this._flag = false;
     }
 
+    isFixed() {
+        if (this.getLightState().state === 'off') {
+            return true;
+        } return false;
+    }
+
     /**************************** interactive logic **************************/
 
     onClick(option) {
-        this.raiseChangeFlag();
-        this.setOption(option);
-        this.handleCallService(option);
+        if (!this.isFixed()) {
+            this.raiseChangeFlag();
+            this.setOption(option);
+            this.handleCallService(option);
+        }
     }
 
     handleCallService(option) {

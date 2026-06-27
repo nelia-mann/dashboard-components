@@ -54,4 +54,12 @@ export default css`
         align-items: center;
     }
 
+    .top-row {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items:center;
+        margin-bottom: var(--light-select-top-row-margin, 20px);
+    }
+
 `;

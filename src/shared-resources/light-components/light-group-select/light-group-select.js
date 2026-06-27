@@ -1,22 +1,30 @@
 import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
+import { keyed } from 'lit/directives/keyed.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { HaLightingComponent } from '../../base-classes/ha-lighting-component.js';
 import styles from './group-select.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
-import '../light-control/light-control.js';
+import '../light-control-select/light-control-select.js';
 
 export class LightGroupSelect extends HaLightingComponent {
 
     static properties = {
         ...super.properties,
-        selectedId: { state: true }
+        selectedId: { state: true },
+        option: { state: true }
+    }
+
+    constructor() {
+        super();
+        this.option = '';
+        this.selectedId = '';
     }
 
     /******************************* lifecycle **********************************/
 
     getTriggers() {
-        return ["selectedId"];
+        return ["selectedId", "option"];
     }
 
     /************************ getter and setter logic *************************/
@@ -29,10 +37,18 @@ export class LightGroupSelect extends HaLightingComponent {
         return this.selectedId;
     }
 
+    getOption() {
+        return this.option;
+    }
+
     /************************ interactive logic *******************************/
 
     onSelect(lightId) {
         this.dispatchEvent(new CustomEvent('select', { detail: lightId }));
+    }
+
+    onSelectControl(e) {
+        this.dispatchEvent(new CustomEvent('select_control', { detail: e.detail})) 
     }
 
     /**************************** style/html logic ******************************/
@@ -51,6 +67,20 @@ export class LightGroupSelect extends HaLightingComponent {
         } else {
             return 'sub-info';
         }
+    }
+
+    lightControlSelect() {
+        return keyed(this.getSelectedId(), html`
+            <light-control-select
+                class = "outlined"
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .structure = ${this.getThisStructure(this.getSelectedId())}
+                .entityIds = ${new Set([this.getSelectedId()])}
+                .option = ${this.getOption()}
+                @select = ${this.onSelectControl}
+            ></light-control-select>
+        `)
     }
 
     innerLight(lightId) {
@@ -82,7 +112,10 @@ export class LightGroupSelect extends HaLightingComponent {
     render() {
         if (this.isInitialized()) {
             return html`
-                ${this.innerLight(this.getMainId())}
+                <div class="top-row">
+                    ${this.innerLight(this.getMainId())}
+                    ${this.lightControlSelect()}
+                </div>
                 <div class="members">
                     ${this.lights()}
                 </div>

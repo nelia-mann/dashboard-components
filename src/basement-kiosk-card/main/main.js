@@ -15,6 +15,8 @@ import layoutStyles from './layout-styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import "../../shared-resources/light-components/light-button/light-button.js";
 import "../../shared-resources/climate-components/climate-button/climate-button.js";
+import "../lighting/lighting.js";
+import "../climate/climate.js";
 
 
 export class BasementKioskCard extends HaMainComponent {
@@ -187,8 +189,38 @@ export class BasementKioskCard extends HaMainComponent {
         return [this.lightingButton(), this.climateButton()];
     }
 
+    lightingPanel() {
+        return html`
+            <lighting-basement-panel
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getLightIds()}
+                .structure = ${this.getLightStructure()}
+                .callService = ${this._hass.callService}
+            ></lighting-basement-panel>
+            `
+    }
+
+    climatePanel() {
+        return html`
+            <climate-basement-panel
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getClimateIds()}
+                .structure = ${this.getClimateStructure()}
+                .callService = ${this._hass.callService}
+            ></climate-basement-panel>
+            `
+    }
+
     content() {
-        return html`<div> Placeholder </div>`;
+        switch (this.getType()) {
+            case 'lighting':
+                return this.lightingPanel();
+            case 'climate':
+                return this.climatePanel();
+        }
+        return html``;
     }
 
     static styles = [styles, layoutStyles, sharedStyles];

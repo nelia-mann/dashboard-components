@@ -6,6 +6,12 @@ import '../../general-components/slider/slider.js';
 
 export class ColorTempSlider extends HaLightingComponent {
 
+    isFixed() {
+        if (this.getLightState().state === 'off') {
+            return true;
+        } return false;
+    }
+
     /************************ interactive logic *******************************/
 
     handleCallService(e) {
@@ -23,6 +29,7 @@ export class ColorTempSlider extends HaLightingComponent {
         const tempGrad = this.tempGradientGeneral(minTemp, maxTemp, 'to right', 1);
         return html`
             <slider-bar
+                .fixed = ${this.isFixed()}
                 .changedEntityIds = ${this.getCEIs()}
                 .state=${this.getLightState()}
                 .max=${maxTemp}

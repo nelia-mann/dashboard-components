@@ -61,6 +61,9 @@ export class LightControlSelect extends HaLightingComponent {
         this.hasCTColor() && options.push('color_temp_kelvin');
         this.hasHSColor() && options.push('hs_color');
         this.hasTheme() && options.push('theme');
+        if (options.length === 2) {
+            options = ['onOff'];
+        }
         this._options = options;
     }
 

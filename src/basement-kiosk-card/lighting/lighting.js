@@ -1,67 +1,85 @@
 import { html } from 'lit';
+import { repeat } from 'lit-html/directives/repeat.js';
 import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
 import styles from './lighting.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import '../../shared-resources/light-components/area-list-panel/area-list-panel.js';
-import '../led-lighting/led-lighting.js';
+import '../../shared-resources/light-components/area-list-panel/area-list-panel.js'
+import '../../shared-resources/light-components/light-group-control/light-group-control.js';
 
-export class LightingPanel extends HaSubComponent {
+export class LightingBasementPanel extends HaSubComponent {
 
 
 
     /****************************** getter and setter logic **************************/
 
-    getSubDict(option) {
-        return this.getStructure()[option];
+    getBasicStructure() {
+        return this.getStructure()['basic_lighting']['structure'];
     }
 
-    getSubStructure(option) {
-        return this.getSubDict(option).structure;
+    getAreaEIs(areaId) {
+        return this.getBasicStructure()[areaId].entityIds;
     }
 
-    getSubEntityIds(option) {
-        return this.getSubDict(option).entityIds;
+    getAreaStructure(areaId) {
+        return this.getBasicStructure()[areaId].structure;
     }
 
+    getAreaName(areaId) {
+        return this.getBasicStructure()[areaId].name
+    }
+
+    getSpecialStructure() {
+        return this.getStructure()['special_lights']['structure'];
+    }
 
     /****************************** html/style logic *********************************/
 
     static styles = [sharedStyles, styles];
 
-    basicLightingPanel() {
+    getAreaListDisplay() {
         return html`
             <area-list-panel
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
-                .structure = ${this.getSubStructure("basic_lighting")}
-                .entityIds = ${this.getSubEntityIds("basic_lighting")}
-                .callService=${this.callService}
-            ></area-list-panel>
+                .structure = ${this.getBasicStructure()}
+                .entityIds = ${this.getEntityIds()}
+                .callService = ${this.callService}
+            ></area-panel>
         `
     }
 
-    ledLightingPanel() {
+    getSpecialDisplay(specialId) {
         return html`
-            <led-lighting-panel
+            <light-group-control
                 class="outlined"
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
-                .structure = ${this.getSubStructure("leds")}
-                .entityIds = ${this.getSubEntityIds("leds")}
-                .callService=${this.callService}
-            ></led-lighting-panel>
+                .structure = ${this.getSpecialStructure()[specialId].structure}
+                .entityIds = ${this.getSpecialStructure()[specialId].entityIds}
+                .callService = ${this.callService}
+            ></light-group-control>
         `
+    }
+
+    basicLighting() {
+        const areaIds = Object.keys(this.getBasicStructure()).sort();
+        return html`${repeat(areaIds, (areaId) => areaId, (areaId) => this.getAreaDisplay(areaId))}`
+    }
+
+    specialLighting() {
+        const specialIds = Object.keys(this.getSpecialStructure());
+        return html`${repeat(specialIds, (specialId) => specialId, (specialId) => this.getSpecialDisplay(specialId))}`
     }
 
     render() {
         if (this.isInitialized()) {
             return html`
-                ${this.basicLightingPanel()}
-                ${this.ledLightingPanel()}
+                ${this.getAreaListDisplay()}
+                ${this.specialLighting()}
             `
         }
     }
 
 }
 
-customElements.define("lighting-panel", LightingPanel);
+customElements.define("lighting-basement-panel", LightingBasementPanel);

@@ -62,6 +62,12 @@ export class ColorWheel extends HaLightingComponent {
 
     /****************************** getter and setter logic *******************/
 
+    isFixed() {
+        if (this.getLightState().state === 'off') {
+            return true;
+        } return false;
+    }
+
     getHue() {
         return Math.round(this._hue);
     }
@@ -120,7 +126,7 @@ export class ColorWheel extends HaLightingComponent {
     }
 
     move(e) {
-        if (this.isDown()) {
+        if (this.isDown() && !this.isFixed()) {
             const rect = this.getRect();
             const scale = rect.width;
             let x = (100 * (e.clientX - rect.left) / scale) - 50;
@@ -138,12 +144,14 @@ export class ColorWheel extends HaLightingComponent {
     }
 
     handleCallService() {
-        const entityId = this.getMainId();
-        const data = {
-            entity_id: entityId,
-            'hs_color': [this.getHue(), this.getSat()]
+        if (!this.isFixed()) {
+            const entityId = this.getMainId();
+            const data = {
+                entity_id: entityId,
+                'hs_color': [this.getHue(), this.getSat()]
+            }
+            this.callService('light', 'turn_on', data)
         }
-        this.callService('light', 'turn_on', data)
     }
 
     /**************************** style/html logic ***************************/
