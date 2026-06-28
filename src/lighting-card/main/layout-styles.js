@@ -82,7 +82,7 @@ export default css`
         --light-inner-font-size: var(--sub-info-font-size);
         --light-inner-font-weight: var(--sub-info-font-size);
 
-        --wheel-width: 270px;
+        --wheel-width: 440px;
         --dot-width: 20px;
 
         --control-select-flex-flow: row nowrap;
@@ -100,20 +100,20 @@ export default css`
         --light-control-margin-right: 20px;
         --light-control-margin: 15px;
 
-        --brightness-slider-width: 400px;
+        --brightness-slider-width: 600px;
         --brightness-slider-height: 100px;
 
-        --colortemp-slider-width: 400px;
-        --colortemp-slider-height: 100px;
+        --colortemp-slider-width: var(--brightness-slider-width);
+        --colortemp-slider-height: var(--brightness-slider-height);
 
         --slider-orientation: column nowrap;
-        --slider-margin: 5%;
+        --slider-margin: 3%;
         --slider-width: 15px;
         --slider-text-padding: 10px;
         --slider-text-offset: 6%;
         --slider-text-width: 20px;
         --slider-level-offset: 10%;
-        --slider-level-height: 2%;
+        --slider-level-height: 1.5%;
 
         --theme-select-flex-flow: column wrap;
         --theme-select-align-items: center;

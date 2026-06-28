@@ -64,6 +64,12 @@ export class LightControlSelect extends HaLightingComponent {
         if (options.length === 2) {
             options = ['onOff'];
         }
+        if (options.includes('color_temp_kelvin')) {
+            const index = options.indexOf('brightness');
+            if (index > -1) {
+                options.splice(index, 1);
+            }
+        }
         this._options = options;
     }
 
@@ -115,6 +121,9 @@ export class LightControlSelect extends HaLightingComponent {
             case 'brightness':
                 content = html`<ha-svg-icon .path=${brightness6}></ha-svg-icon>`;
                 break;
+            case 'color_temp_kelvin':
+                content = html`<ha-svg-icon .path=${brightness6}></ha-svg-icon>`;
+                break;                
             case 'theme':
                 content = html`<ha-svg-icon .path=${creationOutline}></ha-svg-icon>`;
                 break;

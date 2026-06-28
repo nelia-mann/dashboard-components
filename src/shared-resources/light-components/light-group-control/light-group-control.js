@@ -59,7 +59,9 @@ export class LightGroupControl extends HaLightingComponent {
     }
 
     setDefaultOption() {
-        if (this.hasBrightness(this.getSelectedId())) {
+        if (this.hasCTColor(this.getSelectedId())) {
+            this.setOption('color_temp_kelvin');
+        } else if (this.hasBrightness(this.getSelectedId())) {
             this.setOption('brightness');
         } else {
             this.setOption(null);
@@ -136,19 +138,27 @@ export class LightGroupControl extends HaLightingComponent {
         `)
     }
 
-    lightControl() {
+    lightControl(option) {
+        return keyed(this.getSelectedId(), html`
+            <light-control
+                class = ${this.getClass()}
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getTheseEntityIds(this.getSelectedId())}
+                .structure = ${this.getThisStructure(this.getSelectedId())}
+                .option = ${option}
+                .callService=${this.callService}
+            ></light-control>
+        `)
+    }
+
+    lightControls() {
         if (this.getOption()) {
-            return keyed(this.getSelectedId(), html`
-                <light-control
-                    class = ${this.getClass()}
-                    .changedEntityIds = ${this.getCEIs()}
-                    .states = ${this.getStates()}
-                    .entityIds = ${this.getTheseEntityIds(this.getSelectedId())}
-                    .structure = ${this.getThisStructure(this.getSelectedId())}
-                    .option = ${this.getOption()}
-                    .callService=${this.callService}
-                ></light-control>
-            `)
+            if (this.getOption() === 'color_temp_kelvin') {
+                return [this.lightControl('brightness'), this.lightControl('color_temp_kelvin')];
+            } else {
+                return this.lightControl(this.getOption());
+            }
         }
     }
 
@@ -158,7 +168,7 @@ export class LightGroupControl extends HaLightingComponent {
         if (this.isInitialized()) {
             return html`
                 ${this.lightGroupSelect()}
-                ${this.lightControl()}
+                ${this.lightControls()}
             `
         }
     }

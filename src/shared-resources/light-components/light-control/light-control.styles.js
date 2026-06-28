@@ -5,7 +5,7 @@ export default css`
 
     :host {
         display: flex;
-        flex-flow: row nowrap;
+        flex-flow: column nowrap;
         justify-content: center;
         align-items: center;
         padding: var(--light-control-padding, 20px);

@@ -25,6 +25,18 @@ export default css`
         outline: none;
     }
 
+    .doublewide {
+        width: calc(2 * var(--control-select-icon-window-width, 30px));
+        height: var(--control-select-icon-window-width, 30px);
+        border-radius: 40%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: var(--control-select-icon-window-margin, 10px);
+        outline-offset: var(--control-select-outline-offset, -2px);
+        outline: none;
+    }
+
     .icon {
         width: var(--control-select-icon-size, 20px);
         height: var(--control-select-icon-size, 20px);

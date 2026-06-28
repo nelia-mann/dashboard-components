@@ -40,7 +40,7 @@ export default css`
         top: var(--slider-margin, 5%);
         left: 0;
         width: 100%;
-        height: calc(100% - 2*var(--slider-margin, 5%));
+        height: calc(100% - 2*var(--slider-margin, 10%));
     }
 
     .inner-slider.horizontal {

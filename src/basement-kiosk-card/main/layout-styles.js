@@ -88,7 +88,7 @@ export default css`
         --light-inner-font-size: var(--sub-info-font-size);
         --light-inner-font-weight: var(--sub-info-font-size);
 
-        --wheel-width: 400px;
+        --wheel-width: 360px;
         --dot-width: 30px;
 
         --control-select-flex-flow: row nowrap;
@@ -104,7 +104,7 @@ export default css`
         --light-control-padding: 30px;
         --light-control-margin-left: 20px;
         --light-control-margin-right: 20px;
-        --light-control-margin: 15px;
+        --light-control-margin: 35px;
 
         --brightness-slider-width: 800px;
         --brightness-slider-height: 100px;
@@ -113,7 +113,7 @@ export default css`
         --colortemp-slider-height: 100px;
 
         --slider-orientation: column nowrap;
-        --slider-margin: 20%;
+        --slider-margin: 3%;
         --slider-width: 5px;
         --slider-text-padding: 10px;
         --slider-text-offset: 1%;
@@ -124,13 +124,13 @@ export default css`
         --theme-select-flex-flow: column wrap;
         --theme-select-align-items: center;
         --theme-select-justify-content: flex-start;
-        --theme-select-padding: 10px;
-        --theme-select-height: 400px;
+        --theme-select-padding: 0px;
+        --theme-select-height: 380px;
         --theme-select-width: 850px;
 
         --theme-button-padding-top: 7px;
         --theme-button-padding-bottom: 7px;
-        --theme-button-margin: 8.5px;
+        --theme-button-margin: 7px;
         --theme-button-width: 120px;
         --theme-button-height: 40px;
         --theme-button-font-size: var(--sub-info-font-size);
@@ -229,7 +229,6 @@ export default css`
         --offset-slider-value-font-weight: 700;
         --offset-slider-bar-height: calc(100% - var(--offset-slider-value-height));
 
-        --slider-margin: 10px;
         --slider-width: 100%;
         --slider-width-for-offset: 40px;
 
