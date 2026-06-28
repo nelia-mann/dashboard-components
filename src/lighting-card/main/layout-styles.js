@@ -58,6 +58,9 @@ export default css`
         --light-group-width: 700px;
         --light-group-margin-top: 30px;
 
+        --light-group-control-padding-top: 20px;
+        --light-group-control-padding-bottom: 20px;
+
         --light-select-flex-flow: column nowrap;
         --light-select-align-items: center;
         --light-select-justify-content: center;

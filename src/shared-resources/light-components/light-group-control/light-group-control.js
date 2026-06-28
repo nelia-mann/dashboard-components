@@ -137,17 +137,19 @@ export class LightGroupControl extends HaLightingComponent {
     }
 
     lightControl() {
-        return keyed(this.getSelectedId(), html`
-            <light-control
-                class = ${this.getClass()}
-                .changedEntityIds = ${this.getCEIs()}
-                .states = ${this.getStates()}
-                .entityIds = ${this.getTheseEntityIds(this.getSelectedId())}
-                .structure = ${this.getThisStructure(this.getSelectedId())}
-                .option = ${this.getOption()}
-                .callService=${this.callService}
-            ></light-control>
-        `)
+        if (this.getOption()) {
+            return keyed(this.getSelectedId(), html`
+                <light-control
+                    class = ${this.getClass()}
+                    .changedEntityIds = ${this.getCEIs()}
+                    .states = ${this.getStates()}
+                    .entityIds = ${this.getTheseEntityIds(this.getSelectedId())}
+                    .structure = ${this.getThisStructure(this.getSelectedId())}
+                    .option = ${this.getOption()}
+                    .callService=${this.callService}
+                ></light-control>
+            `)
+        }
     }
 
     static styles = [sharedStyles, styles];

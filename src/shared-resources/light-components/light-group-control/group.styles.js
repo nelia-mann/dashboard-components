@@ -10,6 +10,8 @@ export default css`
         justify-content: var(--light-group-justify-content, space-around);
         align-items: var(--light-group-align-items, center);
         margin-top: var(--light-group-margin-top, 40px);
+        padding-top: var(--light-group-control-padding-top, 20px);
+        padding-bottom: var(--light-group-control-padding-bottom, 20px);
     }
 
 `;

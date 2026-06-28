@@ -57,10 +57,13 @@ export default css`
         --simple-light-align-items: center;
         --simple-light-justify-content: flex-start;
 
-        --light-group-height: var(--lighting-height);
+        --light-group-control-padding-top: 20px;
+        --light-group-control-padding-bottom: var(--light-group-control-padding-top);
+
+        --light-group-height: calc(var(--lighting-height) - 2 * var(--light-group-control-padding-top));
         --light-group-width: 950px;
         --light-group-flex-flow: column nowrap;
-        --light-group-justify-content: space-around;
+        --light-group-justify-content: flex-start;
         --light-group-align-items: center;
         --light-group-margin-top: 0px;
 
@@ -85,8 +88,8 @@ export default css`
         --light-inner-font-size: var(--sub-info-font-size);
         --light-inner-font-weight: var(--sub-info-font-size);
 
-        --wheel-width: 270px;
-        --dot-width: 20px;
+        --wheel-width: 400px;
+        --dot-width: 30px;
 
         --control-select-flex-flow: row nowrap;
         --control-select-justify-content: space-around;
@@ -98,25 +101,25 @@ export default css`
         --control-select-icon-size: 20px;
         --control-select-outline-offset: -2px;
 
-        --light-control-padding: 15px;
+        --light-control-padding: 30px;
         --light-control-margin-left: 20px;
         --light-control-margin-right: 20px;
         --light-control-margin: 15px;
 
-        --brightness-slider-width: 400px;
+        --brightness-slider-width: 800px;
         --brightness-slider-height: 100px;
 
-        --colortemp-slider-width: 400px;
+        --colortemp-slider-width: var(--brightness-slider-width);
         --colortemp-slider-height: 100px;
 
         --slider-orientation: column nowrap;
-        --slider-margin: 5%;
-        --slider-width: 15px;
+        --slider-margin: 20%;
+        --slider-width: 5px;
         --slider-text-padding: 10px;
-        --slider-text-offset: 6%;
+        --slider-text-offset: 1%;
         --slider-text-width: 20px;
         --slider-level-offset: 10%;
-        --slider-level-height: 2%;
+        --slider-level-height: 1%;
 
         --theme-select-flex-flow: column wrap;
         --theme-select-align-items: center;

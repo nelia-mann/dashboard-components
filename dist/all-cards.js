@@ -79,6 +79,9 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --light-group-width: 700px;
         --light-group-margin-top: 30px;
 
+        --light-group-control-padding-top: 20px;
+        --light-group-control-padding-bottom: 20px;
+
         --light-select-flex-flow: column nowrap;
         --light-select-align-items: center;
         --light-select-justify-content: center;
@@ -254,6 +257,8 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         justify-content: var(--light-group-justify-content, space-around);
         align-items: var(--light-group-align-items, center);
         margin-top: var(--light-group-margin-top, 40px);
+        padding-top: var(--light-group-control-padding-top, 20px);
+        padding-bottom: var(--light-group-control-padding-bottom, 20px);
     }
 
 `,er=a`
@@ -766,17 +771,17 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                 .option = ${this.getOption()}
                 @select = ${this.onSelectControl}
             ></light-control-select>
-        `)}lightControl(){return t_(this.getSelectedId(),U`
-            <light-control
-                class = ${this.getClass()}
-                .changedEntityIds = ${this.getCEIs()}
-                .states = ${this.getStates()}
-                .entityIds = ${this.getTheseEntityIds(this.getSelectedId())}
-                .structure = ${this.getThisStructure(this.getSelectedId())}
-                .option = ${this.getOption()}
-                .callService=${this.callService}
-            ></light-control>
-        `)}static styles=[tX,en];render(){if(this.isInitialized())return U`
+        `)}lightControl(){if(this.getOption())return t_(this.getSelectedId(),U`
+                <light-control
+                    class = ${this.getClass()}
+                    .changedEntityIds = ${this.getCEIs()}
+                    .states = ${this.getStates()}
+                    .entityIds = ${this.getTheseEntityIds(this.getSelectedId())}
+                    .structure = ${this.getThisStructure(this.getSelectedId())}
+                    .option = ${this.getOption()}
+                    .callService=${this.callService}
+                ></light-control>
+            `)}static styles=[tX,en];render(){if(this.isInitialized())return U`
                 ${this.lightGroupSelect()}
                 ${this.lightControl()}
             `}}customElements.define("light-group-control",eP);var eB=a`
@@ -2547,6 +2552,9 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --light-group-width: 100%;
         --light-group-margin-top: 15px;
 
+        --light-group-control-padding-top: 20px;
+        --light-group-control-padding-bottom: 20px;
+
         --light-select-flex-flow: column nowrap;
         --light-select-align-items: center;
         --light-select-justify-content: center;
@@ -2874,10 +2882,13 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --simple-light-align-items: center;
         --simple-light-justify-content: flex-start;
 
-        --light-group-height: var(--lighting-height);
+        --light-group-control-padding-top: 20px;
+        --light-group-control-padding-bottom: var(--light-group-control-padding-top);
+
+        --light-group-height: calc(var(--lighting-height) - 2 * var(--light-group-control-padding-top));
         --light-group-width: 950px;
         --light-group-flex-flow: column nowrap;
-        --light-group-justify-content: space-around;
+        --light-group-justify-content: flex-start;
         --light-group-align-items: center;
         --light-group-margin-top: 0px;
 
@@ -2902,8 +2913,8 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --light-inner-font-size: var(--sub-info-font-size);
         --light-inner-font-weight: var(--sub-info-font-size);
 
-        --wheel-width: 270px;
-        --dot-width: 20px;
+        --wheel-width: 400px;
+        --dot-width: 30px;
 
         --control-select-flex-flow: row nowrap;
         --control-select-justify-content: space-around;
@@ -2915,25 +2926,25 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --control-select-icon-size: 20px;
         --control-select-outline-offset: -2px;
 
-        --light-control-padding: 15px;
+        --light-control-padding: 30px;
         --light-control-margin-left: 20px;
         --light-control-margin-right: 20px;
         --light-control-margin: 15px;
 
-        --brightness-slider-width: 400px;
+        --brightness-slider-width: 800px;
         --brightness-slider-height: 100px;
 
-        --colortemp-slider-width: 400px;
+        --colortemp-slider-width: var(--brightness-slider-width);
         --colortemp-slider-height: 100px;
 
         --slider-orientation: column nowrap;
-        --slider-margin: 5%;
-        --slider-width: 15px;
+        --slider-margin: 20%;
+        --slider-width: 5px;
         --slider-text-padding: 10px;
-        --slider-text-offset: 6%;
+        --slider-text-offset: 1%;
         --slider-text-width: 20px;
         --slider-level-offset: 10%;
-        --slider-level-height: 2%;
+        --slider-level-height: 1%;
 
         --theme-select-flex-flow: column wrap;
         --theme-select-align-items: center;
