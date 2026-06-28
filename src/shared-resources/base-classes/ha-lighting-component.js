@@ -84,10 +84,27 @@ export class HaLightingComponent extends HaSubComponent {
         return this.getAttributes(lightId).rgb_color;
     }
 
+    getOffBrightness(lightId) {
+        let offBrightness = this.getAttributes(lightId).off_brightness;
+        if (offBrightness) return offBrightness;
+        const groupIds = this.getAttributes(lightId).entity_id;
+        if (groupIds) {
+            const values = [];
+            groupIds.forEach(groupId => {
+                const value = this.getAttributes(groupId).off_brightness;
+                (value) && (values.push(value))
+            });
+            if (values.length > 0) {
+                offBrightness = values.reduce((sum, value) => sum + value, 0) / values.length;
+            };
+        };
+        if (offBrightness) return offBrightness;
+    }
+
     getBrightnessPct(lightId) {
         let brightnessPct = 100;
         const brightness = this.getAttributes(lightId).brightness;
-        const offBrightness = this.getAttributes(lightId).off_brightness;
+        const offBrightness = this.getOffBrightness(lightId);
         if (brightness) {
             brightnessPct = brightness * 100 / 255;
         } else if (offBrightness) {
