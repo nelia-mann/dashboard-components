@@ -125,12 +125,12 @@ export default css`
         --theme-select-align-items: center;
         --theme-select-justify-content: flex-start;
         --theme-select-padding: 10px;
-        --theme-select-height: 440px;
+        --theme-select-height: 400px;
         --theme-select-width: 850px;
 
         --theme-button-padding-top: 7px;
         --theme-button-padding-bottom: 7px;
-        --theme-button-margin: 7px;
+        --theme-button-margin: 8.5px;
         --theme-button-width: 120px;
         --theme-button-height: 40px;
         --theme-button-font-size: var(--sub-info-font-size);
