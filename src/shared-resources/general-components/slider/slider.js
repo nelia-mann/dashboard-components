@@ -43,7 +43,7 @@ export class SliderBar extends HaSubComponent {
     }
 
     updated() {
-        (!this.isDown()) && (this.lowerChangeFlag());
+        // (!this.isDown()) && (this.lowerChangeFlag());
     }
 
     hasRelevantChanges() {
@@ -144,11 +144,15 @@ export class SliderBar extends HaSubComponent {
     /****************************** interactive logic *******************************/
 
     // depends on type
-    handleOnChange(e) {
+    async handleOnChange(e) {
         if (!this.isFixed()) {
             this.setIsDown(false);
-            let value = e.target.value;
+            const value = e.target.value;
             this.dispatchEvent(new CustomEvent('change', { detail: value }));
+            if (this.wait) {
+                await this.waitForEntity(this.state.entity_id, (entityId) => this.wait(entityId, value));
+            }
+            this.lowerChangeFlag();
         }
     }
 

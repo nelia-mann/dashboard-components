@@ -51,7 +51,7 @@ export class HaSubComponent extends LitElement {
         return false;
     }
 
-    waitForState(entityId, condition, timeout = 5000) {
+    waitForEntity(entityId, condition, timeout = 5000) {
         const interval = 100;
         let elapsed = 0;
         return new Promise((resolve, reject) => {
@@ -63,6 +63,26 @@ export class HaSubComponent extends LitElement {
                 elapsed += interval; 
                 if (elapsed >= timeout) {
                     reject(new Error(`Timed out waiting for ${entityId}`));
+                    return;
+                };
+                setTimeout(check, interval);
+            };
+            check();      
+        });
+    }
+
+    waitForState(state, condition, timeout = 5000) {
+        const interval = 100;
+        let elapsed = 0;
+        return new Promise((resolve, reject) => {
+            const check = () => {
+                if (condition.call(this, state)) {
+                    resolve()
+                    return;
+                }
+                elapsed += interval; 
+                if (elapsed >= timeout) {
+                    reject(new Error(`Timed out waiting for ${state.entity_id}`));
                     return;
                 };
                 setTimeout(check, interval);

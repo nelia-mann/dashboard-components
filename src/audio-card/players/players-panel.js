@@ -223,7 +223,7 @@ export class PlayersPanel extends HaSubComponent {
 
     async transferToEmpty(speakerId) {
         this.removeSpeaker(speakerId);
-        await this.waitForState(speakerId, this.isUnjoined);
+        await this.waitForEntity(speakerId, this.isUnjoined);
         this.createPlayer(speakerId);
     }
 
