@@ -51,7 +51,7 @@ export class ThermostatPanel extends HaClimateComponent {
         if (this.getMode() === 'cool') {
             structure.maxValue = this.getTarget();
         }
-        if  (this.getMode() === 'heat_cool') {
+        if  ((this.getMode() === 'heat_cool') || (this.getMode() === 'auto')) {
             structure.targetValue = this.getTarget();
         }
         return structure;

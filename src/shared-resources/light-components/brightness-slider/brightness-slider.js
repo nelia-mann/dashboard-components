@@ -24,12 +24,6 @@ export class BrightnessSlider extends HaLightingComponent {
         this.callService('light', 'turn_on', data)
     }
 
-    waitForBrightness(targetValue, state) {
-        const brightness = state.attributes.brightness * 100 / 255;
-        console.log(brightness);
-        this.waitForState(state, (state) => (targetValue === brightness));
-    }
-
     waitCondition(entityId, value) {
         const state = this.getState(entityId);
         const target = state.attributes.brightness * 100 / 255;

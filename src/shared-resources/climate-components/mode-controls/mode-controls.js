@@ -60,6 +60,14 @@ export class ModeControls extends HaClimateComponent {
                     <ha-svg-icon .path=${slash}} class="center"></ha-svg-icon>
                     <ha-svg-icon .path=${fire}}></ha-svg-icon>
                 `
+                break;
+            case 'auto':
+                icon = html`
+                    <ha-svg-icon .path=${snowflake}}"></ha-svg-icon>
+                    <ha-svg-icon .path=${slash}} class="center"></ha-svg-icon>
+                    <ha-svg-icon .path=${fire}}></ha-svg-icon>
+                `  
+                break;              
         }
         return html`<div class="button outlined"
             style=${styleMap(this.getModeStyles(mode))}

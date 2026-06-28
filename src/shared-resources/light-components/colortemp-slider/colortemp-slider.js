@@ -21,6 +21,12 @@ export class ColorTempSlider extends HaLightingComponent {
         this.callService('light', 'turn_on', data)
     }
 
+    waitCondition(entityId, value) {
+        const state = this.getState(entityId);
+        const target = state.attributes.color_temp_kelvin;
+        return (target - .5 < value) && (value < target + .5);
+    }
+
     /**************************** style/html logic ******************************/
 
     ctBar() {
@@ -39,6 +45,7 @@ export class ColorTempSlider extends HaLightingComponent {
                 .background=${tempGrad}
                 .mode=${'horizontal'}
                 @change=${this.handleCallService}
+                .wait = ${this.waitCondition}
             ></slider-bar>`
     }
 

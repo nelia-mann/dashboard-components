@@ -36,10 +36,6 @@ export class ColorWheel extends HaLightingComponent {
         this.setInitialValues();
     }
 
-    updated() {
-        (!this.isDown()) && (this.lowerChangeFlag());
-    }
-
     hasRelevantChanges() {
         const isStateChanged = this.getCEIs().has(this.getMainId());
         const lightHSColor = this.getHSColor();
@@ -114,24 +110,33 @@ export class ColorWheel extends HaLightingComponent {
 
     /**************************** interactive logic **************************/
 
+    waitCondition(entityId) {
+        const hsColor = this.getHSColor(entityId);
+        const firstCondition = ((hsColor[0] - .5 < this.getHue()) && (this.getHue() < hsColor[0] + .5));
+        const secondCondition = ((hsColor[1] - .5 < this.getSat()) && (this.getSat() < hsColor[1] + .5));
+        return firstCondition && secondCondition;
+    }
+
     down(e) {
         this.raiseChangeFlag();
         this.setIsDown(true);
         this.move(e);
     }
 
-    up() {
+    async up() {
         this.setIsDown(false);
         this.handleCallService();
+        await this.waitForEntity(this.getMainId(), this.waitCondition)
+        this.lowerChangeFlag();
     }
 
     move(e) {
         if (this.isDown() && !this.isFixed()) {
             const rect = this.getRect();
             const scale = rect.width;
-            let x = (100 * (e.clientX - rect.left) / scale) - 50;
-            let y = 50 - (100 * (e.clientY - rect.top) / scale);
-            let saturation = 2 * Math.sqrt(x ** 2 + y ** 2)
+            const x = (100 * (e.clientX - rect.left) / scale) - 50;
+            const y = 50 - (100 * (e.clientY - rect.top) / scale);
+            const saturation = 2 * Math.sqrt(x ** 2 + y ** 2)
             let hue = 360 * Math.atan2(x, y) / (2 * Math.PI);
             (hue < 0) && (hue = 360 + hue);
             if (saturation < 100) {

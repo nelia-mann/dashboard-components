@@ -90,9 +90,12 @@ action: the current action of the climate entity
 
     getHPModes() {
         const modes = [...this.getAttribute('hp', 'hvac_modes')];
-        let index = modes.indexOf('auto');
-        if (index > -1) {
-            modes.splice(index, 1)
+        let index;
+        if (modes.includes('heat_cool')) {
+            index = modes.indexOf('auto');
+            if (index > -1) {
+                modes.splice(index, 1)
+            }
         }
         index = modes.indexOf('dry');
         if (index > -1) {

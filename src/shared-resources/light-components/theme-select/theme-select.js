@@ -83,11 +83,17 @@ export class ThemeSelect extends HaLightingComponent {
 
     /**************************** interactive logic **************************/
 
-    onClick(option) {
+    waitCondition(entityId) {
+        const theme = this.getState(entityId).state;
+        return this.getOption() === theme;
+    }
+
+    async onClick(option) {
         if (!this.isFixed()) {
             this.raiseChangeFlag();
             this.setOption(option);
             this.handleCallService(option);
+            await this.waitForEntity(this.getThemeId(), this.waitCondition);
         }
     }
 
