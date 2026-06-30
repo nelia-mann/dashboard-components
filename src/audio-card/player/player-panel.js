@@ -34,12 +34,6 @@ export class PlayerPanel extends HaSubComponent {
         return this.getSpeakers()[0];
     }
 
-    getImageURL() {
-        const state = this.getState(this.getLeadSpeakerId());
-        const URL = state.attributes.entity_picture;
-        return URL;
-    }
-
     /*********************************** interactive logic *****************************************/
 
     handlePointerDown(e, id) {
@@ -94,11 +88,19 @@ export class PlayerPanel extends HaSubComponent {
 
     /************************************ html and style *********************************************/
 
+    getBackground() {
+        const styles = {};
+        styles['background-color'] = 'rgba(255, 255, 255, .7)';
+        return styles;
+    }
+
     static styles = [sharedStyles, styles];
 
     getSpeakerTile(id) {
         return html`<speaker-tile
+                class = "outlined"
                 .name = ${this.getName(id)}
+                style = ${styleMap(this.getBackground())}
                 @pointerdown = ${(e) => this.handlePointerDown(e, id)}
                 @pointerup = ${(e) => this.handlePointerUp(e, id)}
                 @pointermove = ${this.handlePointerMove}
@@ -106,7 +108,7 @@ export class PlayerPanel extends HaSubComponent {
     }
 
     getImage() {
-        return html`<img class = "art" src=${this.getImageURL()} alt="album art" />`
+        return html`<img class = "art" src=${this.getImageURL()} alt="album art">`
     }
 
     getSpeakerPanel() {
@@ -117,7 +119,7 @@ export class PlayerPanel extends HaSubComponent {
 
     render() {
         if (this.isInitialized()) {
-            return [this.getImage(), this.getSpeakerPanel()];
+            return this.getSpeakerPanel();
         }
     }
 }

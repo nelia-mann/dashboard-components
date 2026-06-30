@@ -10,6 +10,8 @@ export default css`
         justify-content: space-between;
         align-items: flex-start;
         padding: var(--player-panel-padding, 10px);
+        overflow: hidden;
+        background-size: contain;
     }
 
     .art {

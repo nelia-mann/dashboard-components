@@ -7,7 +7,7 @@ export default css`
         --small-heading-font-size: var(--large-font);
         --small-heading-font-weight: 700;
         --sub-info-font-size: var(--normal-font);
-        --sub-info-font-weight: 400;
+        --sub-info-font-weight: 600;
 
         --ha-card-padding: 15px;
         --ha-card-height: var(--ipad-max-height);
@@ -26,6 +26,6 @@ export default css`
         --player-panel-height: 400px;
         --player-art-width: 220px;
         --player-art-height: var(--player-art-width);
-        --player-panel-padding: 10px;
+        --player-panel-padding: 0px;
     }
     `;
