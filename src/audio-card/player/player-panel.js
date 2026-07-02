@@ -1,6 +1,7 @@
 import { html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
+import { OFF, rgba } from './../../shared-resources/util/color-util.js';
 import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent';
 import styles from './player.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
@@ -88,9 +89,62 @@ export class PlayerPanel extends HaSubComponent {
 
     /************************************ html and style *********************************************/
 
+    getBackgroundCase() {
+        if (this.getImageURL()) return 'albumArt';
+        if (this.getAlbumInitials()) return 'initials';
+        return 'nothing';
+    }
+
+    getImageURL() {
+        const state = this.getState(this.getLeadSpeakerId());
+        const URL = state.attributes.entity_picture;
+        return URL;
+    }
+
+    getAlbumInitials() {
+        const state = this.getState(this.getLeadSpeakerId());
+        const albumName = state.attributes.media_album_name;
+        if (albumName) {
+            const albumWords = albumName.split(" ");
+            let inits = '';
+            albumWords.forEach((word) => {
+                const init = word[0];
+                const upper = init.toUpperCase();
+                (upper === init) && (inits = inits + init);
+            })
+            if (inits.length > 2) {
+                inits = inits.slice(0, 2);
+            }
+            return inits;
+        }
+    }
+
+    makeImage() {
+        const styles = {};
+        const bgCase = this.getBackgroundCase();
+        if (bgCase === 'albumArt') {
+            styles['backgroundImage'] = `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url(${this.getImageURL()})`;
+        } else if (bgCase === 'nothing') {
+            styles['background'] = rgba(OFF, .5);
+        }
+        return styles;
+    }
+
+    makeBGInits() {
+        if (this.getBackgroundCase() === 'initials') {
+            return html`<span class = "initials" style = ${styleMap(this.getFontColor())}> ${this.getAlbumInitials()} </span>`;
+        }
+    }
+
     getBackground() {
         const styles = {};
         styles['background-color'] = 'rgba(255, 255, 255, .7)';
+        return styles;
+    }
+
+    getFontColor() {
+        const styles = {};
+        styles['color'] = rgba(OFF, .5);
         return styles;
     }
 
@@ -107,10 +161,6 @@ export class PlayerPanel extends HaSubComponent {
             />`;
     }
 
-    getImage() {
-        return html`<img class = "art" src=${this.getImageURL()} alt="album art">`
-    }
-
     getSpeakerPanel() {
         return html`<div class="speakerTiles"> 
             ${repeat(this.getSpeakers(), (speakerId) => speakerId, speakerId => this.getSpeakerTile(speakerId))}
@@ -119,7 +169,11 @@ export class PlayerPanel extends HaSubComponent {
 
     render() {
         if (this.isInitialized()) {
-            return this.getSpeakerPanel();
+            return html`
+                ${this.makeBGInits()}
+                <div class = "outlined player" style=${styleMap(this.makeImage())}>
+                    ${this.getSpeakerPanel()}
+                </div>`;
         }
     }
 }

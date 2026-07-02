@@ -399,23 +399,10 @@ export class PlayersPanel extends HaSubComponent {
         }
     }
 
-    getImageURL(index) {
-        const state = this.getState(this.getLeaderFromIndex(index));
-        const URL = state.attributes.entity_picture;
-        return URL;
-    }
-
-    makeImage(index) {
-        const styles = {};
-        styles['backgroundImage'] = `linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), url(${this.getImageURL(index)})`
-        return styles;
-    }
-
     getPlayerPanel(index) {
         return html`<player-panel
                 data-group-index=${index}
                 class="outlined"
-                style=${styleMap(this.makeImage(index))}
                 .changedEntityIds = ${this.getCEIs()}
                 .entityIds=${new Set(this.getPlayer(index))}
                 .speakers = ${this.getPlayer(index)}

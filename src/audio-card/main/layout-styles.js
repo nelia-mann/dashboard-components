@@ -27,5 +27,7 @@ export default css`
         --player-art-width: 220px;
         --player-art-height: var(--player-art-width);
         --player-panel-padding: 0px;
+        --player-BGInits-size: 1500%;
+        --player-speaker-margin: 5%;
     }
     `;
