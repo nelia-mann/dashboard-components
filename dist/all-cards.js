@@ -18419,6 +18419,7 @@ customElements.define("player-panel", $d12f01acebf1b7ac$export$d8a28575d59b53b4)
 
 class $89e87c8e949cbb46$export$6a01bec7255b2afb extends (0, $c0664485052839c4$export$1dc45fe673c170) {
     _ghost;
+    _changeFlag;
     static properties = {
         ...super.properties,
         players: {
@@ -18433,6 +18434,7 @@ class $89e87c8e949cbb46$export$6a01bec7255b2afb extends (0, $c0664485052839c4$ex
         this.players = [];
         this.idles = [];
         this._ghost = null;
+        this._changeFlag = false;
     }
     /********************************** lifecycle  ************************************/ getTriggers() {
         return [
@@ -18443,11 +18445,40 @@ class $89e87c8e949cbb46$export$6a01bec7255b2afb extends (0, $c0664485052839c4$ex
     onFirstUpdate() {
         this.assignRoles();
     }
-    /************************************ speaker logic **********************************/ getGroup(speakerId) {
+    hasRelevantChanges() {
+        return !this.getChangeFlag() && this.isIntersection(this.getCEIs(), this.getEntityIds());
+    }
+    /************************************ speaker logic **********************************/ getChangeFlag() {
+        return this._changeFlag;
+    }
+    raiseChangeFlag() {
+        this._changeFlag = true;
+    }
+    lowerChangeFlag() {
+        this._changeFlag = false;
+    }
+    getGroup(speakerId) {
         return this.getState(speakerId).attributes.group_members;
     }
-    isUnjoined(speakerId) {
+    isAlone(speakerId) {
         return this.getGroup(speakerId).length === 0;
+    }
+    isUnjoined(speakerId, targetId) {
+        const index = this.getPlayerIndex(targetId);
+        const intendedGroup = this.getPlayer(index);
+        const isRemoved = intendedGroup.every((speakerId)=>{
+            const result = this.checkGroup(intendedGroup, this.getGroup(speakerId));
+            return result;
+        });
+        return isRemoved && this.isAlone(speakerId);
+    }
+    isJoined(speakerId, targetId) {
+        const index = this.getPlayerIndex(targetId);
+        const intendedGroup = this.getPlayer(index);
+        return intendedGroup.every((speakerId)=>{
+            const result = this.checkGroup(intendedGroup, this.getGroup(speakerId));
+            return result;
+        });
     }
     isLeader(speakerId) {
         const group = this.getGroup(speakerId);
@@ -18460,9 +18491,13 @@ class $89e87c8e949cbb46$export$6a01bec7255b2afb extends (0, $c0664485052839c4$ex
         else return group[0];
     }
     isInactive(id) {
-        return this.isUnjoined(id) && (this.getStateState(id) === 'idle' || this.getStateState(id) === 'off');
+        return this.isAlone(id) && (this.getStateState(id) === 'idle' || this.getStateState(id) === 'off');
+    }
+    checkGroup(group1, group2) {
+        return group1.length === group2.length && group1.every((value)=>group2.includes(value));
     }
     /******************************** player/idle logic ***********************************/ assignRoles() {
+        console.log("assigning roles");
         const ids = [
             ...this.getStructure().sorted
         ];
@@ -18480,16 +18515,6 @@ class $89e87c8e949cbb46$export$6a01bec7255b2afb extends (0, $c0664485052839c4$ex
         });
         this.players = newPlayers;
         this.idles = newIdles;
-    }
-    createPlayer(speakerId) {
-        const newPlayers = [
-            ...this.players
-        ];
-        newPlayers.push([
-            speakerId
-        ]);
-        this.players = newPlayers;
-        this.removeIdle(speakerId);
     }
     getPlayers() {
         return [
@@ -18516,6 +18541,16 @@ class $89e87c8e949cbb46$export$6a01bec7255b2afb extends (0, $c0664485052839c4$ex
             ...this.idles
         ];
     }
+    createPlayer(speakerId) {
+        const newPlayers = [
+            ...this.players
+        ];
+        newPlayers.push([
+            speakerId
+        ]);
+        this.players = newPlayers;
+        this.removeIdle(speakerId);
+    }
     removeIdle(speakerId) {
         const newIdles = this.getIdles().filter((id)=>id !== speakerId);
         this.idles = newIdles;
@@ -18539,8 +18574,28 @@ class $89e87c8e949cbb46$export$6a01bec7255b2afb extends (0, $c0664485052839c4$ex
         if (newSpeakers.length > 0) newPlayers[index] = newSpeakers;
         else newPlayers.splice(index, 1);
         this.players = newPlayers;
+        if (newSpeakers.length > 0) return newSpeakers[0];
     }
-    /************************************* interactive logic *************************************************/ unJoinLeader(leaderId) {
+    /************************************* interactive logic *************************************************/ async joinSpeaker(speakerId, leaderId) {
+        this.raiseChangeFlag();
+        const data = {
+            entity_id: leaderId,
+            group_members: [
+                speakerId
+            ]
+        };
+        this.callService('media_player', 'join', data);
+        await this.waitForEntity(speakerId, (speakerId)=>this.isJoined(speakerId, leaderId));
+        this.lowerChangeFlag();
+        console.log("done joining");
+    }
+    async addSpeaker(speakerId, index) {
+        this.addToPlayer(speakerId, index);
+        this.removeIdle(speakerId);
+        const targetLeaderId = this.getLeaderFromIndex(index);
+        await this.joinSpeaker(speakerId, targetLeaderId);
+    }
+    unJoinLeader(leaderId) {
         const group = this.getGroup(leaderId);
         if (group && group.length > 1) {
             const remainingSpeakers = group.filter((id)=>id !== leaderId);
@@ -18564,14 +18619,15 @@ class $89e87c8e949cbb46$export$6a01bec7255b2afb extends (0, $c0664485052839c4$ex
         };
         this.callService('media_player', 'unjoin', data);
     }
-    joinSpeaker(speakerId, leaderId) {
-        const data = {
-            entity_id: leaderId,
-            group_members: [
-                speakerId
-            ]
-        };
-        this.callService('media_player', 'join', data);
+    async unJoinSpeaker(speakerId, targetId) {
+        if (targetId) {
+            this.raiseChangeFlag();
+            if (this.isLeader(speakerId)) this.unJoinLeader(speakerId);
+            else this.unJoinFollower(speakerId);
+            await this.waitForEntity(speakerId, (speakerId)=>this.isUnjoined(speakerId, targetId));
+            this.lowerChangeFlag();
+            console.log("done unjoining");
+        }
     }
     stopSpeaker(speakerId) {
         const data = {
@@ -18579,43 +18635,46 @@ class $89e87c8e949cbb46$export$6a01bec7255b2afb extends (0, $c0664485052839c4$ex
         };
         this.callService('media_player', 'media_stop', data);
     }
-    removeSpeaker(speakerId) {
-        if (this.isLeader(speakerId)) this.unJoinLeader(speakerId);
-        else this.unJoinFollower(speakerId);
-        this.removeFromPlayer(speakerId);
-    }
-    clearSpeaker(speakerId) {
-        this.removeSpeaker(speakerId);
-        this.stopSpeaker(speakerId);
+    async removeSpeaker(speakerId) {
+        const targetId = this.removeFromPlayer(speakerId);
         this.addIdle(speakerId);
-    }
-    addSpeaker(speakerId, index) {
-        const targetLeaderId = this.getLeaderFromIndex(index);
-        this.joinSpeaker(speakerId, targetLeaderId);
-        this.addToPlayer(speakerId, index);
-        this.removeIdle(speakerId);
+        await this.unJoinSpeaker(speakerId, targetId);
     }
     async transferSpeaker(speakerId, index) {
-        const targetLeaderId = this.getLeaderFromIndex(index);
-        if (speakerId === targetLeaderId) return;
-        this.removeSpeaker(speakerId);
-        await this.waitForState(speakerId, this.isUnjoined);
-        this.addSpeaker(speakerId, index);
+        if (this.getPlayer(index).includes(speakerId)) return;
+        const oldTargetId = this.removeFromPlayer(speakerId);
+        const newTargetId = this.getLeaderFromIndex(index);
+        this.addToPlayer(speakerId, index);
+        await this.unJoinSpeaker(speakerId, oldTargetId);
+        await this.joinSpeaker(speakerId, newTargetId);
     }
     async transferToEmpty(speakerId) {
-        this.removeSpeaker(speakerId);
-        await this.waitForEntity(speakerId, this.isUnjoined);
+        const targetId = this.removeFromPlayer(speakerId);
         this.createPlayer(speakerId);
+        await this.unJoinSpeaker(speakerId, targetId);
     }
     manipulateSpeaker(speakerId, prevIndex, targetIndex) {
         if (prevIndex === targetIndex) return;
         if (targetIndex !== null) {
             if (targetIndex < this.getPlayers().length) {
-                if (prevIndex !== null) this.transferSpeaker(speakerId, targetIndex);
-                else this.addSpeaker(speakerId, targetIndex);
-            } else if (prevIndex !== null) this.transferToEmpty(speakerId);
-            else this.createPlayer(speakerId);
-        } else this.clearSpeaker(speakerId);
+                if (prevIndex !== null) {
+                    console.log("transfering");
+                    this.transferSpeaker(speakerId, targetIndex);
+                } else {
+                    console.log("adding", targetIndex);
+                    this.addSpeaker(speakerId, targetIndex);
+                }
+            } else if (prevIndex !== null) {
+                console.log("transfering to empty");
+                this.transferToEmpty(speakerId);
+            } else {
+                console.log("creating");
+                this.createPlayer(speakerId);
+            }
+        } else {
+            console.log("removing");
+            this.removeSpeaker(speakerId);
+        }
     }
     handlePointerDown(e, id) {
         e.currentTarget.setPointerCapture(e.pointerId);
@@ -18736,10 +18795,13 @@ class $89e87c8e949cbb46$export$6a01bec7255b2afb extends (0, $c0664485052839c4$ex
         (0, $2bfbbf12f33da3ff$export$2e2bcd8739ae039)
     ];
     render() {
-        if (this.isInitialized()) return [
-            this.getMainPanel(),
-            this.getSidePanel()
-        ];
+        if (this.isInitialized()) {
+            console.log(this.getCEIs());
+            return [
+                this.getMainPanel(),
+                this.getSidePanel()
+            ];
+        }
     }
 }
 customElements.define("players-panel", $89e87c8e949cbb46$export$6a01bec7255b2afb);

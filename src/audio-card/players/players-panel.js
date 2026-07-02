@@ -12,6 +12,7 @@ import '../player/player-panel.js';
 export class PlayersPanel extends HaSubComponent {
 
     _ghost;
+    _changeFlag;
 
     static properties = {
         ...super.properties,
@@ -24,6 +25,7 @@ export class PlayersPanel extends HaSubComponent {
         this.players = [];
         this.idles = [];
         this._ghost = null;
+        this._changeFlag = false;
     }
 
     /********************************** lifecycle  ************************************/
@@ -36,14 +38,49 @@ export class PlayersPanel extends HaSubComponent {
         this.assignRoles();
     }
 
+    hasRelevantChanges() {
+        return !(this.getChangeFlag()) && this.isIntersection(this.getCEIs(), this.getEntityIds());
+    }
+
     /************************************ speaker logic **********************************/
+
+    getChangeFlag() {
+        return this._changeFlag;
+    }
+
+    raiseChangeFlag() {
+        this._changeFlag = true;
+    }
+
+    lowerChangeFlag() {
+        this._changeFlag = false;
+    }
 
     getGroup(speakerId) {
         return this.getState(speakerId).attributes.group_members;
     }
 
-    isUnjoined(speakerId) {
+    isAlone(speakerId) {
         return this.getGroup(speakerId).length === 0;
+    }
+
+    isUnjoined(speakerId, targetId) {
+        const index = this.getPlayerIndex(targetId);
+        const intendedGroup = this.getPlayer(index);
+        const isRemoved = intendedGroup.every((speakerId) => {
+            const result = this.checkGroup(intendedGroup, this.getGroup(speakerId));
+            return result;
+        })
+        return (isRemoved && this.isAlone(speakerId));
+    }
+
+    isJoined(speakerId, targetId) {
+        const index = this.getPlayerIndex(targetId);
+        const intendedGroup = this.getPlayer(index);
+        return intendedGroup.every((speakerId) => {
+            const result = this.checkGroup(intendedGroup, this.getGroup(speakerId));
+            return result;
+        })
     }
 
     isLeader(speakerId) {
@@ -63,12 +100,17 @@ export class PlayersPanel extends HaSubComponent {
     }
 
     isInactive(id) {
-        return (this.isUnjoined(id)) && ((this.getStateState(id) === 'idle') || (this.getStateState(id) === 'off'))
+        return (this.isAlone(id)) && ((this.getStateState(id) === 'idle') || (this.getStateState(id) === 'off'))
+    }
+
+    checkGroup(group1, group2) {
+        return group1.length === group2.length && group1.every(value => group2.includes(value));
     }
 
     /******************************** player/idle logic ***********************************/
 
     assignRoles() {
+        console.log("assigning roles");
         const ids = [...this.getStructure().sorted];
         const newPlayers = [];
         const newIdles = [];
@@ -86,13 +128,6 @@ export class PlayersPanel extends HaSubComponent {
         })
         this.players = newPlayers;
         this.idles = newIdles;
-    }
-
-    createPlayer(speakerId) {
-        const newPlayers = [...this.players];
-        newPlayers.push([speakerId]);
-        this.players = newPlayers;
-        this.removeIdle(speakerId);
     }
 
     getPlayers() {
@@ -119,6 +154,13 @@ export class PlayersPanel extends HaSubComponent {
 
     getIdles() {
         return [...this.idles];
+    }
+
+    createPlayer(speakerId) {
+        const newPlayers = [...this.players];
+        newPlayers.push([speakerId]);
+        this.players = newPlayers;
+        this.removeIdle(speakerId);
     }
 
     removeIdle(speakerId) {
@@ -150,9 +192,29 @@ export class PlayersPanel extends HaSubComponent {
             newPlayers.splice(index, 1);
         }
         this.players = newPlayers;
+        if (newSpeakers.length > 0) return newSpeakers[0]; 
     } 
 
     /************************************* interactive logic *************************************************/
+
+    async joinSpeaker(speakerId, leaderId) {
+        this.raiseChangeFlag();
+        const data = {
+            entity_id: leaderId,
+            group_members: [speakerId]
+        }
+        this.callService('media_player', 'join', data);
+        await this.waitForEntity(speakerId, (speakerId) => this.isJoined(speakerId, leaderId));
+        this.lowerChangeFlag();
+        console.log("done joining");
+    }
+
+    async addSpeaker(speakerId, index) {
+        this.addToPlayer(speakerId, index);
+        this.removeIdle(speakerId);
+        const targetLeaderId = this.getLeaderFromIndex(index);
+        await this.joinSpeaker(speakerId, targetLeaderId);
+    }
 
     unJoinLeader(leaderId) {
         const group = this.getGroup(leaderId);
@@ -178,12 +240,18 @@ export class PlayersPanel extends HaSubComponent {
         this.callService('media_player', 'unjoin', data);
     }
 
-    joinSpeaker(speakerId, leaderId) {
-        const data = {
-            entity_id: leaderId,
-            group_members: [speakerId]
-        }
-        this.callService('media_player', 'join', data);
+    async unJoinSpeaker(speakerId, targetId) {
+        if (targetId) {
+            this.raiseChangeFlag();
+            if (this.isLeader(speakerId)) {
+                this.unJoinLeader(speakerId);
+            } else {
+                this.unJoinFollower(speakerId);
+            }
+            await this.waitForEntity(speakerId, (speakerId) => this.isUnjoined(speakerId, targetId));
+            this.lowerChangeFlag();
+            console.log("done unjoining");
+        }        
     }
 
     stopSpeaker(speakerId) {
@@ -191,40 +259,25 @@ export class PlayersPanel extends HaSubComponent {
         this.callService('media_player', 'media_stop', data);
     }
 
-    removeSpeaker(speakerId) {
-        if (this.isLeader(speakerId)) {
-            this.unJoinLeader(speakerId);
-        } else {
-            this.unJoinFollower(speakerId);
-        }
-        this.removeFromPlayer(speakerId);
-    }
-
-    clearSpeaker(speakerId) {
-        this.removeSpeaker(speakerId);
-        this.stopSpeaker(speakerId);
+    async removeSpeaker(speakerId) {
+        const targetId = this.removeFromPlayer(speakerId);
         this.addIdle(speakerId);
-    }
-
-    addSpeaker(speakerId, index) {
-        const targetLeaderId = this.getLeaderFromIndex(index);
-        this.joinSpeaker(speakerId, targetLeaderId);
-        this.addToPlayer(speakerId, index);
-        this.removeIdle(speakerId);
+        await this.unJoinSpeaker(speakerId, targetId);
     }
 
     async transferSpeaker(speakerId, index) {
-        const targetLeaderId = this.getLeaderFromIndex(index);        
-        if (speakerId === targetLeaderId) return;
-        this.removeSpeaker(speakerId);
-        await this.waitForState(speakerId, this.isUnjoined);
-        this.addSpeaker(speakerId, index);
+        if (this.getPlayer(index).includes(speakerId)) return;
+        const oldTargetId = this.removeFromPlayer(speakerId);
+        const newTargetId = this.getLeaderFromIndex(index);
+        this.addToPlayer(speakerId, index);
+        await this.unJoinSpeaker(speakerId, oldTargetId);
+        await this.joinSpeaker(speakerId, newTargetId);
     }
 
     async transferToEmpty(speakerId) {
-        this.removeSpeaker(speakerId);
-        await this.waitForEntity(speakerId, this.isUnjoined);
+        const targetId = this.removeFromPlayer(speakerId);
         this.createPlayer(speakerId);
+        await this.unJoinSpeaker(speakerId, targetId);
     }
 
     manipulateSpeaker(speakerId, prevIndex, targetIndex) {
@@ -232,19 +285,24 @@ export class PlayersPanel extends HaSubComponent {
         if (targetIndex !== null) {
             if (targetIndex < this.getPlayers().length) {
                 if (prevIndex !== null) {
+                    console.log("transfering");
                     this.transferSpeaker(speakerId, targetIndex);
                 } else {
+                    console.log("adding", targetIndex);
                     this.addSpeaker(speakerId, targetIndex);
                 }
             } else {
                 if (prevIndex !== null) {
+                    console.log("transfering to empty")
                     this.transferToEmpty(speakerId);
                 } else {
+                    console.log("creating");
                     this.createPlayer(speakerId);
                 }
             }
         } else {
-            this.clearSpeaker(speakerId);
+            console.log("removing");
+            this.removeSpeaker(speakerId);
         }
     }
 
@@ -387,6 +445,7 @@ export class PlayersPanel extends HaSubComponent {
 
     render() {
         if (this.isInitialized()) {
+            console.log(this.getCEIs());
             return [this.getMainPanel(), this.getSidePanel()];
         }
     }
