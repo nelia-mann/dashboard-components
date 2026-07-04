@@ -29,5 +29,12 @@ export default css`
         --player-panel-padding: 0px;
         --player-BGInits-size: 1500%;
         --player-speaker-margin: 5%;
+
+        --volume-slider-margin-bottom: 10px;
+        --volume-slider-overall-width: 90%;
+        --volume-slider-overall-height: 40px;
+        --volume-slider-input-width: calc(100% - 60px);
+        --mute-button-height: 30px;
+
     }
     `;

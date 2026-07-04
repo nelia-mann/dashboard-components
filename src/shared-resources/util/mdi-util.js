@@ -16,6 +16,8 @@ export {
     mdiThermometer as thermometer,
     mdiArrowDownThin as minimum,
     mdiFan as fan,
-    mdiArrowUpThin as maximum
+    mdiArrowUpThin as maximum,
+    mdiVolumeHigh as volume,
+    mdiVolumeOff as volumeOff,
 
 } from '@mdi/js';

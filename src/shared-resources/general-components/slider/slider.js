@@ -42,10 +42,6 @@ export class SliderBar extends HaSubComponent {
         this.setInitialValue();
     }
 
-    updated() {
-        // (!this.isDown()) && (this.lowerChangeFlag());
-    }
-
     hasRelevantChanges() {
         const isStateChanged = this.getCEIs().has(this.getStateEI(this.getState()));
         const isUp = !this.isDown();

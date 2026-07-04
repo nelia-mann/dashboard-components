@@ -404,9 +404,10 @@ export class PlayersPanel extends HaSubComponent {
                 data-group-index=${index}
                 class="outlined"
                 .changedEntityIds = ${this.getCEIs()}
-                .entityIds=${new Set(this.getPlayer(index))}
+                .entityIds= ${new Set(this.getPlayer(index))}
                 .speakers = ${this.getPlayer(index)}
-                .states=${this.getStates()}
+                .states = ${this.getStates()}
+                .callService = ${this.callService}
                 @end = ${(e) => this.handlePointerUp(e, e.detail.speakerId, index)}
             />`
     }
@@ -432,7 +433,6 @@ export class PlayersPanel extends HaSubComponent {
 
     render() {
         if (this.isInitialized()) {
-            console.log(this.getCEIs());
             return [this.getMainPanel(), this.getSidePanel()];
         }
     }

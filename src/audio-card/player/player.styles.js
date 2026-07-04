@@ -44,4 +44,8 @@ export default css`
         align-items: flex-start;
     }
 
+    .volume {
+        margin-bottom: var(--volume-slider-margin-bottom, 10px);
+    }
+
 `;
