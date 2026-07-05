@@ -22,7 +22,7 @@ getTriggers() {
     return ["_value"];
 }
 
-setInitialValues() {
+onFirstUpdate() {
     this.setValue(this.getAverageVolume());
 }
 

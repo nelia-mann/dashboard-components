@@ -20,7 +20,7 @@ export class ThemeSelect extends HaLightingComponent {
         return ["_option"];
     }
 
-    setInitialValues() {
+    onFirstUpdate() {
         this.setOption(this.getThemeStateState());
     }
 

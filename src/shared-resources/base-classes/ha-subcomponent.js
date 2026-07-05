@@ -45,7 +45,6 @@ export class HaSubComponent extends LitElement {
     }
 
     firstUpdated() {
-        this.setInitialValues();
         this.onFirstUpdate();
         this.initialize();
     }
@@ -152,7 +151,5 @@ export class HaSubComponent extends LitElement {
     getTriggers() {
         return [];
     }
-
-    setInitialValues() {}
 
 }

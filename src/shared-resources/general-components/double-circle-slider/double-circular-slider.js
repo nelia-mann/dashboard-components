@@ -31,7 +31,7 @@ export class DoubleCircularSlider extends HaSubComponent {
         return ["_value", "fixed"];
     }
 
-    setInitialValues() {
+    onFirstUpdate() {
         this.setValue(this.getStateValue());
     }
 

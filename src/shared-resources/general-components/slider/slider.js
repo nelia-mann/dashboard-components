@@ -31,7 +31,7 @@ export class SliderBar extends HaSubComponent {
         return ["_value", "colorCode"];
     }
 
-    setInitialValues() {
+    onFirstUpdate() {
         (this.getStateValue()) ? (this.setValue(this.getStateValue())) : (this.setValue(this.getMin()));
     }
 
