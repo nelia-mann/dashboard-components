@@ -14,38 +14,13 @@ export class ThemeSelect extends HaLightingComponent {
         _option: { state: true }
     }
 
-    constructor() {
-        super();
-        this._flag = false;
-    }
-
     /************* lifecycle ***********************************************/
-
-    update(changedProps) {
-        (!this.getChangeFlag()) && (this.setInitialValue());
-        super.update(changedProps);
-    }
 
     getTriggers() {
         return ["_option"];
     }
 
-    onFirstUpdate() {
-        this.setInitialValue();
-    }
-
-    hasRelevantChanges() {
-        const isStateChanged = this.getCEIs().has(this.getThemeId());
-        const isNewOption = (this.getOption() != this.getThemeStateState());
-        const isFlag = this.getChangeFlag();
-        return (!isFlag && isStateChanged && isNewOption);
-    }
-
-    updated() {
-        this.lowerChangeFlag();
-    }
-
-    setInitialValue() {
+    setInitialValues() {
         this.setOption(this.getThemeStateState());
     }
 
@@ -61,18 +36,6 @@ export class ThemeSelect extends HaLightingComponent {
 
     isSelected(option) {
         return (option === this.getOption());
-    }
-
-    getChangeFlag() {
-        return this._flag;
-    }
-
-    raiseChangeFlag() {
-        this._flag = true;
-    }
-
-    lowerChangeFlag() {
-        this._flag = false;
     }
 
     isFixed() {
@@ -94,6 +57,7 @@ export class ThemeSelect extends HaLightingComponent {
             this.setOption(option);
             this.handleCallService(option);
             await this.waitForEntity(this.getThemeId(), this.waitCondition);
+            this.lowerChangeFlag();
         }
     }
 

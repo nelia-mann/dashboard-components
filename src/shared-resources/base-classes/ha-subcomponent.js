@@ -2,6 +2,8 @@ import { LitElement } from 'lit';
 
 export class HaSubComponent extends LitElement {
 
+    _changeFlag;
+
     static properties = {
         changedEntityIds: { state: true },
         states: { state: true },
@@ -15,6 +17,14 @@ export class HaSubComponent extends LitElement {
         this._initialized = false;
         this.structure = {};
         this.entityIds = new Set();
+        this._changeFlag = false;
+    }
+
+    /******************************** lifecycle logic ********************************/
+
+    update(changedProps) {
+        (!this.getChangeFlag()) && (this.setInitialValues());
+        super.update(changedProps);
     }
 
     shouldUpdate(changedProps) {
@@ -35,12 +45,13 @@ export class HaSubComponent extends LitElement {
     }
 
     firstUpdated() {
+        this.setInitialValues();
         this.onFirstUpdate();
         this.initialize();
     }
 
     hasRelevantChanges() {
-        return this.isIntersection(this.getCEIs(), this.getEntityIds());
+        return !(this.getChangeFlag()) && this.isIntersection(this.getCEIs(), this.getEntityIds());
     }
 
     isIntersection(set1, set2) {
@@ -71,26 +82,6 @@ export class HaSubComponent extends LitElement {
         });
     }
 
-    waitForState(state, condition, timeout = 5000) {
-        const interval = 100;
-        let elapsed = 0;
-        return new Promise((resolve, reject) => {
-            const check = () => {
-                if (condition.call(this, state)) {
-                    resolve()
-                    return;
-                }
-                elapsed += interval; 
-                if (elapsed >= timeout) {
-                    reject(new Error(`Timed out waiting for ${state.entity_id}`));
-                    return;
-                };
-                setTimeout(check, interval);
-            };
-            check();      
-        });
-    }
-
     /********************************* basic getters and setters *****************************/
 
     isInitialized() {
@@ -99,6 +90,18 @@ export class HaSubComponent extends LitElement {
 
     initialize() {
         this._initialized = true;
+    }
+
+    getChangeFlag() {
+        return this._changeFlag;
+    }
+
+    raiseChangeFlag() {
+        this._changeFlag = true;
+    }
+
+    lowerChangeFlag() {
+        this._changeFlag = false;
     }
 
     getCEIs() {
@@ -142,14 +145,14 @@ export class HaSubComponent extends LitElement {
         return pretty.slice(0, -1);
     }
 
-    /********************************* hooks for subclasses **********************************/
+    /********************************* lifecycle hooks for subclasses **********************/
 
-    onFirstUpdate() { }
+    onFirstUpdate() {}
 
     getTriggers() {
         return [];
     }
 
-
+    setInitialValues() {}
 
 }

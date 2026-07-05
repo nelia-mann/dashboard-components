@@ -61,6 +61,12 @@ export class OffsetSlider extends HaClimateComponent {
 
     /************************ interactive logic *******************************/
 
+    waitCondition(entityId, value) {
+        const state = this.getState(entityId);
+        const target = state.state;
+        return (target - .5 < value) && (value < target + .5);
+    }
+
     handleCallService(e) {
         const value = e.detail;
         const entityId = this.getOffsetId();
@@ -71,12 +77,6 @@ export class OffsetSlider extends HaClimateComponent {
     handleSetValue(e) {
         const value = e.detail;
         this.setCurrentValue(value);
-    }
-
-    waitCondition(entityId, value) {
-        const state = this.getState(entityId);
-        const target = state.state;
-        return (target - .5 < value) && (value < target + .5);
     }
 
     /**************************** style/html logic ******************************/

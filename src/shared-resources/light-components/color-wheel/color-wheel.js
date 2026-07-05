@@ -14,18 +14,7 @@ export class ColorWheel extends HaLightingComponent {
         _saturation: { state: true }
     }
 
-    constructor() {
-        super();
-        this._isDown = false;
-        this._flag = false;
-    }
-
     /****************************** lifecycle **************************************/
-
-    update(changedProps) {
-        (!this.getChangeFlag()) && (this.setInitialValues());
-        super.update(changedProps);
-    }
 
     getTriggers() {
         return ["_hue", "_saturation"];
@@ -33,15 +22,6 @@ export class ColorWheel extends HaLightingComponent {
 
     onFirstUpdate() {
         this.setBox(this.renderRoot.querySelector('.wheel-background'));
-        this.setInitialValues();
-    }
-
-    hasRelevantChanges() {
-        const isStateChanged = this.getCEIs().has(this.getMainId());
-        const lightHSColor = this.getHSColor();
-        const isUp = !this.isDown();
-        const hasNewValues = (lightHSColor[0] !== this.getHue()) || (lightHSColor[1] !== this.getSat())
-        return isStateChanged && isUp && hasNewValues;
     }
 
     setInitialValues() {
@@ -80,32 +60,12 @@ export class ColorWheel extends HaLightingComponent {
         this._saturation = saturation;
     }
 
-    isDown() {
-        return this._isDown;
-    }
-
-    setIsDown(boolean) {
-        this._isDown = boolean;
-    }
-
     getRect() {
         return this._box.getBoundingClientRect();
     }
 
     setBox(box) {
         this._box = box;
-    }
-
-    getChangeFlag() {
-        return this._flag;
-    }
-
-    raiseChangeFlag() {
-        this._flag = true;
-    }
-
-    lowerChangeFlag() {
-        this._flag = false;
     }
 
     /**************************** interactive logic **************************/
@@ -119,19 +79,17 @@ export class ColorWheel extends HaLightingComponent {
 
     down(e) {
         this.raiseChangeFlag();
-        this.setIsDown(true);
         this.move(e);
     }
 
     async up() {
-        this.setIsDown(false);
         this.handleCallService();
         await this.waitForEntity(this.getMainId(), this.waitCondition)
         this.lowerChangeFlag();
     }
 
     move(e) {
-        if (this.isDown() && !this.isFixed()) {
+        if (this.getChangeFlag() && !this.isFixed()) {
             const rect = this.getRect();
             const scale = rect.width;
             const x = (100 * (e.clientX - rect.left) / scale) - 50;

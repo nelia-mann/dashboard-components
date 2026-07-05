@@ -24,54 +24,46 @@ export class ThermostatPanel extends HaClimateComponent {
         return ['fixed'];
     }
 
-    static styles = [sharedStyles, styles];
+    /************************************** getter logic ***************************************/
 
-    getColorMode() {
-        let colorMode;
-        (this.getAction() === 'Heating') && (colorMode = 'min');
-        (this.getAction() === 'Cooling') && (colorMode = 'max');
-        return colorMode;
+    getActionColor() {
+        if (this.getAction() === 'Heating') return HOT;
+        if (this.getAction() === 'Cooling') return COOL;
     }
 
-    getSliderStructure() {
-        let structure = {};
-        structure.value = this.getSensor();
-        structure.minExtreme = this.getMinExtreme();
-        structure.maxExtreme = this.getMaxExtreme();
-        structure.units = this.getSensorUnits();
-        structure.upper = this.getAction();
-        structure.icon = thermometer;
-        structure.minColor = HOT;
-        structure.maxColor = COOL;
-        structure.colorMode = this.getColorMode();
-        structure.separation = this.getSeparation();
-        if (this.getMode() === 'heat') {
-            structure.minValue = this.getTarget();
-        }
-        if (this.getMode() === 'cool') {
-            structure.maxValue = this.getTarget();
-        }
-        if  ((this.getMode() === 'heat_cool') || (this.getMode() === 'auto')) {
-            structure.targetValue = this.getTarget();
-        }
-        return structure;
+    getTargetValue() {
+        if (['heat', 'cool', 'heat_cool', 'auto'].includes(this.getMode())) {
+            return this.getTarget();
+        }        
     }
 
     isFixed() {
         return this.fixed;
     }
 
+    getHighColor() {
+        if (['heat', 'heat_cool', 'auto'].includes(this.getMode())) return HOT;
+    }
+
+    getLowColor() {
+        if (['cool', 'heat_cool', 'auto'].includes(this.getMode())) return COOL;        
+    }
+
+    getThermId() {
+        if (this.getEntityId('hp')) return this.getEntityId('hp');
+        if (this.getEntityId('thermostat')) return this.getEntityId('thermostat');
+    }
+
     /******************************** interactive logic ************************************/
 
+    wait(entityId, value) {
+        return this.getState(entityId).attributes.temperature === Math.round(value);
+    }
+
     handleCallService(e) {
-        const details = e.detail;
-        const key = details[0];
-        let entityId;
-        (this.getEntityId('hp')) && (entityId = this.getEntityId('hp'));
-        (this.getEntityId('thermostat')) && (entityId = this.getEntityId('thermostat'));
-        const value = details[1];
+        const value = Math.round(e.detail);
         const data = {
-            entity_id: entityId,
+            entity_id: this.getThermId(),
             temperature: value 
         }
         this.callService('climate', 'set_temperature', data);
@@ -79,14 +71,11 @@ export class ThermostatPanel extends HaClimateComponent {
 
     change(e) {
         const change = e.detail;
-        let entityId;
-        (this.getEntityId('hp')) && (entityId = this.getEntityId('hp'));
-        (this.getEntityId('thermostat')) && (entityId = this.getEntityId('thermostat'));
         let value = this.getTarget();
         value = value + change * this.getSeparation();
         if ((this.getMinExtreme() < value) && (value < this.getMaxExtreme())) {
             const data = {
-                    entity_id: entityId,
+                    entity_id: this.getThermId(),
                     temperature: value
             }
             this.callService('climate', 'set_temperature', data);
@@ -94,6 +83,8 @@ export class ThermostatPanel extends HaClimateComponent {
     }
 
     /*********************************** html/css logic *********************************************/
+
+    static styles = [sharedStyles, styles];
 
     adjustButtons() {
         if (this.isFixed()) return null;
@@ -111,9 +102,19 @@ export class ThermostatPanel extends HaClimateComponent {
                 <double-circular-slider
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
-                    .entityIds = ${this.getEntityIds()}
-                    .structure=${this.getSliderStructure()}
+                    .entityIds = ${new Set([this.getThermId()])}
+                    .min = ${this.getMinExtreme()}
+                    .max = ${this.getMaxExtreme()}
+                    .sensor = ${this.getSensor()}
+                    .units = ${this.getSensorUnits()}
+                    .icon = ${thermometer}
+                    .highColor = ${this.getHighColor()}
+                    .lowColor = ${this.getLowColor()}
+                    .targetValue = ${this.getTargetValue()}
+                    .action = ${this.getAction()}
+                    .actionColor = ${this.getActionColor()}
                     .fixed=${this.isFixed()}
+                    .wait=${this.wait}
                     @change=${this.handleCallService}
                 >
                 </double-circular-slider>

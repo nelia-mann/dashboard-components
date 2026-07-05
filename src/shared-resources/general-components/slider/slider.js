@@ -23,33 +23,15 @@ export class SliderBar extends HaSubComponent {
         this.units = '';
         this.background = '';
         this.colorCode = [0, 0, 0];
-        this._isDown = false;
-        this._flag = false;
     }
 
     /************************** lifecycle *****************************/
-
-    update(changedProps) {
-        (!this.getChangeFlag()) && (this.setInitialValue());
-        super.update(changedProps);
-    }
 
     getTriggers() {
         return ["_value", "colorCode"];
     }
 
-    onFirstUpdate() {
-        this.setInitialValue();
-    }
-
-    hasRelevantChanges() {
-        const isStateChanged = this.getCEIs().has(this.getStateEI(this.getState()));
-        const isUp = !this.isDown();
-        const isNew = (this.getValue() != this.getStateValue());
-        return (isStateChanged && isUp && isNew);
-    }
-
-    setInitialValue() {
+    setInitialValues() {
         (this.getStateValue()) ? (this.setValue(this.getStateValue())) : (this.setValue(this.getMin()));
     }
 
@@ -85,32 +67,12 @@ export class SliderBar extends HaSubComponent {
         return newValue;
     }
 
-    isDown() {
-        return this._isDown;
-    }
-
-    setIsDown(boolean) {
-        this._isDown = boolean;
-    }
-
     getBackground() {
         return this.background;
     }
 
     getColorCode() {
         return this.colorCode;
-    }
-
-    getChangeFlag() {
-        return this._flag;
-    }
-
-    raiseChangeFlag() {
-        this._flag = true;
-    }
-
-    lowerChangeFlag() {
-        this._flag = false;
     }
 
     getRound() {
@@ -142,7 +104,6 @@ export class SliderBar extends HaSubComponent {
     // depends on type
     async handleOnChange(e) {
         if (!this.isFixed()) {
-            this.setIsDown(false);
             const value = e.target.value;
             this.dispatchEvent(new CustomEvent('change', { detail: value }));
             if (this.wait) {
@@ -156,7 +117,6 @@ export class SliderBar extends HaSubComponent {
     handleOnInput(e) {
         if (!this.isFixed()) {
             this.raiseChangeFlag();
-            this.setIsDown(true);
             const value = e.target.value;
             this.setValue(value);
             this.dispatchEvent(new CustomEvent('slide', { detail: value }));

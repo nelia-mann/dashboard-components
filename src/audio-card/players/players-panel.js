@@ -12,7 +12,6 @@ import '../player/player-panel.js';
 export class PlayersPanel extends HaSubComponent {
 
     _ghost;
-    _changeFlag;
 
     static properties = {
         ...super.properties,
@@ -25,7 +24,6 @@ export class PlayersPanel extends HaSubComponent {
         this.players = [];
         this.idles = [];
         this._ghost = null;
-        this._changeFlag = false;
     }
 
     /********************************** lifecycle  ************************************/
@@ -34,27 +32,27 @@ export class PlayersPanel extends HaSubComponent {
         return ["players", "idles"];
     }
 
-    onFirstUpdate() {
-        this.assignRoles();
-    }
-
-    hasRelevantChanges() {
-        return !(this.getChangeFlag()) && this.isIntersection(this.getCEIs(), this.getEntityIds());
+    setInitialValues() {
+        const ids = [...this.getStructure().sorted];
+        const newPlayers = [];
+        const newIdles = [];
+        ids.forEach((id) => {
+            if (this.isInactive(id)) {
+                newIdles.push(id);
+            } else {
+                const group = this.getGroup(id);
+                if (group[0] === id) {
+                    newPlayers.push(group);
+                } else if (group.length === 0) {
+                    newPlayers.push([id]);
+                }
+            }   
+        })
+        this.players = newPlayers;
+        this.idles = newIdles;
     }
 
     /************************************ speaker logic **********************************/
-
-    getChangeFlag() {
-        return this._changeFlag;
-    }
-
-    raiseChangeFlag() {
-        this._changeFlag = true;
-    }
-
-    lowerChangeFlag() {
-        this._changeFlag = false;
-    }
 
     getGroup(speakerId) {
         return this.getState(speakerId).attributes.group_members;
@@ -108,27 +106,6 @@ export class PlayersPanel extends HaSubComponent {
     }
 
     /******************************** player/idle logic ***********************************/
-
-    assignRoles() {
-        console.log("assigning roles");
-        const ids = [...this.getStructure().sorted];
-        const newPlayers = [];
-        const newIdles = [];
-        ids.forEach((id) => {
-            if (this.isInactive(id)) {
-                newIdles.push(id);
-            } else {
-                const group = this.getGroup(id);
-                if (group[0] === id) {
-                    newPlayers.push(group);
-                } else if (group.length === 0) {
-                    newPlayers.push([id]);
-                }
-            }   
-        })
-        this.players = newPlayers;
-        this.idles = newIdles;
-    }
 
     getPlayers() {
         return [...this.players];

@@ -6,8 +6,6 @@ import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 
 export class MainVolumeSlider extends HaSubComponent {
 
-_changeFlag;
-
 static properties= {
     ...super.properties,
     _value: { state: true }
@@ -16,7 +14,6 @@ static properties= {
 constructor() {
     super();
     this._value = 0.01;
-    this._changeFlag = false;
 }
 
 /********************************************** lifecycle ************************************************/
@@ -25,12 +22,8 @@ getTriggers() {
     return ["_value"];
 }
 
-onFirstUpdate() {
-    this.setInitialValue();
-}
-
-hasRelevantChanges() {
-    return !(this.getChangeFlag()) && this.isIntersection(this.getCEIs(), this.getEntityIds());
+setInitialValues() {
+    this.setValue(this.getAverageVolume());
 }
 
 /********************************************** getter logic *********************************************/
@@ -48,28 +41,12 @@ getAverageVolume() {
     return volumes.reduce((sum, value) => sum + value) / volumes.length;
 }
 
-setInitialValue() {
-    this.setValue(this.getAverageVolume());
-}
-
 getValue() {
     return this._value;
 }
 
 setValue(value) {
     (value) && (this._value = value);
-}
-
-getChangeFlag() {
-    return this._changeFlag;
-}
-
-raiseChangeFlag() {
-    this._changeFlag = true;
-}
-
-lowerChangeFlag() {
-    this._changeFlag = false;
 }
 
 isVolume(speakerId, value) {

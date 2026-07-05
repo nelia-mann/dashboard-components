@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
-import { OFF, rgba, rgbp } from '../../util/color-util.js';
+import { OFF, WHITE, rgba } from '../../util/color-util.js';
 import styles from './slider.styles.js';
 import sharedStyles from '../../styles/shared-styles.js';
 
@@ -14,46 +14,25 @@ export class DoubleCircularSlider extends HaSubComponent {
 
     static properties = {
         ...super.properties,
-        _targetValue: { state: true },
+        _value: { state: true },
         fixed: { state: true }
     }
 
     constructor() {
         super();
         this.structure = {};
-        this._whichValue = 'none';
-        this._targetValue = 50;
-        this._flag = false;
+        this._value = null;
         this.fixed = true;
     }
 
     /************************** lifecycle *****************************/
 
-    update(changedProps) {
-        (!this.getChangeFlag()) && (this.setInitialValue());
-        super.update(changedProps);
-    }
-
     getTriggers() {
-        return ["_targetValue", "fixed"];
+        return ["_value", "fixed"];
     }
 
-    updated() {
-        (this.getWhichValue() == 'none') && (this.lowerChangeFlag());
-    }
-
-    onFirstUpdate() {
-        this.setInitialValue();
-    }
-
-    setInitialValue() {
-        if (this.getMinStateValue()) {
-            this.setTargetValue(this.getMinStateValue());
-        } else if (this.getMaxStateValue()) {
-            this.setTargetValue(this.getMaxStateValue());
-        } else if (this.getTargetStateValue) {
-            this.setTargetValue(this.getTargetStateValue());
-        } else this.setTargetValue(null);
+    setInitialValues() {
+        this.setValue(this.getStateValue());
     }
 
     /****************************** getter and setter logic *************************/
@@ -66,10 +45,6 @@ export class DoubleCircularSlider extends HaSubComponent {
         return this._IRIS;
     }
 
-    getTolerance() {
-        return 2 * this._THICKNESS;
-    }
-
     getThickness() {
         return this._THICKNESS;
     }
@@ -78,124 +53,76 @@ export class DoubleCircularSlider extends HaSubComponent {
         return this._OFFSETANGLE;
     }
 
-    clearWhichValue() {
-        this._whichValue = 'none';
-    }
-
-    getWhichValue() {
-        return this._whichValue;
-    }
-
-    getChangeFlag() {
-        return this._flag;
-    }
-
-    raiseChangeFlag() {
-        this._flag = true;
-    }
-
-    lowerChangeFlag() {
-        this._flag = false;
+    getEntityId() {
+        return [...this.getEntityIds()][0];
     }
 
     getMinExtreme() {
-        return this.structure.minExtreme;
+        return this.min;
     }
 
     getMaxExtreme() {
-        return this.structure.maxExtreme;
+        return this.max;
     }
 
-    getMinStateValue() {
-        return this.structure.minValue;
+    getStateValue() {
+        return this.targetValue;
     }
 
-    getMaxStateValue() {
-        return this.structure.maxValue;
+    getHighColor() {
+        return this.highColor;
     }
 
-    getTargetStateValue() {
-        return this.structure.targetValue;
+    getLowColor() {
+        return this.lowColor;
     }
 
-    getMinColor() {
-        return this.structure.minColor;
+    getSensor() {
+        return this.sensor;
     }
 
-    getMaxColor() {
-        return this.structure.maxColor;
-    }
-
-    getValue() {
-        return this.structure.value;
-    }
-
-    getSeparation() {
-        return this.structure.separation;
-    }
-
-    getColorMode() {
-        const colorMode = this.structure.colorMode;
-        if (colorMode === 'min') return this.getMinColor();
-        if (colorMode === 'max') return this.getMaxColor();
+    getActionColor() {
+        return this.actionColor;
     }
 
     getUnits() {
         let units = '';
-        (this.structure.units) && (units = this.structure.units);
+        (this.units) && (units = this.units);
         return units;
     }
 
-    getUpper() {
+    getAction() {
         let upper = '';
-        (this.structure.upper) && (upper = this.structure.upper);
+        (this.action) && (upper = this.action);
         return upper;
     }
 
-    setTargetValue(value) {
+    setValue(value) {
         if (value < this.getMinExtreme()) {
-            this._targetValue = this.getMinExtreme();
+            this._value = this.getMinExtreme();
         } else if (this.getMaxExtreme() < value) {
-            this._targetValue = this.getMaxExtreme();
+            this._value = this.getMaxExtreme();
         } else {
-            this._targetValue = value;
+            this._value = value;
         }
     }
 
-    getPointer() {
-        return this._targetValue;
+    getValue() {
+        return this._value;
     }
 
     isFixed() {
-        return this.fixed;
+        return (this.fixed || !this.getStateValue());
     }
 
     getMinOff() {
-        if (this.getTargetStateValue()) {
-            return null;
-        } else if (this.getMinStateValue()) {
-            return this.getPointer();
-        } else return this.getMinExtreme();
+        if (this.getHighColor()) return this.getValue();
+        return this.getMinExtreme();
     }
 
     getMaxOff() {
-        if (this.getTargetStateValue()) {
-            return null;
-        } else if (this.getMaxStateValue()) {
-            return this.getPointer();
-        } else return this.getMaxExtreme();
-    }
-
-    getHeatTarget() {
-        if (this.getMaxStateValue()) {
-            return null;
-        } else return this.getPointer();
-    }
-
-    getCoolTarget() {
-        if (this.getMinStateValue()) {
-            return null;
-        } else return this.getPointer();
+        if (this.getLowColor()) return this.getValue();
+        return this.getMaxExtreme();
     }
 
     /******************************* geometric logic *******************************/
@@ -241,7 +168,7 @@ export class DoubleCircularSlider extends HaSubComponent {
     }
 
     isNearPointer(e) {
-        return (this.getDistance(e, this.getPointer()) < this.getTolerance())
+        return (this.getDistance(e, this.getValue()) < 2 * this.getThickness())
     }
 
     getMouseCoords(e) {
@@ -253,33 +180,22 @@ export class DoubleCircularSlider extends HaSubComponent {
         return [svgPoint.x, svgPoint.y]
     }
 
-    setWhichValue(e) {
-        if (!this.isNearPointer(e)) {
-            this._whichValue = 'none';
-        } else if (this.getMinStateValue()) {
-            this._whichValue = 'min';
-        } else if (this.getMaxStateValue()) {
-            this._whichValue = 'max';
-        } else {
-            this._whichValue = 'target';
-        }
-    }
-
     /****************************** interactive logic *******************************/
 
-
     down(e) {
-        this.setWhichValue(e);
-        if (this.getWhichValue() !== 'none' && !this.isFixed()) {
+        if (this.isNearPointer(e) && !this.isFixed()) {
             this.raiseChangeFlag();
             this.move(e);
         }
     }
 
-    up(e) {
-        if (!this.isFixed()) {
-            this.handleMessage();
-            this.clearWhichValue();
+    async up(e) {
+        if (this.getChangeFlag()) {
+            this.dispatchEvent(new CustomEvent('change', { detail: this.getValue() }));
+            if (this.wait) {
+                await this.waitForEntity(this.getEntityId(), (entityId) => this.wait(entityId, this.getValue()));
+            }
+            this.lowerChangeFlag();
         }
     }
 
@@ -288,111 +204,71 @@ export class DoubleCircularSlider extends HaSubComponent {
     }
 
     move(e) {
-        const which = this.getWhichValue();
-        if (which !== 'none' && !this.isFixed()) {
+        if (this.getChangeFlag()) {
             const mouseCoords = this.getMouseCoords(e);
             const xFromCenter = mouseCoords[0] - 1;
             const yFromCenter = mouseCoords[1] - 1;
             let angle = Math.atan2(-xFromCenter, yFromCenter) % (2 * Math.PI);
             (angle < 0) && (angle = angle + 2 * Math.PI);
             const newValue = this.getNewValue(angle);
-            this.setTargetValue(newValue);
+            this.setValue(newValue);
             (this.shouldUp(newValue)) && (this.up(e));
         }
     }
 
-    handleMessage() {
-        if (this.getWhichValue() == 'none') return;
-        this.dispatchEvent(new CustomEvent('change', { detail: [this.getWhichValue(), this.getPointer()] }));
-    }
-
-    /******************************* text logic ************************************/
+    /******************************* html logic ************************************/
 
     getIcon() {
-        let icon = html``;
-        if (this.structure.icon) {
-            icon = html`<ha-svg-icon .path="${this.structure.icon}" style=${styleMap(this.getTextStyles())}></ha-svg-icon>`
+        if (this.icon) {
+            return html`<ha-svg-icon .path="${this.icon}" style=${styleMap(this.getTextStyles())}></ha-svg-icon>`
         }
-        return icon;
     }
 
     getRange() {
-        let result = html``;
-        let target = this.getPointer();
-        (typeof target === 'number') && (target = target.toFixed(0));
-        const units = this.getUnits();
-        if (typeof target === 'string') {
-            result = html`<var class="one">${target}</var><sup class="one">${units}</sup>`
-        } else {
-            result = html`<var class="one"> OFF </var>`
+        if (!this.getStateValue()) return html`<var class="one"> OFF </var>`;
+        if (typeof this.getValue() === 'number') {
+            const target = this.getValue().toFixed(0);
+            const units = this.getUnits();
+            return html`<var class="one">${target}</var><sup class="one">${units}</sup>`
         }
-        return result;
     }
 
     getLowerText() {
         const units = this.getUnits();
-        const value = this.getValue().toFixed(1);
+        const value = this.getSensor().toFixed(1);
         return html`<div class="lower" style=${styleMap(this.getTextStyles())}> ${this.getIcon()}  ${value} ${units}</div>`
     }
 
     getUpperText() {
-        let upper = this.getUpper();
+        let upper = this.getAction();
         (upper === 'Off') && (upper = html`&thinsp;`);
         return html`<div class="upper" style=${styleMap(this.getTextStyles())}>${upper}</div>`;
     }
 
-    /**************************** style/html logic ***************************/
-
-    arc(startValue, stopValue, stroke) {
-        if (typeof startValue != 'number' || typeof stopValue != 'number' || stopValue < startValue) return null;
+    arc(startValue, stopValue, color, opacity) {
+        if (!color || (stopValue < startValue)) return;
         const startAngle = this.getAngle(startValue);
         const stopAngle = this.getAngle(stopValue);
         const ns = "http://www.w3.org/2000/svg";
         const path = document.createElementNS(ns, "path");
         path.setAttribute("d", this.arcD(startAngle, stopAngle));
-        path.setAttribute("stroke", stroke);
+        path.setAttribute("stroke", rgba(color, opacity));
         path.setAttribute("stroke-width", 2 * this.getThickness())
         path.setAttribute("class", "arc");
         return path;
     }
 
-    dot(skip, value, r, fill) {
-        if (typeof value != 'number' || skip) return null;
+    dot(show, value, r, color, opacity) {
+        if (!show || !color) return;
         const ns = "http://www.w3.org/2000/svg";
         const dot1 = document.createElementNS(ns, "circle");
         const coords = this.getCoords(value);
         dot1.setAttribute("cx", coords[0]);
         dot1.setAttribute("cy", coords[1]);
         dot1.setAttribute("r", r);
-        dot1.setAttribute("fill", fill);
-        return dot1;
+        dot1.setAttribute("fill", rgba(color, opacity));
+        return dot1;        
     }
-
-    getBGStyles() {
-        let styles = {};
-        const color = this.getColorMode();
-        if (color) {
-            styles['background'] = `radial-gradient(circle at center, ${rgba(color, .2)} 0, ${rgba(color, 0)} 60%)`;
-        }
-        return styles;
-    }
-
-    getTextStyles() {
-        let styles = {};
-        if (this.getColorMode()) {
-            styles['color'] = rgba(this.getColorMode(), 1);
-        }
-        return styles;
-    }
-
-    getTempColor() {
-        let color = rgba(OFF, 1);
-        (this.getValue() < this.getPointer() && !this.getMaxStateValue()) && (color = rgbp(this.getMinColor(), .5));
-        (this.getValue() > this.getPointer() && !this.getMinStateValue()) && (color = rgbp(this.getMaxColor(), .5));
-        return color;
-    }
-
-    static styles = [sharedStyles, styles];
 
     render() {
         if (this.isInitialized()) {
@@ -408,19 +284,40 @@ export class DoubleCircularSlider extends HaSubComponent {
                     @pointerup=${this.up}
                     @pointermove=${this.move}
                 >
-                    ${this.arc(this.getMinOff(), this.getMaxOff(), rgba(OFF, .25))}
-                    ${this.arc(this.getMinExtreme(), this.getHeatTarget(), rgba(this.getMinColor(), .5))}
-                    ${this.arc(this.getValue(), this.getHeatTarget(), rgba(this.getMinColor(), 1))}
-                    ${this.dot(false, this.getHeatTarget(), this.getThickness(), rgba(this.getMinColor(), 1))}
-                    ${this.arc(this.getCoolTarget(), this.getMaxExtreme(), rgba(this.getMaxColor(), .5))}
-                    ${this.arc(this.getCoolTarget(), this.getValue(), rgba(this.getMaxColor(), 1))}
-                    ${this.dot(false, this.getCoolTarget(), this.getThickness(), rgba(this.getMaxColor(), 1))}
-                    ${this.dot(this.isFixed(), this.getPointer(), this.getIris() * this.getThickness(), "white")}
-                    ${this.dot(false, this.getValue(), this.getTempDotSize(), this.getTempColor())}
+                    ${this.arc(this.getMinOff(), this.getMaxOff(), OFF, .25)}
+                    ${this.arc(this.getMinExtreme(), this.getValue(), this.getHighColor(), .5)}
+                    ${this.arc(this.getSensor(), this.getValue(), this.getHighColor(), 1)}
+                    ${this.arc(this.getValue(), this.getMaxExtreme(), this.getLowColor(), .5)}
+                    ${this.arc(this.getValue(), this.getSensor(), this.getLowColor(), 1)}
+                    ${this.dot(this.getSensor() <= this.getValue(), this.getValue(), this.getThickness(), this.getHighColor(), 1)}
+                    ${this.dot(this.getValue() <= this.getSensor(), this.getValue(), this.getThickness(), this.getLowColor(), 1)}
+                    ${this.dot(!this.isFixed(), this.getValue(), this.getIris() * this.getThickness(), WHITE, 1)}
+                    ${this.dot(true, this.getSensor(), this.getTempDotSize(), OFF, 1)}
                 </svg>
             `
         }
     }
+
+    /********************************** style logic *******************************************/
+
+    getBGStyles() {
+        const styles = {};        
+        const color = this.getActionColor();
+        if (color) {
+            styles['background'] = `radial-gradient(circle at center, ${rgba(color, .2)} 0, ${rgba(color, 0)} 60%)`;
+        }
+        return styles;
+    }
+
+    getTextStyles() {
+        const styles = {};
+        if (this.getActionColor()) {
+            styles['color'] = rgba(this.getActionColor(), 1);
+        }
+        return styles;
+    }
+
+    static styles = [sharedStyles, styles];
 
 }
 

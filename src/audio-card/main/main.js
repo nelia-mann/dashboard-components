@@ -21,10 +21,6 @@ export class AudioCard extends HaMainComponent {
 
     _LABEL = "audio";
 
-    static properties = {
-        ...super.properties,
-    }
-
     /*************************** lifecycle **************************************/
 
 

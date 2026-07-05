@@ -10,30 +10,27 @@ import '../../general-components/adjust-buttons/adjust-buttons.js';
 
 export class HydrostatPanel extends HaClimateComponent {
 
-    static styles = [sharedStyles, styles];
+    getTargetValue() {
+        if (this.getMode() === 'on') return this.getTarget();
+    }
 
-    getSliderStructure() {
-        let structure = {};
-        structure.value = this.getSensor();
-        structure.minExtreme = this.getMinExtreme();
-        structure.maxExtreme = this.getMaxExtreme();
-        structure.units = this.getSensorUnits();
-        structure.upper = this.getAction();
-        structure.icon = fan;
-        structure.maxColor = FAN;
-        structure.minColor = FAN;
-        (this.getAction() === 'Venting') && (structure.colorMode = 'max');
-        structure.separation = this.getSeparation();
-        (this.getMode() === 'on') && (structure.maxValue = this.getTarget());
-        return structure;
+    getLowColor() {
+        if (this.getMode() === 'on') return FAN;
+    }
+
+    getActionColor() {
+        if (this.getAction() === 'Venting') return FAN;
     }
 
     /******************************** interactive logic ************************************/
 
+    wait(entityId, value) {
+        return this.getState(entityId).attributes.humidity = Math.round(value);
+    }
+
     handleCallService(e) {
-        const details = e.detail;
+        const value = Math.round(e.detail);
         const entityId = this.getEntityId('hygrostat');
-        const value = details[1];
         const data = {
             entity_id: entityId,
             humidity: value
@@ -45,7 +42,7 @@ export class HydrostatPanel extends HaClimateComponent {
         const change = e.detail;
         const entityId = this.getEntityId('hygrostat');
         let value = this.getTarget();
-        value = value + change * this.getSeparation();  
+        value = value + change * this.getSeparation(); 
         if ((this.getMinExtreme() < value) && (value < this.getMaxExtreme())) {
             const data = { entity_id: entityId,  humidity: value};
             this.callService('humidifier', 'set_humidity', data);
@@ -69,8 +66,17 @@ export class HydrostatPanel extends HaClimateComponent {
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
                     .entityIds = ${this.getEntityIds()}
-                    .structure=${this.getSliderStructure()}
+                    .min = ${this.getMinExtreme()}
+                    .max = ${this.getMaxExtreme()}
+                    .sensor = ${this.getSensor()}
+                    .units = ${this.getSensorUnits()}
+                    .icon = ${fan}
+                    .lowColor = ${this.getLowColor()}
+                    .targetValue = ${this.getTargetValue()}
+                    .action = ${this.getAction()}
+                    .actionColor = ${this.getActionColor()}
                     .fixed=${this.isSafe()}
+                    .wait=${this.wait}
                     @change=${this.handleCallService}
                 >
                 </double-circular-slider>
@@ -78,6 +84,8 @@ export class HydrostatPanel extends HaClimateComponent {
             `
         }
     }
+
+    static styles = [sharedStyles, styles];
 }
 
 customElements.define("hydrostat-panel", HydrostatPanel);
