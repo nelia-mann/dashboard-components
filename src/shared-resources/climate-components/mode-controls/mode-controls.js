@@ -79,7 +79,7 @@ export class ModeControls extends HaClimateComponent {
 
     modeButtons() {
         return html`
-            ${repeat(this.getHPModes().sort().reverse(), (mode) => mode, mode => this.modeButton(mode))}
+            ${repeat(this.getModes().sort().reverse(), (mode) => mode, mode => this.modeButton(mode))}
         `
     }
 

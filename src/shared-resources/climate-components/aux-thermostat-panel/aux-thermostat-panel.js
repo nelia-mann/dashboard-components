@@ -8,26 +8,17 @@ import '../offset-slider/offset-slider.js';
 
 export class AuxThermostatPanel extends HaClimateComponent {
 
-    getMainStructure() {
-        if (this.getStructure().tied) {
-            return this.getStructure().tied.structure;
-        } else return this.getStructure();
-    }
-
     getThermostatEIs() {
-        let entityIds = new Set();
-        entityIds.add(this.getEntityId('safe_mode'));
-        entityIds.add(this.getEntityId('thermostat'));
-        return entityIds;
+        return new Set([this.getEntityId('thermostat'), this.getEntityId('safe_mode')]);
     }
 
     getControlEIs() {
         let entityIds = new Set();
         entityIds.add(this.getEntityId('safe_mode'));
         entityIds.add(this.getEntityId('thermostat'));
-        entityIds.add(this.getTieId());
+        entityIds.add(this.getEntityId('tie_main'));
         if (this.getStructure().tie) {
-            entityIds = entityIds.union(this.getStructure().tie.entityIds);
+            entityIds = entityIds.add(this.getEntityId('tie'));
         }
         return entityIds;
     }
@@ -37,7 +28,7 @@ export class AuxThermostatPanel extends HaClimateComponent {
     }
 
     isTied() {
-        return (this.getTie() != 'off')
+        return (this.getTie() !== 'off')
     }
 
     isFixed() {
@@ -51,25 +42,22 @@ export class AuxThermostatPanel extends HaClimateComponent {
     }
 
     fixSlider() {
-        if (![this.getRegionName(), 'on'].includes(this.getTie()) || this.getMode() === 'off' || this.isSafe()) {
-            return true;
-        } else return false;
+        return (![this.getRegionName(), 'on'].includes(this.getTie()) || this.getMode() === 'off' || this.isSafe());
     }
+
+    /********************************* html/css logic ******************************************/
+
+    static styles = [sharedStyles, styles];
 
     isInactiveSlider() {
         if (this.fixSlider()) return 'inactive';
         return '';
     }
 
-
-    /********************************* html/css logic ******************************************/
-
-    static styles = [sharedStyles, styles];
-
     render() {
         if (this.isInitialized()) {
             return html`
-                <div class="heading"> ${this.getName()} </div>
+                <div class="heading"> ${this.getThisName()} </div>
                 <div class="main">
                     <div class="thermostat">
                         <thermostat-panel
@@ -85,7 +73,7 @@ export class AuxThermostatPanel extends HaClimateComponent {
                             .changedEntityIds = ${this.getCEIs()}
                             .states = ${this.getStates()}
                             .entityIds = ${this.getControlEIs()}
-                            .structure = ${this.getMainStructure()}
+                            .structure = ${this.getStructure()}
                             .regionName = ${this.getRegionName()}
                             .areaMode = ${this.getTieMode()}
                             .areaAction = ${this.getTieAction()}
@@ -99,6 +87,7 @@ export class AuxThermostatPanel extends HaClimateComponent {
                         .entityIds = ${this.getEntityIds()}
                         .structure=${this.getStructure()}
                         .regionName=${this.getRegionName()}
+                        .fixed = ${this.fixSlider()}
                         .callService = ${this.callService}
                     ></offset-slider>
                 </div>

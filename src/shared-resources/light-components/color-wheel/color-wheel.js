@@ -22,6 +22,9 @@ export class ColorWheel extends HaLightingComponent {
 
     onFirstUpdate() {
         this.setBox(this.renderRoot.querySelector('.wheel-background'));
+    }
+
+    setInitialValues() {
         const hs_values = this.getHSColor();
         if (hs_values) {
             this.setHue(hs_values[0]);

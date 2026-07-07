@@ -12,8 +12,7 @@ export class HeatpumpPanel extends HaClimateComponent {
     static styles = [sharedStyles, styles];
 
     getControlEIs() {
-        let entityIds = new Set();
-        entityIds.add(this.getEntityId('hp'));
+        let entityIds = new Set([this.getEntityId('hp')]);
         if (this.getRankId()) {
             entityIds.add(this.getRankId());
         }
@@ -21,16 +20,13 @@ export class HeatpumpPanel extends HaClimateComponent {
     }
 
     getThermostatEIs() {
-        let entityIds = new Set();
-        entityIds.add(this.getModeId());
-        entityIds.add(this.getEntityId('hp'));
-        return entityIds;
+        return new Set([this.getEntityId('hp')]);
     }
 
     render() {
         if (this.isInitialized()) {
             return html`
-                <div class="heading"> ${this.getName()} </div>
+                <div class="heading"> ${this.getThisName()} </div>
                 <thermostat-panel
                     class="outlined"
                     .changedEntityIds = ${this.getCEIs()}

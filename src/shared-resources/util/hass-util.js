@@ -67,5 +67,6 @@ export {
     getAttributes,
     hasAttributeChanges,
     filterEntityIdsForLabel,
-    getEntityIdsWithLabel
+    getEntityIdsWithLabel,
+    hasLabel,
 }

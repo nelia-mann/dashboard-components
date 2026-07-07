@@ -66,7 +66,7 @@ export class HydrostatPanel extends HaClimateComponent {
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
                     .entityIds = ${this.getEntityIds()}
-                    .min = ${this.getMinExtreme()}
+                    .min = ${0}
                     .max = ${this.getMaxExtreme()}
                     .sensor = ${this.getSensor()}
                     .units = ${this.getSensorUnits()}

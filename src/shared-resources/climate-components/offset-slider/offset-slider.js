@@ -54,9 +54,7 @@ export class OffsetSlider extends HaClimateComponent {
     }
 
     fixSlider() {
-        if (![this.getRegionName(), 'on'].includes(this.getTie()) || this.getMode() === 'off' || this.isSafe()) {
-            return true;
-        } else return false;
+        return this.fixed;
     }
 
     /************************ interactive logic *******************************/

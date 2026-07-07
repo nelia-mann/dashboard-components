@@ -20,7 +20,7 @@ export class IsoHydrostatPanel extends HaClimateComponent {
     render() {
         if (this.isInitialized()) {
             return html`
-                <div class="heading"> ${this.getName()} </div>
+                <div class="heading"> ${this.getThisName()} </div>
                 <hydrostat-panel
                     class = "outlined ${this.isInactive()}"
                     .changedEntityIds = ${this.getCEIs()}

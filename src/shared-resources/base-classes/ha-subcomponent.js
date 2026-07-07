@@ -46,6 +46,7 @@ export class HaSubComponent extends LitElement {
 
     firstUpdated() {
         this.onFirstUpdate();
+        this.setInitialValues();
         this.initialize();
     }
 
@@ -128,11 +129,29 @@ export class HaSubComponent extends LitElement {
     }
 
     getStateState(entityId) {
-        return this.getState(entityId).state;
+        const state = this.getState(entityId);
+        if (state) {
+            return state.state;
+        }
+    }
+
+    getAttributes(entityId) {
+        const state = this.getState(entityId);
+        if (state) {
+            return state.attributes;
+        }
+    }
+
+    getAttribute(entityId, attribute) {
+        const attributes = this.getAttributes(entityId);
+        if (attributes) {
+            return attributes[attribute];
+        }
     }
 
     getName(entityId) {
-        return this.getState(entityId).attributes.friendly_name;
+        const attributes = this.getAttributes(entityId);
+        if (attributes) return attributes.friendly_name;
     }
 
     makePretty(id) {
@@ -151,5 +170,7 @@ export class HaSubComponent extends LitElement {
     getTriggers() {
         return [];
     }
+
+    setInitialValues() {};
 
 }

@@ -32,7 +32,7 @@ export class PlayersPanel extends HaSubComponent {
         return ["players", "idles"];
     }
 
-    onFirstUpdate() {
+    setInitialValues() {
         const ids = [...this.getStructure().sorted];
         const newPlayers = [];
         const newIdles = [];

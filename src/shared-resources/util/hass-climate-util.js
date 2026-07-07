@@ -1,24 +1,27 @@
-import { filterEntityIdsForLabel, hasAttributeChanges } from './hass-util.js';
+import { filterEntityIdsForLabel, hasAttributeChanges, hasLabel } from './hass-util.js';
 
 /******************************* climate structure *************************/
 
-function getClimateKeys() {
+function getPrimaryKeys() {
+    return ["rank", "script", "hp"];
+}
+
+function getAuxClimateKeys() {
     return [
         "tie_main",
-        "rank",
-        "script",
         "offset",
-        "hp",
+        "tie",
         "thermostat",
         "hygrostat",
-        "safe_mode"];
+        "safe_mode"
+    ]
 }
 
 function getClimateButtonKeys() {
     return ["hp"];
 }
 
-function getClimateAuxKeys() {
+function getAuxKeys() {
     return ["fan", "laundry_heater"];
 }
 
@@ -26,37 +29,25 @@ function getDivisions() {
     return ["primary", "secondary", "aux"];
 }
 
-function addClimateKeyStructure(hass, dictionary) {
+function addClimateKeyStructure(hass, dictionary, keys) {
     if (Object.keys(dictionary.structure).length === 0) {
-        getClimateKeys().forEach((key) => {
+        keys.forEach((key) => {
             const entityIds = [...filterEntityIdsForLabel(hass, dictionary.entityIds, key)];
             if (entityIds.length === 1) {
                 dictionary.structure[key] = entityIds[0];
-            }
+            } 
         })
     }
 }
 
-function addClimateTieStructure(hass, dictionary) {
-    if (Object.keys(dictionary.structure).length === 0) {
-        const entityIds = filterEntityIdsForLabel(hass, dictionary.entityIds, "tied");
-        if (entityIds.size > 0) {
-            dictionary.structure.tied = { structure: {}, entityIds: entityIds };
-            addClimateKeyStructure(hass, dictionary.structure.tied);
-            const tieIds = filterEntityIdsForLabel(hass, dictionary.entityIds, "tie");
-            dictionary.structure.tie = { structure: {}, entityIds: tieIds };
-            addClimateKeyStructure(hass, dictionary.structure.tie);
-        }
-    }
-}
-
 function addClimateAuxStructure(hass, dictionary) {
-    getClimateAuxKeys().forEach((element) => {
+    getAuxKeys().forEach((element) => {
         const entityIds = filterEntityIdsForLabel(hass, dictionary.entityIds, element);
         if (entityIds.size > 0) {
             dictionary.structure[element] = { structure: {}, entityIds: entityIds };
-            addClimateTieStructure(hass, dictionary.structure[element]);
-            addClimateKeyStructure(hass, dictionary.structure[element]);
+            addClimateKeyStructure(hass, dictionary.structure[element], getAuxClimateKeys());
+        } else {
+            addClimateKeyStructure(hass, dictionary, getAuxClimateKeys());
         }
     })
 }
@@ -68,9 +59,8 @@ function addClimateDivisionStructure(hass, dictionary) {
             dictionary.structure[division] = { structure: {}, entityIds: entityIds };
             if (division !== 'primary') {
                 addClimateAuxStructure(hass, dictionary.structure[division]);
-                addClimateTieStructure(hass, dictionary.structure[division]);
             }
-            addClimateKeyStructure(hass, dictionary.structure[division]);
+            addClimateKeyStructure(hass, dictionary.structure[division], getPrimaryKeys());
         }
     })
 }
@@ -83,7 +73,7 @@ function addClimateButtonStructure(hass, dictionary) {
         buttonIds = buttonIds.union(newButtonIds);
     })
     dictionary.buttonInfo = { structure: {}, entityIds: buttonIds };
-    addClimateKeyStructure(hass, dictionary.buttonInfo);
+    addClimateKeyStructure(hass, dictionary.buttonInfo, getPrimaryKeys());
 }
 
 /**************************************** find changes ************************************/

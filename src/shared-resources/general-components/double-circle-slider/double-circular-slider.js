@@ -31,7 +31,7 @@ export class DoubleCircularSlider extends HaSubComponent {
         return ["_value", "fixed"];
     }
 
-    onFirstUpdate() {
+    setInitialValues() {
         this.setValue(this.getStateValue());
     }
 
@@ -196,6 +196,7 @@ export class DoubleCircularSlider extends HaSubComponent {
                 await this.waitForEntity(this.getEntityId(), (entityId) => this.wait(entityId, this.getValue()));
             }
             this.lowerChangeFlag();
+            this.requestUpdate();
         }
     }
 

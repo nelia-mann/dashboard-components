@@ -13,7 +13,7 @@ static properties= {
 
 constructor() {
     super();
-    this._value = 0.01;
+    this._value = 0;
 }
 
 /********************************************** lifecycle ************************************************/
@@ -22,7 +22,7 @@ getTriggers() {
     return ["_value"];
 }
 
-onFirstUpdate() {
+setInitialValues() {
     this.setValue(this.getAverageVolume());
 }
 
