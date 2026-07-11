@@ -123,10 +123,13 @@ action: the current action of the climate entity
 
     getAction() {
         let str;
-        if (this.getEntityId('hygrostat')) (str = this.getAttribute(this.getEntityId('hygrostat'), 'action'));
-        str = this.getAttribute(this.getMainEntityId(), 'hvac_action');
+        if (this.getEntityId('hygrostat')) {
+            (str = this.getAttribute(this.getEntityId('hygrostat'), 'action'))
+        } else {
+            str = this.getAttribute(this.getMainEntityId(), 'hvac_action');
+            if (!str) (str = this.getActionDefault());
+        }
         (str === 'fan' || str === 'drying') && (str = 'venting');
-        if (!str) (str = this.getActionDefault());
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
