@@ -128,7 +128,7 @@ export default css`
         --theme-select-justify-content: flex-start;
         --theme-select-padding: 0px;
         --theme-select-height: 380px;
-        --theme-select-width: 850px;
+        --theme-select-width: 800px;
 
         --theme-button-padding-top: 7px;
         --theme-button-padding-bottom: 7px;
