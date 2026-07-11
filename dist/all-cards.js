@@ -247,7 +247,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         align-items: var(--floor-panel-align-items, flex-start);
     }
 
-`;let tQ=[255,193,7],t0=[127,97,3],t1=[158,158,158],t5=[68,115,158],t2=[41,0,255],t3=[33,150,243],t9=[255,111,34],t4=[255,255,255],t7=[0,188,212],t8=[45,100];function t6(t,e,i){return i>1?e:i<0?t:t+(e-t)*i}function et(t,e){return`rgba(${t[0]}, ${t[1]}, ${t[2]}, ${e})`}function ee(t,e,i){return[t6(t[0],e[0],i),t6(t[1],e[1],i),t6(t[2],e[2],i)]}class ei extends tW{getMainId(){return this.getStructure().main}getThisStructure(t){return t&&t!==this.getMainId()?this.getGroup()[t].structure:this.getStructure()}isGroup(t){return!!this.getThisStructure(t).group}getGroup(){return this.getStructure().group}getThemeId(t){return this.getThisStructure(t).theme}getLightState(t){return t?this.getState(t):this.getState(this.getMainId())}getThemeState(t){return t?this.getState(this.getThemeId(t)):this.getState(this.getThemeId(this.getMainId()))}getThemeStateState(t){return this.getThemeState(t).state}getAttributes(t){return this.getLightState(t).attributes}getName(t){return this.getAttributes(t).friendly_name}isOn(t){return"on"===this.getLightState(t).state}getRGB(t){return this.getAttributes(t).rgb_color}getOffBrightness(t){let e=this.getAttributes(t).off_brightness;if(e)return e;let i=this.getAttributes(t).entity_id;if(i){let t=[];i.forEach(e=>{let i=this.getAttributes(e).off_brightness;i&&t.push(i)}),t.length>0&&(e=t.reduce((t,e)=>t+e,0)/t.length)}if(e)return e}getBrightnessPct(t){let e=100,i=this.getAttributes(t).brightness,s=this.getOffBrightness(t);return i?e=100*i/255:s&&(e=100*s/255),e}getColorModes(t){let e=this.getAttributes(t).supported_color_modes;return e||[]}hasBrightness(t){return Object.keys(this.getAttributes(t)).includes("brightness")}hasCTColor(t){return Object.keys(this.getAttributes(t)).includes("color_temp_kelvin")}hasHSColor(t){return Object.keys(this.getAttributes(t)).includes("hs_color")}hasTheme(t){return Object.keys(this.getThisStructure(t)).includes("theme")}getThemeOptions(t){return this.getAttributes(this.getThemeId(t)).options}getTheseEntityIds(t){let e,i=[e=t||this.getMainId()];return this.hasTheme(e)&&i.push(this.getThemeId()),new Set(i)}getHalfRGB(t){let e=this.getRGB(t);return[e[0]/2,e[1]/2,e[2]/2]}getColor(t){let e=t5;return this.isOn(t)&&(e=this.getRGB(t)?ee(this.getHalfRGB(t),this.getRGB(t),this.getBrightnessPct(t)/100):ee(t0,tQ,this.getBrightnessPct(t)/100)),et(e,1)}getHSColor(t){let e=t8,i=this.getAttributes(t).hs_color;return i&&(e=i),e}getMinTemp(t){let e=1500,i=this.getAttributes(t).min_color_temp_kelvin;return i&&(e=i),e}getMaxTemp(t){let e=9e3,i=this.getAttributes(t).max_color_temp_kelvin;return i&&(e=i),e}getColorTemp(t){let e=2e3,i=this.getAttributes(t).color_temp_kelvin;return i&&(e=i),e}hsGradient(){let t="radial-gradient(circle at center, white 0%, transparent 100%), ";t+="conic-gradient( from 0deg";for(let e=0;e<=10;e++){let i=Math.round(360*e/10);t+=`, hsl(${i}, 100%, 50%)`}return t+")"}getTempRed(t){let e;return(e=t<=6600?255:Math.round(329.698727446*(e=t/100-60)**-.1332047592))<0&&(e=0),e>255&&(e=255),e}getTempGreen(t){let e;return(e=t<=6600?Math.round(99.4708025861*Math.log(e=t/100)-161.1195681661):Math.round(288.1221695283*(e=t/100-60)**-.0755148492))<0&&(e=0),e>255&&(e=255),e}getTempBlue(t){let e;return(e=t>6600?255:t<=1900?0:Math.round(138.5177312231*Math.log(e=t/100-10)-305.0447927307))<0&&(e=0),e>255&&(e=255),e}getTempColor(t){return[this.getTempRed(t),this.getTempGreen(t),this.getTempBlue(t)]}tempBorder(){return et(this.getTempColor(1500),1)}tempGradientGeneral(t,e,i,s){let n=`linear-gradient(${i}`;for(let i=0;i<=10;i++){let r=(t*(10-i)+e*i)/10,a=et(this.getTempColor(r),s),o=Math.round(100*i/10);n=n+", "+a+` ${o}%`}return n+")"}tempGradientFull(){return this.tempGradientGeneral(1500,9e3,"to right",1)}}var es=a`
+`;let tQ=[255,193,7],t0=[127,97,3],t1=[158,158,158],t5=[68,115,158],t2=[41,0,255],t3=[33,150,243],t9=[255,111,34],t4=[255,255,255],t8=[0,188,212],t7=[45,100];function t6(t,e,i){return i>1?e:i<0?t:t+(e-t)*i}function et(t,e){return`rgba(${t[0]}, ${t[1]}, ${t[2]}, ${e})`}function ee(t,e,i){return[t6(t[0],e[0],i),t6(t[1],e[1],i),t6(t[2],e[2],i)]}class ei extends tW{getMainId(){return this.getStructure().main}getThisStructure(t){return t&&t!==this.getMainId()?this.getGroup()[t].structure:this.getStructure()}isGroup(t){return!!this.getThisStructure(t).group}getGroup(){return this.getStructure().group}getThemeId(t){return this.getThisStructure(t).theme}getLightState(t){return t?this.getState(t):this.getState(this.getMainId())}getThemeState(t){return t?this.getState(this.getThemeId(t)):this.getState(this.getThemeId(this.getMainId()))}getThemeStateState(t){return this.getThemeState(t).state}getAttributes(t){return this.getLightState(t).attributes}getName(t){return this.getAttributes(t).friendly_name}isOn(t){return"on"===this.getLightState(t).state}getRGB(t){return this.getAttributes(t).rgb_color}getOffBrightness(t){let e=this.getAttributes(t).off_brightness;if(e)return e;let i=this.getAttributes(t).entity_id;if(i){let t=[];i.forEach(e=>{let i=this.getAttributes(e).off_brightness;i&&t.push(i)}),t.length>0&&(e=t.reduce((t,e)=>t+e,0)/t.length)}if(e)return e}getBrightnessPct(t){let e=100,i=this.getAttributes(t).brightness,s=this.getOffBrightness(t);return i?e=100*i/255:s&&(e=100*s/255),e}getColorModes(t){let e=this.getAttributes(t).supported_color_modes;return e||[]}hasBrightness(t){return Object.keys(this.getAttributes(t)).includes("brightness")}hasCTColor(t){return Object.keys(this.getAttributes(t)).includes("color_temp_kelvin")}hasHSColor(t){return Object.keys(this.getAttributes(t)).includes("hs_color")}hasTheme(t){return Object.keys(this.getThisStructure(t)).includes("theme")}getThemeOptions(t){return this.getAttributes(this.getThemeId(t)).options}getTheseEntityIds(t){let e,i=[e=t||this.getMainId()];return this.hasTheme(e)&&i.push(this.getThemeId()),new Set(i)}getHalfRGB(t){let e=this.getRGB(t);return[e[0]/2,e[1]/2,e[2]/2]}getColor(t){let e=t5;return this.isOn(t)&&(e=this.getRGB(t)?ee(this.getHalfRGB(t),this.getRGB(t),this.getBrightnessPct(t)/100):ee(t0,tQ,this.getBrightnessPct(t)/100)),et(e,1)}getHSColor(t){let e=t7,i=this.getAttributes(t).hs_color;return i&&(e=i),e}getMinTemp(t){let e=1500,i=this.getAttributes(t).min_color_temp_kelvin;return i&&(e=i),e}getMaxTemp(t){let e=9e3,i=this.getAttributes(t).max_color_temp_kelvin;return i&&(e=i),e}getColorTemp(t){let e=2e3,i=this.getAttributes(t).color_temp_kelvin;return i&&(e=i),e}hsGradient(){let t="radial-gradient(circle at center, white 0%, transparent 100%), ";t+="conic-gradient( from 0deg";for(let e=0;e<=10;e++){let i=Math.round(360*e/10);t+=`, hsl(${i}, 100%, 50%)`}return t+")"}getTempRed(t){let e;return(e=t<=6600?255:Math.round(329.698727446*(e=t/100-60)**-.1332047592))<0&&(e=0),e>255&&(e=255),e}getTempGreen(t){let e;return(e=t<=6600?Math.round(99.4708025861*Math.log(e=t/100)-161.1195681661):Math.round(288.1221695283*(e=t/100-60)**-.0755148492))<0&&(e=0),e>255&&(e=255),e}getTempBlue(t){let e;return(e=t>6600?255:t<=1900?0:Math.round(138.5177312231*Math.log(e=t/100-10)-305.0447927307))<0&&(e=0),e>255&&(e=255),e}getTempColor(t){return[this.getTempRed(t),this.getTempGreen(t),this.getTempBlue(t)]}tempBorder(){return et(this.getTempColor(1500),1)}tempGradientGeneral(t,e,i,s){let n=`linear-gradient(${i}`;for(let i=0;i<=10;i++){let r=(t*(10-i)+e*i)/10,a=et(this.getTempColor(r),s),o=Math.round(100*i/10);n=n+", "+a+` ${o}%`}return n+")"}tempGradientFull(){return this.tempGradientGeneral(1500,9e3,"to right",1)}}var es=a`
 
     :host {
         height: var(--light-group-height);
@@ -1189,8 +1189,11 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --aux-basement-panel-elements-top-justify-content: center;
         --aux-basement-panel-elements-bottom-justify-content: space-between;
 
+        --aux-panel-height-2: calc(var(--thermostat-mini-height) + var(--aux-mode-control-height) + var(--aux-panel-heading-mini-height) + var(--hp-mini-panel-padding));
+        --aux-panel-width-2: calc(var(--thermostat-mini-width) + var(--offset-slider-width) + 2 * var(--slider-padding) + var(--hp-panel-mini-padding));
+
     }
-    `;class eJ extends tW{getEntityId(t){return this.getStructure()[t]}getNumberState(t){if(this.getEntityId(t))return Number(this.getStateState(this.getEntityId(t)))}getNumberAttribute(t,e){let i=this.getAttribute(this.getEntityId(t),e);if("number"==typeof i)return i}getMainEntityId(){return this.getEntityId("hp")?this.getEntityId("hp"):this.getEntityId("thermostat")?this.getEntityId("thermostat"):this.getEntityId("hygrostat")?this.getEntityId("hygrostat"):void 0}getThisName(){return this.getName(this.getMainEntityId())}getTarget(){return this.getEntityId("hygrostat")?this.getAttribute(this.getMainEntityId(),"humidity"):this.getAttribute(this.getMainEntityId(),"temperature")}getMinExtreme(){return this.getEntityId("hygrostat")?this.getAttribute(this.getMainEntityId(),"min_humidity"):this.getAttribute(this.getMainEntityId(),"min_temp")}getMaxExtreme(){return this.getEntityId("hygrostat")?this.getAttribute(this.getMainEntityId(),"max_humidity"):this.getAttribute(this.getMainEntityId(),"max_temp")}getSeparation(){return this.getEntityId("hygrostat")?1:this.getAttribute(this.getMainEntityId(),"target_temp_step")}getSensor(){return this.getEntityId("hygrostat")?this.getAttribute(this.getMainEntityId(),"current_humidity"):this.getAttribute(this.getMainEntityId(),"current_temperature")}getSensorUnits(){return this.getEntityId("hygrostat")?"%":"°F"}getSensorDisplay(){return this.getSensor().toFixed(1).toString()+" "+this.getSensorUnits()}getMode(){return this.getStateState(this.getMainEntityId())}getModes(){let t;if(this.getEntityId("hygrostat"))return["off","on"];let e=[...this.getAttribute(this.getMainEntityId(),"hvac_modes")];return e.includes("heat_cool")&&(t=e.indexOf("auto"))>-1&&e.splice(t,1),(t=e.indexOf("dry"))>-1&&e.splice(t,1),(t=e.indexOf("fan_only"))>-1&&e.splice(t,1),e}getActionDefault(){return"off"===this.getMode()?"off":this.getTarget()>this.getSensor()?"heating":"idle"}getAction(){let t;return this.getEntityId("hygrostat")&&(t=this.getAttribute(this.getEntityId("hygrostat"),"action")),("fan"===(t=this.getAttribute(this.getMainEntityId(),"hvac_action"))||"drying"===t)&&(t="venting"),t||(t=this.getActionDefault()),t.charAt(0).toUpperCase()+t.slice(1)}getSafeMin(){return this.getNumberState("safe_min")}getSafeMax(){return this.getNumberState("safe_max")}isSafe(){return"on"===this.getStateState(this.getEntityId("safe_mode"))}getRank(){return Number(this.getStateState(this.getEntityId("rank")))}isDominant(){return 1===this.getRank()}getRankId(){return this.getEntityId("rank")}getScriptId(){return this.getEntityId("script")}getTie(){return this.getStateState(this.getEntityId("tie_main"))}getTieId(){return this.getEntityId("tie_main")}getTieOptions(){return this.getAttribute(this.getEntityId("tie_main"),"options")}getTieAction(){let t=this.getAttribute(this.getEntityId("tie"),"hvac_action");return"fan"===t&&(t="venting"),t.charAt(0).toUpperCase()+t.slice(1)}getTieMode(){return this.getStateState(this.getEntityId("tie"))}getOffsetId(){return this.getEntityId("offset")}getOffset(){return this.getNumberState("offset")}getMinOffset(){return this.getNumberAttribute("offset","min")}getMaxOffset(){return this.getNumberAttribute("offset","max")}}function eX(t,e,i){let s={};switch(t){case"off":s["background-color"]=et(t1,.5),i&&(s.outline=`solid ${et(t1,1)}`);break;case"heat":case"safe_min":s["background-color"]=et(t9,.5),i&&(s.outline=`solid ${et(t9,1)}`);break;case"cool":s["background-color"]=et(t3,.5),i&&(s.outline=`solid ${et(t3,1)}`);break;case"heat_cool":case"auto":s.background="linear-gradient(to left, "+et(t3,.5)+"0%, "+et(t4,.5)+"50%, "+et(t9,.5)+"100%)",i&&"Heating"===e&&(s.outline=`solid ${et(t9,1)}`),i&&"Cooling"===e&&(s.outline=`solid ${et(t3,1)}`),i&&["Off","Idle"].includes(e)&&(s.outline=`solid ${et(t1,1)}`);break;case"on":case"fan_only":case"safe_max":s["background-color"]=et(t7,.5),i&&(s.outline=`solid ${et(t7,1)}`)}return s}var eW=a`
+    `;class eJ extends tW{getEntityId(t){return this.getStructure()[t]}getNumberState(t){if(this.getEntityId(t))return Number(this.getStateState(this.getEntityId(t)))}getNumberAttribute(t,e){let i=this.getAttribute(this.getEntityId(t),e);if("number"==typeof i)return i}getMainEntityId(){return this.getEntityId("hp")?this.getEntityId("hp"):this.getEntityId("thermostat")?this.getEntityId("thermostat"):this.getEntityId("hygrostat")?this.getEntityId("hygrostat"):void 0}getThisName(){return this.getName(this.getMainEntityId())}getTarget(){return this.getEntityId("hygrostat")?this.getAttribute(this.getMainEntityId(),"humidity"):this.getAttribute(this.getMainEntityId(),"temperature")}getMinExtreme(){return this.getEntityId("hygrostat")?this.getAttribute(this.getMainEntityId(),"min_humidity"):this.getAttribute(this.getMainEntityId(),"min_temp")}getMaxExtreme(){return this.getEntityId("hygrostat")?this.getAttribute(this.getMainEntityId(),"max_humidity"):this.getAttribute(this.getMainEntityId(),"max_temp")}getSeparation(){return this.getEntityId("hygrostat")?1:this.getAttribute(this.getMainEntityId(),"target_temp_step")}getSensor(){return this.getEntityId("hygrostat")?this.getAttribute(this.getMainEntityId(),"current_humidity"):this.getAttribute(this.getMainEntityId(),"current_temperature")}getSensorUnits(){return this.getEntityId("hygrostat")?"%":"°F"}getSensorDisplay(){return this.getSensor().toFixed(1).toString()+" "+this.getSensorUnits()}getMode(){return this.getStateState(this.getMainEntityId())}getModes(){let t;if(this.getEntityId("hygrostat"))return["off","on"];let e=[...this.getAttribute(this.getMainEntityId(),"hvac_modes")];return e.includes("heat_cool")&&(t=e.indexOf("auto"))>-1&&e.splice(t,1),(t=e.indexOf("dry"))>-1&&e.splice(t,1),(t=e.indexOf("fan_only"))>-1&&e.splice(t,1),e}getActionDefault(){return"off"===this.getMode()?"off":this.getTarget()>this.getSensor()?"heating":"idle"}getAction(){let t;return this.getEntityId("hygrostat")&&(t=this.getAttribute(this.getEntityId("hygrostat"),"action")),("fan"===(t=this.getAttribute(this.getMainEntityId(),"hvac_action"))||"drying"===t)&&(t="venting"),t||(t=this.getActionDefault()),t.charAt(0).toUpperCase()+t.slice(1)}getSafeMin(){return this.getNumberState("safe_min")}getSafeMax(){return this.getNumberState("safe_max")}isSafe(){return"on"===this.getStateState(this.getEntityId("safe_mode"))}getRank(){return Number(this.getStateState(this.getEntityId("rank")))}isDominant(){return 1===this.getRank()}getRankId(){return this.getEntityId("rank")}getScriptId(){return this.getEntityId("script")}getTie(){return this.getStateState(this.getEntityId("tie_main"))}getTieId(){return this.getEntityId("tie_main")}getTieOptions(){return this.getAttribute(this.getEntityId("tie_main"),"options")}getTieAction(){let t=this.getAttribute(this.getEntityId("tie"),"hvac_action");return"fan"===t&&(t="venting"),t.charAt(0).toUpperCase()+t.slice(1)}getTieMode(){return this.getStateState(this.getEntityId("tie"))}getOffsetId(){return this.getEntityId("offset")}getOffset(){return this.getNumberState("offset")}getMinOffset(){return this.getNumberAttribute("offset","min")}getMaxOffset(){return this.getNumberAttribute("offset","max")}}function eX(t,e,i){let s={};switch(t){case"off":s["background-color"]=et(t1,.5),i&&(s.outline=`solid ${et(t1,1)}`);break;case"heat":case"safe_min":s["background-color"]=et(t9,.5),i&&(s.outline=`solid ${et(t9,1)}`);break;case"cool":s["background-color"]=et(t3,.5),i&&(s.outline=`solid ${et(t3,1)}`);break;case"heat_cool":case"auto":s.background="linear-gradient(to left, "+et(t3,.5)+"0%, "+et(t4,.5)+"50%, "+et(t9,.5)+"100%)",i&&"Heating"===e&&(s.outline=`solid ${et(t9,1)}`),i&&"Cooling"===e&&(s.outline=`solid ${et(t3,1)}`),i&&["Off","Idle"].includes(e)&&(s.outline=`solid ${et(t1,1)}`);break;case"on":case"fan_only":case"safe_max":s["background-color"]=et(t8,.5),i&&(s.outline=`solid ${et(t8,1)}`)}return s}var eW=a`
 
     :host {
         height: 100%;
@@ -1520,7 +1523,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                     .structure = ${this.getStructure()}
                     .callService = ${this.callService}
                 ></mode-controls>
-            `}});var e7=a`
+            `}});var e8=a`
 
     :host {
         width: var(--aux-panel-width, 350px);
@@ -1555,14 +1558,14 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
 
     .thermostat {
         display: flex;
-        flex-flow: column nowrap;
+        flex-flow: var(--aux-thermostat-layout, column nowrap);
         justify-content: space-between;
         align-items: center;
         height: 100%;
     }
 
 
-`,e8=a`
+`,e7=a`
 
     :host {
         width: var(--aux-mode-control-width, 100%);
@@ -1629,7 +1632,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         >
             <ha-svg-icon .path=${eh}} class="exclamation"></ha-svg-icon>
             ${this.makePretty(this.getRegionName())}
-        </div>`}static styles=[tX,e8];render(){if(this.isInitialized())return U`
+        </div>`}static styles=[tX,e7];render(){if(this.isInitialized())return U`
                 ${this.modeButtons()}
                 ${this.safeButton()}
                 ${this.TieButton()}
@@ -1689,7 +1692,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                 <div class="bar">
                     ${this.offsetBar()}
                 </div>
-            `}}customElements.define("offset-slider",it),customElements.define("aux-thermostat-panel",class extends eJ{getThermostatEIs(){return new Set([this.getEntityId("thermostat"),this.getEntityId("safe_mode")])}getControlEIs(){let t=new Set;return t.add(this.getEntityId("safe_mode")),t.add(this.getEntityId("thermostat")),t.add(this.getEntityId("tie_main")),this.getStructure().tie&&(t=t.add(this.getEntityId("tie"))),t}getRegionName(){return this.regionName}isTied(){return"off"!==this.getTie()}isFixed(){return this.isTied()||this.isSafe()}isInactive(){return this.isFixed()||"off"===this.getMode()?"inactive":""}fixSlider(){return![this.getRegionName(),"on"].includes(this.getTie())||"off"===this.getMode()||this.isSafe()}static styles=[tX,e7];isInactiveSlider(){return this.fixSlider()?"inactive":""}render(){if(this.isInitialized())return U`
+            `}}customElements.define("offset-slider",it),customElements.define("aux-thermostat-panel",class extends eJ{getThermostatEIs(){return new Set([this.getEntityId("thermostat"),this.getEntityId("safe_mode")])}getControlEIs(){let t=new Set;return t.add(this.getEntityId("safe_mode")),t.add(this.getEntityId("thermostat")),t.add(this.getEntityId("tie_main")),this.getStructure().tie&&(t=t.add(this.getEntityId("tie"))),t}getRegionName(){return this.regionName}isTied(){return"off"!==this.getTie()}isFixed(){return this.isTied()||this.isSafe()}isInactive(){return this.isFixed()||"off"===this.getMode()?"inactive":""}fixSlider(){return![this.getRegionName(),"on"].includes(this.getTie())||"off"===this.getMode()||this.isSafe()}static styles=[tX,e8];isInactiveSlider(){return this.fixSlider()?"inactive":""}render(){if(this.isInitialized())return U`
                 <div class="heading"> ${this.getThisName()} </div>
                 <div class="main">
                     <div class="thermostat">
@@ -1740,8 +1743,8 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --thermostat-width: var(--thermostat-mini-width);
         --thermostat-height: var(--thermostat-mini-height);
 
-        --aux-panel-width: calc(var(--thermostat-width) + var(--offset-slider-width) + 2 * var(--slider-padding) + var(--hp-panel-padding));
-        --aux-panel-height: calc(var(--thermostat-height) + var(--aux-mode-control-height) + var(--aux-panel-heading-height) + var(--hp-panel-padding));
+        --aux-panel-width: var(--aux-panel-width-2);
+        --aux-panel-height: var(--aux-panel-height-2);
         --aux-panel-padding: var(--hp-panel-padding);
         --aux-panel-heading-font-size: var(--aux-panel-heading-mini-font-size);
         --aux-panel-heading-height: var(--aux-panel-heading-mini-height);
@@ -1762,6 +1765,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --center-text-height: var(--mini-center-text-height);
 
         --circular-slider-height: var(--circular-slider-mini-height);
+
 
     }
 
@@ -1818,6 +1822,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         font-size: var(--iso-panel-heading-font-size, large-font);
         font-weight: var(--iso-panel-heading-font-weight, 550);
         height: var(--iso-panel-heading-height, 30px);
+        margin-bottom: var(--iso-panel-heading-margin-bottom, 0px);
     }
 
 
@@ -1844,7 +1849,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         width: var(--hydrostat-adjust-button-row-width, 85%);
     }
 
-`;customElements.define("hydrostat-panel",class extends eJ{getTargetValue(){if("on"===this.getMode())return this.getTarget()}getLowColor(){if("on"===this.getMode())return t7}getActionColor(){if("Venting"===this.getAction())return t7}wait(t,e){return this.getState(t).attributes.humidity=Math.round(e)}handleCallService(t){let e=Math.round(t.detail),i=this.getEntityId("hygrostat");this.callService("humidifier","set_humidity",{entity_id:i,humidity:e})}change(t){let e=t.detail,i=this.getEntityId("hygrostat"),s=this.getTarget();if(s+=e*this.getSeparation(),this.getMinExtreme()<s&&s<this.getMaxExtreme()){let t={entity_id:i,humidity:s};this.callService("humidifier","set_humidity",t)}}adjustButtons(){return this.isSafe()||"on"!==this.getMode()?null:U`<div class="button-row"> 
+`;customElements.define("hydrostat-panel",class extends eJ{getTargetValue(){if("on"===this.getMode())return this.getTarget()}getLowColor(){if("on"===this.getMode())return t8}getActionColor(){if("Venting"===this.getAction())return t8}wait(t,e){return this.getState(t).attributes.humidity=Math.round(e)}handleCallService(t){let e=Math.round(t.detail),i=this.getEntityId("hygrostat");this.callService("humidifier","set_humidity",{entity_id:i,humidity:e})}change(t){let e=t.detail,i=this.getEntityId("hygrostat"),s=this.getTarget();if(s+=e*this.getSeparation(),this.getMinExtreme()<s&&s<this.getMaxExtreme()){let t={entity_id:i,humidity:s};this.callService("humidifier","set_humidity",t)}}adjustButtons(){return this.isSafe()||"on"!==this.getMode()?null:U`<div class="button-row"> 
                         <adjust-buttons @change=${t=>this.change(t)}>
                     </adjust-buttons> </div>`}render(){if(this.isInitialized())return U`
                 <double-circular-slider
@@ -1927,16 +1932,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                     .structure = ${this.getStructure()}
                     .callService = ${this.callService}
                 ></iso-mode-controls>
-                `}}),customElements.define("aux-basement-panel",class extends eJ{getFireplace(){return this.getStructure().fireplace}getFireplaceStructure(){return this.getFireplace().structure}getFireplaceEIs(){return this.getFireplace().entityIds}getFan(){return this.getStructure().fan}getFanStructure(){return this.getFan().structure}getFanEIs(){return this.getFan().entityIds}getRegionName(){return this.regionName}getLaundryHeat(){return this.getStructure().laundry_heater}getLaundryHeatStructure(){return this.getLaundryHeat().structure}getLaundryHeatEIs(){return this.getLaundryHeat().entityIds}fireplace(){if(this.getFireplace())return U`
-            <aux-thermostat-panel class="outlined"
-                .changedEntityIds = ${this.getCEIs()}
-                .states = ${this.getStates()}
-                .entityIds = ${this.getFireplaceEIs()}
-                .structure = ${this.getFireplaceStructure()}
-                .regionName = ${this.getRegionName()}
-                .callService = ${this.callService}
-            ></aux-thermostat-panel>
-        `}laundryFan(){if(this.getFan())return U`
+                `}}),customElements.define("aux-basement-panel",class extends eJ{getFireplace(){return this.getStructure().fireplace}getFireplaceStructure(){return this.getFireplace().structure}getFireplaceEIs(){return this.getFireplace().entityIds}getFan(){return this.getStructure().fan}getFanStructure(){return this.getFan().structure}getFanEIs(){return this.getFan().entityIds}getRegionName(){return this.regionName}getLaundryHeat(){return this.getStructure().laundry_heater}getLaundryHeatStructure(){return this.getLaundryHeat().structure}getLaundryHeatEIs(){return this.getLaundryHeat().entityIds}fireplace(){if(this.getFireplace())return U`<div> placeholder </div>`}laundryFan(){if(this.getFan())return U`
             <iso-hydrostat-panel class="outlined"
                 .changedEntityIds = ${this.getCEIs()}
                 .states = ${this.getStates()}
@@ -2903,16 +2899,18 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --lighting-height: 670px;
         --lighting-width: var(--ha-card-width);
         --floor-panel-height: var(--lighting-height);
+        --area-heading-font-size: 125%;
+        --area-headint-font-weight: 700;
 
-        --light-component-width: 210px;
-        --light-component-height: 20px;
+        --light-component-width: 250px;
+        --light-component-height: 21px;
         --light-component-padding: 10px;
-        --light-component-margin: 11px;
+        --light-component-margin: 9px;
 
         --simple-light-icons-margin-right: 10px;
         --simple-light-icons-margin-left: 0px;
         --simple-light-icon-size: 25px;
-        --simple-light-font-size: var(--sub-info-font-size);
+        --simple-light-font-size: 125%;
         --simple-light-font-weight: var(--sub-info-font-weight);
         --simple-light-align-items: center;
         --simple-light-justify-content: flex-start;
@@ -2921,7 +2919,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --light-group-control-padding-bottom: var(--light-group-control-padding-top);
 
         --light-group-height: calc(var(--lighting-height) - 2 * var(--light-group-control-padding-top));
-        --light-group-width: 950px;
+        --light-group-width: 900px;
         --light-group-flex-flow: column nowrap;
         --light-group-justify-content: flex-start;
         --light-group-align-items: center;
@@ -2943,9 +2941,9 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --light-select-icon-margin-right: 10px;
         --light-select-icon-margin-left: 10px;
         --light-select-icon-size: 20px;
-        --light-inner-heading-font-size: var(--small-heading-font-size);
+        --light-inner-heading-font-size: 150%;
         --light-inner-heading-font-weight: var(--small-heading-font-weight);
-        --light-inner-font-size: var(--sub-info-font-size);
+        --light-inner-font-size: 125%;
         --light-inner-font-weight: var(--sub-info-font-size);
 
         --wheel-width: 360px;
@@ -3030,14 +3028,11 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
 
         --circular-slider-height: calc(100% - 2 * var(--hp-panel-padding));
         --circular-slider-top-margin: 0px;
-
         --adjust-button-row-width: 85%;
-
         --adjust-pair-width: 110px;
         --adjust-pair-margin-top: -40px;
         --plus-minus-circle-size: 40px;
         --plus-minus-sizes: 60%;
-
         --range-font-size: var(--Huge-font);
         --solo-font-size: var(--HUGE-font);
         --upper-font-size: var(--large-font);
@@ -3049,12 +3044,27 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --center-weight: 400;
         --sup-factor: 2.5;
 
-        --aux-panel-width: calc(var(--hp-panel-width) + var(--offset-slider-width) + var(--hp-panel-padding) + 2 * var(--slider-padding));
-        --aux-panel-height: var(--hp-panel-height);
+        --aux-basement-panel-width: calc(var(--ha-card-width) - var(--hp-panel-width) - 2 * var(--hp-panel-padding) - 2 * var(--ha-card-padding));
+        --aux-basement-panel-height: 100%;
+        --aux-basement-panel-margin-left: var(--hp-panel-padding);
+
+        --aux-basement-panel-heading-font-size: var(--climate-panel-heading-font-size);
+        --aux-basement-panel-heading-font-weight: var(--climate-panel-heading-font-weight);
+        --aux-basement-panel-heading-height: 40px;
+
+        --aux-basement-panel-main-width: calc(100% - 2 * var(--hp-panel-padding));
+        --aux-basement-panel-main-height: calc(100% - var(--aux-basement-panel-heading-height) - var(--hp-panel-mini-padding));
+        --aux-basement-panel-elements-width: 100%;
+        --aux-basement-panel-elements-height: calc(50% - .5 * var(--hp-panel-mini-padding));
+        --aux-basement-panel-elements-top-justify-content: center;
+        --aux-basement-panel-elements-bottom-justify-content: space-between;
+
+        --aux-panel-height-2: calc(100% - var(--hp-panel-mini-padding));
+        --aux-panel-width-2: 410px;
+
         --aux-panel-flex-flow: column nowrap;
         --aux-panel-justify-content: space-between;
         --aux-panel-align-items: center;
-        --aux-panel-padding: var(--hp-panel-padding);
         --aux-panel-padding-top: 0px;
         --aux-panel-heading-font-size: var(--hp-panel-heading-font-size);
         --aux-panel-heading-font-weight: var(--hp-panel-heading-font-weight);
@@ -3062,20 +3072,25 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --aux-panel-main-height: calc(var(--aux-panel-height) - var(--aux-panel-heading-height));
         --aux-panel-main-width: 100%;
 
-        --aux-mode-control-width: 100%;
-        --aux-mode-control-height: var(--mode-control-height);
+        --aux-thermostat-layout: row nowrap;
+
+        --aux-mode-control-width: 80px;
+        --aux-mode-control-height: var(--thermostat-mini-height);
         --aux-mode-control-margin-bottom: 0px;
-        --aux-mode-control-flex-flow: var(--mode-control-flex-flow);
-        --aux-mode-control-justify-content: var(--mode-control-justify-content);
-        --aux-mode-control-align-items: var(--mode-control-align-items);
-        --aux-mode-control-button-width: var(--mode-control-button-width);
-        --aux-mode-control-button-height: var(--mode-control-button-height);
+        --aux-mode-control-flex-flow: column nowrap;
+        --aux-mode-control-justify-content: space-between;
+        --aux-mode-control-align-items: center;
+        --aux-mode-control-mini-button-width: 60px;
+        --aux-mode-control-button-height: 50px;
         --aux-mode-control-button-margin-correction-r: -6px;
         --aux-mode-control-button-margin-correction-arrow-l: -10px;
         --aux-mode-control-button-outline-offset: var(--button-outline-offset);
         --aux-mode-control-font-size: var(--sub-info-font-size);
         --aux-mode-control-font-weight: var(--small-heading-font-weight);
-        --tie-button-width: 140px;
+        --tie-button-mini-width: 60px;
+
+        --thermostat-mini-width: 260px;
+        --thermostat-mini-height: var(--thermostat-mini-width);
 
         --offset-slider-width: calc(75px - 2 * var(--slider-padding));
         --slider-padding: 10px;
@@ -3092,37 +3107,26 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --slider-width: 100%;
         --slider-width-for-offset: 40px;
 
-        --aux-basement-panel-width: calc(var(--ha-card-width) - var(--hp-panel-width) - 2 * var(--hp-panel-padding) - 2 * var(--ha-card-padding));
-        --aux-basement-panel-height: calc(var(--aux-basement-panel-main-height) + var(--aux-basement-panel-heading-height) + var(--hp-panel-padding));
-        --aux-basement-panel-margin-left: var(--hp-panel-padding);
-        --aux-basement-panel-heading-font-size: var(--climate-panel-heading-font-size);
-        --aux-basement-panel-heading-font-weight: var(--climate-panel-heading-font-weight);
-        --aux-basement-panel-heading-height: 40px;
-
         --hp-panel-mini-padding: 10px;
-        --thermostat-mini-width: 225px;
-        --thermostat-mini-height: var(--thermostat-mini-width);
         --aux-panel-heading-mini-font-size: var(--large-font);
         --aux-panel-heading-mini-height: 30px;
         --aux-slider-mini-target-width: 65px;
         --aux-slider-mini-padding: var(--hp-panel-mini-padding);
-        --tie-button-mini-width: 60px;
-        --aux-mode-control-mini-button-width: 40px;
         --aux-mode-control-mini-button-margin-correction-r: -8px;
         --aux-mode-control-mini-button-margin-correction-l: -8px;
 
-        --adjust-pair-mini-width: 75px;
-        --adjust-pair-mini-margin-top: -25px;
-        --plus-minus-mini-circle-size: 30px;
+        --adjust-pair-mini-width: 95px;
+        --adjust-pair-mini-margin-top: -35px;
+        --plus-minus-mini-circle-size: 40px;
         --solo-mini-font-size: var(--Huge-font);
         --mini-center-text-height: 50px;
         --circular-slider-mini-height: calc(100% - 2 * var(--hp-panel-mini-padding));
 
         --iso-panel-padding: var(--hp-panel-mini-padding);
         --iso-panel-padding-top: 0px;
-        --iso-panel-height: calc(var(--thermostat-mini-height) + var(--iso-mode-control-height) + var(--iso-panel-heading-height) + var(--iso-panel-padding));
-        --iso-panel-width: var(--thermostat-mini-width);
-        --iso-panel-flex-flow: column nowrap;
+        --iso-panel-height: calc(100% - var(--hp-panel-mini-padding));
+        --iso-panel-width: calc(var(--thermostat-mini-width) + var(--iso-mode-control-width));
+        --iso-panel-flex-flow: column wrap;
         --iso-panel-justify-content: flex-start;
         --iso-panel-align-items: center;
 
@@ -3130,26 +3134,21 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --iso-panel-heading-font-weight: var(--aux-panel-heading-font-weight);
         --iso-panel-heading-height: var(--aux-panel-heading-mini-height);
 
-        --iso-mode-control-width: 100%;
+        --iso-mode-control-width: 60px;
         --iso-mode-control-height: var(--aux-mode-control-height);
-        --iso-mode-control-flex-flow: row nowrap;
-        --iso-mode-control-justify-content: space-between;
-        --iso-mode-control-align-items: center;
-        --iso-mode-control-button-width: 60px;
-        --iso-mode-control-button-height: 100%;
+        --iso-mode-control-flex-flow: column nowrap;
+        --iso-mode-control-justify-content: space-around;
+        --iso-mode-control-align-items: flex-end;
+        --iso-mode-control-button-width: 50px;
+        --iso-mode-control-button-height: 50px;
         --iso-mode-control-button-outline-offset: var(--button-outline-offset);
         --iso-mode-control-button-margin-correction-arrow-l: -6px;
-        --iso-mode-control-margin-top: var(--hp-panel-mini-padding);
+        --iso-mode-control-margin-top: 30px;
+        --iso-panel-heading-margin-bottom: 5px;
+        --aux-iso-control-align-items: flex-end;
 
         --hydrostat-width: var(--thermostat-mini-width);
         --hydrostat-height: var(--thermostat-mini-height);
-
-        --aux-basement-panel-main-width: calc(100% - 2 * var(--hp-panel-padding));
-        --aux-basement-panel-main-height: calc(2 * var(--iso-panel-height) + 2 * var(--hp-panel-padding) + 5px);
-        --aux-basement-panel-elements-width: 100%;
-        --aux-basement-panel-elements-height: calc(var(--iso-panel-height) + var(--hp-panel-mini-padding));
-        --aux-basement-panel-elements-top-justify-content: center;
-        --aux-basement-panel-elements-bottom-justify-content: space-between;
 
     }
     `,iS=a`

@@ -35,7 +35,7 @@ export default css`
 
     .thermostat {
         display: flex;
-        flex-flow: column nowrap;
+        flex-flow: var(--aux-thermostat-layout, column nowrap);
         justify-content: space-between;
         align-items: center;
         height: 100%;

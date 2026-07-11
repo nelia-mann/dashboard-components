@@ -15,8 +15,8 @@ export default css`
         --thermostat-width: var(--thermostat-mini-width);
         --thermostat-height: var(--thermostat-mini-height);
 
-        --aux-panel-width: calc(var(--thermostat-width) + var(--offset-slider-width) + 2 * var(--slider-padding) + var(--hp-panel-padding));
-        --aux-panel-height: calc(var(--thermostat-height) + var(--aux-mode-control-height) + var(--aux-panel-heading-height) + var(--hp-panel-padding));
+        --aux-panel-width: var(--aux-panel-width-2);
+        --aux-panel-height: var(--aux-panel-height-2);
         --aux-panel-padding: var(--hp-panel-padding);
         --aux-panel-heading-font-size: var(--aux-panel-heading-mini-font-size);
         --aux-panel-heading-height: var(--aux-panel-heading-mini-height);
@@ -37,6 +37,7 @@ export default css`
         --center-text-height: var(--mini-center-text-height);
 
         --circular-slider-height: var(--circular-slider-mini-height);
+
 
     }
 

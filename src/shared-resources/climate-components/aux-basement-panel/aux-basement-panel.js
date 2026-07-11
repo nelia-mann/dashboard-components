@@ -52,6 +52,7 @@ export class AuxBasementPanel extends HaClimateComponent {
 
     fireplace() {
         if (this.getFireplace()) {
+            return html`<div> placeholder </div>`
             return html`
             <aux-thermostat-panel class="outlined"
                 .changedEntityIds = ${this.getCEIs()}

@@ -17,6 +17,7 @@ export default css`
         font-size: var(--iso-panel-heading-font-size, large-font);
         font-weight: var(--iso-panel-heading-font-weight, 550);
         height: var(--iso-panel-heading-height, 30px);
+        margin-bottom: var(--iso-panel-heading-margin-bottom, 0px);
     }
 
 
