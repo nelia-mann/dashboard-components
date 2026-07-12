@@ -3469,11 +3469,11 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                 type="range"
                 max = 1
                 min = 0
-                value = ${this.getValue()}
+                .value = ${this.getValue()}
                 @input ${this.handleOnInput}
                 @change = ${this.handleOnChange}
                 step = 0.01
-            />`}}customElements.define("main-volume-slider",iz);let iL=tf(class extends tv{constructor(t){if(super(t),3!==t.type&&1!==t.type&&4!==t.type)throw Error("The `live` directive is not allowed on child or event bindings");if(void 0!==t.strings)throw Error("`live` bindings can only contain a single expression")}render(t){return t}update(t,[e]){if(e===G||e===Z)return e;let i=t.element,s=t.name;if(3===t.type){if(e===i[s])return G}else if(4===t.type){if(!!e===i.hasAttribute(s))return G}else if(1===t.type&&i.getAttribute(s)===e+"")return G;return t$(t),e}});var iM=a`
+            />`}}customElements.define("volume-slider",iz);let iL=tf(class extends tv{constructor(t){if(super(t),3!==t.type&&1!==t.type&&4!==t.type)throw Error("The `live` directive is not allowed on child or event bindings");if(void 0!==t.strings)throw Error("`live` bindings can only contain a single expression")}render(t){return t}update(t,[e]){if(e===G||e===Z)return e;let i=t.element,s=t.name;if(3===t.type){if(e===i[s])return G}else if(4===t.type){if(!!e===i.hasAttribute(s))return G}else if(1===t.type&&i.getAttribute(s)===e+"")return G;return t$(t),e}});var iM=a`
 
     :host {
         width: var(--track-slider-overall-width, 90%);
@@ -3508,7 +3508,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
 
 
 `;class ij extends tW{static properties={...super.properties,_value:{state:!0}};constructor(){super(),this._value=0}getTriggers(){return["_value"]}updated(){this.getChangeFlag()||setTimeout(()=>this.setInitialValues(),1e3)}setInitialValues(){this.getChangeFlag()||this.setValue(this.getTrackPosition())}getValue(){return this._value}setValue(t){this._value=t}getSpeakerId(){return[...this.getEntityIds()][0]}getSpeakerState(){return this.getStates()[this.getSpeakerId()]}getSpeakerAttributes(){return this.getSpeakerState().attributes}getTrackLength(){return this.getAttribute(this.getSpeakerId(),"media_duration")}getTrackTitle(){return this.getAttribute(this.getSpeakerId(),"media_title")}getTrackUpdated(){return new Date(this.getAttribute(this.getSpeakerId(),"media_position_updated_at")).getTime()}getTrackPosition(){let t=this.getTrackUpdated(),e=this.getAttribute(this.getSpeakerId(),"media_position")+(Date.now()-t)/1e3;return e<this.getTrackLength()?Math.round(e):0}formatTime(t){let e=Math.floor(t/60),i=String(t-60*e);return 1===i.length&&(i="0"+i),String(e)+":"+i}isTrackTimeUpdated(t,e){return e!==this.getAttribute(t,"media_position_updated_at")}isTrackTimeUpdated(t,e){let i=this.getAttribute(t,"media_position");return console.log(i,e),i<=Number(e)+1&&Number(e)-1<=i}handleOnInput(t){this.raiseChangeFlag(),this.setValue(Number(t.target.value))}async handleOnChange(t){let e=t.target.value,i={entity_id:this.getSpeakerId(),seek_position:e};this.getAttribute(this.getSpeakerId(),"media_position_updated_at"),this.callService("media_player","media_seek",i),await this.waitForEntity(this.getSpeakerId(),t=>this.isTrackTimeUpdated(t,e)),this.lowerChangeFlag(),this.requestUpdate()}static styles=[tX,iM];render(){if(this.isInitialized())return U`
-            <div> ${this.getTrackTitle()+" second"} </div>
+            <div> ${this.getTrackTitle()+" third"} </div>
             <div class = "track">
                 <div class="value"> ${this.formatTime(this.getValue())} </div>
                 <input
