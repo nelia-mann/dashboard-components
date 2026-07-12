@@ -24,7 +24,9 @@ getTriggers() {
 }
 
 updated() {
-    setTimeout(() => this.setInitialValues(), 1000);
+    if (!this.getChangeFlag()) {
+        setTimeout(() => this.setInitialValues(), 1000);
+    }
 }
 
 setInitialValues() {
@@ -56,20 +58,20 @@ getSpeakerAttributes() {
 }
 
 getTrackLength() {
-    return this.getSpeakerAttributes().media_duration;
+    return this.getAttribute(this.getSpeakerId(), "media_duration");
 }
 
 getTrackTitle() {
-    return this.getSpeakerAttributes().media_title;
+    return this.getAttribute(this.getSpeakerId(), "media_title");
 }
 
 getTrackUpdated() {
-    return new Date(this.getSpeakerAttributes().media_position_updated_at).getTime();
+    return new Date(this.getAttribute(this.getSpeakerId(), "media_position_updated_at")).getTime();
 }
 
 getTrackPosition() {
     const checkedTime = this.getTrackUpdated();
-    const last = this.getSpeakerAttributes().media_position;
+    const last = this.getAttribute(this.getSpeakerId(), "media_position");
     const now = Date.now();
     const time = last + (now - checkedTime) / 1000;
     if (time < this.getTrackLength()) return Math.round(time);
@@ -88,6 +90,12 @@ isTrackTimeUpdated(speakerId, oldTime) {
     return oldTime !== newTime;
 }
 
+isTrackTimeUpdated(speakerId, value) {
+    const newTime = this.getAttribute(speakerId, "media_position");
+    console.log(newTime, value);
+    return Number(value) === newTime;
+}
+
 /********************************************** interactive logic ****************************************/
 
 handleOnInput(e) {
@@ -96,10 +104,11 @@ handleOnInput(e) {
 }
 
 async handleOnChange(e) {
-    const data = { entity_id: this.getSpeakerId(), seek_position: e.target.value };
+    const value = e.target.value;
+    const data = { entity_id: this.getSpeakerId(), seek_position: value };
     const oldTime = this.getAttribute(this.getSpeakerId(), "media_position_updated_at");
     this.callService('media_player', 'media_seek', data);
-    await this.waitForEntity(this.getSpeakerId(), (speakerId) => this.isTrackTimeUpdated(speakerId, oldTime));
+    await this.waitForEntity(this.getSpeakerId(), (speakerId) => this.isTrackTimeUpdated(speakerId, value));
     this.lowerChangeFlag();
     this.requestUpdate();
 }
