@@ -98,8 +98,9 @@ export class PlayerPanel extends HaSubComponent {
     }
 
     getImageURL() {
-        const state = this.getState(this.getLeadSpeakerId());
-        const URL = state.attributes.entity_picture;
+        let URL = this.getAttribute(this.getLeadSpeakerId(), "entity_picture_local");
+        if (URL) return URL;
+        URL = this.getAttribute(this.getLeadSpeakerId(), "entity_picture");
         return URL;
     }
 
