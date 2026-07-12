@@ -121,7 +121,7 @@ static styles = [sharedStyles, styles];
 render() {
     if (this.isInitialized()) {
         return html`
-            <div> ${this.getTrackTitle()} </div>
+            <div> ${this.getTrackTitle() + ' second'} </div>
             <div class = "track">
                 <div class="value"> ${this.formatTime(this.getValue())} </div>
                 <input
