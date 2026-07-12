@@ -59,7 +59,9 @@ export class PlayersPanel extends HaSubComponent {
     }
 
     isAlone(speakerId) {
-        return this.getGroup(speakerId).length === 0;
+        if (this.getGroup(speakerId)) {
+            return this.getGroup(speakerId).length === 0;
+        } else return true;
     }
 
     isUnjoined(speakerId, targetId) {
@@ -134,10 +136,12 @@ export class PlayersPanel extends HaSubComponent {
     }
 
     createPlayer(speakerId) {
+        console.log("ping")
         const newPlayers = [...this.players];
         newPlayers.push([speakerId]);
         this.players = newPlayers;
         this.removeIdle(speakerId);
+        console.log("done creating")
     }
 
     removeIdle(speakerId) {

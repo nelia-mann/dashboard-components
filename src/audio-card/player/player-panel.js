@@ -7,6 +7,7 @@ import styles from './player.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import '../speaker/speaker-panel.js';
 import '../volume-slider/volume-slider.js';
+import '../track-slider/track-slider.js';
 
 export class PlayerPanel extends HaSubComponent {
 
@@ -170,7 +171,7 @@ export class PlayerPanel extends HaSubComponent {
     }
 
     getVolumeSlider() {
-        return html`<main-volume-slider
+        return html`<volume-slider
                 class = "outlined volume"
                 style = ${styleMap(this.getBackground())}
                 .changedEntityIds = ${this.getCEIs()}
@@ -180,12 +181,24 @@ export class PlayerPanel extends HaSubComponent {
             />`
     }
 
+    getTrackSlider() {
+        return html`<track-slider
+            class = "outlined volume"
+            style = ${styleMap(this.getBackground())}
+            .changedEntityIds = ${this.getCEIs()}
+            .entityIds = ${new Set([this.getLeadSpeakerId()])}
+            .states = ${this.getStates()}
+            .callService = ${this.callService}
+        />`    
+    }
+
     render() {
         if (this.isInitialized()) {
             return html`
                 ${this.makeBGInits()}
                 <div class = "outlined player" style=${styleMap(this.makeImage())}>
                     ${this.getSpeakerPanel()}
+                    ${this.getTrackSlider()}
                     ${this.getVolumeSlider()}
                 </div>`;
         }

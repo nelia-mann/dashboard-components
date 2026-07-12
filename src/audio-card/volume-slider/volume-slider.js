@@ -4,7 +4,7 @@ import { volume, volumeOff} from '../../shared-resources/util/mdi-util.js';
 import styles from './volume.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 
-export class MainVolumeSlider extends HaSubComponent {
+export class VolumeSlider extends HaSubComponent {
 
 static properties= {
     ...super.properties,
@@ -149,7 +149,7 @@ render() {
                 type="range"
                 max = 1
                 min = 0
-                value = ${this.getValue()}
+                .value = ${this.getValue()}
                 @input ${this.handleOnInput}
                 @change = ${this.handleOnChange}
                 step = 0.01
@@ -159,5 +159,5 @@ render() {
 
 }
 
-customElements.define("main-volume-slider", MainVolumeSlider);
+customElements.define("volume-slider", VolumeSlider);
 
