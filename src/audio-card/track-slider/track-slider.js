@@ -93,7 +93,7 @@ isTrackTimeUpdated(speakerId, oldTime) {
 isTrackTimeUpdated(speakerId, value) {
     const newTime = this.getAttribute(speakerId, "media_position");
     console.log(newTime, value);
-    return Number(value) === newTime;
+    return (newTime <= Number(value) + 1) && (Number(value) - 1 <= newTime);
 }
 
 /********************************************** interactive logic ****************************************/
