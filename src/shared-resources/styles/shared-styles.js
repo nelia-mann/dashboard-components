@@ -1,5 +1,4 @@
-import { css, unsafeCSS } from 'lit';
-import { OUTLINE_STYLES } from './shared-style-tokens.js';
+import { css } from 'lit';
 
 export default css`
 
@@ -27,8 +26,8 @@ export default css`
     }
 
     .outlined {
-        outline-offset: ${unsafeCSS(OUTLINE_STYLES.general.outlineOffset)};
-        border-radius: ${unsafeCSS(OUTLINE_STYLES.general.borderRadius)};
+        outline-offset: 0px;
+        border-radius: 8px;
     }
 
     .inactive {
@@ -40,8 +39,8 @@ export default css`
     }
 
     .outlined {
-        outline: ${unsafeCSS(OUTLINE_STYLES.light.outline)};
-        box-shadow: ${unsafeCSS(OUTLINE_STYLES.light.boxShadow)};
+        outline: .5px solid rgba(0, 0, 0, .1);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .shown-slider {
@@ -51,6 +50,10 @@ export default css`
 
     .shown-level {
         background: rgba(0, 0, 0, 1);
+    }
+
+    .player-pop {
+        background: rgba(255, 255, 255, .8);
     }
 
     @media (prefers-color-scheme: dark) {
@@ -63,8 +66,8 @@ export default css`
         }
 
         .outlined {
-            outline: ${unsafeCSS(OUTLINE_STYLES.dark.outline)};
-            box-shadow: ${unsafeCSS(OUTLINE_STYLES.dark.boxShadow)};
+            outline: .5px solid rgba(255, 255, 255, .2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 .5px 2px rgba(255, 255, 255, 0.2) inset;
         }
 
         .shown-slider {
@@ -74,6 +77,10 @@ export default css`
 
         .shown-level {
             background: rgba(255, 255, 255, 1);
+        }
+
+        .player-pop {
+            background: rgba(0, 0, 0, .8);
         }
 
         dialog {

@@ -3,7 +3,7 @@ import { ClimateCard } from "./climate-card/main/main.js";
 import { ClockCard } from "./clock-card/main.js";
 import { BedroomKioskCard } from "./bedroom-kiosk-card/main/main.js";
 import { BasementKioskCard } from "./basement-kiosk-card/main/main.js";
-import { AudioCard } from "./audio-card/main/main.js";
+import { AudioCard } from "./audio-card/main.js";
 
 customElements.define("lighting-card", LightingCard);
 customElements.define("clock-card", ClockCard);

@@ -10,7 +10,7 @@ import {
 import styles from './main.styles.js';
 import layoutStyles from './layout-styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import "../../shared-resources/climate-components/climate-button/climate-button.js";
+import "../../shared-resources/climate-components/climate-button.js";
 import "../area-panel/area-panel.js";
 
 export class ClimateCard extends HaMainComponent {

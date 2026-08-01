@@ -16,7 +16,7 @@ import styles from './main.styles.js';
 import layoutStyles from './layout-styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
 import "../floor-panel/floor-panel.js";
-import "../../shared-resources/light-components/light-button/light-button.js";
+import "../../shared-resources/light-components/light-button.js";
 
 export class LightingCard extends HaMainComponent {
 

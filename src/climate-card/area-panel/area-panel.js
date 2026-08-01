@@ -2,9 +2,9 @@ import { html } from 'lit';
 import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
 import styles from './area.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import '../../shared-resources/climate-components/heatpump-panel/heatpump-panel.js';
-import '../../shared-resources/climate-components/aux-thermostat-panel/aux-thermostat-panel.js';
-import '../../shared-resources/climate-components/aux-basement-panel/aux-basement-panel.js';
+import '../../shared-resources/climate-components/heatpump-panel.js';
+import '../../shared-resources/climate-components/aux-thermostat-panel.js';
+import '../../shared-resources/climate-components/aux-basement-panel.js';
 
 export class AreaClimatePanel extends HaSubComponent {
 

@@ -2,8 +2,8 @@ import { html } from 'lit';
 import { HaClimateComponent } from '../../shared-resources/base-classes/ha-climate-component.js';
 import styles from './climate.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import '../../shared-resources/climate-components/heatpump-panel/heatpump-panel.js';
-import '../../shared-resources/climate-components/aux-thermostat-panel/aux-thermostat-panel.js';
+import '../../shared-resources/climate-components/heatpump-panel.js';
+import '../../shared-resources/climate-components/aux-thermostat-panel.js';
 
 export class ClimateBedroomPanel extends HaClimateComponent {
 

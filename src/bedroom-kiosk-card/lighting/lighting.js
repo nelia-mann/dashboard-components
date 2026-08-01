@@ -3,8 +3,8 @@ import { repeat } from 'lit-html/directives/repeat.js';
 import { HaSubComponent } from '../../shared-resources/base-classes/ha-subcomponent.js';
 import styles from './lighting.styles.js';
 import sharedStyles from '../../shared-resources/styles/shared-styles.js';
-import '../../shared-resources/light-components/area-panel/area-panel.js'
-import '../../shared-resources/light-components/light-group-control/light-group-control.js';
+import '../../shared-resources/light-components/area-panel.js'
+import '../../shared-resources/light-components/light-group-control.js';
 
 export class LightingBedroomPanel extends HaSubComponent {
 
