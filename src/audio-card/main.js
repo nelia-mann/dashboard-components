@@ -13,7 +13,7 @@ import {
 } from '../shared-resources/util/hass-audio-util.js';
 import layoutStyles from './layout-styles.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
-import '../shared-resources/audio-components/library-panel/library-panel.js';
+import '../shared-resources/audio-components/library-panel.js';
 import './players-panel.js';
 
 export class AudioCard extends HaMainComponent {

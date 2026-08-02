@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { HaSubComponent } from '../../base-classes/ha-subcomponent.js';
+import { HaSubComponent } from '../base-classes/ha-subcomponent.js';
 
 export class LibraryPanel extends HaSubComponent {
 
