@@ -4,8 +4,8 @@ import { HaClimateComponent } from '../base-classes/ha-climate-component.js';
 import { COOL, HOT } from '../util/color-util.js';
 import { thermometer } from '../util/mdi-util.js';
 import sharedStyles from '../styles/shared-styles.js';
-import '../general-components/double-circle-slider/double-circular-slider.js';
-import '../general-components/adjust-buttons/adjust-buttons.js';
+import '../general-components/double-circular-slider.js';
+import '../general-components/adjust-buttons.js';
 
 export class ThermostatPanel extends HaClimateComponent {
 
@@ -19,11 +19,13 @@ export class ThermostatPanel extends HaClimateComponent {
         this.fixed = false;
     }
 
+/********************************************** lifecycle *************************************************************/
+
     getTriggers() {
         return ['fixed'];
     }
 
-    /********************************************** getter logic ********************************************************/
+/********************************************** getter & setter logic *************************************************/
 
     getActionColor() {
         if (this.getAction() === 'Heating') return HOT;
@@ -53,11 +55,11 @@ export class ThermostatPanel extends HaClimateComponent {
         if (this.getEntityId('thermostat')) return this.getEntityId('thermostat');
     }
 
+/********************************************** interactive logic *****************************************************/
+
     wait(entityId, value) {
         return this.getState(entityId).attributes.temperature === Math.round(value);
     }
-
-    /********************************************** interactive logic ***************************************************/
 
     handleCallService(e) {
         const value = Math.round(e.detail);
@@ -81,70 +83,73 @@ export class ThermostatPanel extends HaClimateComponent {
         } 
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     adjustButtons() {
         if (this.isFixed()) return null;
         if (!['heat', 'cool', 'auto'].includes(this.getMode())) return null;
         return html`
             <div class="button-row">
-                <adjust-buttons @change=${(e) => this.change(e)}></adjust-buttons>
+                <adjust-buttons @change=${(e) => this.change(e)}/>
             </div>
-        `
+        `;
+    }
+
+    slider() {
+        return html`<double-circular-slider
+            .changedEntityIds = ${this.getCEIs()}
+            .states = ${this.getStates()}
+            .entityIds = ${new Set([this.getThermId()])}
+            .min = ${this.getMinExtreme()}
+            .max = ${this.getMaxExtreme()}
+            .sensor = ${this.getSensor()}
+            .units = ${this.getSensorUnits()}
+            .icon = ${thermometer}
+            .highColor = ${this.getHighColor()}
+            .lowColor = ${this.getLowColor()}
+            .targetValue = ${this.getTargetValue()}
+            .action = ${this.getAction()}
+            .actionColor = ${this.getActionColor()}
+            .fixed=${this.isFixed()}
+            .wait=${this.wait}
+            @change=${this.handleCallService}
+        >`;
     }
 
     render() {
         if (this.isInitialized()) {
             return html`
-                <double-circular-slider
-                    .changedEntityIds = ${this.getCEIs()}
-                    .states = ${this.getStates()}
-                    .entityIds = ${new Set([this.getThermId()])}
-                    .min = ${this.getMinExtreme()}
-                    .max = ${this.getMaxExtreme()}
-                    .sensor = ${this.getSensor()}
-                    .units = ${this.getSensorUnits()}
-                    .icon = ${thermometer}
-                    .highColor = ${this.getHighColor()}
-                    .lowColor = ${this.getLowColor()}
-                    .targetValue = ${this.getTargetValue()}
-                    .action = ${this.getAction()}
-                    .actionColor = ${this.getActionColor()}
-                    .fixed=${this.isFixed()}
-                    .wait=${this.wait}
-                    @change=${this.handleCallService}
-                >
-                </double-circular-slider>
+                ${this.slider()}
                 ${this.adjustButtons()}
             `
         }
     }
-/********************************************** style logic *************************************************************/
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 
-    :host {
-        width: var(--thermostat-width, 80%);
-        height: var(--thermostat-height, 350px);
-        padding-bottom: var(--thermostat-bottom-padding, 0px);
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        margin-top: var(--thermostat-margin-top, 0px);
-        margin-bottom: var(--thermostat-margin-bottom, 0px);
-    }
+        :host {
+            width: var(--thermostat-width, 80%);
+            height: var(--thermostat-height, 350px);
+            padding-bottom: var(--thermostat-bottom-padding, 0px);
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-top: var(--thermostat-margin-top, 0px);
+            margin-bottom: var(--thermostat-margin-bottom, 0px);
+        }
 
-    .button-row {
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-        justify-content: center;
-        width: var(--adjust-button-row-width, 85%);
-    }
+        .button-row {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            justify-content: center;
+            width: var(--adjust-button-row-width, 85%);
+        }
 
-`];
+    `];
 
 }
 

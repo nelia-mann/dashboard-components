@@ -205,6 +205,4 @@ action: the current action of the climate entity
         return this.getNumberAttribute('offset', 'max');
     }
 
-    /****************************** name *****************************************/
-
 }

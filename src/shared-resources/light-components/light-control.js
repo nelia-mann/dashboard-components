@@ -19,19 +19,19 @@ export class LightControl extends HaLightingComponent {
         this.option = '';
     }
 
-    /********************************************** lifecycle ***********************************************************/
+/********************************************** lifecycle *************************************************************/
 
     getTriggers() {
         return ["option"];
     }
 
-    /********************************************** getter & setter logic ***********************************************/
+/********************************************** getter & setter logic *************************************************/
 
     getOption() {
         return this.option;
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
 
     brightnessBar() {
@@ -42,7 +42,7 @@ export class LightControl extends HaLightingComponent {
                 .structure=${this.getStructure()}
                 .entityIds = ${new Set([this.getMainId()])}
                 .callService=${this.callService}
-            ></brightness-slider>`
+            />`;
     }
 
     ctBar() {
@@ -53,7 +53,7 @@ export class LightControl extends HaLightingComponent {
                 .structure=${this.getStructure()}
                 .entityIds = ${new Set([this.getMainId()])}
                 .callService=${this.callService}
-            ></colortemp-slider>`
+            />`;
     }
 
     colorWheel() {
@@ -63,7 +63,7 @@ export class LightControl extends HaLightingComponent {
             .structure=${this.getStructure()}
             .entityIds = ${new Set([this.getMainId()])}
             .callService = ${this.callService}
-        ></color-wheel>`
+        />`;
     }
 
     themeSelect() {
@@ -73,8 +73,7 @@ export class LightControl extends HaLightingComponent {
             .structure=${this.getStructure()}
             .entityIds = ${new Set([this.getThemeId()])}
             .callService = ${this.callService}
-        ></theme-select>
-        `
+        />`;
     }
 
     optionControl() {
@@ -104,24 +103,24 @@ export class LightControl extends HaLightingComponent {
         }
     }
 
-    /********************************************** style logic *********************************************************/
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 
-    :host {
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
-        padding: var(--light-control-padding, 20px);
-        margin-left: var(--light-control-margin-left, 20px);
-        margin-right: var(--light-control-margin-right, 10px);
-        margin: var(--light-control-margin);
-        min-height: var(--light-control-minsize);
-        min-width: var(--light-control-minsize);
-    }
+        :host {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: center;
+            align-items: center;
+            padding: var(--light-control-padding, 20px);
+            margin-left: var(--light-control-margin-left, 20px);
+            margin-right: var(--light-control-margin-right, 10px);
+            margin: var(--light-control-margin);
+            min-height: var(--light-control-minsize);
+            min-width: var(--light-control-minsize);
+        }
 
-`];
+    `];
 
 }
 

@@ -18,7 +18,7 @@ export class LightingButton extends HaLightingComponent {
         this._total = 0;
     }
 
-    /********************************************** lifecycle ***********************************************************/
+/********************************************** lifecycle *************************************************************/
 
     getTriggers() {
         return ["isSelected"];
@@ -28,7 +28,7 @@ export class LightingButton extends HaLightingComponent {
         this.setTotal();
     }
 
-    /********************************************** getter & setter logic ***********************************************/
+/********************************************** getter & setter logic *************************************************/
 
     selected() {
         return this.isSelected;
@@ -66,13 +66,13 @@ export class LightingButton extends HaLightingComponent {
         return rgba(rgb, opacity);
     }
 
-    /********************************************** interactive logic ***************************************************/
+/********************************************** interactive logic *****************************************************/
 
     onClick() {
         this.dispatchEvent(new CustomEvent('select'))
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     render() {
         if (this.isInitialized()) {
@@ -89,7 +89,7 @@ export class LightingButton extends HaLightingComponent {
         }
     }
 
-    /********************************************** style logic *********************************************************/
+/********************************************** style logic ***********************************************************/
 
     getStyles() {
         let styles = {
@@ -103,40 +103,40 @@ export class LightingButton extends HaLightingComponent {
 
     static styles = [sharedStyles, css`
 
-    :host {
-        height: 100%;
-        width: var(--light-button-width, 160px);
-        padding: var(--light-button-padding, 5px);
-        border: none;
-    }
+        :host {
+            height: 100%;
+            width: var(--light-button-width, 160px);
+            padding: var(--light-button-padding, 5px);
+            border: none;
+        }
 
-    .button {
-        height: 100%;
-        width: 100%;
-        display: flex;
-        border: none;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
-        outline-offset: var(--button-outline-offset, -3px);
-        outline: none;
-    }
+        .button {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            border: none;
+            flex-flow: column nowrap;
+            justify-content: center;
+            align-items: center;
+            outline-offset: var(--button-outline-offset, -3px);
+            outline: none;
+        }
 
-    .small-heading {
-        margin-top: var(--light-button-heading-margin-top, 7px);
-        margin-bottom: var(--light-button-heading-margin-bottom, -7px);
-        font-weight: var(--light-button-heading-font-weight, 700);
-        font-size: var(--light-button-heading-font-size, 100%);
-    }
+        .small-heading {
+            margin-top: var(--light-button-heading-margin-top, 7px);
+            margin-bottom: var(--light-button-heading-margin-bottom, -7px);
+            font-weight: var(--light-button-heading-font-weight, 700);
+            font-size: var(--light-button-heading-font-size, 100%);
+        }
 
-    .sub-info {
-        margin-bottom: var(--light-button-sub-info-margin-bottom, 10px);
-        margin-top: var(--light-button-sub-info-margin-top, 1px);
-        font-weight: var(--light-button-sub-info-font-weight, 700);
-        font-size: var(--light-button-sub-info-font-size, 100%);
-    }
+        .sub-info {
+            margin-bottom: var(--light-button-sub-info-margin-bottom, 10px);
+            margin-top: var(--light-button-sub-info-margin-top, 1px);
+            font-weight: var(--light-button-sub-info-font-weight, 700);
+            font-size: var(--light-button-sub-info-font-size, 100%);
+        }
 
-`];
+    `];
 
 }
 

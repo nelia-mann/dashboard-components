@@ -1,18 +1,18 @@
 import { html, css } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { lightbulb, lightbulbOff, lightbulbGroup, lightbulbGroupOff } from '../util/mdi-util.js';
 import { HaLightingComponent } from '../base-classes/ha-lighting-component.js';
+import { lightbulb, lightbulbOff, lightbulbGroup, lightbulbGroupOff } from '../util/mdi-util.js';
+import sharedStyles from '../styles/shared-styles.js';
 
 export class LightIcon extends HaLightingComponent {
 
-
-    /********************************************** getter & setter logic ***********************************************/
+/********************************************** getter & setter logic *************************************************/
 
     getEntityIds() {
         return new Set([this.getMainId()])
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     lightbulb() {
         let lightbulbPath;
@@ -27,10 +27,12 @@ export class LightIcon extends HaLightingComponent {
     render() {
         if (this.isInitialized()) {
             return html`
-                <ha-svg-icon .path=${this.lightbulb()} style="${styleMap(this.getStyles())}"></ha-svg-icon>
+                <ha-svg-icon .path=${this.lightbulb()} style="${styleMap(this.getStyles())}"/>
             `
         }
     }
+
+/********************************************** style logic ***********************************************************/
 
     getStyles() {
         let styles = {
@@ -39,17 +41,15 @@ export class LightIcon extends HaLightingComponent {
         return styles;
     }
 
-    /********************************************** style logic *********************************************************/
+    static styles = [sharedStyles, css`
 
-    static styles = css`
+        ha-svg-icon {
+            padding: 0%;
+            margin: 0%;
+            --mdc-icon-size: 100%;
+        }
 
-    ha-svg-icon {
-        padding: 0%;
-        margin: 0%;
-        --mdc-icon-size: 100%;
-    }
-
-    `;
+    `];
 
 }
 

@@ -1,8 +1,8 @@
 import { html, css } from 'lit';
 import { HaClimateComponent } from '../base-classes/ha-climate-component.js';
-import { climateGradientUp } from './util/climate-util.js';
+import { climateGradientUp } from '../util/climate-util/climate-util.js';
 import sharedStyles from '../styles/shared-styles.js';
-import '../general-components/slider/slider.js';
+import '../general-components/slider.js';
 
 export class OffsetSlider extends HaClimateComponent {
 
@@ -16,7 +16,7 @@ export class OffsetSlider extends HaClimateComponent {
         this.currentValue = 0;
     }
 
-    /********************************************** lifecycle ***********************************************************/
+/********************************************** lifecycle *************************************************************/
 
     getTriggers() {
         return ["currentValue"];
@@ -26,7 +26,7 @@ export class OffsetSlider extends HaClimateComponent {
         this.setCurrentValue(this.getOffset());
     }
 
-    /********************************************** getter & setter logic ***********************************************/
+/********************************************** getter & setter logic *************************************************/
 
     getRegionName() {
         return this.regionName;
@@ -56,13 +56,13 @@ export class OffsetSlider extends HaClimateComponent {
         return this.fixed;
     }
 
+/********************************************** interactive logic *****************************************************/
+
     waitCondition(entityId, value) {
         const state = this.getState(entityId);
         const target = state.state;
         return (target - .5 < value) && (value < target + .5);
     }
-
-    /********************************************** interactive logic ***************************************************/
 
     handleCallService(e) {
         const value = e.detail;
@@ -76,7 +76,7 @@ export class OffsetSlider extends HaClimateComponent {
         this.setCurrentValue(value);
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     offsetBar() {
         return html`
@@ -94,7 +94,7 @@ export class OffsetSlider extends HaClimateComponent {
                 @change=${this.handleCallService}
                 @slide=${this.handleSetValue}
                 .wait = ${this.waitCondition}
-            ></slider-bar>`
+            />`;
     }
 
     render() {
@@ -111,42 +111,42 @@ export class OffsetSlider extends HaClimateComponent {
         }
     }
 
-/********************************************** style logic *************************************************************/
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 
-    :host {
-        width: var(--offset-slider-width, 210px);
-        height: var(--offset-slider-height, 210px);
-        padding-left: var(--offset-slider-padding-left, 0px);
-        padding-right: var(--offset-slider-padding-right, 0px);
-        padding-bottom: var(--offset-slider-padding-bottom, 0px);
-        --slider-justify-content: flex-start;
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: space-between;
+        :host {
+            width: var(--offset-slider-width, 210px);
+            height: var(--offset-slider-height, 210px);
+            padding-left: var(--offset-slider-padding-left, 0px);
+            padding-right: var(--offset-slider-padding-right, 0px);
+            padding-bottom: var(--offset-slider-padding-bottom, 0px);
+            --slider-justify-content: flex-start;
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-between;
 
-        --slider-orientation: column nowrap;
-        --slider-width: var(--slider-width-for-offset, 15px);
+            --slider-orientation: column nowrap;
+            --slider-width: var(--slider-width-for-offset, 15px);
 
-    }
+        }
 
-    .value {
-        height: var(--offset-slider-value-height, 50px);
-        width: 100%;
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
-        justify-content: flex-start;
-        font-weight: var(--offset-slider-value-font-weight);
-        font-size: var(--offset-slider-value-font-size);
-    }
+        .value {
+            height: var(--offset-slider-value-height, 50px);
+            width: 100%;
+            display: flex;
+            flex-flow: column nowrap;
+            align-items: center;
+            justify-content: flex-start;
+            font-weight: var(--offset-slider-value-font-weight);
+            font-size: var(--offset-slider-value-font-size);
+        }
 
-    .bar {
-        height: var(--offset-slider-bar-height, 100%);
-    }
+        .bar {
+            height: var(--offset-slider-bar-height, 100%);
+        }
 
-`];
+    `];
 
 }
 

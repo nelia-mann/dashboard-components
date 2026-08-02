@@ -3,6 +3,8 @@ import { HaSubComponent } from '../base-classes/ha-subcomponent.js';
 
 export class LibraryPanel extends HaSubComponent {
 
+/********************************************** interactive logic *****************************************************/
+
     async testLibrary() {
         const result = await this.getHass().connection.sendMessagePromise({
             type: "call_service",
@@ -17,11 +19,15 @@ export class LibraryPanel extends HaSubComponent {
         console.log(result.response.items);
     }
 
+/********************************************** html logic ************************************************************/
+
     render() {
         if (this.isInitialized()) {
             this.testLibrary();
             return html`<div> Test </div>`
         }
     }
+
+/********************************************** style logic ***********************************************************/
 
 }

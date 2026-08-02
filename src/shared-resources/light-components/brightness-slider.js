@@ -2,21 +2,16 @@ import { html, css } from 'lit';
 import { ONLIGHT, OFFLIGHT, OFF, rgba } from '../util/color-util.js';
 import { HaLightingComponent } from '../base-classes/ha-lighting-component.js';
 import sharedStyles from '../styles/shared-styles.js';
-import '../general-components/slider/slider.js';
+import '../general-components/slider.js';
 
 export class BrightnessSlider extends HaLightingComponent {
 
+/********************************************** getter & setter logic *************************************************/
 
     isFixed() {
         if (this.getLightState().state === 'off') {
             return true;
         } return false;
-    }
-
-    waitCondition(entityId, value) {
-        const state = this.getState(entityId);
-        const target = state.attributes.brightness * 100 / 255;
-        return (target - .5 < value) && (value < target + .5);
     }
 
     getColor() {
@@ -25,7 +20,13 @@ export class BrightnessSlider extends HaLightingComponent {
         return OFFLIGHT;
     }
 
-    /********************************************** interactive logic ***************************************************/
+/********************************************** interactive logic *****************************************************/
+
+    waitCondition(entityId, value) {
+        const state = this.getState(entityId);
+        const target = state.attributes.brightness * 100 / 255;
+        return (target - .5 < value) && (value < target + .5);
+    }
 
     handleCallService(e) {
         const value = e.detail;
@@ -35,7 +36,7 @@ export class BrightnessSlider extends HaLightingComponent {
         this.callService('light', 'turn_on', data)
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     brightnessBar() {
         return html`
@@ -51,7 +52,7 @@ export class BrightnessSlider extends HaLightingComponent {
                 .mode=${'horizontal'}
                 @change=${this.handleCallService}
                 .wait = ${this.waitCondition}
-            ></slider-bar>`
+            />`
     }
 
     render() {
@@ -62,16 +63,16 @@ export class BrightnessSlider extends HaLightingComponent {
         }
     }
 
-    /********************************************** style logic *********************************************************/
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 
-    :host {
-        width: var(--brightness-slider-width);
-        height: var(--brightness-slider-height);
-    }
+        :host {
+            width: var(--brightness-slider-width);
+            height: var(--brightness-slider-height);
+        }
 
-`];
+    `];
 
 }
 

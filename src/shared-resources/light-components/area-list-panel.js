@@ -18,7 +18,7 @@ export class AreaListPanel extends HaSubComponent {
         return this.getStructure()[areaId].entityIds;
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     getAreaDisplay(areaId) {
         return html`
@@ -29,8 +29,7 @@ export class AreaListPanel extends HaSubComponent {
                 .structure = ${this.getSubStructure(areaId)}
                 .entityIds = ${this.getSubEIs(areaId)}
                 .callService = ${this.callService}
-            ></area-panel>
-        `
+            />`;
     }
 
     getAreaDisplays() {
@@ -44,20 +43,19 @@ export class AreaListPanel extends HaSubComponent {
         }
     }
 
-    /********************************************** style logic *********************************************************/
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 
-    :host {
-        height: var(--floor-panel-height, 400px);
-        display: flex;
-        flex-flow: var(--floor-panel-flex-flow, column wrap);
-        justify-content: var(--floor-panel-justify-content, flex-start);
-        align-items: var(--floor-panel-align-items, flex-start);
-    }
+        :host {
+            height: var(--floor-panel-height, 400px);
+            display: flex;
+            flex-flow: var(--floor-panel-flex-flow, column wrap);
+            justify-content: var(--floor-panel-justify-content, flex-start);
+            align-items: var(--floor-panel-align-items, flex-start);
+        }
 
-`];
-
+    `];
 
 }
 

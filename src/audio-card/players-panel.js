@@ -5,8 +5,8 @@ import { HaSubComponent } from '../shared-resources/base-classes/ha-subcomponent
 import { OFF, rgba } from '../shared-resources/util/color-util.js';
 import { plus } from '../shared-resources/util/mdi-util.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
-import './speaker-panel.js';
-import './player-panel.js';
+import '../shared-resources/audio-components/speaker-panel.js';
+import '../shared-resources/audio-components/player-panel.js';
 
 export class PlayersPanel extends HaSubComponent {
 

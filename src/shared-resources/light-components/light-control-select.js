@@ -24,7 +24,7 @@ export class LightControlSelect extends HaLightingComponent {
         this._options = [];
     }
 
-    /********************************************** lifecycle ***********************************************************/
+/********************************************** lifecycle *************************************************************/
 
     getTriggers() {
         return ["option"];
@@ -34,7 +34,7 @@ export class LightControlSelect extends HaLightingComponent {
         this.buildOptions();
     }
 
-    /********************************************** getter & setter logic ***********************************************/
+/********************************************** getter & setter logic *************************************************/
 
     getOption() {
         return this.option;
@@ -51,8 +51,6 @@ export class LightControlSelect extends HaLightingComponent {
     getOptions() {
         return this._options;
     }
-
-    /********************************************** setting structures **************************************************/
 
     buildOptions() {
         let options = ['onOff'];
@@ -72,13 +70,13 @@ export class LightControlSelect extends HaLightingComponent {
         this._options = options;
     }
 
-    /********************************************** interactive logic ***************************************************/
+/********************************************** interactive logic *****************************************************/
 
     onSelect(option) {
         this.dispatchEvent(new CustomEvent('select', { detail: option }));
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     iconContent(option) {
         let content;
@@ -88,16 +86,16 @@ export class LightControlSelect extends HaLightingComponent {
                             .changedEntityIds=${this.getCEIs()}
                             .states=${this.getStates()}
                             .structure=${this.getStructure()}
-                        ></light-icon>`;
+                        />`;
                 break;
             case 'brightness':
-                content = html`<ha-svg-icon .path=${brightness6}></ha-svg-icon>`;
+                content = html`<ha-svg-icon .path=${brightness6}/>`;
                 break;
             case 'color_temp_kelvin':
-                content = html`<ha-svg-icon .path=${brightness6}></ha-svg-icon>`;
+                content = html`<ha-svg-icon .path=${brightness6}/>`;
                 break;                
             case 'theme':
-                content = html`<ha-svg-icon .path=${creationOutline}></ha-svg-icon>`;
+                content = html`<ha-svg-icon .path=${creationOutline}/>`;
                 break;
         }
         return content;
@@ -125,7 +123,7 @@ export class LightControlSelect extends HaLightingComponent {
         }
     }
 
-    /********************************************** style logic *********************************************************/
+/********************************************** style logic ***********************************************************/
 
     getStyles(option) {
         let styles = {};
@@ -156,57 +154,57 @@ export class LightControlSelect extends HaLightingComponent {
 
     static styles = [sharedStyles, css`
 
-    :host {
-        display: flex;
-        flex-flow: var(--control-select-flex-flow, column nowrap);
-        justify-content: var(--control-select-justify-content, space-around);
-        align-items: var(--control-select-align-items, center);
-        margin-left: var(--control-select-margin-left, 10px);
-        margin-top: var(--control-select-margin-top, 0px);
-        width: var(--control-select-width);
-        height: var(--control-select-height, 100%);
-    }
+        :host {
+            display: flex;
+            flex-flow: var(--control-select-flex-flow, column nowrap);
+            justify-content: var(--control-select-justify-content, space-around);
+            align-items: var(--control-select-align-items, center);
+            margin-left: var(--control-select-margin-left, 10px);
+            margin-top: var(--control-select-margin-top, 0px);
+            width: var(--control-select-width);
+            height: var(--control-select-height, 100%);
+        }
 
-    .icon-window {
-        width: var(--control-select-icon-window-width, 30px);
-        height: var(--control-select-icon-window-width, 30px);
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: var(--control-select-icon-window-margin, 10px);
-        outline-offset: var(--control-select-outline-offset, -2px);
-        outline: none;
-    }
+        .icon-window {
+            width: var(--control-select-icon-window-width, 30px);
+            height: var(--control-select-icon-window-width, 30px);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: var(--control-select-icon-window-margin, 10px);
+            outline-offset: var(--control-select-outline-offset, -2px);
+            outline: none;
+        }
 
-    .doublewide {
-        width: calc(2 * var(--control-select-icon-window-width, 30px));
-        height: var(--control-select-icon-window-width, 30px);
-        border-radius: 40%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: var(--control-select-icon-window-margin, 10px);
-        outline-offset: var(--control-select-outline-offset, -2px);
-        outline: none;
-    }
+        .doublewide {
+            width: calc(2 * var(--control-select-icon-window-width, 30px));
+            height: var(--control-select-icon-window-width, 30px);
+            border-radius: 40%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: var(--control-select-icon-window-margin, 10px);
+            outline-offset: var(--control-select-outline-offset, -2px);
+            outline: none;
+        }
 
-    .icon {
-        width: var(--control-select-icon-size, 20px);
-        height: var(--control-select-icon-size, 20px);
-        margin: 0px;
-        padding: 0px;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
-    }
+        .icon {
+            width: var(--control-select-icon-size, 20px);
+            height: var(--control-select-icon-size, 20px);
+            margin: 0px;
+            padding: 0px;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+        }
 
-    ha-svg-icon {
-        --mdc-icon-size: 100%;
-    }
+        ha-svg-icon {
+            --mdc-icon-size: 100%;
+        }
 
-`];
+    `];
 
 }
 

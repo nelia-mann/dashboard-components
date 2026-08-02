@@ -7,6 +7,8 @@ import './offset-slider.js';
 
 export class AuxThermostatPanel extends HaClimateComponent {
 
+/********************************************** getter & setter logic *************************************************/
+
     getThermostatEIs() {
         return new Set([this.getEntityId('thermostat'), this.getEntityId('safe_mode')]);
     }
@@ -49,7 +51,45 @@ export class AuxThermostatPanel extends HaClimateComponent {
         return '';
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
+
+    thermostat() {
+        return html`<thermostat-panel
+                class = "outlined ${this.isInactive()}"
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getThermostatEIs()}
+                .structure=${this.getStructure()}
+                .fixed=${this.isFixed()}
+                .callService = ${this.callService}
+            />`;
+    }
+
+    modeControls() {
+        return html`<aux-mode-controls
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getControlEIs()}
+                .structure = ${this.getStructure()}
+                .regionName = ${this.getRegionName()}
+                .areaMode = ${this.getTieMode()}
+                .areaAction = ${this.getTieAction()}
+                .callService = ${this.callService}
+            />`;
+    }
+
+    offsetSlider() {
+        return html`<offset-slider
+                class="outlined ${this.isInactiveSlider()}"
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getEntityIds()}
+                .structure=${this.getStructure()}
+                .regionName=${this.getRegionName()}
+                .fixed = ${this.fixSlider()}
+                .callService = ${this.callService}
+            />`;
+    }
 
     render() {
         if (this.isInitialized()) {
@@ -57,85 +97,58 @@ export class AuxThermostatPanel extends HaClimateComponent {
                 <div class="heading"> ${this.getThisName()} </div>
                 <div class="main">
                     <div class="thermostat">
-                        <thermostat-panel
-                            class = "outlined ${this.isInactive()}"
-                            .changedEntityIds = ${this.getCEIs()}
-                            .states = ${this.getStates()}
-                            .entityIds = ${this.getThermostatEIs()}
-                            .structure=${this.getStructure()}
-                            .fixed=${this.isFixed()}
-                            .callService = ${this.callService}
-                        ></thermostat-panel>
-                        <aux-mode-controls
-                            .changedEntityIds = ${this.getCEIs()}
-                            .states = ${this.getStates()}
-                            .entityIds = ${this.getControlEIs()}
-                            .structure = ${this.getStructure()}
-                            .regionName = ${this.getRegionName()}
-                            .areaMode = ${this.getTieMode()}
-                            .areaAction = ${this.getTieAction()}
-                            .callService = ${this.callService}
-                        ></aux-mode-controls>
+                        ${this.thermostat()}
+                        ${this.modeControls()}
                     </div>
-                    <offset-slider
-                        class="outlined ${this.isInactiveSlider()}"
-                        .changedEntityIds = ${this.getCEIs()}
-                        .states = ${this.getStates()}
-                        .entityIds = ${this.getEntityIds()}
-                        .structure=${this.getStructure()}
-                        .regionName=${this.getRegionName()}
-                        .fixed = ${this.fixSlider()}
-                        .callService = ${this.callService}
-                    ></offset-slider>
+                    ${this.offsetSlider()}
                 </div>
 
                 `
         }
     }
 
-/********************************************** style logic *************************************************************/
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 
-    :host {
-        width: var(--aux-panel-width, 350px);
-        height: var(--aux-panel-height, 100%);
-        display: flex;
-        flex-flow: var(--aux-panel-flex-flow, column nowrap);
-        justify-content: var(--aux-panel-justify-content, space-between);
-        align-items: var(--aux-panel-align-items, center);
-        padding: var(--aux-panel-padding, 0px);
-        padding-top: var(--aux-panel-padding-top, 0px);
-    }
+        :host {
+            width: var(--aux-panel-width, 350px);
+            height: var(--aux-panel-height, 100%);
+            display: flex;
+            flex-flow: var(--aux-panel-flex-flow, column nowrap);
+            justify-content: var(--aux-panel-justify-content, space-between);
+            align-items: var(--aux-panel-align-items, center);
+            padding: var(--aux-panel-padding, 0px);
+            padding-top: var(--aux-panel-padding-top, 0px);
+        }
 
-    .heading {
-        font-size: var(--aux-panel-heading-font-size, var(--large-font));
-        font-weight: var(--aux-panel-heading-font-weight, 550);
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: flex-start;
-        width: 100%;
-        height: var(--aux-panel-heading-height, 50px);
-    }
+        .heading {
+            font-size: var(--aux-panel-heading-font-size, var(--large-font));
+            font-weight: var(--aux-panel-heading-font-weight, 550);
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            height: var(--aux-panel-heading-height, 50px);
+        }
 
-    .main {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-        align-items: flex-end;
-        height: var(--aux-panel-main-height, 430px);
-        width: var(--aux-panel-main-width);
-    }
+        .main {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: var(--aux-panel-main-height, 430px);
+            width: var(--aux-panel-main-width);
+        }
 
-    .thermostat {
-        display: flex;
-        flex-flow: var(--aux-thermostat-layout, column nowrap);
-        justify-content: space-between;
-        align-items: center;
-        height: 100%;
-    }
-
+        .thermostat {
+            display: flex;
+            flex-flow: var(--aux-thermostat-layout, column nowrap);
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
 
 `];
 

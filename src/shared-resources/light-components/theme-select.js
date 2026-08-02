@@ -1,6 +1,5 @@
 import { html, css } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
-import { getThemeGradient, getThemeOutline } from './theme-select/theme-util.js';
 import { HaLightingComponent } from '../base-classes/ha-lighting-component.js';
 import sharedStyles from '../styles/shared-styles.js';
 import './theme-button.js';
@@ -13,7 +12,7 @@ export class ThemeSelect extends HaLightingComponent {
         _option: { state: true }
     }
 
-    /********************************************** lifecycle ***********************************************************/
+/********************************************** lifecycle *************************************************************/
 
     getTriggers() {
         return ["_option"];
@@ -23,7 +22,7 @@ export class ThemeSelect extends HaLightingComponent {
         this.setOption(this.getThemeStateState());
     }
 
-    /********************************************** getter & setter logic ***********************************************/
+/********************************************** getter & setter logic *************************************************/
 
     getOption() {
         return this._option;
@@ -43,12 +42,12 @@ export class ThemeSelect extends HaLightingComponent {
         } return false;
     }
 
+/********************************************** interactive logic *****************************************************/
+
     waitCondition(entityId) {
         const theme = this.getState(entityId).state;
         return this.getOption() === theme;
     }
-
-    /********************************************** interactive logic ***************************************************/
 
     async onClick(option) {
         if (!this.isFixed()) {
@@ -66,7 +65,7 @@ export class ThemeSelect extends HaLightingComponent {
         this.callService('select', 'select_option', data);
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     listOptions() {
         const optionList = this.getThemeOptions();
@@ -75,7 +74,7 @@ export class ThemeSelect extends HaLightingComponent {
                 .option=${option}
                 .selected=${this.isSelected(option)}
                 @select=${() => this.onClick(option)}
-             ></theme-button>`
+             />`
         })
     }
 
@@ -85,30 +84,20 @@ export class ThemeSelect extends HaLightingComponent {
         }
     }
 
-    /********************************************** style logic *********************************************************/
-
-    getStyles(option) {
-        let styles = {};
-        if (this.isSelected(option)) {
-            styles['outline'] = `solid ${getThemeOutline(option)}`;
-            styles['outline-offset'] = '-3px;'
-        }
-        styles['background'] = getThemeGradient(option)
-        return styles;
-    }
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 
-    :host {
-        display: flex;
-        flex-flow: var(--theme-select-flex-flow, column wrap);
-        justify-content: var(--theme-select-justify-content, flex-start);
-        align-items: var(--theme-select-align-items, center);
-        width: var(--theme-select-width, 450px);
-        height: var(--theme-select-height, 360px);
-    }
+        :host {
+            display: flex;
+            flex-flow: var(--theme-select-flex-flow, column wrap);
+            justify-content: var(--theme-select-justify-content, flex-start);
+            align-items: var(--theme-select-align-items, center);
+            width: var(--theme-select-width, 450px);
+            height: var(--theme-select-height, 360px);
+        }
 
-`];
+    `];
 
 }
 

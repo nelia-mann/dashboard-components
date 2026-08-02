@@ -11,6 +11,8 @@ export class AreaPanel extends HaSubComponent {
         this.name = '';
     }
 
+/********************************************** getter & setter logic *************************************************/
+
     getAreaName() {
         return this.name;
     }
@@ -23,7 +25,7 @@ export class AreaPanel extends HaSubComponent {
         return this.getStructure()[lightId].entityIds;
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     getLightDisplay(lightId) {
         return html`
@@ -34,43 +36,42 @@ export class AreaPanel extends HaSubComponent {
                 .structure = ${this.getSubStructure(lightId)}
                 .entityIds = ${this.getSubEIs(lightId)}
                 .callService=${this.callService}
-            ></light-component>
-        `
+            />`;
     }
 
     render() {
         if (this.isInitialized()) {
             const lightIds = Object.keys(this.getStructure());
             return html`
-                <div class="heading">${this.getAreaName()}</div>
+                <div class="heading"> ${this.getAreaName()} </div>
                 ${repeat(lightIds, (lightId) => lightId, lightId => this.getLightDisplay(lightId))}
             `
         }
     }
 
-    /********************************************** style logic *********************************************************/
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 
-    :host {
-        margin-left: var(--area-panel-margin-left, 10px);
-        margin-right: var(--area-panel-margin-right, 10px);
-        margin-top: var(--area-panel-margin-top, 20px);
-        width: var(--area-panel-basic-width);
-        height: var(--area-panel-basic-height);
-        padding: var(--area-panel-basic-padding, 0px);
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: var(--area-panel-basic-justify-content);
-        align-items: var(--area-panel-basic-align-items);
-    }
+        :host {
+            margin-left: var(--area-panel-margin-left, 10px);
+            margin-right: var(--area-panel-margin-right, 10px);
+            margin-top: var(--area-panel-margin-top, 20px);
+            width: var(--area-panel-basic-width);
+            height: var(--area-panel-basic-height);
+            padding: var(--area-panel-basic-padding, 0px);
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: var(--area-panel-basic-justify-content);
+            align-items: var(--area-panel-basic-align-items);
+        }
 
-    .heading {
-        font-size: var(--area-heading-font-size, 100%);
-        font-weight: var(--area-heading-font-weight, 700);
-    }
+        .heading {
+            font-size: var(--area-heading-font-size, 100%);
+            font-weight: var(--area-heading-font-weight, 700);
+        }
 
-`];
+    `];
 
 }
 

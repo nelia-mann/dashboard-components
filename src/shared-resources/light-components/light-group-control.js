@@ -20,7 +20,7 @@ export class LightGroupControl extends HaLightingComponent {
         this.selectedId = '';
     }
 
-    /********************************************** lifecycle ***********************************************************/
+/********************************************** lifecycle *************************************************************/
 
     getTriggers() {
         return ["selectedId", "option"];
@@ -31,7 +31,7 @@ export class LightGroupControl extends HaLightingComponent {
         this.setDefaultOption();
     }
 
-    /********************************************** getter & setter logic ***********************************************/
+/********************************************** getter & setter logic *************************************************/
 
     getOption() {
         return this.option;
@@ -81,7 +81,7 @@ export class LightGroupControl extends HaLightingComponent {
         return string;
     }
 
-    /********************************************** interactive logic ***************************************************/
+/********************************************** interactive logic *****************************************************/
 
     onSelectLight(e) {
         const lightId = e.detail;
@@ -106,7 +106,7 @@ export class LightGroupControl extends HaLightingComponent {
         }
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     lightGroupSelect() {
         return html`
@@ -119,8 +119,7 @@ export class LightGroupControl extends HaLightingComponent {
                 .option = ${this.getOption()}
                 @select = ${this.onSelectLight}
                 @select_control = ${this.onSelectControl}
-            ></light-group-select>
-        `
+            />`;
     }
 
     lightControlSelect() {
@@ -133,8 +132,7 @@ export class LightGroupControl extends HaLightingComponent {
                 .entityIds = ${this.getSelectedId()}
                 .option = ${this.getOption()}
                 @select = ${this.onSelectControl}
-            ></light-control-select>
-        `)
+            />`);
     }
 
     lightControl(option) {
@@ -147,8 +145,7 @@ export class LightGroupControl extends HaLightingComponent {
                 .structure = ${this.getThisStructure(this.getSelectedId())}
                 .option = ${option}
                 .callService=${this.callService}
-            ></light-control>
-        `)
+            />`);
     }
 
     lightControls() {
@@ -170,23 +167,23 @@ export class LightGroupControl extends HaLightingComponent {
         }
     }
 
-    /********************************************** style logic *********************************************************/
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 
-    :host {
-        height: var(--light-group-height);
-        width: var(--light-group-width);
-        display: flex;
-        flex-flow: var(--light-group-flex-flow, row nowrap);
-        justify-content: var(--light-group-justify-content, space-around);
-        align-items: var(--light-group-align-items, center);
-        margin-top: var(--light-group-margin-top, 40px);
-        padding-top: var(--light-group-control-padding-top, 20px);
-        padding-bottom: var(--light-group-control-padding-bottom, 20px);
-    }
+        :host {
+            height: var(--light-group-height);
+            width: var(--light-group-width);
+            display: flex;
+            flex-flow: var(--light-group-flex-flow, row nowrap);
+            justify-content: var(--light-group-justify-content, space-around);
+            align-items: var(--light-group-align-items, center);
+            margin-top: var(--light-group-margin-top, 40px);
+            padding-top: var(--light-group-control-padding-top, 20px);
+            padding-bottom: var(--light-group-control-padding-bottom, 20px);
+        }
 
-`];
+    `];
 
 }
 

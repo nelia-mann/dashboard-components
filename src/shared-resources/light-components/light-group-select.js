@@ -20,13 +20,13 @@ export class LightGroupSelect extends HaLightingComponent {
         this.selectedId = '';
     }
 
-    /********************************************** lifecycle ***********************************************************/
+/********************************************** lifecycle *************************************************************/
 
     getTriggers() {
         return ["selectedId", "option"];
     }
 
-    /********************************************** getter & setter logic ***********************************************/
+/********************************************** getter & setter logic *************************************************/
 
     isSelected(lightId) {
         return (this.selectedId === lightId);
@@ -40,7 +40,7 @@ export class LightGroupSelect extends HaLightingComponent {
         return this.option;
     }
 
-    /********************************************** interactive logic ***************************************************/
+/********************************************** interactive logic *****************************************************/
 
     onSelect(lightId) {
         this.dispatchEvent(new CustomEvent('select', { detail: lightId }));
@@ -50,7 +50,7 @@ export class LightGroupSelect extends HaLightingComponent {
         this.dispatchEvent(new CustomEvent('select_control', { detail: e.detail})) 
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     lightControlSelect() {
         return keyed(this.getSelectedId(), html`
@@ -62,7 +62,7 @@ export class LightGroupSelect extends HaLightingComponent {
                 .entityIds = ${new Set([this.getSelectedId()])}
                 .option = ${this.getOption()}
                 @select = ${this.onSelectControl}
-            ></light-control-select>
+            />
         `)
     }
 
@@ -78,7 +78,7 @@ export class LightGroupSelect extends HaLightingComponent {
                         .changedEntityIds=${this.getCEIs()}
                         .states=${this.getStates()}
                         .structure=${this.getThisStructure(lightId)}
-                    ></light-icon>
+                    />
                 </div>
                 ${this.getName(lightId)}
             </div>
@@ -104,7 +104,7 @@ export class LightGroupSelect extends HaLightingComponent {
         }
     }
 
-    /********************************************** style logic *********************************************************/
+/********************************************** style logic ***********************************************************/
 
     getStyles(lightId) {
         let styles = {};
@@ -124,67 +124,67 @@ export class LightGroupSelect extends HaLightingComponent {
 
     static styles = [sharedStyles, css`
 
-    :host {
-        display: flex;
-        flex-flow: var(--light-select-flex-flow, column nowrap);
-        align-items: var(--light-select-align-items, flex-start);
-        justify-content: var(--light-select-justify-content, center);
-    }
+        :host {
+            display: flex;
+            flex-flow: var(--light-select-flex-flow, column nowrap);
+            align-items: var(--light-select-align-items, flex-start);
+            justify-content: var(--light-select-justify-content, center);
+        }
 
-    .members {
-        display: flex;
-        flex-flow: var(--light-select-members-flex-flow);
-        justify-content: var(--light-select-members-justify-content);
-        align-items: var(--light-select-members-align-items);
-        width: var(--light-select-members-width);
-        --light-select-innerlight-width: var(--light-select-member-width);
-    }
+        .members {
+            display: flex;
+            flex-flow: var(--light-select-members-flex-flow);
+            justify-content: var(--light-select-members-justify-content);
+            align-items: var(--light-select-members-align-items);
+            width: var(--light-select-members-width);
+            --light-select-innerlight-width: var(--light-select-member-width);
+        }
 
-    .light-inner {
-        width: var(--light-select-innerlight-width, 180px);
-        height: var(--light-select-innerlight-height, 25px);
-        padding: var(--light-select-innerlight-padding, 10px);
-        margin: var(--light-select-innerlight-margin, 10px);
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-start;
-        align-items: center;
-        outline-offset: var(--button-outline-offset, -3px);
-        outline: none;
-    }
+        .light-inner {
+            width: var(--light-select-innerlight-width, 180px);
+            height: var(--light-select-innerlight-height, 25px);
+            padding: var(--light-select-innerlight-padding, 10px);
+            margin: var(--light-select-innerlight-margin, 10px);
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: flex-start;
+            align-items: center;
+            outline-offset: var(--button-outline-offset, -3px);
+            outline: none;
+        }
 
-    .small-heading {
-        font-size: var(--light-inner-heading-font-size, 100%);
-        font-weight: var(--light-inner-heading-font-weight, 700);
-    }
+        .small-heading {
+            font-size: var(--light-inner-heading-font-size, 100%);
+            font-weight: var(--light-inner-heading-font-weight, 700);
+        }
 
-    .sub-info {
-        font-size: var(--light-inner-font-size, 100%);
-        font-weight: var(--light-inner-font-weight, 400);
-    }
+        .sub-info {
+            font-size: var(--light-inner-font-size, 100%);
+            font-weight: var(--light-inner-font-weight, 400);
+        }
 
-    .icon {
-        margin: 0px;
-        padding: 0px;
-        margin-right: var(--light-select-icoc-margin-right, 10px);
-        margin-left: var(--light-select-icoc-margin-left, 0px);
-        width: var(--light-select-icon-size, 20px);
-        height: var(--light-select-icon-size, 20px);
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
-    }
+        .icon {
+            margin: 0px;
+            padding: 0px;
+            margin-right: var(--light-select-icoc-margin-right, 10px);
+            margin-left: var(--light-select-icoc-margin-left, 0px);
+            width: var(--light-select-icon-size, 20px);
+            height: var(--light-select-icon-size, 20px);
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .top-row {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-around;
-        align-items:center;
-        margin-bottom: var(--light-select-top-row-margin, 20px);
-    }
+        .top-row {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-around;
+            align-items:center;
+            margin-bottom: var(--light-select-top-row-margin, 20px);
+        }
 
-`];
+    `];
 
 }
 

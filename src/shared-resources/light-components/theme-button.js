@@ -1,6 +1,6 @@
 import { html, LitElement, css } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { getThemeGradient, getThemeOutline } from './theme-select/theme-util.js';
+import { getThemeGradient, getThemeOutline } from '../util/lighting-util/theme-util.js';
 import sharedStyles from '../styles/shared-styles.js';
 
 export class ThemeButton extends LitElement {
@@ -19,7 +19,7 @@ export class ThemeButton extends LitElement {
         this._initialized = false;
     }
 
-    /********************************************** lifecycle ***********************************************************/
+/********************************************** lifecycle *************************************************************/
 
     shouldUpdate(changedProps) {
         return (!this.isInitialized()
@@ -31,7 +31,7 @@ export class ThemeButton extends LitElement {
         this.initialize();
     }
 
-    /********************************************** getter & setter logic ***********************************************/
+/********************************************** getter & setter logic *************************************************/
 
     isInitialized() {
         return this._initialized;
@@ -49,13 +49,13 @@ export class ThemeButton extends LitElement {
         return this.selected;
     }
 
-    /********************************************** interactive logic ***************************************************/
+/********************************************** interactive logic *****************************************************/
 
     onClick() {
         this.dispatchEvent(new CustomEvent('select'));
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     render() {
         if (this.isInitialized()) {
@@ -69,7 +69,7 @@ export class ThemeButton extends LitElement {
         }
     }
 
-    /********************************************** style logic *********************************************************/
+/********************************************** style logic ***********************************************************/
 
     getStyles() {
         let styles = {};
@@ -82,26 +82,26 @@ export class ThemeButton extends LitElement {
 
     static styles = [sharedStyles, css`
 
-    :host {
-        margin: var(--theme-button-margin, 5px);
-        width: var(--theme-button-width, 90px);
-        height: var(--theme-button-height, 20px);
-    }
+        :host {
+            margin: var(--theme-button-margin, 5px);
+            width: var(--theme-button-width, 90px);
+            height: var(--theme-button-height, 20px);
+        }
 
-    .option {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
-        padding-top: var(--theme-button-padding-top, 1px);
-        padding-bottom: var(--theme-button-padding-bottom, 1px);
-        outline-offset: var(--button-outline-offset, -3px);
-        outline: none;
-        font-size: var(--theme-button-font-size, 100%);
-        font-weight: var(--theme-button-font-weight, 400);
-    }
+        .option {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+            padding-top: var(--theme-button-padding-top, 1px);
+            padding-bottom: var(--theme-button-padding-bottom, 1px);
+            outline-offset: var(--button-outline-offset, -3px);
+            outline: none;
+            font-size: var(--theme-button-font-size, 100%);
+            font-weight: var(--theme-button-font-weight, 400);
+        }
 
-`];
+    `];
 
 }
 

@@ -1,9 +1,11 @@
 import { html, css } from 'lit';
 import { HaLightingComponent } from '../base-classes/ha-lighting-component.js';
 import sharedStyles from '../styles/shared-styles.js';
-import '../general-components/slider/slider.js';
+import '../general-components/slider.js';
 
 export class ColorTempSlider extends HaLightingComponent {
+
+/********************************************** getter & setter logic *************************************************/
 
     isFixed() {
         if (this.getLightState().state === 'off') {
@@ -11,13 +13,13 @@ export class ColorTempSlider extends HaLightingComponent {
         } return false;
     }
 
+/********************************************** interactive logic *****************************************************/
+
     waitCondition(entityId, value) {
         const state = this.getState(entityId);
         const target = state.attributes.color_temp_kelvin;
         return (target - .5 < value) && (value < target + .5);
     }
-
-    /********************************************** interactive logic ***************************************************/
 
     handleCallService(e) {
         const value = e.detail;
@@ -26,7 +28,7 @@ export class ColorTempSlider extends HaLightingComponent {
         this.callService('light', 'turn_on', data)
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     ctBar() {
         const maxTemp = this.getMaxTemp();
@@ -45,7 +47,7 @@ export class ColorTempSlider extends HaLightingComponent {
                 .mode=${'horizontal'}
                 @change=${this.handleCallService}
                 .wait = ${this.waitCondition}
-            ></slider-bar>`
+            />`
     }
 
     render() {
@@ -56,16 +58,16 @@ export class ColorTempSlider extends HaLightingComponent {
         }
     }
 
-    /********************************************** style logic *********************************************************/
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 
-    :host {
-        width: var(--colortemp-slider-width, 210px);
-        height: var(--colortemp-slider-height, 210px);
-    }
+        :host {
+            width: var(--colortemp-slider-width, 210px);
+            height: var(--colortemp-slider-height, 210px);
+        }
 
-`];
+    `];
 
 }
 

@@ -20,7 +20,7 @@ export class HaSubComponent extends LitElement {
         this._changeFlag = false;
     }
 
-    /******************************** lifecycle logic ********************************/
+/********************************************** lifecycle *************************************************************/
 
     update(changedProps) {
         (!this.getChangeFlag()) && (this.setInitialValues());
@@ -82,7 +82,7 @@ export class HaSubComponent extends LitElement {
         });
     }
 
-    /********************************* basic getters and setters *****************************/
+/********************************************** getter & setter logic *************************************************/
 
     isInitialized() {
         return this._initialized;
@@ -163,7 +163,7 @@ export class HaSubComponent extends LitElement {
         return pretty.slice(0, -1);
     }
 
-    /********************************* lifecycle hooks for subclasses **********************/
+    /********************************* lifecycle hooks for subclasses *************************************************/
 
     onFirstUpdate() {}
 

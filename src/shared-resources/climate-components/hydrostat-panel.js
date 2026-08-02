@@ -4,10 +4,12 @@ import { HaClimateComponent } from '../base-classes/ha-climate-component.js';
 import { FAN } from '../util/color-util.js';
 import { fan } from '../util/mdi-util.js';
 import sharedStyles from '../styles/shared-styles.js';
-import '../general-components/double-circle-slider/double-circular-slider.js';
-import '../general-components/adjust-buttons/adjust-buttons.js';
+import '../general-components/double-circular-slider.js';
+import '../general-components/adjust-buttons.js';
 
 export class HydrostatPanel extends HaClimateComponent {
+
+/********************************************** getter & setter logic *************************************************/
 
     getTargetValue() {
         if (this.getMode() === 'on') return this.getTarget();
@@ -21,7 +23,7 @@ export class HydrostatPanel extends HaClimateComponent {
         if (this.getAction() === 'Venting') return FAN;
     }
 
-    /********************************************** interactive logic ***************************************************/
+/********************************************** interactive logic *****************************************************/
 
     wait(entityId, value) {
         return this.getState(entityId).attributes.humidity = Math.round(value);
@@ -48,66 +50,71 @@ export class HydrostatPanel extends HaClimateComponent {
         }       
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     adjustButtons() {
         if (this.isSafe()) return null;
         if (this.getMode() !== 'on') return null;
         return html`<div class="button-row"> 
-                        <adjust-buttons @change=${(e) => this.change(e)}>
-                    </adjust-buttons> </div>`
+                        <adjust-buttons @change=${(e) => this.change(e)}/>
+                    </div>`
+    }
+
+    slider() {
+        return html`<double-circular-slider
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${this.getEntityIds()}
+                .min = ${0}
+                .max = ${this.getMaxExtreme()}
+                .sensor = ${this.getSensor()}
+                .units = ${this.getSensorUnits()}
+                .icon = ${fan}
+                .lowColor = ${this.getLowColor()}
+                .targetValue = ${this.getTargetValue()}
+                .action = ${this.getAction()}
+                .actionColor = ${this.getActionColor()}
+                .fixed=${this.isSafe()}
+                .wait=${this.wait}
+                @change=${this.handleCallService}
+            />`;
     }
 
     render() {
         if (this.isInitialized()) {
             return html`
-                <double-circular-slider
-                    .changedEntityIds = ${this.getCEIs()}
-                    .states = ${this.getStates()}
-                    .entityIds = ${this.getEntityIds()}
-                    .min = ${0}
-                    .max = ${this.getMaxExtreme()}
-                    .sensor = ${this.getSensor()}
-                    .units = ${this.getSensorUnits()}
-                    .icon = ${fan}
-                    .lowColor = ${this.getLowColor()}
-                    .targetValue = ${this.getTargetValue()}
-                    .action = ${this.getAction()}
-                    .actionColor = ${this.getActionColor()}
-                    .fixed=${this.isSafe()}
-                    .wait=${this.wait}
-                    @change=${this.handleCallService}
-                >
-                </double-circular-slider>
+                ${this.slider()}
                 ${this.adjustButtons()}
             `
         }
     }
-/********************************************** style logic *************************************************************/
+
+    /****************************************** style logic *************************************************************/
+
     static styles = [sharedStyles, css`
 
-    :host {
-        width: var(--hydrostat-width, 200px);
-        height: var(--hydrostat-height, 200px);
-        padding-bottom: var(--hydrostat-bottom-padding, 0px);
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        margin-top: var(--hydrostat-margin-top, 0px);
-        margin-bottom: var(--hydrostat-margin-botton, 0px);
-    }
+        :host {
+            width: var(--hydrostat-width, 200px);
+            height: var(--hydrostat-height, 200px);
+            padding-bottom: var(--hydrostat-bottom-padding, 0px);
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-top: var(--hydrostat-margin-top, 0px);
+            margin-bottom: var(--hydrostat-margin-botton, 0px);
+        }
 
-    .button-row {
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-        justify-content: center;
-        width: var(--hydrostat-adjust-button-row-width, 85%);
-    }
+        .button-row {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            justify-content: center;
+            width: var(--hydrostat-adjust-button-row-width, 85%);
+        }
 
-`];
+    `];
 
 }
 

@@ -20,14 +20,14 @@ export class AudioCard extends HaMainComponent {
 
     _LABEL = "audio";
 
-/********************************************** lifecycle ***************************************************************/
+/********************************************** lifecycle *************************************************************/
 
 
     hasChanges(oldHass, newHass, entityId) {
         return hasAudioChanges(oldHass, newHass, entityId);
     }
 
-/********************************************** setting structures ******************************************************/
+/********************************************** setting structures ****************************************************/
 
     setStructure() {
         const floors = getHassFloors(this.getHass());

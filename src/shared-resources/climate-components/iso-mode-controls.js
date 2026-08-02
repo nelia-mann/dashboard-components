@@ -2,13 +2,13 @@ import { html, css } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { HaClimateComponent } from '../base-classes/ha-climate-component.js';
-import { getModeStyles } from './util/climate-util.js';
+import { getModeStyles } from '../util/climate-util/climate-util.js';
 import { fire, power, minimum, fan, maximum } from '../util/mdi-util.js';
 import sharedStyles from '../styles/shared-styles.js';
 
 export class IsoModeControls extends HaClimateComponent {
 
-    /********************************************** interactive logic ***************************************************/
+/********************************************** interactive logic *****************************************************/
 
     selectMode(mode) {
         const data = {
@@ -26,16 +26,16 @@ export class IsoModeControls extends HaClimateComponent {
         this.callService('input_boolean', 'toggle', { entity_id: entityId })
     }
 
-    /********************************************** html logic **********************************************************/
+/********************************************** html logic ************************************************************/
 
     modeButton(mode) {
         let icon;
         switch (mode) {
             case 'off':
-                icon = html`<ha-svg-icon .path=${power}></ha-svg-icon>`;
+                icon = html`<ha-svg-icon .path=${power}/>`;
                 break;
             case 'on':
-                icon = html`<ha-svg-icon .path=${fan}></ha-svg-icon>`;
+                icon = html`<ha-svg-icon .path=${fan}/>`;
                 break;
         }
         return html`<div class="button outlined"
@@ -58,7 +58,7 @@ export class IsoModeControls extends HaClimateComponent {
                 style=${styleMap(this.getSafeStyles())}
                 @click=${this.setSafe}
             >
-                <ha-svg-icon .path=${fan} ></ha-svg-icon>
+                <ha-svg-icon .path=${fan}/></ha-svg-icon>
                 <ha-svg-icon .path=${maximum} class="center"></ha-svg-icon>
             </div>`
         }
@@ -73,7 +73,7 @@ export class IsoModeControls extends HaClimateComponent {
         }
     }
     
-/********************************************** style logic *************************************************************/
+/********************************************** style logic ***********************************************************/
 
     getModeStyles(mode) {
         const isMode = (mode === this.getMode())
@@ -86,32 +86,32 @@ export class IsoModeControls extends HaClimateComponent {
 
     static styles = [sharedStyles, css`
 
-    :host {
-        width: var(--iso-mode-control-width, 100%);
-        height: var(--iso-mode-control-height, 50px);
-        margin-top: var(--iso-mode-control-margin-top, 0px);
-        display: flex;
-        flex-flow: var(--iso-mode-control-flex-flow, row nowrap);
-        justify-content: var(--iso-mode-control-justify-content, space-around);
-        align-items: var(--aux-iso-control-align-items, center);
-    }
+        :host {
+            width: var(--iso-mode-control-width, 100%);
+            height: var(--iso-mode-control-height, 50px);
+            margin-top: var(--iso-mode-control-margin-top, 0px);
+            display: flex;
+            flex-flow: var(--iso-mode-control-flex-flow, row nowrap);
+            justify-content: var(--iso-mode-control-justify-content, space-around);
+            align-items: var(--aux-iso-control-align-items, center);
+        }
 
-    .button {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
-        width: var(--iso-mode-control-button-width, 60px);
-        height: var(--iso-mode-control-button-height, 100%);
-        outline-offset: var(--iso-mode-control-button-outline-offset, -3px);
-        outline: none;
-    }
+        .button {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+            width: var(--iso-mode-control-button-width, 60px);
+            height: var(--iso-mode-control-button-height, 100%);
+            outline-offset: var(--iso-mode-control-button-outline-offset, -3px);
+            outline: none;
+        }
 
-    .center {
-        margin-left: var(--iso-mode-control-button-margin-correction-arrow-l, -6px);
-    }
+        .center {
+            margin-left: var(--iso-mode-control-button-margin-correction-arrow-l, -6px);
+        }
 
-`];
+    `];
 
 }
 

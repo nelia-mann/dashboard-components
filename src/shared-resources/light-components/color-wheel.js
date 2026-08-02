@@ -13,7 +13,7 @@ export class ColorWheel extends HaLightingComponent {
         _saturation: { state: true }
     }
 
-    /********************************************** lifecycle ***********************************************************/
+/********************************************** lifecycle *************************************************************/
 
     getTriggers() {
         return ["_hue", "_saturation"];
@@ -35,7 +35,7 @@ export class ColorWheel extends HaLightingComponent {
         }
     }
 
-    /********************************************** getter & setter logic ***********************************************/
+/********************************************** getter & setter logic *************************************************/
 
     isFixed() {
         if (this.getLightState().state === 'off') {
@@ -67,18 +67,29 @@ export class ColorWheel extends HaLightingComponent {
         this._box = box;
     }
 
+    getThisColor() {
+        return `hsl(${this.getHue()}, 100%, ${100 - this.getSat() / 2}%)`
+    }
+
+/********************************************** geometry logic ********************************************************/
+
+    getXY() {
+        const angle = this._hue * 2 * Math.PI / 360;
+        const relX = this.getSat() * Math.sin(angle) / 2;
+        const relY = this.getSat() * Math.cos(angle) / 2;
+        const X = 50 + relX;
+        const Y = 50 - relY;
+        return [X, Y]
+    }
+
+/********************************************** interactive logic *****************************************************/
+
     waitCondition(entityId) {
         const hsColor = this.getHSColor(entityId);
         const firstCondition = ((hsColor[0] - .5 < this.getHue()) && (this.getHue() < hsColor[0] + .5));
         const secondCondition = ((hsColor[1] - .5 < this.getSat()) && (this.getSat() < hsColor[1] + .5));
         return firstCondition && secondCondition;
     }
-
-    getThisColor() {
-        return `hsl(${this.getHue()}, 100%, ${100 - this.getSat() / 2}%)`
-    }
-
-    /********************************************** interactive logic ***************************************************/
 
     down(e) {
         this.raiseChangeFlag();
@@ -120,20 +131,11 @@ export class ColorWheel extends HaLightingComponent {
         }
     }
 
-    /********************************************** html logic **********************************************************/
-
-    getXY() {
-        const angle = this._hue * 2 * Math.PI / 360;
-        const relX = this.getSat() * Math.sin(angle) / 2;
-        const relY = this.getSat() * Math.cos(angle) / 2;
-        const X = 50 + relX;
-        const Y = 50 - relY;
-        return [X, Y]
-    }
+/********************************************** html logic ************************************************************/
 
     getDot() {
         if (this.isInitialized()) {
-            return html`<div class="dot outlined" style="${styleMap(this.getDotStyle())}"></div>`
+            return html`<div class="dot outlined" style="${styleMap(this.getDotStyle())}"/>`
         }
     }
 
@@ -151,7 +153,7 @@ export class ColorWheel extends HaLightingComponent {
         `;
     }
 
-    /********************************************** style logic *********************************************************/
+/********************************************** style logic ***********************************************************/
 
     getBGStyle() {
         let styles = {};
@@ -170,35 +172,35 @@ export class ColorWheel extends HaLightingComponent {
 
     static styles = [sharedStyles, css`
 
-    :host {
-        position: relative;
-        width: var(--wheel-width, 210px);
-        height: var(--wheel-width, 210px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+        :host {
+            position: relative;
+            width: var(--wheel-width, 210px);
+            height: var(--wheel-width, 210px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .wheel-background {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        left: 0;
-        border-radius: 50%;
-        touch-action: none;
-    }
+        .wheel-background {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            touch-action: none;
+        }
 
-    .dot {
-        position: absolute;
-        width: var(--dot-width, 20px);
-        height: var(--dot-width, 20px);
-        margin-left: calc(-1 * var(--dot-width, 20px) / 2);
-        margin-top: calc(-1 * var(--dot-width, 20px) / 2);
-        border-radius: 50%;
-    }
+        .dot {
+            position: absolute;
+            width: var(--dot-width, 20px);
+            height: var(--dot-width, 20px);
+            margin-left: calc(-1 * var(--dot-width, 20px) / 2);
+            margin-top: calc(-1 * var(--dot-width, 20px) / 2);
+            border-radius: 50%;
+        }
 
-`];
+    `];
 
 }
 
