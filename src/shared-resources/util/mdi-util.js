@@ -19,5 +19,10 @@ export {
     mdiArrowUpThin as maximum,
     mdiVolumeHigh as volume,
     mdiVolumeOff as volumeOff,
+    mdiPlay as play,
+    mdiPause as pause,
+    mdiSkipForward as next,
+    mdiSkipBackward as previous,
+
 
 } from '@mdi/js';

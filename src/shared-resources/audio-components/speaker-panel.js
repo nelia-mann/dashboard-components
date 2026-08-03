@@ -4,7 +4,7 @@ import sharedStyles from '../styles/shared-styles.js';
 
 export class SpeakerTile extends HaSubComponent {
 
-    /********************************************** html logic ******************************************************/
+/********************************************** html logic ************************************************************/
 
     render() {
         if (this.isInitialized()) {
@@ -12,7 +12,7 @@ export class SpeakerTile extends HaSubComponent {
         }
     }
 
-    /********************************************** style logic *****************************************************/
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 

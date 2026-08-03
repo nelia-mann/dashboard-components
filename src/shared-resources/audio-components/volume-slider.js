@@ -15,7 +15,7 @@ constructor() {
     this._value = 0;
 }
 
-/********************************************** lifecycle ***************************************************************/
+/********************************************** lifecycle *************************************************************/
 
 getTriggers() {
     return ["_value"];
@@ -25,7 +25,7 @@ setInitialValues() {
     this.setValue(this.getAverageVolume());
 }
 
-/********************************************** getter logic ************************************************************/
+/********************************************** getter & setter logic *************************************************/
 
 getVolume(speakerId) {
     const state = this.getState(speakerId);
@@ -64,7 +64,7 @@ isAllMuted() {
     return mutes.every(element => element === true);
 }
 
-/********************************************** interactive logic *******************************************************/
+/********************************************** interactive logic *****************************************************/
 
 scaleVolume(speakerId, oldAverage, newAverage) {
     const oldVolume = this.getVolume(speakerId);
@@ -126,7 +126,7 @@ handleOnClick() {
     this.toggleMuteAll();
 }
 
-/********************************************** html logic **************************************************************/
+/********************************************** html logic ************************************************************/
 
 muteButton() {
     let icon;
@@ -135,26 +135,31 @@ muteButton() {
     } else {
         icon = volume;
     }
-    return html`<div class = "outlined mute" @click=${this.handleOnClick}> <ha-svg-icon .path=${icon} /></div>`
+    return html`<div class = "outlined mute" @click=${this.handleOnClick}> <ha-svg-icon .path=${icon}/> </div>`
+}
+
+slider() {
+    return html`<input
+            type="range"
+            max = 1
+            min = 0
+            .value = ${this.getValue()}
+            @input ${this.handleOnInput}
+            @change = ${this.handleOnChange}
+            step = 0.01
+        />`;
 }
 
 render() {
     if (this.isInitialized()) {
         return html`
             ${this.muteButton()}
-            <input
-                type="range"
-                max = 1
-                min = 0
-                .value = ${this.getValue()}
-                @input ${this.handleOnInput}
-                @change = ${this.handleOnChange}
-                step = 0.01
-            />`
+            ${this.slider()}
+        `
     }
 }
 
-/********************************************** style logic *************************************************************/
+/********************************************** style logic ***********************************************************/
 
 static styles = [sharedStyles, css`
 

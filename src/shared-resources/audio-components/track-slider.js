@@ -68,13 +68,25 @@ export class TrackSlider extends HaSubComponent {
         return new Date(this.getAttribute(this.getSpeakerId(), "media_position_updated_at")).getTime();
     }
 
+    isPlaying() {
+        const state = this.getStateState(this.getSpeakerId());
+        return state === 'playing';
+    }
+
     getTrackPosition() {
         const checkedTime = this.getTrackUpdated();
         const last = this.getAttribute(this.getSpeakerId(), "media_position");
         const now = Date.now();
         const time = last + (now - checkedTime) / 1000;
-        if (time < this.getTrackLength()) return Math.round(time);
-        return 0;
+        if (this.isPlaying()) {
+            if (time < this.getTrackLength()) {
+                return Math.round(time);
+            } else {
+                return Math.round(this.getTrackLength());
+            }
+        } else {
+            return Math.round(last);
+        }
     }
 
     formatTime(time) {
@@ -95,7 +107,7 @@ export class TrackSlider extends HaSubComponent {
         return (newTime <= Number(value) + 1) && (Number(value) - 1 <= newTime);
     }
 
-/********************************************** interactive logic *******************************************************/
+/********************************************** interactive logic *****************************************************/
 
     handleOnInput(e) {
         this.raiseChangeFlag();
@@ -117,7 +129,7 @@ export class TrackSlider extends HaSubComponent {
 render() {
     if (this.isInitialized()) {
         return html`
-            <div> ${this.getTrackTitle()} </div>
+            <div class = "title" > ${this.getTrackTitle()} </div>
             <div class = "track">
                 <div class="value"> ${this.formatTime(this.getValue())} </div>
                 <input
@@ -147,6 +159,11 @@ render() {
             align-items: center;
         }
 
+        .title {
+            font-weight: var(--track-font-weight, 400);
+            font-size: var(--track-font-size, 100%);        
+        }
+
         .track {
             width: 100%;
             display: flex;
@@ -156,7 +173,7 @@ render() {
         }
 
         .value {
-            width: 10%;
+            width: var(--track-value-width, 10%);
             height: 100%;
             display: flex;
             flex-flow: row nowrap;

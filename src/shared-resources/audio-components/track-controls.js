@@ -1,39 +1,30 @@
 import { css, html } from 'lit';
 import { HaSubComponent } from '../base-classes/ha-subcomponent.js';
 import sharedStyles from '../styles/shared-styles.js';
+import { play, pause, next, previous } from '../util/mdi-util.js';
 
 export class TrackControls extends HaSubComponent {
 
-    static properties = {
-        ...super.properties,
-    }
-
-    /********************************************** lifecycle *******************************************************/
-
-    getTriggers() {
-        return [];
-    }
-
-    /********************************************** getter logic ****************************************************/
+/********************************************** getter & setter logic *************************************************/
 
     getSpeakerId() {
         return [...this.getEntityIds()][0];
     }
 
     getSpeakerState() {
-        return this.getStates()[this.getSpeakerId()];
+        return this.getStateState(this.getSpeakerId());
     }
 
     isPlaying() {
         const state = this.getSpeakerState();
-        return state?.state === 'playing';
+        return state === 'playing';
     }
 
-    getPlayPauseLabel() {
-        return this.isPlaying() ? 'Pause' : 'Play';
+    getPlayPauseIcon() {
+        return this.isPlaying() ? pause : play;
     }
 
-    /********************************************** interactive logic ***********************************************/
+/********************************************** interactive logic *****************************************************/
 
     handlePrevious() {
         const speakerId = this.getSpeakerId();
@@ -53,60 +44,60 @@ export class TrackControls extends HaSubComponent {
         this.callService('media_player', 'media_next_track', { entity_id: speakerId });
     }
 
-    /********************************************** html logic ******************************************************/
+/********************************************** html logic ************************************************************/
+
+    previous() {
+        return html`<div class = "outlined button" @click=${this.handlePrevious}> 
+                <ha-svg-icon .path=${previous} />
+            </div>`
+    }
+
+    next() {
+        return html`<div class = "outlined button" @click=${this.handleNext}> 
+                <ha-svg-icon .path=${next} />
+            </div>`        
+    }
+
+    playPause() {
+        return html`<div class = "outlined button" @click=${this.handlePlayPause}> 
+                <ha-svg-icon .path=${this.getPlayPauseIcon()} />
+            </div>`  
+    }
 
     render() {
         if (this.isInitialized()) {
             return html`
-                <div class="controls">
-                    <button class="control-button" @click=${this.handlePrevious}>⏮</button>
-                    <button class="control-button primary" @click=${this.handlePlayPause}>${this.getPlayPauseLabel()}</button>
-                    <button class="control-button" @click=${this.handleNext}>⏭</button>
-                </div>
+                ${this.previous()}
+                ${this.playPause()}
+                ${this.next()}
             `;
         }
     }
 
-    /********************************************** style logic *****************************************************/
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 
-    :host {
-        display: block;
-        width: 100%;
-    }
+        :host {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-around;
+            align-items: center;
+            width: var(--control-button-row-width, 80%);
+            height: var(--control-button-row-height, 50px);
+        }
 
-    .controls {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: var(--track-controls-gap, 8px);
-        width: 100%;
-    }
+        .button {
+            border-radius: 50%;
+            width: var(--controls-button-height, 30px);
+            height: var(--controls-button-height, 30px);
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .control-button {
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        background: rgba(255, 255, 255, 0.15);
-        border-radius: 999px;
-        color: inherit;
-        cursor: pointer;
-        min-width: 42px;
-        min-height: 42px;
-        padding: 0 12px;
-        font-size: 0.9rem;
-        transition: opacity 0.2s ease;
-    }
-
-    .control-button:hover {
-        opacity: 0.9;
-    }
-
-    .control-button.primary {
-        min-width: 74px;
-        font-weight: 600;
-    }
-
-`];
+    `];
 
 }
 

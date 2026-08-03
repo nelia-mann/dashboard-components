@@ -36,5 +36,16 @@ export default css`
         --volume-slider-input-width: calc(100% - 60px);
         --mute-button-height: 30px;
 
+        --control-button-row-height: 50px;
+        --control-button-row-width: 80%;
+        --controls-button-height: 40px;
+
+        --track-slider-overall-width: 90%;
+        --track-slider-overall-height: 50px;
+        --track-value-width: 10%;
+        --track-slider-input-wdith: calc(100% - 60px);
+        --track-font-weight: 700;
+        --track-font-size: var(--normal-font);
+
     }
     `;

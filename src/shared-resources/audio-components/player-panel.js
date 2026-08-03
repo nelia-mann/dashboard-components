@@ -21,13 +21,13 @@ export class PlayerPanel extends HaSubComponent {
         this.speakers = {};
     }
 
-/********************************************** lifecycle ***************************************************************/
+/********************************************** lifecycle *************************************************************/
 
     getTriggers() {
         return ["speakers"]
     }
 
-    /********************************************** getter & setter logic ***********************************************/
+/********************************************** getter & setter logic *************************************************/
 
     getSpeakers() {
         return this.speakers;
@@ -81,7 +81,7 @@ export class PlayerPanel extends HaSubComponent {
         return !!track && track !== 'TV audio';
     }
 
-    /********************************************** interactive logic ***********************************************/
+/********************************************** interactive logic *****************************************************/
 
     handlePointerDown(e, id) {
         e.currentTarget.setPointerCapture(e.pointerId);
@@ -133,7 +133,7 @@ export class PlayerPanel extends HaSubComponent {
         this._ghost = null;
     }
 
-    /********************************************** html logic ******************************************************/
+/********************************************** html logic ************************************************************/
 
     makeImage() {
         const styles = {};
@@ -227,7 +227,7 @@ export class PlayerPanel extends HaSubComponent {
         }
     }
 
-    /********************************************** style logic *****************************************************/
+/********************************************** style logic ***********************************************************/
 
     static styles = [sharedStyles, css`
 
