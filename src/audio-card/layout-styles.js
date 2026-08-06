@@ -41,7 +41,7 @@ export default css`
         --controls-button-height: 40px;
 
         --track-slider-overall-width: 90%;
-        --track-slider-overall-height: 60px;
+        --track-slider-overall-height: 100px;
         --track-value-width: 10%;
         --track-slider-input-wdith: calc(100% - 60px);
         --track-font-weight: 700;

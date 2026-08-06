@@ -6,7 +6,6 @@ import { HaSubComponent } from '../base-classes/ha-subcomponent.js';
 import sharedStyles from '../styles/shared-styles.js';
 import './speaker-panel.js';
 import './volume-slider.js';
-import './track-slider.js';
 import './track-controls.js';
 
 export class PlayerPanel extends HaSubComponent {
@@ -179,7 +178,8 @@ export class PlayerPanel extends HaSubComponent {
 
     getVolumeSlider() {
         if (this.hasVolume()) {
-            return html`<volume-slider
+            return html`
+                <volume-slider
                     .changedEntityIds = ${this.getCEIs()}
                     .entityIds = ${this.getEntityIds()}
                     .states = ${this.getStates()}
@@ -188,9 +188,10 @@ export class PlayerPanel extends HaSubComponent {
         }
     }
 
-    getTrackSlider() {
+    getTrackControls() {
         if (this.hasTrackLength()) {
-            return html`<track-slider
+            return html`
+                <track-controls
                     .changedEntityIds = ${this.getCEIs()}
                     .entityIds = ${new Set([this.getLeadSpeakerId()])}
                     .states = ${this.getStates()}
@@ -199,21 +200,10 @@ export class PlayerPanel extends HaSubComponent {
         } 
     }
 
-    getTrackControls() {
-        if (this.hasTrack()) {
-            return html`<track-controls
-                .changedEntityIds = ${this.getCEIs()}
-                .entityIds = ${new Set([this.getLeadSpeakerId()])}
-                .states = ${this.getStates()}
-                .callService = ${this.callService}
-            />`
-        }
-    }
-
     getControlPanel() {
-        return html`<div class = "outlined controls player-pop"> 
-                ${this.getTrackSlider()}
-                ${this.getTrackControls()} 
+        return html`
+            <div class = "outlined controls player-pop"> 
+                ${this.getTrackControls()}
                 ${this.getVolumeSlider()} 
             </div>`;
     }
