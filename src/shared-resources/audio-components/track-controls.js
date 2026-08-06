@@ -1,24 +1,11 @@
 import { css, html } from 'lit';
-import { HaSubComponent } from '../base-classes/ha-subcomponent.js';
+import { HaAudioComponent } from '../base-classes/ha-audio-component.js';
 import sharedStyles from '../styles/shared-styles.js';
 import { play, pause, next, previous } from '../util/mdi-util.js';
 
-export class TrackControls extends HaSubComponent {
+export class TrackControls extends HaAudioComponent {
 
 /********************************************** getter & setter logic *************************************************/
-
-    getSpeakerId() {
-        return [...this.getEntityIds()][0];
-    }
-
-    getSpeakerState() {
-        return this.getStateState(this.getSpeakerId());
-    }
-
-    isPlaying() {
-        const state = this.getSpeakerState();
-        return state === 'playing';
-    }
 
     getPlayPauseIcon() {
         return this.isPlaying() ? pause : play;
@@ -27,19 +14,19 @@ export class TrackControls extends HaSubComponent {
 /********************************************** interactive logic *****************************************************/
 
     handlePrevious() {
-        const speakerId = this.getSpeakerId();
+        const speakerId = this.getMainSpeakerId();
         if (!speakerId) return;
         this.callService('media_player', 'media_previous_track', { entity_id: speakerId });
     }
 
     handlePlayPause() {
-        const speakerId = this.getSpeakerId();
+        const speakerId = this.getMainSpeakerId();
         if (!speakerId) return;
         this.callService('media_player', 'media_play_pause', { entity_id: speakerId });
     }
 
     handleNext() {
-        const speakerId = this.getSpeakerId();
+        const speakerId = this.getMainSpeakerId();
         if (!speakerId) return;
         this.callService('media_player', 'media_next_track', { entity_id: speakerId });
     }

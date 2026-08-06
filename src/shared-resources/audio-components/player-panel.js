@@ -148,7 +148,9 @@ export class PlayerPanel extends HaSubComponent {
 
     makeBGInits() {
         if (this.getBackgroundCase() === 'initials') {
-            return html`<span class = "initials" style = ${styleMap(this.getFontColor())}> ${this.getAlbumInitials()} </span>`;
+            return html`<span class = "initials" style = ${styleMap(this.getFontColor())}> 
+                    ${this.getAlbumInitials()} 
+                </span>`;
         }
     }
 

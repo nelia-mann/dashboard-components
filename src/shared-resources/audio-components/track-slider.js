@@ -1,10 +1,10 @@
 import { css, html } from 'lit';
 import { live } from 'lit/directives/live.js';
-import { HaSubComponent } from '../base-classes/ha-subcomponent.js';
+import { HaAudioComponent } from '../base-classes/ha-audio-component.js';
 import { volume, volumeOff} from '../util/mdi-util.js';
 import sharedStyles from '../styles/shared-styles.js';
 
-export class TrackSlider extends HaSubComponent {
+export class TrackSlider extends HaAudioComponent {
 
     static properties = {
         ...super.properties,
@@ -44,51 +44,6 @@ export class TrackSlider extends HaSubComponent {
         this._value = value;
     }
 
-    getSpeakerId() {
-        return [...this.getEntityIds()][0];
-    }
-
-    getSpeakerState() {
-        return this.getStates()[this.getSpeakerId()];
-    }
-
-    getSpeakerAttributes() {
-        return this.getSpeakerState().attributes;
-    }
-
-    getTrackLength() {
-        return this.getAttribute(this.getSpeakerId(), "media_duration");
-    }
-
-    getTrackTitle() {
-        return this.getAttribute(this.getSpeakerId(), "media_title");
-    }
-
-    getTrackUpdated() {
-        return new Date(this.getAttribute(this.getSpeakerId(), "media_position_updated_at")).getTime();
-    }
-
-    isPlaying() {
-        const state = this.getStateState(this.getSpeakerId());
-        return state === 'playing';
-    }
-
-    getTrackPosition() {
-        const checkedTime = this.getTrackUpdated();
-        const last = this.getAttribute(this.getSpeakerId(), "media_position");
-        const now = Date.now();
-        const time = last + (now - checkedTime) / 1000;
-        if (this.isPlaying()) {
-            if (time < this.getTrackLength()) {
-                return Math.round(time);
-            } else {
-                return Math.round(this.getTrackLength());
-            }
-        } else {
-            return Math.round(last);
-        }
-    }
-
     formatTime(time) {
         const minutes = Math.floor(time / 60);
         let seconds = String(time - (60 * minutes));
@@ -96,14 +51,8 @@ export class TrackSlider extends HaSubComponent {
         return String(minutes) + ":" + seconds;
     }
 
-    isTrackTimeUpdated(speakerId, oldTime) {
-        const newTime = this.getAttribute(speakerId, "media_position_updated_at");
-        return oldTime !== newTime;
-    }
-
     isTrackTimeUpdated(speakerId, value) {
-        const newTime = this.getAttribute(speakerId, "media_position");
-        console.log(newTime, value);
+        const newTime = this.getTrackRecordedPosition();
         return (newTime <= Number(value) + 1) && (Number(value) - 1 <= newTime);
     }
 
@@ -116,10 +65,10 @@ export class TrackSlider extends HaSubComponent {
 
     async handleOnChange(e) {
         const value = e.target.value;
-        const data = { entity_id: this.getSpeakerId(), seek_position: value };
-        const oldTime = this.getAttribute(this.getSpeakerId(), "media_position_updated_at");
+        const data = { entity_id: this.getMainSpeakerId(), seek_position: value };
+        const oldTime = this.getTrackUpdated();
         this.callService('media_player', 'media_seek', data);
-        await this.waitForEntity(this.getSpeakerId(), (speakerId) => this.isTrackTimeUpdated(speakerId, value));
+        await this.waitForEntity(this.getMainSpeakerId(), (speakerId) => this.isTrackTimeUpdated(speakerId, value));
         this.lowerChangeFlag();
         this.requestUpdate();
     }
