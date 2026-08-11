@@ -60,7 +60,6 @@ function isGroup(hass, entityId) {
 
 function getGroupMemberIds(hass, entityId) {
     if (isGroup(hass, entityId)) {
-        console.log(entityId, getAttributes(hass, entityId).entity_id);
         return getAttributes(hass, entityId).entity_id;
     }
 }

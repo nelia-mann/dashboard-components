@@ -39,6 +39,7 @@ export class LightingCard extends HaMainComponent {
 /********************************************** setting structures ****************************************************/
 
     setStructure() {
+        console.log(this.getEntityIds());
         const floors = getHassFloors(this.getHass());
         Object.keys(floors).forEach((floorId) => {
             const filteredIds = filterEntityIdsForFloor(this.getHass(), this.getEntityIds(), floorId);
@@ -135,7 +136,6 @@ export class LightingCard extends HaMainComponent {
 
     // return html
     render() {
-        return html``;
         if (this.isInitialized()) {
             return html`
                 <ha-card>
