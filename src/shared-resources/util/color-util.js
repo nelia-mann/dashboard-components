@@ -5,6 +5,7 @@ const OFFLIGHT = [68, 115, 158]; // color in rgb (steel blue)
 const INDIGO = [41, 0, 255]; // blue color
 const COOL = [33, 150, 243];
 const HOT = [255, 111, 34];
+const VOLUME = [110, 65, 171]; //violet
 const WHITE = [255, 255, 255];
 const FAN = [0, 188, 212]; // green color
 
@@ -54,5 +55,6 @@ export {
     COOL,
     HOT,
     WHITE,
-    FAN
+    FAN,
+    VOLUME,
 }

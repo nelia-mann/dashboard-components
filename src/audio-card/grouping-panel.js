@@ -3,16 +3,31 @@ import { repeat } from 'lit-html/directives/repeat.js';
 import { HaAudioComponent } from '../shared-resources/base-classes/ha-audio-component.js';
 import sharedStyles from '../shared-resources/styles/shared-styles.js';
 import '../shared-resources/audio-components/speaker-tile.js';
+import '../shared-resources/audio-components/group-panel.js';
+
+
+/*
+At this level, the entityIds are still all of the speaker IDs.  
+Ghost and suppressDrag are local objects associated with the drag-and-drop
+of speakers into groups.  
+
+Players is an array of arrays, representing the speaker groupings.  Every speaker
+is in exactly one player.  The inner array (the "player") is accessed by
+and index, mainly so that the listings don't reorganize when things are
+joined and removed.  
+
+*/
 
 export class GroupingPanel extends HaAudioComponent {
 
     _ghost;
     _suppressDrag;
+    _draggedSpeakerId;
 
     static properties = {
         ...super.properties,
         players: { state: true },
-        selectedIndex: { state: true}
+        selectedIndex: { state: true },
     }
 
     constructor() {
@@ -26,7 +41,7 @@ export class GroupingPanel extends HaAudioComponent {
 /********************************************** lifecycle *************************************************************/
 
     getTriggers() {
-        return ["players"];
+        return ["players", "selectedIndex"];
     }
 
     onFirstUpdate() {
@@ -70,7 +85,11 @@ export class GroupingPanel extends HaAudioComponent {
     setSelectedIndex(index) {
         this.selectedIndex = index;
         const leaderId = this.getLeaderFromIndex(index);
-        this.dispatchEvent(new CustomEvent('select', { detail: leaderId }))
+        this.dispatchEvent(new CustomEvent('select', { detail: leaderId }));
+    }
+
+    isSelected(index) {
+        return index === this.getSelectedIndex();
     }
 
     getSuppressState() {
@@ -83,6 +102,14 @@ export class GroupingPanel extends HaAudioComponent {
 
     lowerSuppress() {
         this._suppressDrag = false;
+    }
+
+    getDraggedId() {
+        return this._draggedSpeakerId
+    }
+
+    setDraggedId(speakerId) {
+        this._draggedSpeakerId = speakerId;
     }
 
     getPlayers() {
@@ -238,7 +265,8 @@ export class GroupingPanel extends HaAudioComponent {
         if (!this.getSuppressState()) {
             e.currentTarget.setPointerCapture(e.pointerId);
             this.createGhost(e, speakerId);
-            this.moveGhost(e.clientX, e.clientY)
+            this.setDraggedId(speakerId)
+            this.moveGhost(e.clientX, e.clientY);
         }
     }
 
@@ -248,8 +276,9 @@ export class GroupingPanel extends HaAudioComponent {
         }
     }
 
-    handlePointerUp(e, speakerId, prevIndex) {
+    handlePointerUp(e, prevIndex) {
         if (!this.getSuppressState()) {
+            const speakerId = this.getDraggedId();
             this.removeGhost();
             let elementUnder;
             if (e.clientX && e.clientY) { 
@@ -323,34 +352,25 @@ export class GroupingPanel extends HaAudioComponent {
 
 /********************************************** html logic ************************************************************/
 
-    speakerTile(speakerId, playerIndex) {
-        return html`
-            <speaker-tile
-                class = "outlined"
-                .changedEntityIds = ${this.getCEIs()}
-                .entityIds = ${new Set([speakerId])}
-                .states = ${this.getStates()}
-                .name = ${this.getName(speakerId)} 
-                @forceup = ${(e) => this.raiseSuppress()}
-                @forcedown = ${(e) => this.lowerSuppress()}
-                @pointerdown = ${(e) => this.handlePointerDown(e, speakerId)}
-                @pointerup = ${(e) => this.handlePointerUp(e, speakerId, playerIndex)}
-                @pointermove = ${this.handlePointerMove}
-                .callService = ${this.callService}
-            />`
-    }
-
     playerTile(player) {
         const index = this.getPlayerIndex(player[0]);
         const speakerIds = this.getPlayer(index);
         return html`
-            <div 
-                class = "player outlined" 
-                data-group-index=${index} 
+            <speaker-group-panel
+                class = "outlined"
+                data-group-index=${index}
+                .changedEntityIds = ${this.getCEIs()}
+                .states = ${this.getStates()}
+                .entityIds = ${new Set(speakerIds)}
+                .selected = ${this.isSelected(index)}
+                @forceup = ${(e) => this.raiseSuppress()}
+                @forcedown = ${(e) => this.lowerSuppress()}
+                @speaker-drag-start = ${(e) => this.handlePointerDown(e, e.detail)}
+                @pointerup = ${(e) => this.handlePointerUp(e, index)}
+                @pointermove = ${this.handlePointerMove}
                 @click = ${(e) => this.handleSelect(e, index)}
-            >
-                ${repeat(speakerIds, (speakerId) => speakerId, (speakerId) => this.speakerTile(speakerId, index))}
-            </div>`
+                .callService = ${this.callService}
+            />`        
     }
 
 
@@ -366,18 +386,6 @@ export class GroupingPanel extends HaAudioComponent {
     static styles = [sharedStyles, css`
         
         :host {
-        }
-
-        .player {
-            display: flex;
-            flex-flow: column nowrap;
-            justify-content: space-around;
-            align-items: center;
-            padding: var(--player-tile-padding, 10px);
-            padding-left: var(--player-tile-padding-left, 30px);
-            padding-top: 0px;
-            margin-bottom: 15px;
-            margin-top: 15px;
         }
     
         

@@ -5,26 +5,38 @@ import './volume-slider.js';
 
 export class SpeakerTile extends HaAudioComponent {
 
+    static properties = {
+        ...super.properties,
+        selected: { state: true }
+    }
+
+
+/********************************************** lifecycle *************************************************************/
+
+    getTriggers() {
+        return ['selected'];
+    }
+
 /********************************************** getter & setter logic *************************************************/
 
-    hasVolume() {
-        return !!this.getAttribute(this.getMainSpeakerId(), "media_title");
+    displayVolume() {
+        return this.hasVolume() && this.selected;
     }
 
 /********************************************** interactive logic *****************************************************/
 
     handlePointerDown() {
-        this.dispatchEvent(new CustomEvent('forceup'));
+        this.dispatchEvent(new CustomEvent('forceup', { bubbles: true, composed: true }));
     }
 
     handlePointerUp() {
-        this.dispatchEvent(new CustomEvent('forcedown'));
+        this.dispatchEvent(new CustomEvent('forcedown', { bubbles: true, composed: true }));
     }
 
 /********************************************** html logic ************************************************************/
 
     getVolumeSlider() {
-        if (this.hasVolume()) {
+        if (this.displayVolume()) {
             return html`
                 <volume-slider
                     @pointerdown = ${this.handlePointerDown}
@@ -40,7 +52,7 @@ export class SpeakerTile extends HaAudioComponent {
     render() {
         if (this.isInitialized()) {
             return html`
-                ${this.name} 
+                ${this.getName(this.getMainSpeakerId())} 
                 ${this.getVolumeSlider()}
             `
         }

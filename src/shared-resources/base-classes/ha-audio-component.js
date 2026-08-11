@@ -1,5 +1,14 @@
 import { HaSubComponent } from './ha-subcomponent.js';
 
+/* 
+All methods in here that relate to speaker state and attributes
+have inputs that can either be specified or left blank; 
+these inputs are always either a single speaker ID, or an array of them.  If
+these are left blank, they use the methods that pull the speaker IDs or main 
+speaker ID from the entityIds in the class.
+
+*/
+
 export class HaAudioComponent extends HaSubComponent {
 
     getSpeakerIds() {
@@ -10,68 +19,77 @@ export class HaAudioComponent extends HaSubComponent {
         return this.getSpeakerIds()[0];
     }
 
-    getTrackLength() {
-        return this.getAttribute(this.getMainSpeakerId(), "media_duration");
+    getTrackLength(speakerId = this.getMainSpeakerId()) {
+        return this.getAttribute(speakerId, "media_duration");
     }
 
-    getTrackTitle() {
-        return this.getAttribute(this.getMainSpeakerId(), "media_title");
+    getTrackTitle(speakerId = this.getMainSpeakerId()) {
+        return this.getAttribute(speakerId, "media_title");
     }
 
-    getTrackArtist() {
-        return this.getAttribute(this.getMainSpeakerId(), "media_artist");
+    getTrackArtist(speakerId = this.getMainSpeakerId()) {
+        return this.getAttribute(speakerId, "media_artist");
     }
 
-    getTrackUpdated() {
-        return new Date(this.getAttribute(this.getMainSpeakerId(), "media_position_updated_at")).getTime();
+    getTrackUpdated(speakerId = this.getMainSpeakerId()) {
+        return new Date(this.getAttribute(speakerId, "media_position_updated_at")).getTime();
     }
 
-    isPlaying() {
-        return this.getStateState(this.getMainSpeakerId()) === "playing";
+    isPlaying(speakerId = this.getMainSpeakerId()) {
+        return this.getStateState(speakerId) === "playing";
     }
 
-    getTrackRecordedPosition() {
-        return this.getAttribute(this.getMainSpeakerId(), "media_position");
+    getTrackRecordedPosition(speakerId = this.getMainSpeakerId()) {
+        return this.getAttribute(speakerId, "media_position");
     }
 
-    getTrackPosition() {
-        const checkedTime = this.getTrackUpdated();
-        let time = this.getTrackRecordedPosition();
+    getTrackPosition(speakerId = this.getMainSpeakerId()) {
+        const checkedTime = this.getTrackUpdated(speakerId);
+        let time = this.getTrackRecordedPosition(speakerId);
         const now = Date.now();
-        if (this.isPlaying()) {
+        if (this.isPlaying(speakerId)) {
             time = Math.floor(time + (now - checkedTime) / 1000);
         } 
-        return Math.min(time, this.getTrackLength());
+        return Math.min(time, this.getTrackLength(speakerId));
     }
 
-    getSpeakerVolume(speakerId) {
+    getSpeakerVolume(speakerId = this.getMainSpeakerId()) {
         const volume = this.getAttribute(speakerId, "volume_level");
         if (volume) return Number(volume);
         return 0;
     }
 
-    getAverageVolume() {
-        const volumes = this.getSpeakerIds().map((speakerId) => this.getSpeakerVolume(speakerId));
+    hasVolume(speakerId = this.getMainSpeakerId()) {
+        const volume = this.getAttribute(speakerId, 'volume');
+        return volume !== 'undefined';
+    }
+
+    getAverageVolume(speakerIds = this.getSpeakerIds()) {
+        const volumes = speakerIds.map((speakerId) => this.getSpeakerVolume(speakerId));
         return volumes.reduce((sum, value) => sum + value) / volumes.length;
     }
 
-    isMuted(speakerId) {
+    isMuted(speakerId = this.getMainSpeakerId()) {
         return this.getAttribute(speakerId, "is_volume_muted");
     }
 
-    isAllMuted() {
-        const mutes = this.getSpeakerIds().map((speakerId) => this.isMuted(speakerId));
+    isAllMuted(speakerIds = this.getSpeakerIds()) {
+        const mutes = speakerIds.map((speakerId) => this.isMuted(speakerId));
         return mutes.every(element => element);
     }
 
-    getGroup(speakerId) {
+    getGroup(speakerId = this.getMainSpeakerId()) {
         return this.getAttribute(speakerId, "group_members");
     }
 
-    isAlone(speakerId) {
+    isAlone(speakerId = this.getMainSpeakerId()) {
         if (this.getGroup(speakerId)) {
             return this.getGroup(speakerId).length === 0;
         } else return true;        
+    }
+
+    getSource(speakerId = this.getMainSpeakerId()) {
+        return this.getAttribute(speakerId, "source");
     }
 
 }

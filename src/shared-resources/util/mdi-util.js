@@ -23,6 +23,8 @@ export {
     mdiPause as pause,
     mdiSkipForward as next,
     mdiSkipBackward as previous,
+    mdiAudioInputStereoMinijack as lineIn,
+    mdiTelevisionClassic as tv,
 
 
 } from '@mdi/js';

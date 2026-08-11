@@ -9,6 +9,13 @@ import '../shared-resources/audio-components/speaker-tile.js';
 import '../shared-resources/audio-components/player-panel.js';
 import './grouping-panel.js';
 
+/*
+At this level the entity Ids are all of the speakers in the house.  the internal
+object "player" is an entityId associated with the lead speaker for the selected
+player.  But it's set inside grouping-panel.  
+
+*/
+
 export class PlayersPanel extends HaAudioComponent {
 
     static properties = {
@@ -27,6 +34,8 @@ export class PlayersPanel extends HaAudioComponent {
         return ["player"];
     }
 
+/********************************************** getter & setter logic *************************************************/
+
     setPlayer(leaderId) {
         this.player = leaderId;
     }
@@ -35,15 +44,17 @@ export class PlayersPanel extends HaAudioComponent {
         return this.player;
     }
 
-    getPlayerGroup() {
+    // returns a set of entityIds associated with the selected player.
+    getPlayerGroupIds() {
         if (!this.getPlayer()) return [];
         const group = this.getGroup(this.getPlayer());
         (group.length === 0) && (group.push(this.getPlayer()));
-        return group;
+        return new Set(group);
     }
 
 /********************************************** interactive logic *****************************************************/
 
+    // sets the player through interaction from grouping-panel
     handleSelect(e) {
         this.setPlayer(e.detail);
     }
@@ -51,12 +62,11 @@ export class PlayersPanel extends HaAudioComponent {
 /********************************************** html logic ************************************************************/
 
     getMainPanel() {
-        if (this.getPlayerGroup().length > 0) {
+        if (this.getPlayerGroupIds().size > 0) {
             return html`<player-panel
-                    data-group-index=${0}
                     class="outlined"
                     .changedEntityIds = ${this.getCEIs()}
-                    .entityIds= ${new Set(this.getPlayerGroup())}
+                    .entityIds= ${this.getPlayerGroupIds()}
                     .states = ${this.getStates()}
                     .callService = ${this.callService}
                 />`    
@@ -93,46 +103,6 @@ export class PlayersPanel extends HaAudioComponent {
         justify-content: space-between;
         align-items: center;
         touch-action: none;
-    }
-
-    .main {
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: space-around;
-        align-items: flex-start;
-        height: 100%;
-        width: var(--main-player-panel-width, 75%);        
-    }
-
-    .side {
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: flex-start;
-        align-items: center;
-        height: 100%;
-        width: var(--side-player-panel-width, 25%);
-        touch-action: none;
-    }
-
-    .empty {
-        height: var(--player-panel-height, 300px);
-        width: var(--player-panel-width, 200px);
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .circle {
-        height: calc(var(--player-panel-height) / 2);
-        width: calc(var(--player-panel-height) / 2);
-        border-radius: 50%;
-    }
-
-    .plus {
-        height: 100%;
-        width: 100%;
-        ---mdc-icon-size: 400%;
     }
 
 `];
