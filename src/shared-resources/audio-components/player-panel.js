@@ -2,50 +2,36 @@ import { css, html } from 'lit';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { OFF, rgba } from '../util/color-util.js';
-import { HaSubComponent } from '../base-classes/ha-subcomponent.js';
+import { HaAudioComponent } from '../base-classes/ha-audio-component.js';
 import sharedStyles from '../styles/shared-styles.js';
-import './speaker-panel.js';
+import './speaker-tile.js';
 import './volume-slider.js';
 import './track-controls.js';
 
-export class PlayerPanel extends HaSubComponent {
+export class PlayerPanel extends HaAudioComponent {
 
     static properties = {
         ...super.properties,
-        speakers: { state: true }
-    }
-
-    constructor() {
-        super();
-        this.speakers = {};
+        entityIds: { state: true }
     }
 
 /********************************************** lifecycle *************************************************************/
 
     getTriggers() {
-        return ["speakers"]
+        return ["entityIds"];
     }
 
 /********************************************** getter & setter logic *************************************************/
 
-    getSpeakers() {
-        return this.speakers;
-    }
-
-    getLeadSpeakerId() {
-        return this.getSpeakers()[0];
-    }
-
     getImageURL() {
-        let URL = this.getAttribute(this.getLeadSpeakerId(), "entity_picture_local");
+        let URL = this.getAttribute(this.getMainSpeakerId(), "entity_picture_local");
         if (URL) return URL;
-        URL = this.getAttribute(this.getLeadSpeakerId(), "entity_picture");
+        URL = this.getAttribute(this.getMainSpeakerId(), "entity_picture");
         return URL;
     }
 
     getAlbumInitials() {
-        const state = this.getState(this.getLeadSpeakerId());
-        const albumName = state.attributes.media_album_name;
+        const albumName = this.getAttribute(this.getMainSpeakerId(), "media_album_name");
         if (albumName) {
             const albumWords = albumName.split(" ");
             let inits = '';
@@ -68,69 +54,21 @@ export class PlayerPanel extends HaSubComponent {
     }
 
     hasTrackLength() {
-        return !!this.getAttribute(this.getLeadSpeakerId(), "media_duration");
+        return !!this.getAttribute(this.getMainSpeakerId(), "media_duration");
     }
 
     hasVolume() {
-        return !!this.getAttribute(this.getLeadSpeakerId(), "media_title");
+        return !!this.getAttribute(this.getMainSpeakerId(), "media_title");
     }
 
     hasTrack() {
-        const track = this.getAttribute(this.getLeadSpeakerId(), "media_title");
+        const track = this.getAttribute(this.getMainSpeakerId(), "media_title");
         return !!track && track !== 'TV audio';
     }
 
+
 /********************************************** interactive logic *****************************************************/
 
-    handlePointerDown(e, id) {
-        e.currentTarget.setPointerCapture(e.pointerId);
-        this.createGhost(e, id);
-        this.moveGhost(e.clientX, e.clientY);
-    }
-
-    handlePointerMove(e) {
-        this.moveGhost(e.clientX, e.clientY);
-    }
-
-    handlePointerUp(e, id) {
-        this.removeGhost();
-        this.dispatchEvent(new CustomEvent('end', { 
-            detail: {
-                speakerId: id, 
-                x: e.clientX, 
-                y: e.clientY 
-            }
-        }));
-    }
-
-    createGhost(e, id) {
-        const rect = e.currentTarget.getBoundingClientRect();
-        this._ghost = document.createElement('speaker-tile');
-        this._ghost.name = this.getName(id);
-        Object.assign(this._ghost.style, {
-            position: 'fixed',
-            pointerEvents: 'none',
-            opacity: '0.7',
-            zIndex: '1000',
-            width: rect.width + 'px',
-            height: rect.height + 'px',
-        });
-        document.body.appendChild(this._ghost);
-    }
-
-    moveGhost(x, y) {
-        if (!this._ghost) return;
-        Object.assign(this._ghost.style, {
-            left: x + 'px',
-            top: y + 'px',
-            transform: 'translate(-50%, -50%)',
-        })
-    }
-
-    removeGhost() {
-        this._ghost?.remove();
-        this._ghost = null;
-    }
 
 /********************************************** html logic ************************************************************/
 
@@ -159,23 +97,6 @@ export class PlayerPanel extends HaSubComponent {
         return styles;
     }
 
-    getSpeakerTile(id) {
-        return html`<speaker-tile
-                class = "outlined player-pop"
-                .name = ${this.getName(id)}
-                @pointerdown = ${(e) => this.handlePointerDown(e, id)}
-                @pointerup = ${(e) => this.handlePointerUp(e, id)}
-                @pointermove = ${this.handlePointerMove}
-            />`;
-    }
-
-    getSpeakerPanel() {
-        return html`
-            <div class="speakerTiles"> 
-                ${repeat(this.getSpeakers(), (speakerId) => speakerId, speakerId => this.getSpeakerTile(speakerId))}
-            </div> `
-    }
-
     getVolumeSlider() {
         if (this.hasVolume()) {
             return html`
@@ -193,7 +114,7 @@ export class PlayerPanel extends HaSubComponent {
             return html`
                 <track-controls
                     .changedEntityIds = ${this.getCEIs()}
-                    .entityIds = ${new Set([this.getLeadSpeakerId()])}
+                    .entityIds = ${new Set([this.getMainSpeakerId()])}
                     .states = ${this.getStates()}
                     .callService = ${this.callService}
                 />`   
@@ -213,7 +134,6 @@ export class PlayerPanel extends HaSubComponent {
             return html`
                 ${this.makeBGInits()}
                 <div class = "outlined player" style=${styleMap(this.makeImage())}>
-                    ${this.getSpeakerPanel()}
                     ${this.getControlPanel()}
                 </div>`;
         }
@@ -237,8 +157,8 @@ export class PlayerPanel extends HaSubComponent {
         width: 100%;
         display: flex;
         flex-flow: column nowrap;
-        justify-content: space-between;
         align-items: center;
+        justify-content: flex-end;
         padding: var(--player-panel-padding, 10px);
         overflow: hidden;
         background-size: contain;
@@ -255,14 +175,6 @@ export class PlayerPanel extends HaSubComponent {
         justify-content: center;
         align-items: center;
         font-size: var(--player-BGInits-size, 100%);
-    }
-
-    .speakerTiles{
-        width: calc(100% - 2 * var(--player-speakers-margin, 5%));
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: space-around;
-        align-items: flex-start;
     }
 
     .controls {

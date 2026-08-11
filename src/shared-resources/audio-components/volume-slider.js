@@ -36,14 +36,14 @@ export class VolumeSlider extends HaAudioComponent {
     }
 
     isVolume(speakerId, value) {
-        const volume = Number(this.getVolume(speakerId));
+        const volume = Number(this.getSpeakerVolume(speakerId));
         return volume === value;
     }
 
 /********************************************** interactive logic *****************************************************/
 
     scaleVolume(speakerId, oldAverage, newAverage) {
-        const oldVolume = this.getVolume(speakerId);
+        const oldVolume = this.getSpeakerVolume(speakerId);
         let newVolume;
         if (newAverage > oldAverage) {
             const invScaleFactor = (1 - newAverage) / (1 - oldAverage);

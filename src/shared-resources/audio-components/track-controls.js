@@ -94,10 +94,13 @@ export class TrackControls extends HaAudioComponent {
 
     async handlePlayPause() {
         const speakerId = this.getMainSpeakerId();
+        const wasPlaying = this.isPlaying();
         this.raiseChangeFlag();
         const value = this.getTrackRecordedPosition();
         this.callService('media_player', 'media_play_pause', { entity_id: speakerId });
-        await this.waitForEntity(this.getMainSpeakerId(), (speakerId) => this.isUpdatedBasic(speakerId, value));
+        if (wasPlaying) {
+            await this.waitForEntity(this.getMainSpeakerId(), (speakerId) => this.isUpdatedBasic(speakerId, value));
+        }
         this.lowerChangeFlag();
         this.requestUpdate();
     }

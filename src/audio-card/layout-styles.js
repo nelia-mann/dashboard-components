@@ -16,14 +16,17 @@ export default css`
         --side-player-panel-width: 160px;
         --main-player-panel-width: calc(100% - var(--side-player-panel-width));
 
-        --idle-panel-width: 160px;
-        --idle-panel-height: 30px;
-        --idle-panel-margin-top: 20px;
-        --idle-panel-font-size: var(--sub-info-font-size);
-        --idle-panel-font-weight: var(--sub-info-font-weight);
+        --player-tile-padding: 12px;
+        --player-tile-padding-left: 50px;
 
-        --player-panel-width: 400px;
-        --player-panel-height: 400px;
+        --speaker-panel-width: 200px;
+        --speaker-panel-padding: 5px;
+        --speaker-panel-margin-top: var(--player-tile-padding);
+        --speaker-panel-font-size: var(--sub-info-font-size);
+        --speaker-panel-font-weight: var(--sub-info-font-weight);
+
+        --player-panel-width: 730px;
+        --player-panel-height: 730px;
         --player-art-width: 220px;
         --player-art-height: var(--player-art-width);
         --player-panel-padding: 0px;

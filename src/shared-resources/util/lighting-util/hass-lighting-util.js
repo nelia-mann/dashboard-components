@@ -60,6 +60,7 @@ function isGroup(hass, entityId) {
 
 function getGroupMemberIds(hass, entityId) {
     if (isGroup(hass, entityId)) {
+        console.log(entityId, getAttributes(hass, entityId).entity_id);
         return getAttributes(hass, entityId).entity_id;
     }
 }
@@ -117,12 +118,11 @@ function addThemeStructure(hass, dictionary, lightId) {
 function addLightStructure(hass, dictionary) {
     let structure = dictionary.structure;
     const entityIds = dictionary.entityIds;
-    entityIds.forEach((entityId) => {
-        if (isLight(hass, entityId) && !isLightInAGroup(hass, entityId)) {
+    entityIds.forEach((entityId) => {        if (isLight(hass, entityId) && !isLightInAGroup(hass, entityId)) {
             let lightDictionary = { structure: { main: entityId }, entityIds: new Set([entityId]) };
             addThemeStructure(hass, lightDictionary, entityId);
             addLightGroupStructure(hass, lightDictionary, entityId);
-            structure[entityId] = lightDictionary;
+            structure[entityId] = lightDictionary; 
         }
     })
 }
@@ -138,7 +138,7 @@ function addAreaStructure(hass, categoryDictionary) {
         };
         addLightStructure(hass, areaDictionary);
         categoryDictionary.structure[areaId] = areaDictionary;
-    })
+    }) 
 }
 
 function addSpecialLightStructure(hass, dictionary) {

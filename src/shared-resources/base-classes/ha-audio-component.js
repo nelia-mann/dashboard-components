@@ -18,6 +18,10 @@ export class HaAudioComponent extends HaSubComponent {
         return this.getAttribute(this.getMainSpeakerId(), "media_title");
     }
 
+    getTrackArtist() {
+        return this.getAttribute(this.getMainSpeakerId(), "media_artist");
+    }
+
     getTrackUpdated() {
         return new Date(this.getAttribute(this.getMainSpeakerId(), "media_position_updated_at")).getTime();
     }
@@ -58,6 +62,16 @@ export class HaAudioComponent extends HaSubComponent {
     isAllMuted() {
         const mutes = this.getSpeakerIds().map((speakerId) => this.isMuted(speakerId));
         return mutes.every(element => element);
+    }
+
+    getGroup(speakerId) {
+        return this.getAttribute(speakerId, "group_members");
+    }
+
+    isAlone(speakerId) {
+        if (this.getGroup(speakerId)) {
+            return this.getGroup(speakerId).length === 0;
+        } else return true;        
     }
 
 }
