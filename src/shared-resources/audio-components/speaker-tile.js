@@ -69,6 +69,7 @@ export class SpeakerTile extends HaAudioComponent {
         margin-top: var(--speaker-tile-margin-top);
         font-size: var(--speaker-tile-font-size, 100%);
         font-weight: var(--speaker-tile-font-weight, 400);
+        touch-action: none;
     }
 
     .tile {
