@@ -74,6 +74,7 @@ export class HaSubComponent extends LitElement {
                 elapsed += interval; 
                 if (elapsed >= timeout) {
                     reject(new Error(`Timed out waiting for ${entityId}`));
+                    this.setInitialValues();
                     return;
                 };
                 setTimeout(check, interval);

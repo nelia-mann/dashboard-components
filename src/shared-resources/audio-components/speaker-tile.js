@@ -52,8 +52,10 @@ export class SpeakerTile extends HaAudioComponent {
     render() {
         if (this.isInitialized()) {
             return html`
-                ${this.getName(this.getMainSpeakerId())} 
-                ${this.getVolumeSlider()}
+                <div class = "tile outlined">
+                    ${this.getName(this.getMainSpeakerId())} 
+                    ${this.getVolumeSlider()}
+                </div>
             `
         }
     }
@@ -63,16 +65,22 @@ export class SpeakerTile extends HaAudioComponent {
     static styles = [sharedStyles, css`
 
     :host {
-        width: var(--speaker-panel-width);
-        margin-top: var(--speaker-panel-margin-top);
-        padding: var(--speaker-panel-padding, 5px);
-        font-size: var(--speaker-panel-font-size, 100%);
-        font-weight: var(--speaker-panel-font-weight, 400);
+        width: var(--speaker-tile-width);
+        margin-top: var(--speaker-tile-margin-top);
+        font-size: var(--speaker-tile-font-size, 100%);
+        font-weight: var(--speaker-tile-font-weight, 400);
+    }
+
+    .tile {
         display: flex;
         flex-flow: column nowrap;
         justify-content: center;
         align-items: center;
+        padding: var(--speaker-tile-padding, 5px);
+        width: 100%;
+        height: 100%;
     }
+
 
 `];
 

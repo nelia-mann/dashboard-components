@@ -45,8 +45,11 @@ export class GroupingPanel extends HaAudioComponent {
     }
 
     onFirstUpdate() {
-        this.initializePlayers();
         this.initializeSelectedIndex();
+    }
+
+    setInitialValues() {
+        this.initializePlayers();
     }
 
     initializePlayers() {
@@ -261,12 +264,12 @@ export class GroupingPanel extends HaAudioComponent {
         this.setSelectedIndex(targetIndex);
     }
 
-    handlePointerDown(e, speakerId) {
+    handlePointerDown(e, details) {
         if (!this.getSuppressState()) {
             e.currentTarget.setPointerCapture(e.pointerId);
-            this.createGhost(e, speakerId);
-            this.setDraggedId(speakerId)
-            this.moveGhost(e.clientX, e.clientY);
+            this.createGhost(details);
+            this.setDraggedId(details.speakerId)
+            this.moveGhost(details.clientX, details.clientY);
         }
     }
 
@@ -309,7 +312,6 @@ export class GroupingPanel extends HaAudioComponent {
         const oldTargetId = this.removeFromPlayer(speakerId);
         const newTargetId = this.getLeaderFromIndex(targetIndex);
         this.addToPlayer(speakerId, targetIndex);
-        console.log(this.getPlayers());
         await this.unJoinSpeaker(speakerId, oldTargetId);
         await this.joinSpeaker(speakerId, newTargetId);        
     }
@@ -321,17 +323,17 @@ export class GroupingPanel extends HaAudioComponent {
 
 /********************************************* ghost manipulation logic ***********************************************/
 
-    createGhost(e, id) {
-        const rect = e.currentTarget.getBoundingClientRect();
+    createGhost(details) {
         this._ghost = document.createElement('speaker-tile');
-        this._ghost.name = this.getName(id);
+        this._ghost.entityIds = new Set([details.speakerId]);
+        this._ghost.states = this.getStates();
         Object.assign(this._ghost.style, {
             position: 'fixed',
             pointerEvents: 'none',
             opacity: '0.7',
             zIndex: '1000',
-            width: rect.width + 'px',
-            height: rect.height + 'px',
+            width: details.width + 'px',
+            height: details.height + 'px',
         });
         document.body.appendChild(this._ghost);
     }
@@ -353,24 +355,26 @@ export class GroupingPanel extends HaAudioComponent {
 /********************************************** html logic ************************************************************/
 
     playerTile(player) {
-        const index = this.getPlayerIndex(player[0]);
-        const speakerIds = this.getPlayer(index);
-        return html`
-            <speaker-group-panel
-                class = "outlined"
-                data-group-index=${index}
-                .changedEntityIds = ${this.getCEIs()}
-                .states = ${this.getStates()}
-                .entityIds = ${new Set(speakerIds)}
-                .selected = ${this.isSelected(index)}
-                @forceup = ${(e) => this.raiseSuppress()}
-                @forcedown = ${(e) => this.lowerSuppress()}
-                @speaker-drag-start = ${(e) => this.handlePointerDown(e, e.detail)}
-                @pointerup = ${(e) => this.handlePointerUp(e, index)}
-                @pointermove = ${this.handlePointerMove}
-                @click = ${(e) => this.handleSelect(e, index)}
-                .callService = ${this.callService}
-            />`        
+        if (player.length > 0) {
+            const index = this.getPlayerIndex(player[0]);
+            const speakerIds = this.getPlayer(index);
+            return html`
+                <speaker-group-panel
+                    class = "outlined"
+                    data-group-index=${index}
+                    .changedEntityIds = ${this.getCEIs()}
+                    .states = ${this.getStates()}
+                    .entityIds = ${new Set(speakerIds)}
+                    .selected = ${this.isSelected(index)}
+                    @forceup = ${(e) => this.raiseSuppress()}
+                    @forcedown = ${(e) => this.lowerSuppress()}
+                    @speaker-drag-start = ${(e) => this.handlePointerDown(e, e.detail)}
+                    @pointerup = ${(e) => this.handlePointerUp(e, index)}
+                    @pointermove = ${this.handlePointerMove}
+                    @click = ${(e) => this.handleSelect(e, index)}
+                    .callService = ${this.callService}
+                />`    
+        }    
     }
 
 
