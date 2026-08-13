@@ -3450,7 +3450,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                 ${this.getVolumeSlider()} 
             </div>`}render(){if(this.isInitialized())return N`
                 ${this.makeBGInits()}
-                changed1
+                changed2
                 <div class = "outlined player" style=${t8(this.makeImage())}>
                     ${this.getControlPanel()}
                 </div>`}static styles=[tR,r`
@@ -3558,7 +3558,6 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                     .selected = ${this.isSelected(t)}
                     @forceup = ${t=>this.raiseSuppress()}
                     @forcedown = ${t=>this.lowerSuppress()}
-                    @pointerdown=${e=>this.handleSelect(e,t)}
                     @speaker-drag-start = ${t=>this.handlePointerDown(t,t.detail)}
                     @pointerup = ${e=>this.handlePointerUp(e,t)}
                     @pointermove = ${this.handlePointerMove}

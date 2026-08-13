@@ -352,7 +352,6 @@ export class GroupingPanel extends HaAudioComponent {
                     .selected = ${this.isSelected(playerId)}
                     @forceup = ${(e) => this.raiseSuppress()}
                     @forcedown = ${(e) => this.lowerSuppress()}
-                    @pointerdown=${(e) => this.handleSelect(e, playerId)}
                     @speaker-drag-start = ${(e) => this.handlePointerDown(e, e.detail)}
                     @pointerup = ${(e) => this.handlePointerUp(e, playerId)}
                     @pointermove = ${this.handlePointerMove}
