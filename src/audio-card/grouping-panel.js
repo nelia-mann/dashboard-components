@@ -203,7 +203,8 @@ export class GroupingPanel extends HaAudioComponent {
     }
 
     async unJoinSpeaker(speakerId, targetId) {
-        if (targetId) {
+            this._debugLog(speakerId)
+        if (targetId && speakerId) {
             this.raiseChangeFlag();
             if (this.isLeader(speakerId)) {
                 this.unJoinLeader(speakerId);
@@ -281,8 +282,6 @@ export class GroupingPanel extends HaAudioComponent {
     async transferSpeaker(speakerId, newTargetId) {
         const oldTargetId = this.removeFromPlayer(speakerId);
         this.addToPlayer(speakerId, newTargetId);
-        this._debugLog(oldTargetId)
-        console.log(oldTargetId);
         await this.unJoinSpeaker(speakerId, oldTargetId);
         await this.joinSpeaker(speakerId, newTargetId);        
     }
