@@ -79,13 +79,16 @@ export class HaAudioComponent extends HaSubComponent {
     }
 
     getGroup(speakerId = this.getMainSpeakerId()) {
-        return this.getAttribute(speakerId, "group_members");
+        const group = this.getAttribute(speakerId, "group_members");
+        if (group.length === 0) {
+            return [speakerId];
+        } else {
+            return group;
+        }
     }
 
     isAlone(speakerId = this.getMainSpeakerId()) {
-        if (this.getGroup(speakerId)) {
-            return this.getGroup(speakerId).length === 0;
-        } else return true;        
+        return this.getGroup(speakerId).length === 1;       
     }
 
     getSource(speakerId = this.getMainSpeakerId()) {

@@ -56,13 +56,8 @@ export class GroupingPanel extends HaAudioComponent {
     initializePlayers() {
         const newPlayers = {};
         this.getSpeakerIds().forEach((speakerId) => {
-            if (this.isAlone(speakerId)) {
-                newPlayers[speakerId] = [speakerId];
-            } else {
-                const group = this.getGroup(speakerId);
-                if (group[0] === speakerId) {
-                    newPlayers[speakerId] = group;
-                }
+            if (this.isLeader(speakerId)) {
+                newPlayers[speakerId] = this.getGroup(speakerId);
             }
         });
         this.setPlayers(newPlayers);
@@ -147,20 +142,13 @@ export class GroupingPanel extends HaAudioComponent {
         })
     }
 
-    isLeader(speakerId) {
-        const group = this.getGroup(speakerId);
-        if (group.length === 0) {
-            return false;
-        } else {
-            return (speakerId === group[0]);
-        }
-    }
-
     getLeader(speakerId) {
         const group = this.getGroup(speakerId);
-        if (group.length === 0) {
-            return speakerId;
-        } else return group[0];
+        return group[0];
+    }
+
+    isLeader(speakerId) {
+        return speakerId === this.getLeader(speakerId);
     }
 
 /********************************************** player manipulation logic *********************************************/
