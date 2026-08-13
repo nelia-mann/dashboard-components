@@ -400,6 +400,7 @@ export class GroupingPanel extends HaAudioComponent {
     static styles = [sharedStyles, css`
         
         :host {
+            touch-action:none;
         }
     
         

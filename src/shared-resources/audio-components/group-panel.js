@@ -127,6 +127,7 @@ handlePointerDown(e, speakerId) {
             padding-top: 0px;
             margin-bottom: 15px;
             margin-top: 15px;
+            touch-action: none;
         }
 
         ha-svg-icon {
@@ -144,7 +145,8 @@ handlePointerDown(e, speakerId) {
             display: flex;
             flex-flow: column nowrap;
             justify-content: space-around;
-            align-items: center;          
+            align-items: center;  
+            touch-action: none;        
         }
         
     `]
