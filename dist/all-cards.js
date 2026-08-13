@@ -3449,6 +3449,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                 ${this.getVolumeSlider()} 
             </div>`}render(){if(this.isInitialized())return N`
                 ${this.makeBGInits()}
+                changed
                 <div class = "outlined player" style=${t8(this.makeImage())}>
                     ${this.getControlPanel()}
                 </div>`}static styles=[tR,r`
@@ -3620,6 +3621,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         align-items: center;
         height: var(--ha-card-height, 570px);
         width: var(--ha-card-width, 900px);
+        touch-action: none;
     }
 
 `];getCardSize(){return 14}getGridOptions(){return{rows:14,columns:36,min_rows:14,max_rows:14}}}customElements.define("lighting-card",eS),customElements.define("clock-card",class extends to{_hass;_stopwatchId;_timerIds={};static get properties(){return{_clocktype:{state:!0},_stopwatch:{state:!0},_timers:{state:!0}}}constructor(){super(),this._clocktype="clock"}setConfig(){this._stopwatchId="input_select.stopwatch",this._timerIds[0]="timer.timer_1",this._timerIds[1]="timer.timer_2",this._timerIds[2]="timer.timer_3"}set hass(t){this._hass=t,this._hass&&(this._stopwatch=this._hass.states[this._stopwatchId],this._timers=Object.keys(this._timerIds).map(t=>{let e=this._timerIds[t];return this._hass.states[e]}))}static styles=eq;render(){return N`
