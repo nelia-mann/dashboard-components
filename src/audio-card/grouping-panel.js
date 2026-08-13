@@ -23,6 +23,7 @@ export class GroupingPanel extends HaAudioComponent {
     _ghost;
     _suppressDrag;
     _draggedSpeakerId;
+    _pointerDownTime;
 
     static properties = {
         ...super.properties,
@@ -373,11 +374,10 @@ export class GroupingPanel extends HaAudioComponent {
                     .selected = ${this.isSelected(index)}
                     @forceup = ${(e) => this.raiseSuppress()}
                     @forcedown = ${(e) => this.lowerSuppress()}
-                    @pointerdown=${(e) => this._debugLog('native pointerdown on group-panel')}
+                    @pointerdown=${(e) => this.handleSelect()}
                     @speaker-drag-start = ${(e) => this.handlePointerDown(e, e.detail)}
                     @pointerup = ${(e) => this.handlePointerUp(e, index)}
                     @pointermove = ${this.handlePointerMove}
-                    @click = ${(e) => this.handleSelect(e, index)}
                     .callService = ${this.callService}
                 />`    
         }    
