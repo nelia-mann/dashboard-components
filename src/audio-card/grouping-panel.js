@@ -221,15 +221,17 @@ export class GroupingPanel extends HaAudioComponent {
     }
 
     async joinSpeaker(speakerId, leaderId) {
-        this.raiseChangeFlag();
-        const data = {
-            entity_id: leaderId,
-            group_members: [speakerId]
+        if (speakerId && leaderId) {
+            this.raiseChangeFlag();
+            const data = {
+                entity_id: leaderId,
+                group_members: [speakerId]
+            }
+            this.callService('media_player', 'join', data);
+            await this.waitForEntity(speakerId, (speakerId) => this.isJoined(speakerId, leaderId));
+            this.lowerChangeFlag();
+            console.log("done joining");
         }
-        this.callService('media_player', 'join', data);
-        await this.waitForEntity(speakerId, (speakerId) => this.isJoined(speakerId, leaderId));
-        this.lowerChangeFlag();
-        console.log("done joining");
     }
 
 /********************************************** interactive logic *****************************************************/
