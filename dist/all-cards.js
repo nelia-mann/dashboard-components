@@ -3449,7 +3449,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
                 ${this.getVolumeSlider()} 
             </div>`}render(){if(this.isInitialized())return N`
                 ${this.makeBGInits()}
-                changed2
+                changed1
                 <div class = "outlined player" style=${t8(this.makeImage())}>
                     ${this.getControlPanel()}
                 </div>`}static styles=[tR,r`

@@ -293,6 +293,8 @@ export class GroupingPanel extends HaAudioComponent {
     async transferSpeaker(speakerId, newTargetId) {
         const oldTargetId = this.removeFromPlayer(speakerId);
         this.addToPlayer(speakerId, newTargetId);
+        this._debugLog(oldTargetId)
+        console.log(oldTargetId);
         await this.unJoinSpeaker(speakerId, oldTargetId);
         await this.joinSpeaker(speakerId, newTargetId);        
     }
@@ -344,6 +346,9 @@ export class GroupingPanel extends HaAudioComponent {
         const player = this.getPlayer(playerId);
         if (player.length > 0) {
             return html`
+                            <div>
+                    ${(this._debugMessages || []).map(m => html`<div>${m}</div>`)}
+                </div>
                 <speaker-group-panel
                     class = "outlined"
                     data-group-player=${playerId}
@@ -367,9 +372,6 @@ export class GroupingPanel extends HaAudioComponent {
         if (this.isInitialized()) {
             const playerIds = Object.keys(this.getPlayers());
             return html`
-                <div>
-                    ${(this._debugMessages || []).map(m => html`<div>${m}</div>`)}
-                </div>
             ${repeat(playerIds, (playerId) => playerId, playerId => this.playerTile(playerId))}`
         }
     }
