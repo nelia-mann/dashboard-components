@@ -186,8 +186,8 @@ export default css`
         --aux-basement-panel-elements-top-justify-content: center;
         --aux-basement-panel-elements-bottom-justify-content: space-between;
 
-        --aux-panel-height-2: calc(var(--thermostat-mini-height) + var(--aux-mode-control-height) + var(--aux-panel-heading-mini-height) + var(--hp-mini-panel-padding));
-        --aux-panel-width-2: calc(var(--thermostat-mini-width) + var(--offset-slider-width) + 2 * var(--slider-padding) + var(--hp-panel-mini-padding));
+        --aux-panel-height-two: calc(var(--thermostat-mini-height) + var(--aux-mode-control-height) + var(--aux-panel-heading-mini-height) + var(--hp-mini-panel-padding));
+        --aux-panel-width-two: calc(var(--thermostat-mini-width) + var(--offset-slider-width) + 2 * var(--slider-padding) + var(--hp-panel-mini-padding));
 
     }
     `;

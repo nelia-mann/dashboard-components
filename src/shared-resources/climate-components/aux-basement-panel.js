@@ -127,8 +127,8 @@ export class AuxBasementPanel extends HaClimateComponent {
             --thermostat-width: var(--thermostat-mini-width);
             --thermostat-height: var(--thermostat-mini-height);
 
-            --aux-panel-width: var(--aux-panel-width-2);
-            --aux-panel-height: var(--aux-panel-height-2);
+            --aux-panel-width: var(--aux-panel-width-two);
+            --aux-panel-height: var(--aux-panel-height-two);
             --aux-panel-padding: var(--hp-panel-padding);
             --aux-panel-heading-font-size: var(--aux-panel-heading-mini-font-size);
             --aux-panel-heading-height: var(--aux-panel-heading-mini-height);

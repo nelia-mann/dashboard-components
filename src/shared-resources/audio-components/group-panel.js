@@ -136,7 +136,7 @@ handlePointerDown(e, speakerId) {
             display: flex;
             flex-flow: column nowrap;
             justify-content: space-around;
-            align-items: center;            
+            align-items: center;          
         }
         
     `]
