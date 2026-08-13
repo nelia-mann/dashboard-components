@@ -26,6 +26,7 @@ export class SpeakerTile extends HaAudioComponent {
 /********************************************** interactive logic *****************************************************/
 
     handlePointerDown() {
+        this._debugLog("log ping inside handlePointerDown, groupingPanel")
         this.dispatchEvent(new CustomEvent('forceup', { bubbles: true, composed: true }));
     }
 
@@ -48,6 +49,8 @@ export class SpeakerTile extends HaAudioComponent {
                 />`
         }
     }
+
+
 
     render() {
         if (this.isInitialized()) {

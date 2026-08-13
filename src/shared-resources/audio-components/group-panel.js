@@ -46,6 +46,7 @@ export class SpeakerGroupPanel extends HaAudioComponent {
 /********************************************** interactive logic *****************************************************/
 
 handlePointerDown(e, speakerId) {
+    this._debugLog("handlePointerDown inside group-panel fires");
     const rect = e.currentTarget.getBoundingClientRect();
     this.dispatchEvent(new CustomEvent('speaker-drag-start', { 
             detail : {
@@ -73,9 +74,16 @@ handlePointerDown(e, speakerId) {
             />`
     }
 
+    _debugLog(msg) {
+        this._debugMessages = [...(this._debugMsgs || []), msg]
+    }
+
     playerTile() {
         return html`
             <div class="player">
+                    <div>
+                        ${(this._debugMessages || []).map(m => html`<div>${m}</div>`)}
+                    </div>
                 ${repeat(this.getSpeakerIds(), (speakerId) => speakerId, (speakerId) => this.speakerTile(speakerId))}
             </div>`
     }

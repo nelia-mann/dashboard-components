@@ -265,7 +265,6 @@ export class GroupingPanel extends HaAudioComponent {
     }
 
     handlePointerDown(e, details) {
-        this._debugLog("log ping inside handlePointerDown, groupingPanel")
         if (!this.getSuppressState()) {
             e.currentTarget.setPointerCapture(e.pointerId);
             this.createGhost(details);
@@ -355,9 +354,6 @@ export class GroupingPanel extends HaAudioComponent {
 
 /********************************************** html logic ************************************************************/
 
-    _debugLog(msg) {
-        this._debugMessages = [...(this._debugMsgs || []), msg]
-    }
 
     playerTile(player) {
         if (player.length > 0) {
@@ -387,9 +383,6 @@ export class GroupingPanel extends HaAudioComponent {
         if (this.isInitialized()) {
             const players = this.getPlayers();
             return html`
-                <div>
-                    ${(this._debugMessages || []).map(m => html`<div>${m}</div>`)}
-                </div>
             ${repeat(players, (player) => player[0], player => this.playerTile(player))}`
         }
     }
