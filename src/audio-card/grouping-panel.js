@@ -28,25 +28,25 @@ export class GroupingPanel extends HaAudioComponent {
     static properties = {
         ...super.properties,
         players: { state: true },
-        selectedIndex: { state: true },
+        selectedPlayer: { state: true },
     }
 
     constructor() {
         super();
-        this.players = [];
+        this.players = {};
         this._ghost = null;
-        this.selectedIndex = null;
+        this.selectedPlayer = null;
         this._suppressDrag = false;
     }
 
 /********************************************** lifecycle *************************************************************/
 
     getTriggers() {
-        return ["players", "selectedIndex"];
+        return ["players", "selectedPlayer"];
     }
 
     onFirstUpdate() {
-        this.initializeSelectedIndex();
+        this.initializeSelectedPlayer();
     }
 
     setInitialValues() {
@@ -54,46 +54,44 @@ export class GroupingPanel extends HaAudioComponent {
     }
 
     initializePlayers() {
-        const newPlayers = [];
+        const newPlayers = {};
         this.getSpeakerIds().forEach((speakerId) => {
             if (this.isAlone(speakerId)) {
-                newPlayers.push([speakerId]);
+                newPlayers[speakerId] = [speakerId];
             } else {
                 const group = this.getGroup(speakerId);
                 if (group[0] === speakerId) {
-                    newPlayers.push(group);
+                    newPlayers[speakerId] = group;
                 }
             }
         });
         this.setPlayers(newPlayers);
     }
 
-    initializeSelectedIndex() {
-        let bestIndex = 0;
-        this.getPlayers().forEach((player, index) => {
-            const oldLength = this.getPlayer(bestIndex).length;
-            const newLength = player.length;
-            (newLength > oldLength) && (bestIndex = index);
+    initializeSelectedPlayer() {
+        const idsAndLengths = Object.keys(this.getPlayers()).map((playerId) => {
+            const playerSize = this.getPlayer(playerId).length;
+            return [playerId, playerSize];
         })
-        this.setSelectedIndex(bestIndex);
+        idsAndLengths.sort((a, b) => b[1] - a[1])
+        this.setSelectedPlayer(idsAndLengths[0][0]);
     }
 
 
 
 /********************************************** getter & setter logic *************************************************/
 
-    getSelectedIndex() {
-        return this.selectedIndex;
+    getSelectedPlayer() {
+        return this.selectedPlayer;
     }
 
-    setSelectedIndex(index) {
-        this.selectedIndex = index;
-        const leaderId = this.getLeaderFromIndex(index);
-        this.dispatchEvent(new CustomEvent('select', { detail: leaderId }));
+    setSelectedPlayer(playerId) {
+        this.selectedPlayer = playerId;
+        this.dispatchEvent(new CustomEvent('select', { detail: playerId }));
     }
 
-    isSelected(index) {
-        return index === this.getSelectedIndex();
+    isSelected(playerId) {
+        return playerId === this.getSelectedPlayer();
     }
 
     getSuppressState() {
@@ -117,26 +115,15 @@ export class GroupingPanel extends HaAudioComponent {
     }
 
     getPlayers() {
-        return [...this.players];
+        return {...this.players};
     }
 
     setPlayers(newPlayers) {
         this.players = newPlayers;
     }
 
-    getPlayer(index) {
-        return [...this.getPlayers()[index]];
-    }
-
-    getPlayerIndex(playerId) {
-        const result = [];
-        const players = this.getPlayers();
-        players.forEach((player, index) => {
-            if (player.includes(playerId)) { 
-                result.push(index);
-            };
-        })
-        return result[0];
+    getPlayer(playerId) {
+        return [...this.getPlayers()[playerId]];
     }
 
     checkGroup(group1, group2) {
@@ -144,8 +131,7 @@ export class GroupingPanel extends HaAudioComponent {
     }
 
     isUnjoined(speakerId, targetId) {
-        const index = this.getPlayerIndex(targetId);
-        const intendedGroup = this.getPlayer(index);
+        const intendedGroup = this.getPlayer(targetId);
         const isRemoved = intendedGroup.every((speakerId) => {
             const result = this.checkGroup(intendedGroup, this.getGroup(speakerId));
             return result;
@@ -154,8 +140,7 @@ export class GroupingPanel extends HaAudioComponent {
     }
 
     isJoined(speakerId, targetId) {
-        const index = this.getPlayerIndex(targetId);
-        const intendedGroup = this.getPlayer(index);
+        const intendedGroup = this.getPlayer(targetId);
         return intendedGroup.every((speakerId) => {
             const result = this.checkGroup(intendedGroup, this.getGroup(speakerId));
             return result;
@@ -178,33 +163,29 @@ export class GroupingPanel extends HaAudioComponent {
         } else return group[0];
     }
 
-    getLeaderFromIndex(index) {
-        return this.getPlayer(index)[0];
-    }
-
 /********************************************** player manipulation logic *********************************************/
 
     removeFromPlayer(speakerId) {
-        const playerIndex = this.getPlayerIndex(speakerId);
-        const player = this.getPlayer(playerIndex);  
+        const playerId = this.getLeader(speakerId);
+        const player = this.getPlayer(playerId);  
         const newSpeakers = player.filter((id) => (id !== speakerId));  
         const newPlayers = this.getPlayers(); 
         if (newSpeakers.length > 0) {
-            newPlayers[playerIndex] = newSpeakers;
+            newPlayers[playerId] = newSpeakers;
         } else {
-            newPlayers.splice(playerIndex, 1);
+            delete newPlayers[playerId]
         }
         this.setPlayers(newPlayers);
-        if (newSpeakers.length > 0) return newSpeakers[0];
+        if (newSpeakers.length > 0) return playerId;
     }
 
-    addToPlayer(speakerId, targetIndex) {
-        const playerList = this.getPlayer(targetIndex);
+    addToPlayer(speakerId, targetId) {
+        const playerList = this.getPlayer(targetId);
         playerList.push(speakerId);
         const newPlayers = this.getPlayers();
-        newPlayers[targetIndex] = playerList;
+        newPlayers[targetId] = playerList;
         this.setPlayers(newPlayers);
-        this.setSelectedIndex(targetIndex);
+        this.setSelectedPlayer(targetId);
     }
 
 /********************************************** speaker manipulation logic ********************************************/
@@ -261,8 +242,8 @@ export class GroupingPanel extends HaAudioComponent {
 
 /********************************************** interactive logic *****************************************************/
 
-    handleSelect(e, targetIndex) {
-        this.setSelectedIndex(targetIndex);
+    handleSelect(e, targetId) {
+        this.setSelectedPlayer(targetId);
     }
 
     handlePointerDown(e, details) {
@@ -280,7 +261,7 @@ export class GroupingPanel extends HaAudioComponent {
         }
     }
 
-    handlePointerUp(e, prevIndex) {
+    handlePointerUp(e, prevId) {
         if (!this.getSuppressState()) {
             const speakerId = this.getDraggedId();
             this.removeGhost();
@@ -290,29 +271,28 @@ export class GroupingPanel extends HaAudioComponent {
             } else {
                 elementUnder = this.renderRoot.elementFromPoint(e.detail.x, e.detail.y);
             }
-            const playerBoxes = this.renderRoot.querySelectorAll('[data-group-index');
+            const playerBoxes = this.renderRoot.querySelectorAll('[data-group-player');
             const playerBox = Array.from(playerBoxes).find(box => box.contains(elementUnder));
-            let targetIndex = null;
+            let targetId = null;
             if (playerBox) {
-                targetIndex = parseInt(playerBox.dataset.groupIndex);
+                targetId = playerBox.dataset.groupPlayer;
             }
-            this.manipulateSpeaker(speakerId, prevIndex, targetIndex);                     
+            this.manipulateSpeaker(speakerId, prevId, targetId);                     
         }
     }
 
-    manipulateSpeaker(speakerId, prevIndex, targetIndex) {
-        if (prevIndex === targetIndex) return;
-        if (targetIndex !== null) {
-            this.transferSpeaker(speakerId, targetIndex);
-        } else if (this.getPlayer(prevIndex).length > 1) {
+    manipulateSpeaker(speakerId, prevId, targetId) {
+        if (prevId === targetId) return;
+        if (targetId !== null) {
+            this.transferSpeaker(speakerId, targetId);
+        } else if (this.getPlayer(prevId).length > 1) {
             this.removeSpeaker(speakerId);
         }
     }
 
-    async transferSpeaker(speakerId, targetIndex) {
+    async transferSpeaker(speakerId, newTargetId) {
         const oldTargetId = this.removeFromPlayer(speakerId);
-        const newTargetId = this.getLeaderFromIndex(targetIndex);
-        this.addToPlayer(speakerId, targetIndex);
+        this.addToPlayer(speakerId, newTargetId);
         await this.unJoinSpeaker(speakerId, oldTargetId);
         await this.joinSpeaker(speakerId, newTargetId);        
     }
@@ -360,23 +340,22 @@ export class GroupingPanel extends HaAudioComponent {
         this._debugMessages = [...(this._debugMsgs || []), msg]
     }
 
-    playerTile(player) {
+    playerTile(playerId) {
+        const player = this.getPlayer(playerId);
         if (player.length > 0) {
-            const index = this.getPlayerIndex(player[0]);
-            const speakerIds = this.getPlayer(index);
             return html`
                 <speaker-group-panel
                     class = "outlined"
-                    data-group-index=${index}
+                    data-group-player=${playerId}
                     .changedEntityIds = ${this.getCEIs()}
                     .states = ${this.getStates()}
-                    .entityIds = ${new Set(speakerIds)}
-                    .selected = ${this.isSelected(index)}
+                    .entityIds = ${new Set(player)}
+                    .selected = ${this.isSelected(playerId)}
                     @forceup = ${(e) => this.raiseSuppress()}
                     @forcedown = ${(e) => this.lowerSuppress()}
-                    @pointerdown=${(e) => this.handleSelect()}
+                    @pointerdown=${(e) => this.handleSelect(e, playerId)}
                     @speaker-drag-start = ${(e) => this.handlePointerDown(e, e.detail)}
-                    @pointerup = ${(e) => this.handlePointerUp(e, index)}
+                    @pointerup = ${(e) => this.handlePointerUp(e, playerId)}
                     @pointermove = ${this.handlePointerMove}
                     .callService = ${this.callService}
                 />`    
@@ -386,12 +365,12 @@ export class GroupingPanel extends HaAudioComponent {
 
     render() {
         if (this.isInitialized()) {
-            const players = this.getPlayers();
+            const playerIds = Object.keys(this.getPlayers());
             return html`
                 <div>
                     ${(this._debugMessages || []).map(m => html`<div>${m}</div>`)}
                 </div>
-            ${repeat(players, (player) => player[0], player => this.playerTile(player))}`
+            ${repeat(playerIds, (playerId) => playerId, playerId => this.playerTile(playerId))}`
         }
     }
 
