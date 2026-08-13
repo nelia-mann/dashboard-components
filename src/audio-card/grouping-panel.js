@@ -355,6 +355,10 @@ export class GroupingPanel extends HaAudioComponent {
 /********************************************** html logic ************************************************************/
 
 
+    _debugLog(msg) {
+        this._debugMessages = [...(this._debugMsgs || []), msg]
+    }
+
     playerTile(player) {
         if (player.length > 0) {
             const index = this.getPlayerIndex(player[0]);
@@ -369,6 +373,7 @@ export class GroupingPanel extends HaAudioComponent {
                     .selected = ${this.isSelected(index)}
                     @forceup = ${(e) => this.raiseSuppress()}
                     @forcedown = ${(e) => this.lowerSuppress()}
+                    @pointerdown=${(e) => this._debugLog('native pointerdown on group-panel')}
                     @speaker-drag-start = ${(e) => this.handlePointerDown(e, e.detail)}
                     @pointerup = ${(e) => this.handlePointerUp(e, index)}
                     @pointermove = ${this.handlePointerMove}
@@ -383,6 +388,9 @@ export class GroupingPanel extends HaAudioComponent {
         if (this.isInitialized()) {
             const players = this.getPlayers();
             return html`
+                <div>
+                    ${(this._debugMessages || []).map(m => html`<div>${m}</div>`)}
+                </div>
             ${repeat(players, (player) => player[0], player => this.playerTile(player))}`
         }
     }
