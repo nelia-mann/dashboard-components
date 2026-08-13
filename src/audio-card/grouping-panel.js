@@ -118,7 +118,9 @@ export class GroupingPanel extends HaAudioComponent {
     }
 
     getPlayer(playerId) {
-        return [...this.getPlayers()[playerId]];
+        if (this.getPlayers()[playerId]) {
+            return [...this.getPlayers()[playerId]];
+        }
     }
 
     checkGroup(group1, group2) {
@@ -127,6 +129,7 @@ export class GroupingPanel extends HaAudioComponent {
 
     isUnjoined(speakerId, targetId) {
         const intendedGroup = this.getPlayer(targetId);
+        if (!intendedGroup) return this.isAlone(speakerId);
         const isRemoved = intendedGroup.every((speakerId) => {
             const result = this.checkGroup(intendedGroup, this.getGroup(speakerId));
             return result;
@@ -164,7 +167,7 @@ export class GroupingPanel extends HaAudioComponent {
             delete newPlayers[playerId]
         }
         this.setPlayers(newPlayers);
-        if (newSpeakers.length > 0) return playerId;
+        return playerId;
     }
 
     addToPlayer(speakerId, targetId) {
@@ -203,8 +206,8 @@ export class GroupingPanel extends HaAudioComponent {
     }
 
     async unJoinSpeaker(speakerId, targetId) {
-            this._debugLog(speakerId)
         if (targetId && speakerId) {
+            this._debugLog(targetId + speakerId);
             this.raiseChangeFlag();
             if (this.isLeader(speakerId)) {
                 this.unJoinLeader(speakerId);
@@ -333,9 +336,6 @@ export class GroupingPanel extends HaAudioComponent {
         const player = this.getPlayer(playerId);
         if (player.length > 0) {
             return html`
-                            <div>
-                    ${(this._debugMessages || []).map(m => html`<div>${m}</div>`)}
-                </div>
                 <speaker-group-panel
                     class = "outlined"
                     data-group-player=${playerId}
@@ -359,6 +359,9 @@ export class GroupingPanel extends HaAudioComponent {
         if (this.isInitialized()) {
             const playerIds = Object.keys(this.getPlayers());
             return html`
+                                        <div>
+                    ${(this._debugMessages || []).map(m => html`<div>${m}</div>`)}
+                </div>
             ${repeat(playerIds, (playerId) => playerId, playerId => this.playerTile(playerId))}`
         }
     }
