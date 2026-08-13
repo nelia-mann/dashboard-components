@@ -80,6 +80,7 @@ export class SpeakerTile extends HaAudioComponent {
         padding: var(--speaker-tile-padding, 5px);
         width: 100%;
         height: 100%;
+        touch-action: none;
     }
 
 
