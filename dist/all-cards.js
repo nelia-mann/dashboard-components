@@ -1168,7 +1168,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --aux-basement-panel-elements-top-justify-content: center;
         --aux-basement-panel-elements-bottom-justify-content: space-between;
 
-        --aux-panel-height-two: calc(var(--thermostat-mini-height) + var(--aux-mode-control-height) + var(--aux-panel-heading-mini-height) + var(--hp-mini-panel-padding));
+        --aux-panel-height-two: var(--iso-panel-height);
         --aux-panel-width-two: calc(var(--thermostat-mini-width) + var(--offset-slider-width) + 2 * var(--slider-padding) + var(--hp-panel-mini-padding));
 
     }
@@ -1863,6 +1863,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
             --aux-panel-main-height: calc(var(--aux-panel-height) - var(--aux-panel-heading-height));
 
             --offset-slider-width: calc(var(--aux-slider-mini-target-width) - 2 * var(--aux-slider-mini-padding));
+            --offset-slider-height: calc(var(--aux-panel-height-two) - var(--aux-panel-heading-height) - var(--aux-panel-padding));
             --slider-padding: var(--aux-slider-mini-padding);
             --tie-button-width: var(--tie-button-mini-width);
             --aux-mode-control-button-width: var(--aux-mode-control-mini-button-width);
