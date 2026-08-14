@@ -3310,7 +3310,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
             align-items: center;        
         }
 
-    `]}customElements.define("volume-slider",it);class ie extends e6{static properties={...super.properties,selected:{state:!0}};getTriggers(){return["selected"]}displayVolume(){return this.hasVolume()&&this.selected}handlePointerDown(){this._debugLog("log ping inside handlePointerDown, groupingPanel"),this.dispatchEvent(new CustomEvent("forceup",{bubbles:!0,composed:!0}))}handlePointerUp(){this.dispatchEvent(new CustomEvent("forcedown",{bubbles:!0,composed:!0}))}getVolumeSlider(){if(this.displayVolume())return N`
+    `]}customElements.define("volume-slider",it);class ie extends e6{static properties={...super.properties,selected:{state:!0}};getTriggers(){return["selected"]}displayVolume(){return this.hasVolume()&&this.selected}handlePointerDown(){this.dispatchEvent(new CustomEvent("forceup",{bubbles:!0,composed:!0}))}handlePointerUp(){this.dispatchEvent(new CustomEvent("forcedown",{bubbles:!0,composed:!0}))}getVolumeSlider(){if(this.displayVolume())return N`
                 <volume-slider
                     @pointerdown = ${this.handlePointerDown}
                     @pointerup = ${this.handlePointerUp}
