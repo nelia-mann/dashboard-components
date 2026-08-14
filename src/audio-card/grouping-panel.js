@@ -235,13 +235,12 @@ export class GroupingPanel extends HaAudioComponent {
 
 /********************************************** interactive logic *****************************************************/
 
-    handleSelect(e, targetId) {
+    handleSelect(targetId) {
         this.setSelectedPlayer(targetId);
     }
 
     handlePointerDown(e, details) {
         if (!this.getSuppressState()) {
-            this._pointerDownTime = Date.now();
             e.currentTarget.setPointerCapture(e.pointerId);
             this.createGhost(details);
             this.setDraggedId(details.speakerId)
@@ -257,26 +256,21 @@ export class GroupingPanel extends HaAudioComponent {
 
     handlePointerUp(e, prevId) {
         if (!this.getSuppressState()) {
-            const elapsed = Date.now() - this._pointerDownTime;
-            if (elapsed < 300) {
-                this.handleSelect(prevId)
+            const speakerId = this.getDraggedId();
+            this.removeGhost();
+            let elementUnder;
+            if (e.clientX && e.clientY) { 
+                elementUnder = this.renderRoot.elementFromPoint(e.clientX, e.clientY);
             } else {
-                const speakerId = this.getDraggedId();
-                this.removeGhost();
-                let elementUnder;
-                if (e.clientX && e.clientY) { 
-                    elementUnder = this.renderRoot.elementFromPoint(e.clientX, e.clientY);
-                } else {
-                    elementUnder = this.renderRoot.elementFromPoint(e.detail.x, e.detail.y);
-                }
-                const playerBoxes = this.renderRoot.querySelectorAll('[data-group-player');
-                const playerBox = Array.from(playerBoxes).find(box => box.contains(elementUnder));
-                let targetId = null;
-                if (playerBox) {
-                    targetId = playerBox.dataset.groupPlayer;
-                }
-                this.manipulateSpeaker(speakerId, prevId, targetId);   
-            }                  
+                elementUnder = this.renderRoot.elementFromPoint(e.detail.x, e.detail.y);
+            }
+            const playerBoxes = this.renderRoot.querySelectorAll('[data-group-player');
+            const playerBox = Array.from(playerBoxes).find(box => box.contains(elementUnder));
+            let targetId = null;
+            if (playerBox) {
+                targetId = playerBox.dataset.groupPlayer;
+            }
+            this.manipulateSpeaker(speakerId, prevId, targetId);                   
         }
     }
 
