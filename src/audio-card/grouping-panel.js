@@ -176,7 +176,6 @@ export class GroupingPanel extends HaAudioComponent {
         const newPlayers = this.getPlayers();
         newPlayers[targetId] = playerList;
         this.setPlayers(newPlayers);
-        this.setSelectedPlayer(targetId);
     }
 
 /********************************************** speaker manipulation logic ********************************************/
@@ -255,6 +254,7 @@ export class GroupingPanel extends HaAudioComponent {
     }
 
     handlePointerUp(e, prevId) {
+        this.setSelectedPlayer(prevId);
         if (!this.getSuppressState()) {
             const speakerId = this.getDraggedId();
             this.removeGhost();
