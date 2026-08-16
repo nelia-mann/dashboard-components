@@ -164,10 +164,16 @@ export class GroupingPanel extends HaAudioComponent {
         if (newSpeakers.length > 0) {
             newPlayers[playerId] = newSpeakers;
         } else {
-            delete newPlayers[playerId]
+            delete newPlayers[playerId];
         }
         this.setPlayers(newPlayers);
         return playerId;
+    }
+
+    createPlayer(speakerId) {
+        const newPlayers = this.getPlayers();
+        newPlayers[speakerId] = [speakerId];
+        this.setPlayers(newPlayers);
     }
 
     addToPlayer(speakerId, targetId) {
@@ -176,6 +182,7 @@ export class GroupingPanel extends HaAudioComponent {
         const newPlayers = this.getPlayers();
         newPlayers[targetId] = playerList;
         this.setPlayers(newPlayers);
+        this.setSelectedPlayer(targetId);
     }
 
 /********************************************** speaker manipulation logic ********************************************/
@@ -234,13 +241,11 @@ export class GroupingPanel extends HaAudioComponent {
 
 /********************************************** interactive logic *****************************************************/
 
-    handleSelect(targetId) {
-        this.setSelectedPlayer(targetId);
-    }
-
     handlePointerDown(e, details) {
         if (!this.getSuppressState()) {
-            e.currentTarget.setPointerCapture(e.pointerId);
+        if (e.currentTarget?.setPointerCapture) {
+            e.currentTarget.setPointerCapture(details.pointerId);
+        }
             this.createGhost(details);
             this.setDraggedId(details.speakerId)
             this.moveGhost(details.clientX, details.clientY);
@@ -292,6 +297,7 @@ export class GroupingPanel extends HaAudioComponent {
 
     async removeSpeaker(speakerId) {
         const targetId = this.removeFromPlayer(speakerId);
+        this.createPlayer(speakerId);
         await this.unJoinSpeaker(speakerId, targetId);
     }
 

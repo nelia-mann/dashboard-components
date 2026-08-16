@@ -133,7 +133,6 @@ export class PlayerPanel extends HaAudioComponent {
         if (this.isInitialized()) {
             return html`
                 ${this.makeBGInits()}
-                changed2
                 <div class = "outlined player" style=${styleMap(this.makeImage())}>
                     ${this.getControlPanel()}
                 </div>`;
