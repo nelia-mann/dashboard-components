@@ -1170,6 +1170,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
 
         --aux-panel-height-two: var(--iso-panel-height);
         --aux-panel-width-two: calc(var(--thermostat-mini-width) + var(--offset-slider-width) + 2 * var(--slider-padding) + var(--hp-panel-mini-padding));
+        --aux-basement-panel-slider-height: calc(var(--aux-panel-height-two) - var(--aux-panel-heading-mini-height) - var(--hp-panel-mini-padding));
 
     }
     `;class eT extends tN{getEntityId(t){return this.getStructure()[t]}getNumberState(t){if(this.getEntityId(t))return Number(this.getStateState(this.getEntityId(t)))}getNumberAttribute(t,e){let i=this.getAttribute(this.getEntityId(t),e);if("number"==typeof i)return i}getMainEntityId(){return this.getEntityId("hp")?this.getEntityId("hp"):this.getEntityId("thermostat")?this.getEntityId("thermostat"):this.getEntityId("hygrostat")?this.getEntityId("hygrostat"):void 0}getThisName(){return this.getName(this.getMainEntityId())}getTarget(){return this.getEntityId("hygrostat")?this.getAttribute(this.getMainEntityId(),"humidity"):this.getAttribute(this.getMainEntityId(),"temperature")}getMinExtreme(){return this.getEntityId("hygrostat")?this.getAttribute(this.getMainEntityId(),"min_humidity"):this.getAttribute(this.getMainEntityId(),"min_temp")}getMaxExtreme(){return this.getEntityId("hygrostat")?this.getAttribute(this.getMainEntityId(),"max_humidity"):this.getAttribute(this.getMainEntityId(),"max_temp")}getSeparation(){return this.getEntityId("hygrostat")?1:this.getAttribute(this.getMainEntityId(),"target_temp_step")}getSensor(){return this.getEntityId("hygrostat")?this.getAttribute(this.getMainEntityId(),"current_humidity"):this.getAttribute(this.getMainEntityId(),"current_temperature")}getSensorUnits(){return this.getEntityId("hygrostat")?"%":"°F"}getSensorDisplay(){return this.getSensor().toFixed(1).toString()+" "+this.getSensorUnits()}getMode(){return this.getStateState(this.getMainEntityId())}getModes(){let t;if(this.getEntityId("hygrostat"))return["off","on"];let e=[...this.getAttribute(this.getMainEntityId(),"hvac_modes")];return e.includes("heat_cool")&&(t=e.indexOf("auto"))>-1&&e.splice(t,1),(t=e.indexOf("dry"))>-1&&e.splice(t,1),(t=e.indexOf("fan_only"))>-1&&e.splice(t,1),e}getActionDefault(){return"off"===this.getMode()?"off":this.getTarget()>this.getSensor()?"heating":"idle"}getAction(){let t;return this.getEntityId("hygrostat")?t=this.getAttribute(this.getEntityId("hygrostat"),"action"):(t=this.getAttribute(this.getMainEntityId(),"hvac_action"))||(t=this.getActionDefault()),("fan"===t||"drying"===t)&&(t="venting"),t.charAt(0).toUpperCase()+t.slice(1)}getSafeMin(){return this.getNumberState("safe_min")}getSafeMax(){return this.getNumberState("safe_max")}isSafe(){return"on"===this.getStateState(this.getEntityId("safe_mode"))}getRank(){return Number(this.getStateState(this.getEntityId("rank")))}isDominant(){return 1===this.getRank()}getRankId(){return this.getEntityId("rank")}getScriptId(){return this.getEntityId("script")}getTie(){return this.getStateState(this.getEntityId("tie_main"))}getTieId(){return this.getEntityId("tie_main")}getTieOptions(){return this.getAttribute(this.getEntityId("tie_main"),"options")}getTieAction(){let t=this.getAttribute(this.getEntityId("tie"),"hvac_action");return"fan"===t&&(t="venting"),t.charAt(0).toUpperCase()+t.slice(1)}getTieMode(){return this.getStateState(this.getEntityId("tie"))}getOffsetId(){return this.getEntityId("offset")}getOffset(){return this.getNumberState("offset")}getMinOffset(){return this.getNumberAttribute("offset","min")}getMaxOffset(){return this.getNumberAttribute("offset","max")}}function eM(t,e,i){let s={};switch(t){case"off":s["background-color"]=t5(tZ,.5),i&&(s.outline=`solid ${t5(tZ,1)}`);break;case"heat":case"safe_min":s["background-color"]=t5(tW,.5),i&&(s.outline=`solid ${t5(tW,1)}`);break;case"cool":s["background-color"]=t5(tJ,.5),i&&(s.outline=`solid ${t5(tJ,1)}`);break;case"heat_cool":case"auto":s.background="linear-gradient(to left, "+t5(tJ,.5)+"0%, "+t5(tK,.5)+"50%, "+t5(tW,.5)+"100%)",i&&"Heating"===e&&(s.outline=`solid ${t5(tW,1)}`),i&&"Cooling"===e&&(s.outline=`solid ${t5(tJ,1)}`),i&&["Off","Idle"].includes(e)&&(s.outline=`solid ${t5(tZ,1)}`);break;case"on":case"fan_only":case"safe_max":s["background-color"]=t5(tQ,.5),i&&(s.outline=`solid ${t5(tQ,1)}`)}return s}class ez extends eT{static properties={...super.properties,isSelected:{state:!0}};constructor(){super(),this.isSelected=!1,this.title=""}getTriggers(){return["isSelected"]}selected(){return this.isSelected}getTitle(){return this.title}onClick(){this.dispatchEvent(new CustomEvent("select"))}render(){if(this.isInitialized())return N`
@@ -1860,10 +1861,10 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
             --aux-panel-padding: var(--hp-panel-padding);
             --aux-panel-heading-font-size: var(--aux-panel-heading-mini-font-size);
             --aux-panel-heading-height: var(--aux-panel-heading-mini-height);
-            --aux-panel-main-height: calc(var(--aux-panel-height) - var(--aux-panel-heading-height));
+            --aux-panel-main-height: calc(var(--aux-panel-height-two) - var(--aux-panel-heading-height-two));
 
             --offset-slider-width: calc(var(--aux-slider-mini-target-width) - 2 * var(--aux-slider-mini-padding));
-            --offset-slider-height: calc(var(--aux-panel-height-two) - var(--aux-panel-heading-height) - var(--aux-panel-padding));
+            --offset-slider-height: var(--aux-basement-panel-slider-height);
             --slider-padding: var(--aux-slider-mini-padding);
             --tie-button-width: var(--tie-button-mini-width);
             --aux-mode-control-button-width: var(--aux-mode-control-mini-button-width);
@@ -3012,8 +3013,8 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --aux-basement-panel-elements-top-justify-content: center;
         --aux-basement-panel-elements-bottom-justify-content: space-between;
 
-        --aux-panel-height-2: calc(100% - var(--hp-panel-mini-padding));
-        --aux-panel-width-2: 410px;
+        --aux-panel-height-two: calc(100% - var(--hp-panel-mini-padding));
+        --aux-panel-width-two: 410px;
 
         --aux-panel-flex-flow: column nowrap;
         --aux-panel-justify-content: space-between;
@@ -3102,6 +3103,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
 
         --hydrostat-width: var(--thermostat-mini-width);
         --hydrostat-height: var(--thermostat-mini-height);
+        --aux-basement-panel-slider-height: 250px;
 
     }
     `;class e9 extends tN{getBasicStructure(){return this.getStructure().basic_lighting.structure}getAreaEIs(t){return this.getBasicStructure()[t].entityIds}getAreaStructure(t){return this.getBasicStructure()[t].structure}getAreaName(t){return this.getBasicStructure()[t].name}getSpecialStructure(){return this.getStructure().special_lights.structure}getAreaListDisplay(){return N`

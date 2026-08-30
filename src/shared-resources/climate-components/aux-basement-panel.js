@@ -132,10 +132,10 @@ export class AuxBasementPanel extends HaClimateComponent {
             --aux-panel-padding: var(--hp-panel-padding);
             --aux-panel-heading-font-size: var(--aux-panel-heading-mini-font-size);
             --aux-panel-heading-height: var(--aux-panel-heading-mini-height);
-            --aux-panel-main-height: calc(var(--aux-panel-height) - var(--aux-panel-heading-height));
+            --aux-panel-main-height: calc(var(--aux-panel-height-two) - var(--aux-panel-heading-height-two));
 
             --offset-slider-width: calc(var(--aux-slider-mini-target-width) - 2 * var(--aux-slider-mini-padding));
-            --offset-slider-height: calc(var(--aux-panel-height-two) - var(--aux-panel-heading-height) - var(--aux-panel-padding));
+            --offset-slider-height: var(--aux-basement-panel-slider-height);
             --slider-padding: var(--aux-slider-mini-padding);
             --tie-button-width: var(--tie-button-mini-width);
             --aux-mode-control-button-width: var(--aux-mode-control-mini-button-width);

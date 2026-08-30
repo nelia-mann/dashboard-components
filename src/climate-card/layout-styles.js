@@ -188,6 +188,7 @@ export default css`
 
         --aux-panel-height-two: var(--iso-panel-height);
         --aux-panel-width-two: calc(var(--thermostat-mini-width) + var(--offset-slider-width) + 2 * var(--slider-padding) + var(--hp-panel-mini-padding));
+        --aux-basement-panel-slider-height: calc(var(--aux-panel-height-two) - var(--aux-panel-heading-mini-height) - var(--hp-panel-mini-padding));
 
     }
     `;

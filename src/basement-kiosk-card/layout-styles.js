@@ -203,8 +203,8 @@ export default css`
         --aux-basement-panel-elements-top-justify-content: center;
         --aux-basement-panel-elements-bottom-justify-content: space-between;
 
-        --aux-panel-height-2: calc(100% - var(--hp-panel-mini-padding));
-        --aux-panel-width-2: 410px;
+        --aux-panel-height-two: calc(100% - var(--hp-panel-mini-padding));
+        --aux-panel-width-two: 410px;
 
         --aux-panel-flex-flow: column nowrap;
         --aux-panel-justify-content: space-between;
@@ -293,6 +293,7 @@ export default css`
 
         --hydrostat-width: var(--thermostat-mini-width);
         --hydrostat-height: var(--thermostat-mini-height);
+        --aux-basement-panel-slider-height: 250px;
 
     }
     `
