@@ -87,7 +87,7 @@ export class ThermostatPanel extends HaClimateComponent {
 
     adjustButtons() {
         if (this.isFixed()) return null;
-        if (!['heat', 'cool', 'auto'].includes(this.getMode())) return null;
+        if (!['heat', 'cool', 'auto', 'heat_cool'].includes(this.getMode())) return null;
         return html`
             <div class="button-row">
                 <adjust-buttons @change=${(e) => this.change(e)}/>
