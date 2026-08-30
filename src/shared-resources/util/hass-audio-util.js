@@ -8,7 +8,11 @@ function hasAudioChanges(oldHass, newHass, entityId) {
         'volume_level', 
         'is_volume_muted', 
         'media_position_updated_at',
-        'source'
+        'source',
+        'media_title',
+        'media_artist',
+        'media_duration',
+        'media_position'
     ];
     return hasAttributeChanges(oldHass, newHass, entityId, attributes)
 }

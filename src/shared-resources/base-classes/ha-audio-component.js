@@ -60,7 +60,7 @@ export class HaAudioComponent extends HaSubComponent {
     }
 
     hasVolume(speakerId = this.getMainSpeakerId()) {
-        const volume = this.getAttribute(speakerId, 'volume');
+        const volume = this.getAttribute(speakerId, 'volume_level');
         return volume !== 'undefined';
     }
 
