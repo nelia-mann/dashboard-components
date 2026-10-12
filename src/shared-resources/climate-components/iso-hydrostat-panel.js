@@ -42,8 +42,10 @@ export class IsoHydrostatPanel extends HaClimateComponent {
         if (this.isInitialized()) {
             return html`
                 <div class="heading"> ${this.getThisName()} </div>
-                ${this.hygrostatPanel()}
-                ${this.modeControls()}
+                <div class="hygrostat">
+                    ${this.hygrostatPanel()}
+                    ${this.modeControls()}
+                </div>
             `
         }
     }
@@ -53,21 +55,29 @@ export class IsoHydrostatPanel extends HaClimateComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            width: var(--iso-panel-width, 350px);
-            height: var(--iso-panel-height, 100%);
-            padding: var(--iso-panel-padding, 0px);
-            padding-top: var(--iso-panel-padding-top, 0px);
+            width: var(--ip-width, 350px);
+            height: var(--ip-height, 100%);
+            padding: var(--ip-padding, 0px);
+            padding-top: var(--ip-padding-top, 0px);
             display: flex;
-            flex-flow: var(--iso-panel-flex-flow, column nowrap);
-            justify-content: var(--iso-panel-justify-content, flex-start);
-            align-items: var(--iso-panel-align-items, center);
+            flex-flow: column nowrap;
+            justify-content: flex-start;
+            align-items: center;
         }
 
         .heading {
-            font-size: var(--iso-panel-heading-font-size, large-font);
-            font-weight: var(--iso-panel-heading-font-weight, 550);
-            height: var(--iso-panel-heading-height, 30px);
-            margin-bottom: var(--iso-panel-heading-margin-bottom, 0px);
+            font-size: var(--iph-font-size, large-font);
+            font-weight: var(--iph-font-weight, 550);
+            height: var(--iph-height, 30px);
+        }
+
+        .hygrostat {
+            height: var(--iphy-height, 100%);
+            width: var(--iphy-width, 100%);
+            display: flex;
+            flex-flow: var(--iphy-flex-flow, column nowrap);
+            justify-content: var(iphy-justify-content, space-between);
+            align-items: var(--iphy-align-items, center);
         }
 
     `];

@@ -3,6 +3,10 @@ import { css } from 'lit';
 export default css`
 
     :host {
+
+        --ha-card-border-width: 0px;
+        box-sizing: border-box;
+
         font-family: "Roboto", "Noto", sans-serif;
         ---mdc-icon-size: 20px;
         --small-font: 85%;
@@ -16,7 +20,7 @@ export default css`
         --button-outline-offset: -3px;
 
         --ipad-max-height: 900px;
-        --ipad-max-width: 1050px;
+        --ipad-max-width: 1250px;
 
         --smallfire-max-width: 500px;
         --smallfire-max-height: 920px;
@@ -28,6 +32,8 @@ export default css`
     .outlined {
         outline-offset: 0px;
         border-radius: 8px;
+        outline: .5px solid rgba(0, 0, 0, .1);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .inactive {
@@ -36,11 +42,6 @@ export default css`
 
     dialog::backdrop {
         background-color: rgba(0, 0, 0, 0.5);
-    }
-
-    .outlined {
-        outline: .5px solid rgba(0, 0, 0, .1);
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .shown-slider {

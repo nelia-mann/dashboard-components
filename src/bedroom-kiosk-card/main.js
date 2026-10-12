@@ -84,7 +84,7 @@ export class BedroomKioskCard extends HaMainComponent {
     }
 
     initializeChoice() {
-        this.setType('lighting');
+        this.setType('climate');
     }
 
 /************************************* type selection structure *******************************************************/

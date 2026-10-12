@@ -108,13 +108,13 @@ export class ModeControls extends HaClimateComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            width: var(--mode-control-width, 100%);
-            height: var(--mode-control-height, 50px);
+            width: var(--mc-width, 100%);
+            height: var(--mc-height, 50px);
+            margin-top: var(--mc-margin-top, 0px);
             display: flex;
-            flex-flow: var(--mode-control-flex-flow, row nowrap);
-            justify-content: var(--mode-control-justify-content, space-around);
-            align-items: var(--mode-control-align-items, center);
-            margin-top: var(--mode-control-margin-top, 0px);
+            flex-flow: row nowwrap;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .button {
@@ -122,15 +122,15 @@ export class ModeControls extends HaClimateComponent {
             flex-flow: row nowrap;
             justify-content: center;
             align-items: center;
-            width: var(--mode-control-button-width, 60px);
-            height: var(--mode-control-button-height, 100%);
-            outline-offset: var(--mode-control-button-outline-offset, -3px);
+            width: var(--mcb-width, 60px);
+            height: var(--mcb-height, 100%);
+            outline-offset: var(--mcb-outline-offset, -3px);
             outline: none;
         }
 
         .center {
-            margin-left: var(--mode-control-button-margin-correction-l, -10px);
-            margin-right: var(--mode-control-button-margin-correction-r, -10px);
+            margin-left: var(--mcbc-margin-left, -10px);
+            margin-right: var(--mcbc-margin-right, -10px);
         }
 
     `];

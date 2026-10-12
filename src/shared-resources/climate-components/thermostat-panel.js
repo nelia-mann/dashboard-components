@@ -129,16 +129,16 @@ export class ThermostatPanel extends HaClimateComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            width: var(--thermostat-width, 80%);
-            height: var(--thermostat-height, 350px);
-            padding-bottom: var(--thermostat-bottom-padding, 0px);
+            width: var(--th-width, 80%);
+            height: var(--th-height, 350px);
+            padding-bottom: var(--th-bottom-padding, 0px);
             display: flex;
             flex-flow: column nowrap;
             justify-content: center;
             align-items: center;
             position: relative;
-            margin-top: var(--thermostat-margin-top, 0px);
-            margin-bottom: var(--thermostat-margin-bottom, 0px);
+            margin-top: var(--th-margin-top, 0px);
+            margin-bottom: var(--th-margin-bottom, 0px);
         }
 
         .button-row {
@@ -146,7 +146,7 @@ export class ThermostatPanel extends HaClimateComponent {
             flex-flow: row nowrap;
             align-items: center;
             justify-content: center;
-            width: var(--adjust-button-row-width, 85%);
+            width: var(--thbr-row-width, 85%);
         }
 
     `];

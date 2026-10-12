@@ -83,7 +83,7 @@ export class BasementKioskCard extends HaMainComponent {
     }
 
     initializeChoice() {
-        this.setType('lighting');
+        this.setType('climate');
     }
 
 /************************************* type selection structure *******************************************************/

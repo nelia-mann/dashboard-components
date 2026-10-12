@@ -224,14 +224,14 @@ export class SliderBar extends HaSubComponent {
             width: 100%;
             height: 100%;
             display: flex;
-            flex-flow: var(--slider-orientation, row nowrap);
+            flex-flow: var(--slider-flex-flow, row nowrap);
             justify-content: var(--slider-justify-content, center);
             align-items: center;
         }
 
         .slider {
             position: relative;
-            height: calc(100% - 2*var(--slider-margin, 5%));
+            height: 100%;
             width: var(--slider-width, 40px);
             margin-left: var(--slider-text-padding, 5px);
             margin-right: var(--slider-text-padding, 5px);
@@ -244,7 +244,7 @@ export class SliderBar extends HaSubComponent {
         }
 
         .slider.horizontal {
-            width: calc(100% - 2*var(--slider-margin, 5%));
+            width: calc(100% - 2 * var(--slider-margin, 5%));
             height: var(--slider-width, 40px);
             margin-top: var(--slider-text-padding, 5px);
             margin-bottom: var(--slider-text-padding, 5px);
@@ -255,10 +255,10 @@ export class SliderBar extends HaSubComponent {
 
         .inner-slider {
             position: absolute;
-            top: var(--slider-margin, 5%);
+            top: var(--slider-margin);
             left: 0;
             width: 100%;
-            height: calc(100% - 2*var(--slider-margin, 10%));
+            height: calc(100% - 2 * var(--slider-margin, 10%));
         }
 
         .inner-slider.horizontal {

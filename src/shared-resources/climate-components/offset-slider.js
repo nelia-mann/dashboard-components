@@ -116,34 +116,43 @@ export class OffsetSlider extends HaClimateComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            width: var(--offset-slider-width, 210px);
-            height: var(--offset-slider-height, 210px);
-            padding-left: var(--offset-slider-padding-left, 0px);
-            padding-right: var(--offset-slider-padding-right, 0px);
-            padding-bottom: var(--offset-slider-padding-bottom, 0px);
-            --slider-justify-content: flex-start;
+            width: var(--os-width, 75px);
+            height: var(--os-height, 210px);
+            padding: var(--os-padding);
+            padding-top: var(--os-padding-top);
             display: flex;
             flex-flow: column nowrap;
             justify-content: space-between;
 
-            --slider-orientation: column nowrap;
-            --slider-width: var(--slider-width-for-offset, 15px);
+
+/************************************************ slider **************************************************************/
+
+            --slider-flex-flow: var(--oss-flex-flow);
+            --slider-justify-content: var(--oss-justify-content);
+            --slider-margin: var(--oss-margin);
+            --slider-width: var(--oss-width);
+            --slider-text-padding: var(--oss-text-padding);
+            --slider-text-offset: var(--oss-text-offset);
+            --slider-text-width: var(--oss-text-width);
+            --slider-level-offset: var(--oss-level-offset);
+            --slider-level-height: var(--oss-level-height);
+
 
         }
 
         .value {
-            height: var(--offset-slider-value-height, 50px);
+            height: var(--osv-height, 50px);
             width: 100%;
             display: flex;
             flex-flow: column nowrap;
             align-items: center;
             justify-content: flex-start;
-            font-weight: var(--offset-slider-value-font-weight);
-            font-size: var(--offset-slider-value-font-size);
+            font-weight: var(--osv-font-weight);
+            font-size: var(--osv-font-size);
         }
 
         .bar {
-            height: var(--offset-slider-bar-height, 100%);
+            height: var(--osb-height, 100%);
         }
 
     `];

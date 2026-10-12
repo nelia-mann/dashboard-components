@@ -4,191 +4,500 @@ export default css`
 
     :host {
 
+        --ipad-max-height: 900px;
+        --ipad-max-width: 1250px;
         --small-heading-font-size: var(--large-font);
         --small-heading-font-weight:  700;
         --sub-info-font-size: var(--normal-font);
         --sub-info-font-weight: 400;
 
-        --ha-card-padding: 15px;
-        --ha-card-height: var(--ipad-max-height);
-        --ha-card-width: var(--ipad-max-width);
+/* calls to ha variables */
 
-        --button-row-height: 60px;
-        --button-row-width: 100%;
+        --ha-card-background: transparent;
+        --ha-card-border-width: 0px;
 
-        --climate-button-width: 200px;
-        --climate-button-padding: 5px;
-        --climate-button-heading-margin-top: 7px;
-        --climate-button-heading-margin-bottom: -7px;
-        --climate-button-sub-info-margin-bottom: 10px;
-        --climate-button-sub-info-margin-top: 1px;
-        --climate-button-heading-font-weight: var(--small-heading-font-weight);
-        --climate-button-heading-font-size: var(--small-heading-font-size);
-        --climate-button-sub-info-font-weight: var(--sub-info-font-weight);
-        --climate-button-sub-info-font-size: var(--sub-info-font-size);
+/* general settings */
 
-        --area-panel-width: 100%;
-        --area-panel-height: calc(var(--ipad-max-height) - var(--button-row-height) - 3 * var(--ha-card-padding));
-        --area-panel-flex-flow: row nowrap;
-        --area-panel-justify-content: space-around;
-        --area-panel-align-items: flex-start;
+        --padding: 15px; /* padding in and around large thermostats */
+        --mpadding: 10px; /* padding in and around small thermostats */
+        --b-outline-offset: -3px; /* button outline offset */
+        --t-width: 440px; /* used for large thermostats */
+        --mt-width: 270px; /* used for small thermostats */
 
-        --hp-panel-width: 360px;
-        --hp-panel-height: calc(var(--thermostat-height) + var(--mode-control-height) + var(--hp-panel-heading-height) + var(--hp-panel-padding));
-        --hp-panel-flex-flow: column nowrap;
-        --hp-panel-justify-content: flex-start;
-        --hp-panel-align-items: center;
-        --hp-panel-heading-font-size: var(--Large-font);
-        --hp-panel-heading-font-weight: 550;
-        --hp-panel-heading-height: 40px;
-        --hp-panel-padding: 15px;
-        --hp-panel-padding-top: 0px;
+/***************************************** main ***********************************************************************/
 
-        --mode-control-width: 100%;
-        --mode-control-height: 40px;
-        --mode-control-margin-top: var(--hp-panel-padding);
-        --mode-control-flex-flow: row nowrap;
-        --mode-control-justify-content: space-between;
-        --mode-control-align-items: center;
-        --mode-control-button-width: 55px;
-        --mode-control-button-height: 100%;
-        --mode-control-button-margin-correction-l: -10px;
-        --mode-control-button-margin-correction-r: -14px;
-        --mode-control-button-outline-offset: var(--button-outline-offset);
+/* main -- ha-card */
 
-        --thermostat-width: var(--hp-panel-width);
-        --thermostat-height: var(--hp-panel-width);
-        --thermostat-bottom-padding: 0px;
-        --thermostat-margin-top: 0px;
-        --thermostat-margin-bottom: 0px;
+        --hc-padding: 0px;
+        --hc-height: var(--ipad-max-height);
+        --hc-width: var(--ipad-max-width);
 
-        --circular-slider-height: calc(100% - 2 * var(--hp-panel-padding));
-        --circular-slider-top-margin: 0px;
+/* main -- button-row */
 
-        --adjust-button-row-width: 85%;
+        --br-height: 60px;
+        --br-width: 100%;
 
-        --adjust-pair-width: 110px;
-        --adjust-pair-margin-top: -40px;
-        --plus-minus-circle-size: 40px;
-        --plus-minus-sizes: 60%;
+/************************************** area-panel ********************************************************************/
 
-        --range-font-size: var(--Huge-font);
-        --solo-font-size: var(--HUGE-font);
-        --upper-font-size: var(--large-font);
-        --lower-font-size: var(--large-font);
-        --superscript-offset: -0.5em;
-        --center-text-height: 80px;
-        --upper-weight: 500;
-        --lower-weight: 400;
-        --center-weight: 400;
-        --sup-factor: 2.5;
+/* area-panel --host */
 
-        --aux-panel-width: calc(var(--hp-panel-width) + var(--offset-slider-width) + var(--hp-panel-padding) + 2 * var(--slider-padding));
-        --aux-panel-height: var(--hp-panel-height);
-        --aux-panel-flex-flow: column nowrap;
-        --aux-panel-justify-content: space-between;
-        --aux-panel-align-items: center;
-        --aux-panel-padding: var(--hp-panel-padding);
-        --aux-panel-padding-top: 0px;
-        --aux-panel-heading-font-size: var(--hp-panel-heading-font-size);
-        --aux-panel-heading-font-weight: var(--hp-panel-heading-font-weight);
-        --aux-panel-heading-height: var(--hp-panel-heading-height);
-        --aux-panel-main-height: calc(var(--aux-panel-height) - var(--aux-panel-heading-height));
-        --aux-panel-main-width: 100%;
+        --ap-width: 100%;
+        --ap-height: calc(var(--hc-height) - var(--br-height) - var(--padding));
 
-        --aux-mode-control-width: 100%;
-        --aux-mode-control-height: var(--mode-control-height);
-        --aux-mode-control-margin-bottom: 0px;
-        --aux-mode-control-flex-flow: var(--mode-control-flex-flow);
-        --aux-mode-control-justify-content: var(--mode-control-justify-content);
-        --aux-mode-control-align-items: var(--mode-control-align-items);
-        --aux-mode-control-button-width: var(--mode-control-button-width);
-        --aux-mode-control-button-height: var(--mode-control-button-height);
-        --aux-mode-control-button-margin-correction-r: -6px;
-        --aux-mode-control-button-margin-correction-arrow-l: -10px;
-        --aux-mode-control-button-outline-offset: var(--button-outline-offset);
-        --aux-mode-control-font-size: var(--sub-info-font-size);
-        --aux-mode-control-font-weight: var(--small-heading-font-weight);
-        --tie-button-width: 140px;
+/*********************************** climate-button *******************************************************************/
 
-        --offset-slider-width: calc(75px - 2 * var(--slider-padding));
-        --slider-padding: 10px;
-        --offset-slider-padding-left: var(--slider-padding);
-        --offset-slider-padding-right: var(--slider-padding);
-        --offset-slider-padding-bottom: var(--slider-padding);
-        --offset-slider-height: calc(100% - var(--slider-padding));
+/* climate-button -- host */
 
-        --offset-slider-value-height: 45px;
-        --offset-slider-value-font-size: var(--normal-font);
-        --offset-slider-value-font-weight: 700;
-        --offset-slider-bar-height: calc(100% - var(--offset-slider-value-height));
+        --cb-width: 200px;
+        --cb-padding: 5px;
 
-        --slider-margin: 10px;
-        --slider-width: 100%;
-        --slider-width-for-offset: 40px;
+/* climate-button -- button */
 
-        --aux-basement-panel-width: calc(var(--ha-card-width) - var(--hp-panel-width) - 2 * var(--hp-panel-padding) - 2 * var(--ha-card-padding));
-        --aux-basement-panel-height: calc(var(--aux-basement-panel-main-height) + var(--aux-basement-panel-heading-height) + var(--hp-panel-padding));
-        --aux-basement-panel-margin-left: var(--hp-panel-padding);
-        --aux-basement-panel-heading-font-size: var(--climate-panel-heading-font-size);
-        --aux-basement-panel-heading-font-weight: var(--climate-panel-heading-font-weight);
-        --aux-basement-panel-heading-height: 40px;
+        --cb-outline-offset: var(--b-outline-offset);
 
-        --hp-panel-mini-padding: 10px;
-        --thermostat-mini-width: 225px;
-        --thermostat-mini-height: var(--thermostat-mini-width);
-        --aux-panel-heading-mini-font-size: var(--large-font);
-        --aux-panel-heading-mini-height: 30px;
-        --aux-slider-mini-target-width: 65px;
-        --aux-slider-mini-padding: var(--hp-panel-mini-padding);
-        --tie-button-mini-width: 60px;
-        --aux-mode-control-mini-button-width: 40px;
-        --aux-mode-control-mini-button-margin-correction-r: -8px;
-        --aux-mode-control-mini-button-margin-correction-l: -8px;
+/* climate-button -- small-heading */
 
-        --adjust-pair-mini-width: 75px;
-        --adjust-pair-mini-margin-top: -25px;
-        --plus-minus-mini-circle-size: 30px;
-        --solo-mini-font-size: var(--Huge-font);
-        --mini-center-text-height: 50px;
-        --circular-slider-mini-height: calc(100% - 2 * var(--hp-panel-mini-padding));
+        --cbh-margin-top: 7px;
+        --cbh-margin-bottom: -7px;
+        --cbh-font-weight: var(--small-heading-font-weight);
+        --cbh-font-size: var(--small-heading-font-size);
 
-        --iso-panel-padding: var(--hp-panel-mini-padding);
-        --iso-panel-padding-top: 0px;
-        --iso-panel-height: calc(var(--thermostat-mini-height) + var(--iso-mode-control-height) + var(--iso-panel-heading-height) + var(--iso-panel-padding));
-        --iso-panel-width: var(--thermostat-mini-width);
-        --iso-panel-flex-flow: column nowrap;
-        --iso-panel-justify-content: flex-start;
-        --iso-panel-align-items: center;
+/* climate-button -- sub-info */
 
-        --iso-panel-heading-font-size: var(--aux-panel-heading-mini-font-size);
-        --iso-panel-heading-font-weight: var(--aux-panel-heading-font-weight);
-        --iso-panel-heading-height: var(--aux-panel-heading-mini-height);
+        --cbsi-margin-bottom: 10px;
+        --cbsi-margin-top: 1px;
+        --cbsi-font-weight: var(--sub-info-font-weight);
+        --cbsi-font-size: var(--sub-info-font-size);
 
-        --iso-mode-control-width: 100%;
-        --iso-mode-control-height: var(--aux-mode-control-height);
-        --iso-mode-control-flex-flow: row nowrap;
-        --iso-mode-control-justify-content: space-between;
-        --iso-mode-control-align-items: center;
-        --iso-mode-control-button-width: 60px;
-        --iso-mode-control-button-height: 100%;
-        --iso-mode-control-button-outline-offset: var(--button-outline-offset);
-        --iso-mode-control-button-margin-correction-arrow-l: -6px;
-        --iso-mode-control-margin-top: var(--hp-panel-mini-padding);
+/********************************** heatpump-panel ********************************************************************/
 
-        --hydrostat-width: var(--thermostat-mini-width);
-        --hydrostat-height: var(--thermostat-mini-height);
+/* heatpump-panel -- host */
 
-        --aux-basement-panel-main-width: calc(100% - 2 * var(--hp-panel-padding));
-        --aux-basement-panel-main-height: calc(2 * var(--iso-panel-height) + 2 * var(--hp-panel-padding) + 5px);
-        --aux-basement-panel-elements-width: 100%;
-        --aux-basement-panel-elements-height: calc(var(--iso-panel-height) + var(--hp-panel-mini-padding));
-        --aux-basement-panel-elements-top-justify-content: center;
-        --aux-basement-panel-elements-bottom-justify-content: space-between;
+        --hpp-width: calc(var(--t-width) + 2 * var(--padding));
+        --hpp-height: calc(var(--t-width) + var(--mc-height) + var(--hpph-height) + 2 * var(--padding));
+        --hpp-padding: var(--padding);
+        --hpp-padding-top: 0px;
 
-        --aux-panel-height-two: var(--iso-panel-height);
-        --aux-panel-width-two: calc(var(--thermostat-mini-width) + var(--offset-slider-width) + 2 * var(--slider-padding) + var(--hp-panel-mini-padding));
-        --aux-basement-panel-slider-height: calc(var(--aux-panel-height-two) - var(--aux-panel-heading-mini-height) - var(--hp-panel-mini-padding));
+/* heatpump-panel -- heading */
+
+        --hpph-font-size: var(--Large-font);
+        --hpph-font-weight: 550;
+        --hpph-height: 40px;
+
+/*********************************** mode-controls ********************************************************************/
+
+/* mode-controls -- host */
+
+        --mc-width: 100%;
+        --mc-height: 40px;
+        --mc-margin-top: var(--padding);
+
+/* mode-controls -- button */
+
+        --mcb-width: calc((var(--t-width) - 4 * var(--padding)) / 5);
+        --mcb-height: 100%;
+        --mcb-outline-offset: var(--b-outline-offset);
+
+/* mode-controls -- center */
+
+        --mcbc-margin-left: -10px;
+        --mcbc-margin-right: -14px;
+
+/************************************* thermostat *********************************************************************/
+
+/* thermostat -- host */
+
+        --th-width: var(--t-width);
+        --th-height: var(--t-width);
+        --th-bottom-padding: 0px;
+        --th-margin-top: 0px;
+        --th-margin-bottom: 0px;
+
+/* thermostat -- button-row */
+
+        --thbr-width: 100%;
+
+/********************************* circular-slider ********************************************************************/
+
+/* circular-slider -- host */
+
+        --cs-height: calc(100% - 2 * var(--padding));
+        --cs-top-margin: 0px;
+
+/* circular-slider -- center */
+
+        --csc-text-weight: 400;
+        --csc-text-height: 80px;
+
+/* circular-slider -- var */
+
+        --csr-font-size: var(--Huge-font);
+
+/* circular-slider -- var -- one */        
+
+        --css-font-size: var(--HUGE-font);
+
+/* circular-slider -- upper */        
+
+        --csu-font-size: var(--large-font);
+        --csu-font-weight: 500;
+
+/* circular-slider -- lower */
+
+        --csl-font-size: var(--large-font);
+        --csl-font-weight: 400;
+
+/* circular-slider -- sup */
+
+        --cssu-offset: -0.7em;
+        --cssu-factor: 2.5;
+
+/********************************** adjust-buttons ********************************************************************/
+
+/* adjust-buttons -- host */
+
+        --ab-width: 110px;
+        --ab-margin-top: -40px;
+
+/* adjust-buttons -- circle */
+
+        --abc-size: 40px;
+
+/* adjust-buttons -- ha-svg-icon */
+
+        --abci-size: 60%;
+
+/********************************* aux-thermostat-panel ***************************************************************/
+
+/* aux-thermostat-panel -- host */
+
+        --auxp-width: calc(var(--t-width) + var(--os-width) + 3 * var(--padding));
+        --auxp-height: var(--hpp-height);
+        --auxp-padding: var(--padding);
+        --auxp-padding-top: 0px;
+
+/* aux-thermostat-panel -- heading */
+
+        --auxph-font-size: var(--hpph-font-size);
+        --auxph-font-weight: var(--hpph-font-weight);
+        --auxph-height: var(--hpph-height);
+
+/* aux-thermostat-panel -- main */
+
+        --auxpm-height: calc(var(--auxp-height) - var(--auxph-height) - var(--padding));
+        --auxpm-width: 100%;
+
+/* aux-thermostat-panel -- thermostat */
+
+        --auxpt-height: 100%; /* set by height of aux-panel main */
+        --auxpt-width: var(--t-width);
+        --auxpt-flex-flow: column nowrap;
+        --auxpt-justify-content: space-between;
+        --auxpt-align-items: center;
+
+/*********************************** aux-mode-controls ****************************************************************/
+
+/* aux-mode-controls -- host */
+
+        --auxmc-width: 100%; /* set by width of aux-panel thermostat */
+        --auxmc-height: var(--mc-height);
+        --auxmc-flex-flow: var(--mc-flex-flow);
+        --auxmc-justify-content: space-between;
+        --auxmc-align-items: var(--mc-align-items);
+
+/* aux-mode-controls -- button */        
+
+        --auxmcb-width: var(--mc-button-width);
+        --auxmcb-height: var(--mc-button-height);
+        --auxmcb-outline-offset: var(--button-outline-offset);
+
+/* aux-mode-controls -- bigbutton */
+
+        --auxmcbb-width: calc(var(--t-width) - 3 * var(--mcb-width) - 3 * var(--padding));
+        --auxmcbb-height: var(--mc-button-height);
+        --auxmcbb-font-weight: var(--small-heading-font-weight);
+        --auxmcbb-font-size: var(--sub-info-font-size);
+
+/* aux-mode-controls -- exclamation */
+
+        --auxmce-margin-right: -6px;
+        --auxmce-margin-left: 0px;
+
+/* aux-mode-controls -- center */
+
+        --auxmcc-margin-left: -10px;
+
+/************************************* offset-slider ******************************************************************/
+
+/* offset-slider -- host */
+
+        --os-width: 75px;
+        --os-padding: var(--padding);
+        --os-padding-top: 0px;
+        --os-height: 100%; /* set by height of aux-panel main */
+
+/* offset-slider -- value */
+
+        --osv-height: 45px;
+        --osv-font-size: var(--normal-font);
+        --osv-font-weight: 700;
+
+/* offset-slider -- bar */
+
+        --osb-height: calc(100% - var(--osv-height));
+
+/***************************************** slider *********************************************************************/
+
+        --oss-justify-content: flex-start;
+        --oss-flex-flow: column nowrap;
+        --oss-margin: 5%;
+        --oss-width: 45px;
+        --oss-text-padding: 5px;
+        --oss-text-offset: 5%;
+        --oss-text-width: 45px;
+        --oss-level-offset: 10%;
+        --oss-level-height: 2%;
+
+/************************************* aux-basement-panel *************************************************************/
+
+/* aux-basement-panel -- host */
+
+        --auxbp-width: calc(var(--ap-width) - var(--hpp-width) - var(--padding));
+        --auxbp-height: var(--ap-height);
+        --auxbp-margin-left: var(--padding);
+        --auxbp-padding: var(--padding);
+        --auxbp-padding-top: 0px;
+        --auxbp-padding-bottom: var(--padding);
+
+/* aux-basement-panel -- heading */
+
+        --auxbph-font-size: var(--climate-panel-heading-font-size);
+        --auxbph-font-weight: var(--climate-panel-heading-font-weight);
+        --auxbph-height: var(--hpph-height);
+
+/* aux-basement-panel -- main */
+
+        --auxbpm-width: 100%;
+        --auxbpm-height: calc(var(--auxbp-height) - var(--auxbph-height) - 2 * var(--padding));
+        --auxbp-margin-top: vr(--padding);
+
+/* aux-basement-panel -- elements */
+
+        --auxbpe-width: 100%;
+        --auxbpe-height: calc(50% - var(--padding) / 2);
+
+/* aux-basement-panel -- elements-top */
+
+        --auxbpet-justify-content: space-between;
+
+/* aux-basement-panel -- elements-bottom */
+
+        --auxbpeb-justify-content: space-around;
+
+/************************* aux-thermostat-panel (in aux-basement-panel) ***********************************************/      
+
+/* aux-thermostat-panel -- host */
+
+        --mauxp-width: calc(var(--mt-width) + var(--mos-width) + 3 * var(--mpadding));
+        --mauxp-height: calc(var(--mt-width) + var(--mauxmc-height) + var(--mauxph-height) + 2 * var(--mpadding));
+        --mauxp-padding: var(--mpadding);
+        --mauxp-padding-top: 0px;
+
+/* aux-thermostat-panel -- heading */
+
+        --mauxph-height: 30px;
+        --mauxph-font-size: var(--large-font);
+        --mauxph-font-weight: 700;
+
+/* aux-thermostat-panel -- main */
+
+        --mauxpm-height: calc(var(--mauxp-height) - var(--mauxph-height) - var(--mpadding));
+        --mauxpm-width: 100%; /* references host width */
+
+/* aux-thermostat-panel -- thermostat */
+
+        --mauxpt-height: calc(var(--mt-width) + var(--mauxmc-height) + var(--mpadding));
+        --mauxpt-width: var(--mt-width);
+        --mauxpt-flex-flow: column nowrap;
+        --mauxpt-justify-content: space-between;
+        --mauxpt-align-items: center;
+
+/*************************** aux-mode-controls (in aux-basement-panel) ************************************************/
+
+/* aux-mode-controls -- host */
+
+        --mauxmc-width: 100% /* references aux-thermostat-panel -- panel */;
+        --mauxmc-height: 40px;
+        --mauxmc-flex-flow: row nowrap;
+        --mauxmc-justify-content: space-between;
+        --mauxmc-align-items: center;
+
+/* aux-mode-controls -- button */
+
+        --mauxmcb-width: calc((var(--mauxmc-width) - var(--mauxmcbb-width) - 3 * var(--mpadding)) / 3);
+        --mauxmcb-height: var(--mcb-height);
+        --mauxmcb-outline-offset: var(--b-outline-offset);
+
+/* aux-mode-controls -- bigbutton */
+
+        --mauxmcbb-width: 70px;
+        --mauxmcbb-height: var(--mcb-height);
+        --mauxmcbb-font-weight: 500;
+        --mauxmcbb-font-size: var(--normal-font);
+
+/* aux-mode-controls -- exclamation */
+
+        --mauxmce-margin-right: -6px;
+        --mauxmce-margin-left: -10px;
+
+/* aux-mode-controls -- center */
+
+        --mauxmcc-margin-left: -6px;
+
+/************************** thermostat (in basement panel) ************************************************************/
+
+/* thermostat -- host */
+
+        --mth-width: var(--mt-width);
+        --mth-height: var(--mt-width);
+        --mth-bottom-padding: 0px;
+        --mth-margin-top: 0px;
+        --mth-margin-bottom: 0px;
+
+/* thermostat -- button-row */
+
+        --mthbr-width: 100%;
+
+/********************* circular-slider (in basement panel) ************************************************************/
+
+/* circular-slider -- host */
+
+        --mcs-height: calc(100% - 2 * var(--padding));
+        --mcs-top-margin: 0px;
+
+/* circular-slider -- center */
+
+        --mcsc-text-weight: 400;
+        --mcsc-text-height: 60px;
+
+/* circular-slider -- var */
+
+        --mcsr-font-size: var(--Huge-font);
+
+/* circular-slider -- var -- one */        
+
+        --mcss-font-size: var(--HUGE-font);
+
+/* circular-slider -- upper */        
+
+        --mcsu-font-size: var(--large-font);
+        --mcsu-font-weight: 500;
+
+/* circular-slider -- lower */
+
+        --mcsl-font-size: var(--large-font);
+        --mcsl-font-weight: 400;
+
+/* circular-slider -- sup */
+
+        --mcssu-offset: -0.7em;
+        --mcssu-factor: 2.5;
+
+/************************ adjust-buttons (in basement panel) **********************************************************/
+
+/* adjust-buttons -- host */
+
+        --mab-width: 90px;
+        --mab-margin-top: -40px;
+
+/* adjust-buttons -- circle */
+
+        --mabc-size: 35px;
+
+/* adjust-buttons -- ha-svg-icon */
+
+        --mabci-size: 60%;
+
+/************************* offset-slider (in basement panel) **********************************************************/
+
+/* offset-slider -- host */
+
+        --mos-width: 60px;
+        --mslider-padding: 10px;
+        --mos-padding: var(--mpadding);
+        --mos-padding-top: 0px;
+        --mos-height: 100%; /* set by height of aux-panel main */
+
+/* offset-slider -- value */
+
+        --mosv-height: 40px;
+        --mosv-font-size: var(--normal-font);
+        --mosv-font-weight: 700;
+
+/* offset-slider -- bar */
+
+        --mosb-height: calc(100% - var(--mosv-height));
+
+/*************************** slider (in basement panel) ***************************************************************/
+
+        --moss-justify-content: flex-start;
+        --moss-flex-flow: column nowrap;
+        --moss-margin: 5%;
+        --moss-width: 40px;
+        --moss-text-padding: 5px;
+        --moss-text-offset: 5%;
+        --moss-text-width: 45px;
+        --moss-level-offset: 10%;
+        --moss-level-height: 2%;
+
+/********************************** iso-hydrostat-panel ***************************************************************/
+
+/* iso-hydrostat-panel -- host */
+
+        --ip-padding: var(--mpadding);
+        --ip-padding-top: 0px;
+        --ip-height: var(--mauxp-height);
+        --ip-width: calc(var(--mt-width) + 2 * var(--mpadding));
+
+/* iso-hydrostat-panel -- heading */
+
+        --iph-font-size: var(--large-font);
+        --iph-font-weight: 700;
+        --iph-height: var(--mauxph-height);
+
+/* iso-hydrostat-panel -- hygrostat */
+
+        --iphy-height: calc(var(--ip-height) - var(--iph-height) - var(--mpadding));
+        --iphy-width: 100%;
+        --iphy-flex-flow: column nowrap;
+        --iphy-justify-content: space-between;
+        --iphy-align-items: center;
+
+/*********************************** iso-mode-controls ****************************************************************/
+
+/* iso-mode-controls -- host */
+
+        --imc-width: 100%;
+        --imc-height: var(--mauxmc-height);
+        --imc-margin-top: var(--mpadding);
+        --imc-flex-flow: row nowrap;
+        --imc-justify-content: space-between;
+        --imc-align-items: center;
+
+/* iso-mode-controls -- button */
+
+        --imcb-width: 60px;
+        --imcb-height: var(--mc-button-height);
+        --imcb-outline-offset: var(--button-outline-offset);
+
+/* iso-mode-controls -- center */
+
+        --imcc-margin-left: -6px;
+
+/**************************************** hydrostat *******************************************************************/
+
+        --hydrostat-width: var(--mt-width);
+        --hydrostat-height: var(--mt-width);
 
     }
     `;

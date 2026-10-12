@@ -112,25 +112,25 @@ export class AuxThermostatPanel extends HaClimateComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            width: var(--aux-panel-width, 350px);
-            height: var(--aux-panel-height, 100%);
+            width: var(--auxp-width, 350px);
+            height: var(--auxp-height, 100%);
+            padding: var(--auxp-padding, 15px);
+            padding-top: var(--auxp-padding-top, 0px);
             display: flex;
-            flex-flow: var(--aux-panel-flex-flow, column nowrap);
-            justify-content: var(--aux-panel-justify-content, space-between);
-            align-items: var(--aux-panel-align-items, center);
-            padding: var(--aux-panel-padding, 0px);
-            padding-top: var(--aux-panel-padding-top, 0px);
+            flex-flow: column nowrap;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .heading {
-            font-size: var(--aux-panel-heading-font-size, var(--large-font));
-            font-weight: var(--aux-panel-heading-font-weight, 550);
+            width: 100%;
+            height: var(--auxph-height, 50px);
+            font-size: var(--auxph-font-size, var(--large-font));
+            font-weight: var(--auxph-font-weight, 550);
             display: flex;
             flex-flow: row nowrap;
             justify-content: center;
             align-items: flex-start;
-            width: 100%;
-            height: var(--aux-panel-heading-height, 50px);
         }
 
         .main {
@@ -138,16 +138,17 @@ export class AuxThermostatPanel extends HaClimateComponent {
             flex-flow: row nowrap;
             justify-content: space-between;
             align-items: flex-end;
-            height: var(--aux-panel-main-height, 430px);
-            width: var(--aux-panel-main-width);
+            height: var(--auxpm-height, 430px);
+            width: var(--auxpm-width);
         }
 
         .thermostat {
+            height: var(--auxpt-height, 100%);
+            width: var(--auxpt-width, 400px);
             display: flex;
-            flex-flow: var(--aux-thermostat-layout, column nowrap);
-            justify-content: space-between;
-            align-items: center;
-            height: 100%;
+            flex-flow: var(--auxpt-flex-flow, column nowrap);
+            justify-content: var(--auxpt-justify-content, space-between);
+            align-items: var(--auxpt-align-items, center);
         }
 
 `];

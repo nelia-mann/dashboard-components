@@ -65,8 +65,8 @@ export class ClimateButton extends HaClimateComponent {
 
         :host {
             height: 100%;
-            width: var(--climate-button-width, 160px);
-            padding: var(--cliamte-button-padding, 5px);
+            width: var(--cb-width, 160px);
+            padding: var(--cb-padding, 5px);
             border: none;
         }
 
@@ -78,22 +78,22 @@ export class ClimateButton extends HaClimateComponent {
             flex-flow: column nowrap;
             justify-content: center;
             align-items: center;
-            outline-offset: var(--button-outline-offset, -3px);
+            outline-offset: var(--cb-outline-offset, -3px);
             outline: none;
         }
 
         .small-heading {
-            margin-top: var(--climate-button-heading-margin-top, 7px);
-            margin-bottom: var(--climate-button-heading-margin-bottom, -7px);
-            font-weight: var(--climate-button-heading-font-weight, 700);
-            font-size: var(--climate-button-heading-font-size, 100%);
+            margin-top: var(--cbh-margin-top, 7px);
+            margin-bottom: var(--cbh-margin-bottom, -7px);
+            font-weight: var(--cbh-font-weight, 700);
+            font-size: var(--cbh-font-size, 100%);
         }
 
         .sub-info {
-            margin-bottom: var(--climate-button-sub-info-margin-bottom, 10px);
-            margin-top: var(--climate-button-sub-info-margin-top, 1px);
-            font-weight: var(--climate-button-sub-info-font-weight, 700);
-            font-size: var(--climate-button-sub-info-font-size, 100%);
+            margin-bottom: var(--cbsi-margin-bottom, 10px);
+            margin-top: var(--cbsi-margin-top, 1px);
+            font-weight: var(--cbsi-font-weight, 700);
+            font-size: var(--cbsi-font-size, 100%);
         }
 
     `];

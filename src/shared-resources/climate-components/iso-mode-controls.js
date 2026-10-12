@@ -87,13 +87,14 @@ export class IsoModeControls extends HaClimateComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            width: var(--iso-mode-control-width, 100%);
-            height: var(--iso-mode-control-height, 50px);
-            margin-top: var(--iso-mode-control-margin-top, 0px);
+            width: var(--imc-width, 100%);
+            height: var(--imc-height, 50px);
+            margin-top: var(--imc-margin-top, 0px);
+            margin-left: var(--imc-margin-left, 0px);
             display: flex;
-            flex-flow: var(--iso-mode-control-flex-flow, row nowrap);
-            justify-content: var(--iso-mode-control-justify-content, space-around);
-            align-items: var(--aux-iso-control-align-items, center);
+            flex-flow: var(--imc-flex-flow, row nowrap);
+            justify-content: var(--imc-justify-content, space-around);
+            align-items: var(--imc-align-items, center);
         }
 
         .button {
@@ -101,14 +102,14 @@ export class IsoModeControls extends HaClimateComponent {
             flex-flow: row nowrap;
             justify-content: center;
             align-items: center;
-            width: var(--iso-mode-control-button-width, 60px);
-            height: var(--iso-mode-control-button-height, 100%);
-            outline-offset: var(--iso-mode-control-button-outline-offset, -3px);
+            width: var(--imcb-width, 60px);
+            height: var(--imcb-height, 100%);
+            outline-offset: var(--imcb-outline-offset, -3px);
             outline: none;
         }
 
         .center {
-            margin-left: var(--iso-mode-control-button-margin-correction-arrow-l, -6px);
+            margin-left: var(--imcc-margin-left, -6px);
         }
 
     `];

@@ -330,9 +330,9 @@ export class DoubleCircularSlider extends HaSubComponent {
     static styles = [sharedStyles, css`
         
         :host {
-            height: var(--circular-slider-height, 100%);
-            width: var(--circular-slider-height, 100%);
-            margin-top: var(--circular-slider-top-margin, 20px);
+            height: var(--cs-height, 100%);
+            width: var(--cs-height, 100%);
+            margin-top: var(--cs-top-margin, 20px);
             display: flex;
             flex-flow: column nowrap;
             justify-content: center;
@@ -366,48 +366,44 @@ export class DoubleCircularSlider extends HaSubComponent {
         }
 
         .center {
-            height: var(--center-text-height, 80px);
+            height: var(--csc-text-height, 80px);
             width: 100%;
             display: flex;
             flex-flow: row nowrap;
             justify-content: center;
             align-items: center;
-            font-weight: var(--center-weight, 400)
+            font-weight: var(--csc-text-weight, 400)
         }
 
         var {
-            font-size: var(--range-font-size, 300%);
+            font-size: var(--csr-font-size, 300%);
             font-style: normal !important;
         }
 
         var.one {
-            font-size: var(--solo-font-size, 400%);
+            font-size: var(--css-font-size, 400%);
         }
 
         .upper {
-            font-size: var(--upper-font-size, 150%);
-            font-weight: var(--upper-weight);
+            font-size: var(--csu-font-size, 150%);
+            font-weight: var(--csu-font-weight);
         }
 
         .lower {
-            font-size: var(--lower-font-size, 150%);
+            font-size: var(--csl-font-size, 150%);
+            font-weight: var(--csl-font-weight);
             display: flex;
             flex-flow: row nowrap;
             justify-content: center;
             align-items: center;
-            font-weight: var(--lower-weight);
         }
 
         sup {
-            font-size: calc(var(--range-font-size, 300%) / var(--sup-factor));
+            font-size: calc(var(--csr-font-size, 300%) / var(--cssu-factor));
             position: relative;
-            top: var(--superscript-offset, -0.4em);
+            top: var(--cssu-offset, -0.5em);
             line-height: 0;
-        }
-
-        sup.one {
-            font-size: calc(var(--solo-font-size, 400%) / var(--sup-factor));
-        }    
+        } 
      
     `];
 

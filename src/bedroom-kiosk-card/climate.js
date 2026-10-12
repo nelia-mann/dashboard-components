@@ -77,7 +77,7 @@ export class ClimateBedroomPanel extends HaClimateComponent {
         :host {
             display: flex;
             flex-flow: column nowrap;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
             height: var(--climate-height, 485px);
             width: var(--climate-width, 900px);

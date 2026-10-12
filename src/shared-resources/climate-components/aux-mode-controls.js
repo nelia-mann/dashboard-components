@@ -137,13 +137,12 @@ export class AuxModeControls extends HaClimateComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            width: var(--aux-mode-control-width, 100%);
-            height: var(--aux-mode-control-height, 50px);
-            margin-bottom: var(--aux-mode-control-margin-bottom, 0px);
+            width: var(--auxmc-width, 100%);
+            height: var(--auxmc-height, 50px);
             display: flex;
-            flex-flow: var(--aux-mode-control-flex-flow, row nowrap);
-            justify-content: var(--aux-mode-control-justify-content, space-around);
-            align-items: var(--aux-mode-control-align-items, center);
+            flex-flow: var(--auxmc-flex-flow, row nowrap);
+            justify-content: var(--auxmc-justify-content, space-around);
+            align-items: var(--auxmc-align-items, center);
         }
 
         .button {
@@ -151,9 +150,9 @@ export class AuxModeControls extends HaClimateComponent {
             flex-flow: row nowrap;
             justify-content: center;
             align-items: center;
-            width: var(--aux-mode-control-button-width, 60px);
-            height: var(--aux-mode-control-button-height, 100%);
-            outline-offset: var(--aux-mode-control-button-outline-offset, -3px);
+            width: var(--auxmcb-width, 60px);
+            height: var(--auxmcb-height, 100%);
+            outline-offset: var(--auxmcb-outline-offset, -3px);
             outline: none;
         }
 
@@ -162,21 +161,21 @@ export class AuxModeControls extends HaClimateComponent {
             flex-flow: row nowrap;
             justify-content: center;
             align-items: center;
-            width: var(--tie-button-width, 140px);
-            height: var(--aux-mode-control-button-height, 100%);
+            width: var(--auxmcbb-width, 140px);
+            height: var(--auxmcbb-height, 100%);
             outline-offset: var(--button-outline-offset, -3px);
             outline: none;
-            font-size: var(--aux-mode-control-font-size, var(--normal-font));
-            font-weight: var(--aux-mode-control-font-weight, 500);
+            font-size: var(--auxmcbb-font-size, var(--normal-font));
+            font-weight: var(--auxmcbb-font-weight, 500);
         }
 
         .exclamation {
-            margin-right: var(--aux-mode-control-button-margin-correction-r, -2px);
-            margin-left: var(--aux-mode-control-button-margin-correction-l, 0px);
+            margin-right: var(--auxmce-margin-right, -2px);
+            margin-left: var(--auxmce-margin-left, 0px);
         }
 
         .center {
-            margin-left: var(--aux-mode-control-button-margin-correction-arrow-l, -6px);
+            margin-left: var(--auxmce-margin-left, -6px);
         }
 
     `];
