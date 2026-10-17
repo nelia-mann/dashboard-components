@@ -84,8 +84,8 @@ export class LightingBedroomPanel extends HaSubComponent {
             flex-flow: column nowrap;
             justify-content: space-around;
             align-items: center;
-            height: var(--lighting-height, 485px);
-            width: var(--lighting-width, 900px);
+            height: var(--l-height, 485px);
+            width: var(--l-width, 900px);
         }
         
     `];

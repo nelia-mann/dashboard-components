@@ -9,37 +9,53 @@ export default css`
         --sub-info-font-size: var(--normal-font);
         --sub-info-font-weight: 400;
 
-        --panel-height: calc(var(--smallfire-max-height) - var(--button-row-height) - var(--padding));
+        --panel-height: calc(var(--smallfire-max-height) - var(--br-height) - var(--padding));
         --panel-width: 100%;
         --padding: 15px;
         --t-width: 310px;
         --b-outline-offset: -3px;
         --button-width: 180px;
-
-        --ha-card-background: transparent;        
+     
         --ha-card-border-width: 0px;
+        --ha-card-background: transparent;
 
 /******************************************** main ********************************************************************/
 
-        --ha-card-padding: 0px;
-        --ha-card-height: var(--smallfire-max-height);
-        --ha-card-width: var(--smallfire-max-width);
+/* main -- host */
 
-        --button-row-height: 50px;
-        --button-row-width: 100%;
+        --hc-padding: 0px;
+        --hc-height: var(--smallfire-max-height);
+        --hc-width: var(--smallfire-max-width);
+
+/* main -- button-row */
+
+        --br-height: 50px;
+        --br-width: 100%;
 
 /**************************************** lighting-button *************************************************************/
 
-        --light-button-width: var(--button-width);
-        --light-button-padding: 0px;
-        --light-button-heading-margin-top: 7px;
-        --light-button-heading-margin-bottom: -7px;
-        --light-button-sub-info-margin-top: 1px;
-        --light-button-sub-info-margin-bottom: 10px;
-        --light-button-heading-font-size: var(--small-heading-font-size);
-        --light-button-heading-font-weight: var(--small-heading-font-weight);
-        --light-button-sub-info-font-size: var(--sub-info-font-size);
-        --light-button-sub-info-font-weight: var(--sub-info-font-weight);
+/* lighting-button -- host */
+
+        --lb-width: var(--button-width);
+        --lb-padding: 0px;
+
+/* lighting-button -- button */
+
+        --lb-outline-offset: var(--b-outline-offset);
+
+/* lighting-button -- small-heading */
+
+        --lbh-margin-top: 7px;
+        --lbh-margin-bottom: -7px;
+        --lbh-font-size: var(--small-heading-font-size);
+        --lbh-font-weight: var(--small-heading-font-weight);
+
+/* lighting-button -- sub-info */
+
+        --lbsi-margin-top: 1px;
+        --lbsi-margin-bottom: 10px;
+        --lbsi-font-size: var(--sub-info-font-size);
+        --lbsi-font-weight: var(--sub-info-font-weight);
 
 /****************************************** climate-button ************************************************************/
 
@@ -68,107 +84,152 @@ export default css`
 
 /********************************************* lighting ***************************************************************/
 
-        --lighting-height: var(--panel-height);
-        --lighting-width: var(--panel-width);
+        --l-height: var(--panel-height);
+        --l-width: var(--panel-width);
 
 /******************************************** area-panel **************************************************************/
 
-        --area-panel-basic-width: 100%;
-        --area-panel-basic-height: 120px;
-        --area-panel-basic-padding: 15px;
-        --area-panel-basic-justify-content: space-around;
-        --area-panel-basic-align-items: center;
-        --area-heading-font-size: var(--large-font);
-        --area-heading-font-weight: 700;
+/* area-panel -- host */
+
+        --ap-margin-left: 0px;
+        --ap-margin-right: 0px;
+        --ap-margin-top: 0px;
+        --ap-width: 100%;
+        --ap-padding: var(--padding);
+
+/* area-panel -- heading */
+
+        --aph-font-size: var(--large-font);
+        --aph-font-weight: 700;
+        --aph-margin-bottom: var(--padding);
 
 /****************************************** light-component ***********************************************************/
 
-        --light-component-width: 210px;
-        --light-component-height: 35px;
-        --light-component-padding: 10px;
-        --light-component-margin: 15px;
+/* light-component -- host */
 
-        --simple-light-icons-margin-right: 10px;
-        --simple-light-icons-margin-left: 0px;
-        --simple-light-icon-size: 25px;
-        --simple-light-font-size: var(--sub-info-font-size);
-        --simple-light-font-weight: var(--sub-info-font-weight);
-        --simple-light-align-items: center;
-        --simple-light-justify-content: flex-start;
+        --lc-width: 220px;
+        --lc-height: 50px;
+        --lc-padding: var(--mpadding);
+        --lc-margin: 0px;
+
+/* light-component -- light-element */
+
+        --lcl-font-size: var(--sub-info-font-size);
+        --lcl-font-weight: var(--sub-info-font-weight);
+        --lcl-align-items: center;
+        --lcl-justify-content: flex-start;
+
+/* light-component -- icon */
+
+        --lci-margin-right: var(--mpadding);
+        --lci-icons-margin-left: 0px;
+        --lci-width: 25px;
 
 /***************************************** light-group-control ********************************************************/
 
-        --light-group-flex-flow: column nowrap;
-        --light-group-justify-content: space-around;
-        --light-group-align-items: center;
-        --light-group-width: 100%;
-        --light-group-margin-top: 15px;
+/* light-group-control -- host */
 
-        --light-group-control-padding-top: 20px;
-        --light-group-control-padding-bottom: 20px;
+        --lg-width: 100%;
+        --lg-padding: var(--padding);
+        --lg-padding-bottom: 0px;
+        --lg-margin-top: var(--padding);
+        --lg-margin-bottom: var(--padding);
 
 /****************************************** light-group-select ********************************************************/
 
-        --light-select-flex-flow: column nowrap;
-        --light-select-align-items: center;
-        --light-select-justify-content: center;
-        --light-select-members-flex-flow: row wrap;
-        --light-select-members-justify-content: space-around;
-        --light-select-members-align-items: center;
-        --light-select-members-width: 100%;
-        --light-select-member-width: 180px;
-        --light-select-innerlight-width: 250px;
-        --light-select-innerlight-height: 30px;
-        --light-select-innerlight-padding: 8px;
-        --light-select-innerlight-margin: 10px;
-        --light-select-innerlight-flex-flow: row nowrap;
-        --light-select-icon-margin-right: 10px;
-        --light-select-icon-margin-left: 10px;
-        --light-select-icon-size: 20px;
-        --light-inner-heading-font-size: var(--small-heading-font-size);
-        --light-inner-heading-font-weight: var(--small-heading-font-weight);
-        --light-inner-font-size: var(--sub-info-font-size);
-        --light-inner-font-weight: var(--sub-info-font-size);
+/* light-group-select -- host */
 
-/****************************************** control-select ************************************************************/
+        --lgs-flex-flow: column nowrap;
+        --lgs-align-items: center;
+        --lgs-justify-content: center;
 
-        --control-select-flex-flow: row nowrap;
-        --control-select-justify-content: space-around;
-        --control-select-align-items: center;
-        --control-select-margin-left: 10px;
-        --control-select-margin-top: 10px;
-        --control-select-icon-window-width: 42px;
-        --control-select-icon-window-margin: 10px;
-        --control-select-icon-size: 20px;
-        --control-select-outline-offset: -2px;
+/* light-group-select -- members */
 
-/******************************************** light-control ***********************************************************/
+        --lgsm-flex-flow: row wrap;
+        --lgsm-justify-content: space-around;
+        --lgsm-align-items: center;
+        --lgsm-width: 100%;
 
-        --light-control-padding: 15px;
-        --light-control-margin-left: 20px;
-        --light-control-margin-right: 20px;
-        --light-control-margin: 15px;
+/* light-group-select -- light-inner */
 
-/******************************************* brightness-slider ********************************************************/
+        --lgsli-width: var(--lc-width);
+        --lgsli-height: var(--lc-height);
+        --lgsli-padding: var(--mpadding);
+        --lgsli-margin: 0px;
+        --lgsli-flex-flow: row nowrap;
+        --lgsli-outline-offset: var(--b-outline-offset);
 
-        --brightness-slider-width: 400px;
-        --brightness-slider-height: 100px;
+/* light-group-select -- small-heading */
+
+        --lgssh-font-size: var(--small-heading-font-size);
+        --lgssh-font-weight: var(--small-heading-font-weight);
+        --lgssh-width: 270px;
+
+/* light-group-select -- sub-info */
+
+        --lgssi-font-size: var(--lcl-font-size);
+        --lgssi-font-weight: var(--lcl-font-size);
+        --lcssi-margin-bottom: var(--padding);
+
+/* light-group-select -- icon */
+
+        --lgsi-margin-right: 10px;
+        --lgsi-margin-left: 0px;
+        --lgsi-width: var(--lci-width);
+
+/* light-group-select -- top-row */
+
+        --lgstr-margin-bottom: var(--padding);
+
+/*************************************** light-control-select *********************************************************/
+
+/* light-control-select -- host */
+
+        --lcs-margin: var(--padding);
+        --lcs-padding: var(--padding);
+        --lcs-padding-right: 0px;
+        --lcs-margin-top: 0px;
+        --lcs-margin-bottom: 0px;
+        --lcs-height: calc(var(--lcsiw-width) + 2 * var(--padding));
+
+/* light-control-select -- icon-window */
+
+        --lcsiw-width: 42px;
+        --lcsiw-margin-right: var(--padding);
+        --lcsiw-outline-offset: var(--b-outline-offset);
+
+/* light-control-select -- icon
+
+        --lcsi-width: 20px;
+
+/******************************************* light-control ************************************************************/
+
+        --lc-padding: var(--padding);
+        --lc-margin-left: var(--padding);
+        --lc-margin-right: var(--padding);
+        --lc-margin-bottom: var(--padding);
+
+/**************************************** brightness-slider ***********************************************************/
+
+        --bs-width: 440px;
+        --bs-height: 90px;
 
 /************************************************ slider **************************************************************/
 
-        --slider-orientation: column nowrap;
-        --slider-margin: 5%;
-        --slider-width: 15px;
+        --slider-flex-flow: column nowrap;
+        --slider-margin: 3%;
+        --slider-margin-right: 10%;
+        --slider-width: 20px;
         --slider-text-padding: 10px;
         --slider-text-offset: 6%;
         --slider-text-width: 20px;
         --slider-level-offset: 10%;
-        --slider-level-height: 2%;
+        --slider-level-height: 1.5%;
 
 /*********************************************** climate **************************************************************/
 
-        --climate-height: var(--panel-height);
-        --climate-width: var(--panel-width);
+        --c-height: var(--panel-height);
+        --c-width: var(--panel-width);
 
 /******************************************** heatpump-panel **********************************************************/ 
 

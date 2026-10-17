@@ -112,12 +112,12 @@ export class LightControl extends HaLightingComponent {
             flex-flow: column nowrap;
             justify-content: center;
             align-items: center;
-            padding: var(--light-control-padding, 20px);
-            margin-left: var(--light-control-margin-left, 20px);
-            margin-right: var(--light-control-margin-right, 10px);
-            margin: var(--light-control-margin);
-            min-height: var(--light-control-minsize);
-            min-width: var(--light-control-minsize);
+            padding: var(--lc-padding, 20px);
+            margin-left: var(--lc-margin-left, 20px);
+            margin-right: var(--lc-margin-right, 10px);
+            margin-bottom: var(--lc-margin-bottom);
+            min-height: var(--lc-minsize);
+            min-width: var(--lc-minsize);
         }
 
     `];

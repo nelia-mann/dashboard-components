@@ -244,7 +244,7 @@ export class SliderBar extends HaSubComponent {
         }
 
         .slider.horizontal {
-            width: calc(100% - 2 * var(--slider-margin, 5%));
+            width: calc(100% - 4 * var(--slider-margin, 5%));
             height: var(--slider-width, 40px);
             margin-top: var(--slider-text-padding, 5px);
             margin-bottom: var(--slider-text-padding, 5px);
@@ -308,7 +308,7 @@ export class SliderBar extends HaSubComponent {
         }
 
         .values.horizontal {
-            width: calc(100% - 2 * var(--slider-margin, 5%));
+            width: calc(100% - 4 * var(--slider-margin, 5%));
             margin-top: 0%;
             margin-bottom: 0%;
             margin-left: calc(-var(--slider-text-offset, -5%));

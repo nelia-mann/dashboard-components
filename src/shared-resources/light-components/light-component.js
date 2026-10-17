@@ -38,10 +38,11 @@ export class LightComponent extends HaLightingComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            width: var(--light-component-width, 180px);
-            height: var(--light-component-height, 25px);
-            padding: var(--light-component-padding, 8px);
-            margin: var(--light-component-margin, 10px);
+            width: var(--lc-width, 180px);
+            height: var(--lc-height, 25px);
+            padding: var(--lc-padding, 8px);
+            margin: var(--lc-margin, 10px);
+            margin-bottom: var(--lc-margin-bottom);
             display: flex;
             flex-flow: row nowrap;
             justify-content: flex-start;
@@ -53,17 +54,17 @@ export class LightComponent extends HaLightingComponent {
             height: 100%;
             display: flex;
             flex-flow: row nowrap;
-            align-items: var(--simple-light-align-items, center);
-            justify-content: var(--simple-light-justify-content, flex-start);
-            font-size: var(--simple-light-font-size, 100%);
-            font-weight: var(--simple-light-font-weight, 400);
+            align-items: var(--lcl-align-items, center);
+            justify-content: var(--lcl-justify-content, flex-start);
+            font-size: var(--lcl-font-size, 100%);
+            font-weight: var(--lcl-font-weight, 400);
         }
 
         .icon {
-            width: var(--simple-light-icon-size, 20px);
-            height: var(--simple-light-icon-size, 20px);
-            margin-left: var(--simple-light-icons-margin-left, 0px);
-            margin-right: var(--simple-light-icons-margin-right, 10px);
+            width: var(--lci-width, 20px);
+            height: var(--lci-width, 20px);
+            margin-left: var(--lci-margin-left, 0px);
+            margin-right: var(--lci-margin-right, 10px);
             display: flex;
             flex-flow: row nowrap;
             justify-content: center;

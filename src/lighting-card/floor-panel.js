@@ -64,7 +64,9 @@ export class FloorPanel extends HaSubComponent {
         if (this.isInitialized()) {
             return html`
                 ${this.getAreaListDisplay()}
-                ${this.getSpecialDisplays()}
+                <div class = "special-panel">
+                    ${this.getSpecialDisplays()}
+                </div>
                 `
         }
     }
@@ -74,12 +76,21 @@ export class FloorPanel extends HaSubComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            width: var(--floor-panel-width, 100%);
-            height: var(--floor-panel-height, 400px);
+            width: var(--fp-width, 100%);
+            height: var(--fp-height, 400px);
             display: flex;
-            flex-flow: var(--floor-panel-flex-flow, column wrap);
-            justify-content: var(--floor-panel-justify-content, flex-start);
-            align-items: var(--floor-panel-align-items, flex-start);
+            flex-flow: column wrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .special-panel {
+            height: 100%;
+            width: var(--fpsp-width);
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: center;
+            align-items: center;
         }
 
     `];

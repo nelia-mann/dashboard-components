@@ -82,8 +82,8 @@ export class LightingBasementPanel extends HaSubComponent {
             flex-flow: row nowrap;
             justify-content: space-between;
             align-items: center;
-            height: var(--lighting-height, 485px);
-            width: var(--lighting-width, 900px);
+            height: var(--l-height, 485px);
+            width: var(--l-width, 900px);
         }
         
     `];

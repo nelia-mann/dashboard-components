@@ -48,11 +48,12 @@ export class AreaListPanel extends HaSubComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            height: var(--floor-panel-height, 400px);
+            height: var(--alp-height, 400px);
+            width: var(--alp-width);
             display: flex;
-            flex-flow: var(--floor-panel-flex-flow, column wrap);
-            justify-content: var(--floor-panel-justify-content, flex-start);
-            align-items: var(--floor-panel-align-items, flex-start);
+            flex-flow: column wrap;
+            justify-content: var(--alp-justify-content, flex-start);
+            align-items: flex-start;
         }
 
     `];

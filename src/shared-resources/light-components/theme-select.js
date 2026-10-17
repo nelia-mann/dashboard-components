@@ -90,11 +90,11 @@ export class ThemeSelect extends HaLightingComponent {
 
         :host {
             display: flex;
-            flex-flow: var(--theme-select-flex-flow, column wrap);
-            justify-content: var(--theme-select-justify-content, flex-start);
-            align-items: var(--theme-select-align-items, center);
-            width: var(--theme-select-width, 450px);
-            height: var(--theme-select-height, 360px);
+            flex-flow: var(--ts-flex-flow, column wrap);
+            justify-content: var(--ts-justify-content, flex-start);
+            align-items: var(--ts-align-items, center);
+            width: var(--ts-width, 450px);
+            height: var(--ts-height, 360px);
         }
 
     `];

@@ -174,8 +174,8 @@ export class ColorWheel extends HaLightingComponent {
 
         :host {
             position: relative;
-            width: var(--wheel-width, 210px);
-            height: var(--wheel-width, 210px);
+            width: var(--cw-width, 210px);
+            height: var(--cw-width, 210px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -193,10 +193,10 @@ export class ColorWheel extends HaLightingComponent {
 
         .dot {
             position: absolute;
-            width: var(--dot-width, 20px);
-            height: var(--dot-width, 20px);
-            margin-left: calc(-1 * var(--dot-width, 20px) / 2);
-            margin-top: calc(-1 * var(--dot-width, 20px) / 2);
+            width: var(--cwd-width, 20px);
+            height: var(--cwd-width, 20px);
+            margin-left: calc(-1 * var(--cwd-width, 20px) / 2);
+            margin-top: calc(-1 * var(--cwd-width, 20px) / 2);
             border-radius: 50%;
         }
 

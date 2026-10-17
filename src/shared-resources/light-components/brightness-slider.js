@@ -68,8 +68,8 @@ export class BrightnessSlider extends HaLightingComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            width: var(--brightness-slider-width);
-            height: var(--brightness-slider-height);
+            width: var(--bs-width);
+            height: var(--bs-height);
         }
 
     `];

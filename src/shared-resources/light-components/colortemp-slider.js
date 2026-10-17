@@ -63,8 +63,8 @@ export class ColorTempSlider extends HaLightingComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            width: var(--colortemp-slider-width, 210px);
-            height: var(--colortemp-slider-height, 210px);
+            width: var(--cts-width, 210px);
+            height: var(--cts-height, 210px);
         }
 
     `];

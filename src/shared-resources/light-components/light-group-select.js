@@ -110,6 +110,7 @@ export class LightGroupSelect extends HaLightingComponent {
         let styles = {};
         if (this.isSelected(lightId)) {
             styles['outline'] = 'solid ' + this.getColor(lightId);
+            styles['outline-offset'] = 'var(--lgsli-outline-offset)'
         }
         return styles;
     }
@@ -126,50 +127,51 @@ export class LightGroupSelect extends HaLightingComponent {
 
         :host {
             display: flex;
-            flex-flow: var(--light-select-flex-flow, column nowrap);
-            align-items: var(--light-select-align-items, flex-start);
-            justify-content: var(--light-select-justify-content, center);
+            flex-flow: var(--lgs-flex-flow, column nowrap);
+            align-items: var(--lgs-align-items, flex-start);
+            justify-content: var(--lgs-justify-content, center);
+            width: 100%;
         }
 
         .members {
             display: flex;
-            flex-flow: var(--light-select-members-flex-flow);
-            justify-content: var(--light-select-members-justify-content);
-            align-items: var(--light-select-members-align-items);
-            width: var(--light-select-members-width);
-            --light-select-innerlight-width: var(--light-select-member-width);
+            flex-flow: var(--lgsm-flex-flow);
+            justify-content: var(--lgsm-justify-content);
+            align-items: var(--lgsm-align-items);
+            width: var(--lgsm-width);
         }
 
         .light-inner {
-            width: var(--light-select-innerlight-width, 180px);
-            height: var(--light-select-innerlight-height, 25px);
-            padding: var(--light-select-innerlight-padding, 10px);
-            margin: var(--light-select-innerlight-margin, 10px);
+            box-sizing: border-box;
+            width: var(--lgsli-width, 180px);
+            height: var(--lgsli-height, 25px);
+            padding: var(--lgsli-padding, 10px);
+            margin: var(--lgsli-margin, 10px);
             display: flex;
             flex-flow: row nowrap;
             justify-content: flex-start;
             align-items: center;
-            outline-offset: var(--button-outline-offset, -3px);
-            outline: none;
         }
 
         .small-heading {
-            font-size: var(--light-inner-heading-font-size, 100%);
-            font-weight: var(--light-inner-heading-font-weight, 700);
+            font-size: var(--lgssh-font-size, 100%);
+            font-weight: var(--lgssh-font-weight, 700);
+            width: var(--lgssh-width);
         }
 
         .sub-info {
-            font-size: var(--light-inner-font-size, 100%);
-            font-weight: var(--light-inner-font-weight, 400);
+            font-size: var(--lgssi-font-size, 100%);
+            font-weight: var(--lgssi-font-weight, 400);
+            margin-bottom: var(--lcssi-margin-bottom);
         }
 
         .icon {
             margin: 0px;
             padding: 0px;
-            margin-right: var(--light-select-icoc-margin-right, 10px);
-            margin-left: var(--light-select-icoc-margin-left, 0px);
-            width: var(--light-select-icon-size, 20px);
-            height: var(--light-select-icon-size, 20px);
+            margin-right: var(--lgsi-margin-right, 10px);
+            margin-left: var(--lgsi-margin-left, 0px);
+            width: var(--lgsi-width, 20px);
+            height: var(--lgsi-width, 20px);
             display: flex;
             flex-flow: row nowrap;
             justify-content: center;
@@ -180,8 +182,9 @@ export class LightGroupSelect extends HaLightingComponent {
             display: flex;
             flex-flow: row nowrap;
             justify-content: space-around;
-            align-items:center;
-            margin-bottom: var(--light-select-top-row-margin, 20px);
+            align-items: center;
+            margin-bottom: var(--lgstr-margin-bottom, 20px);
+            width: 100%;
         }
 
     `];

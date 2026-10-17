@@ -122,19 +122,6 @@ export class LightGroupControl extends HaLightingComponent {
             />`;
     }
 
-    lightControlSelect() {
-        return keyed(this.getSelectedId(), html`
-            <light-control-select
-                class = "outlined"
-                .changedEntityIds = ${this.getCEIs()}
-                .states = ${this.getStates()}
-                .structure = ${this.getThisStructure(this.getSelectedId())}
-                .entityIds = ${this.getSelectedId()}
-                .option = ${this.getOption()}
-                @select = ${this.onSelectControl}
-            />`);
-    }
-
     lightControl(option) {
         return keyed(this.getSelectedId(), html`
             <light-control
@@ -162,7 +149,9 @@ export class LightGroupControl extends HaLightingComponent {
         if (this.isInitialized()) {
             return html`
                 ${this.lightGroupSelect()}
-                ${this.lightControls()}
+                <div class = "controls">
+                    ${this.lightControls()}
+                </div>
             `
         }
     }
@@ -172,15 +161,24 @@ export class LightGroupControl extends HaLightingComponent {
     static styles = [sharedStyles, css`
 
         :host {
-            height: var(--light-group-height);
-            width: var(--light-group-width);
+            height: var(--lg-height);
+            width: var(--lg-width);
             display: flex;
-            flex-flow: var(--light-group-flex-flow, row nowrap);
-            justify-content: var(--light-group-justify-content, space-around);
-            align-items: var(--light-group-align-items, center);
-            margin-top: var(--light-group-margin-top, 40px);
-            padding-top: var(--light-group-control-padding-top, 20px);
-            padding-bottom: var(--light-group-control-padding-bottom, 20px);
+            flex-flow: column nowrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--lg-padding, 20px);
+            padding-bottom: var(--lg-padding-bottom);
+            margin-top: var(--lg-margin-top);
+            margin-bottom: var(--lg-margin-bottom);
+        }
+
+        .controls {
+            height: var(--lgcc-height);
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-around;
+            align-items: center;
         }
 
     `];

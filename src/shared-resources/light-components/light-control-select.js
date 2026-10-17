@@ -155,43 +155,35 @@ export class LightControlSelect extends HaLightingComponent {
     static styles = [sharedStyles, css`
 
         :host {
+            box-sizing: border-box;
             display: flex;
-            flex-flow: var(--control-select-flex-flow, column nowrap);
-            justify-content: var(--control-select-justify-content, space-around);
-            align-items: var(--control-select-align-items, center);
-            margin-left: var(--control-select-margin-left, 10px);
-            margin-top: var(--control-select-margin-top, 0px);
-            width: var(--control-select-width);
-            height: var(--control-select-height, 100%);
+            flex-flow: row nowrap;
+            justify-content: space-around;
+            align-items: center;
+            margin: var(--lcs-margin);
+            margin-top: var(--lcs-margin-top);
+            margin-bottom: var(--lcs-margin-bottom);
+            padding: var(--lcs-padding);
+            padding-right: var(--lcs-padding-right);
+            width: var(--lcs-width);
+            height: var(--lcs-height);
         }
 
         .icon-window {
-            width: var(--control-select-icon-window-width, 30px);
-            height: var(--control-select-icon-window-width, 30px);
+            width: var(--lcsiw-width, 30px);
+            height: var(--lcsiw-width, 30px);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: var(--control-select-icon-window-margin, 10px);
-            outline-offset: var(--control-select-outline-offset, -2px);
-            outline: none;
-        }
-
-        .doublewide {
-            width: calc(2 * var(--control-select-icon-window-width, 30px));
-            height: var(--control-select-icon-window-width, 30px);
-            border-radius: 40%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: var(--control-select-icon-window-margin, 10px);
-            outline-offset: var(--control-select-outline-offset, -2px);
+            margin-right: var(--lcsiw-margin-right , 10px);
+            outline-offset: var(--lcsiw-outline-offset, -2px);
             outline: none;
         }
 
         .icon {
-            width: var(--control-select-icon-size, 20px);
-            height: var(--control-select-icon-size, 20px);
+            width: var(--lcsi-width, 20px);
+            height: var(--lcsi-width, 20px);
             margin: 0px;
             padding: 0px;
             display: flex;

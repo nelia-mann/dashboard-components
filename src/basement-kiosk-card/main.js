@@ -83,7 +83,7 @@ export class BasementKioskCard extends HaMainComponent {
     }
 
     initializeChoice() {
-        this.setType('climate');
+        this.setType('lighting');
     }
 
 /************************************* type selection structure *******************************************************/
@@ -232,13 +232,13 @@ export class BasementKioskCard extends HaMainComponent {
     static styles = [sharedStyles, layoutStyles, css`
 
         ha-card {
-            padding: var(--ha-card-padding, 10px);
+            padding: var(--hc-padding, 10px);
             display: flex;
             flex-flow: column nowrap;
             justify-content: space-between;
             align-items: center;
-            height: var(--ha-card-height, 570px);
-            width: var(--ha-card-width, 900px);
+            height: var(--hc-height, 570px);
+            width: var(--hc-width, 900px);
         }
 
         .button-row {
@@ -246,8 +246,8 @@ export class BasementKioskCard extends HaMainComponent {
             flex-flow: row nowrap;
             justify-content: space-around;
             align-items: center;
-            width: var(--button-row-width, 100%);
-            height: var(--button-row-height, 50px);
+            width: var(--br-width, 100%);
+            height: var(--br-height, 50px);
         }        
 
     `]

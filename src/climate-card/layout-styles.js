@@ -34,7 +34,7 @@ export default css`
 
 /* main -- button-row */
 
-        --br-height: 60px;
+        --br-height: 50px;
         --br-width: 100%;
 
 /************************************** area-panel ********************************************************************/
@@ -49,7 +49,7 @@ export default css`
 /* climate-button -- host */
 
         --cb-width: 200px;
-        --cb-padding: 5px;
+        --cb-padding: 0px;
 
 /* climate-button -- button */
 

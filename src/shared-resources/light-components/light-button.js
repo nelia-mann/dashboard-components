@@ -105,8 +105,8 @@ export class LightingButton extends HaLightingComponent {
 
         :host {
             height: 100%;
-            width: var(--light-button-width, 160px);
-            padding: var(--light-button-padding, 5px);
+            width: var(--lb-width, 160px);
+            padding: var(--lb-padding, 5px);
             border: none;
         }
 
@@ -118,22 +118,22 @@ export class LightingButton extends HaLightingComponent {
             flex-flow: column nowrap;
             justify-content: center;
             align-items: center;
-            outline-offset: var(--button-outline-offset, -3px);
+            outline-offset: var(--lb-outline-offset, -3px);
             outline: none;
         }
 
         .small-heading {
-            margin-top: var(--light-button-heading-margin-top, 7px);
-            margin-bottom: var(--light-button-heading-margin-bottom, -7px);
-            font-weight: var(--light-button-heading-font-weight, 700);
-            font-size: var(--light-button-heading-font-size, 100%);
+            margin-top: var(--lbh-margin-top, 7px);
+            margin-bottom: var(--lbh-margin-bottom, -7px);
+            font-weight: var(--lbh-font-weight, 700);
+            font-size: var(--lbh-font-size, 100%);
         }
 
         .sub-info {
-            margin-bottom: var(--light-button-sub-info-margin-bottom, 10px);
-            margin-top: var(--light-button-sub-info-margin-top, 1px);
-            font-weight: var(--light-button-sub-info-font-weight, 700);
-            font-size: var(--light-button-sub-info-font-size, 100%);
+            margin-bottom: var(--lbsi-margin-bottom, 10px);
+            margin-top: var(--lbsi-margin-top, 1px);
+            font-weight: var(--lbsi-font-weight, 700);
+            font-size: var(--lbsi-font-size, 100%);
         }
 
     `];
