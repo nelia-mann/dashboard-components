@@ -31,7 +31,6 @@ export class AuxModeControls extends HaClimateComponent {
     selectMode(mode) {
         this.setSafeOff();
         this.selectTieOff();
-        (this.isTied()) && (this.selectTie());
         const entityId = this.getEntityId('thermostat');
         const data = {
             entity_id: entityId,
