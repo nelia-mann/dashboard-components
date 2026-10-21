@@ -29,6 +29,8 @@ export class AuxModeControls extends HaClimateComponent {
 /********************************************** interactive logic *****************************************************/
 
     selectMode(mode) {
+        this.setSafeOff();
+        this.selectTieOff();
         (this.isTied()) && (this.selectTie());
         const entityId = this.getEntityId('thermostat');
         const data = {
@@ -38,7 +40,7 @@ export class AuxModeControls extends HaClimateComponent {
         this.callService('climate', 'set_hvac_mode', data)
     }
 
-    selectTie() {
+    selectTieOn() {
         const entityId = this.getTieId();
         let data = { entity_id: entityId };
         if (this.getTieOptions()) {
@@ -47,14 +49,33 @@ export class AuxModeControls extends HaClimateComponent {
             data['option'] = newOption;
             this.callService('input_select', 'select_option', data);
         } else {
-            this.callService('input_boolean', 'toggle', data);
+            this.callService('input_boolean', 'turn_on', data);
         }
     }
 
-    setSafe() {
-        const entityId = this.getEntityId('safe_mode');
-        this.callService('input_boolean', 'toggle', { entity_id: entityId })
+    selectTieOff() {
+        const entityId = this.getTieId();
+        let data = { entity_id: entityId };
+        if (this.getTieOptions()) {
+            data['option'] = 'off';
+            this.callService('input_select', 'select_option', data);
+        } else {
+            this.callService('input_boolean', 'turn_off', data);
+        }
     }
+
+    setSafeOn() {
+        this.selectTieOff();
+        const entityId = this.getEntityId('safe_mode');
+        this.callService('input_boolean', 'turn_on', { entity_id: entityId })
+    }
+
+    setSafeOff() {
+        const entityId = this.getEntityId('safe_mode');
+        this.callService('input_boolean', 'turn_off', { entity_id: entityId })
+    }
+
+
 
 /********************************************** html logic ************************************************************/
 
@@ -91,7 +112,7 @@ export class AuxModeControls extends HaClimateComponent {
         if (this.getEntityId('safe_mode')) {
             return html`<div class="button outlined"
                 style=${styleMap(this.getSafeStyles())}
-                @click=${this.setSafe}
+                @click=${this.setSafeOn}
             >
                 <ha-svg-icon .path=${fire}></ha-svg-icon>
                 <ha-svg-icon .path=${minimum} class="center"></ha-svg-icon>
@@ -102,7 +123,7 @@ export class AuxModeControls extends HaClimateComponent {
     TieButton() {
         return html`<div class="bigbutton outlined"
             style=${styleMap(this.getTieStyles())}
-            @click=${this.selectTie}
+            @click=${this.selectTieOn}
         >
             <ha-svg-icon .path=${exclamation} class="exclamation"></ha-svg-icon>
             ${this.makePretty(this.getRegionName())}
@@ -123,7 +144,7 @@ export class AuxModeControls extends HaClimateComponent {
 
     getModeStyles(mode) {
         const isMode = (mode === this.getMode())
-        return getModeStyles(mode, this.getAction(), isMode)
+        return getModeStyles(mode, this.getAction(), !this.isTied() && !this.isSafe() && isMode)
     }
 
     getTieStyles() {
@@ -131,7 +152,7 @@ export class AuxModeControls extends HaClimateComponent {
     }
 
     getSafeStyles() {
-        return getModeStyles('safe_min', this.getAction(), this.isSafe());
+        return getModeStyles('safe_min', this.getAction(), !this.isTied() && this.isSafe());
     }
 
     static styles = [sharedStyles, css`

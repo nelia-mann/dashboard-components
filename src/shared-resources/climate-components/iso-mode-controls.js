@@ -11,6 +11,7 @@ export class IsoModeControls extends HaClimateComponent {
 /********************************************** interactive logic *****************************************************/
 
     selectMode(mode) {
+        this.setSafeOff();
         const data = {
             entity_id: this.getEntityId('hygrostat'),
         }
@@ -21,10 +22,16 @@ export class IsoModeControls extends HaClimateComponent {
         }
     }
 
-    setSafe() {
+    setSafeOn() {
         const entityId = this.getEntityId('safe_mode');
-        this.callService('input_boolean', 'toggle', { entity_id: entityId })
+        this.callService('input_boolean', 'turn_on', { entity_id: entityId })
     }
+
+    setSafeOff() {
+        const entityId = this.getEntityId('safe_mode');
+        this.callService('input_boolean', 'turn_off', { entity_id: entityId })
+    }
+
 
 /********************************************** html logic ************************************************************/
 
@@ -56,7 +63,7 @@ export class IsoModeControls extends HaClimateComponent {
         if (this.getEntityId('safe_mode')) {
             return html`<div class="button outlined"
                 style=${styleMap(this.getSafeStyles())}
-                @click=${this.setSafe}
+                @click=${this.setSafeOn}
             >
                 <ha-svg-icon .path=${fan}/></ha-svg-icon>
                 <ha-svg-icon .path=${maximum} class="center"></ha-svg-icon>
@@ -77,7 +84,7 @@ export class IsoModeControls extends HaClimateComponent {
 
     getModeStyles(mode) {
         const isMode = (mode === this.getMode())
-        return getModeStyles(mode, this.getAction(), isMode)
+        return getModeStyles(mode, this.getAction(), !this.isSafe() && isMode)
     }
 
     getSafeStyles() {

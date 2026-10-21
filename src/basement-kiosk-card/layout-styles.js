@@ -405,7 +405,7 @@ export default css`
 
 /* aux-basement-panel -- elements-top */
 
-        --auxbpet-justify-content: space-between;
+        --auxbpet-justify-content: center;
 
 /* aux-basement-panel -- elements-bottom */
 

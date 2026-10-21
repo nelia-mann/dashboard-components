@@ -53,7 +53,6 @@ export class AuxBasementPanel extends HaClimateComponent {
 
     fireplace() {
         if (this.getFireplace()) {
-            return html`<div> placeholder </div>`
             return html`<aux-thermostat-panel 
                     class="outlined"
                     .changedEntityIds = ${this.getCEIs()}
@@ -98,12 +97,12 @@ export class AuxBasementPanel extends HaClimateComponent {
             return html`
                 <div class="heading"> ${"Auxiliary Elements"} </div>
                 <div class="main">
+                    <div class="elements top">
+                        ${this.fireplace()}
+                    </div>
                     <div class="elements bottom">
                         ${this.laundryThermostat()}
                         ${this.laundryFan()}
-                    </div>
-                    <div class="elements top">
-                        ${this.fireplace()}
                     </div>
                 </div>
             `;

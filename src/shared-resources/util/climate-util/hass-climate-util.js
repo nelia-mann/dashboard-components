@@ -22,7 +22,7 @@ function getClimateButtonKeys() {
 }
 
 function getAuxKeys() {
-    return ["fan", "laundry_heater"];
+    return ["fan", "laundry_heater", "fireplace"];
 }
 
 function getDivisions() {
