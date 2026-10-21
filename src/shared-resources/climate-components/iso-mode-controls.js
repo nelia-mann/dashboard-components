@@ -3,7 +3,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { HaClimateComponent } from '../base-classes/ha-climate-component.js';
 import { getModeStyles } from '../util/climate-util/climate-util.js';
-import { fire, power, minimum, fan, maximum } from '../util/mdi-util.js';
+import { power, fan, maximum } from '../util/mdi-util.js';
 import sharedStyles from '../styles/shared-styles.js';
 
 export class IsoModeControls extends HaClimateComponent {

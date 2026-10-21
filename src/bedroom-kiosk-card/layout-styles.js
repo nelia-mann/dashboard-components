@@ -29,7 +29,7 @@ export default css`
 
 /* main -- button-row */
 
-        --br-height: 50px;
+        --br-height: 55px;
         --br-width: 100%;
 
 /**************************************** lighting-button *************************************************************/

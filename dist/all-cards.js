@@ -33,7 +33,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
 
 /* main -- button-row */
 
-        --br-height: 50px;
+        --br-height: 55px;
         --br-width: 100%;
 
 /************************************ lighting-button *****************************************************************/
@@ -1150,7 +1150,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
 
 /* main -- button-row */
 
-        --br-height: 50px;
+        --br-height: 55px;
         --br-width: 100%;
 
 /************************************** area-panel ********************************************************************/
@@ -3103,7 +3103,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
 
 /* main -- button-row */
 
-        --br-height: 50px;
+        --br-height: 55px;
         --br-width: 100%;
 
 /**************************************** lighting-button *************************************************************/
@@ -3638,7 +3638,7 @@ let t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&
         --hc-height: var(--largegalaxy-max-height);
         --hc-width: var(--largegalaxy-max-width);
 
-        --br-height: 50px;
+        --br-height: 55px;
         --br-width: 100%;
 
 /**************************************** lighting-button *************************************************************/

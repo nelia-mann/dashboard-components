@@ -27,7 +27,7 @@ export default css`
         --hc-height: var(--largegalaxy-max-height);
         --hc-width: var(--largegalaxy-max-width);
 
-        --br-height: 50px;
+        --br-height: 55px;
         --br-width: 100%;
 
 /**************************************** lighting-button *************************************************************/
